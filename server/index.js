@@ -1,4 +1,6 @@
 const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
 const path = require('path');
 
 // Feel free to move or copy/paste the line below 
