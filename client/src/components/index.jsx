@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Home from './Home';
 import LiveGame from './LiveGame';
+import Nav from './Nav';
 
 class App extends Component {
   constructor(props) {
@@ -32,8 +33,11 @@ class App extends Component {
 
   render() {
     return (
-      <div className="app app-grid">
-        {this.renderView()}
+      <div id="page">
+        <Nav changeView={this.changeView}/>
+        <div className="main">
+          {this.renderView()}
+        </div>
       </div>
     );
   }
