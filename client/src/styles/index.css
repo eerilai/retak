@@ -3,6 +3,7 @@ body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
+  font-family:helvetica;
 }
 
 button {
@@ -10,13 +11,29 @@ button {
   width: 200px;
 }
 
-.app-grid {
+#page {
   display: grid;
   margin: auto;
   grid-template-columns: auto 200px 600px 200px auto;
 }
 
-.home {
+#nav {
+  grid-column: 3;
+  display: flex;
+}
+
+nav {
+  font-size: 12px;
+  cursor:pointer;
+  padding: 5px 10px;
+  text-shadow: 2px 2px 2px #DCDCDC;
+}
+
+nav:hover {
+  background-color: #fff;
+}
+
+.main {
   grid-column: 3;
   width: 100%;
   margin: auto;
