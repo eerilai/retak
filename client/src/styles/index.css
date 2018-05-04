@@ -1,0 +1,35 @@
+body {
+  background-color: #EEEEEE;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  height: 50px;
+  width: 200px;
+}
+
+.app-grid {
+  display: grid;
+  margin: auto;
+  grid-template-columns: auto 200px 600px 200px auto;
+}
+
+.home {
+  grid-column: 3;
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+.lobby, .leaderboard {
+  border-style: solid;
+  border-width: 2px;
+  min-height: 400px;
+}
+
+.board {
+  min-height: 600px;
+}
+
