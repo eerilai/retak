@@ -7,19 +7,24 @@ require('dotenv').config();
 // Feel free to move or copy/paste the line below 
 // where db queries are required
 const db = require('../database');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
-
-console.log('session secret: ' + process.env.SESSION_SECRET);
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
-    maxAge: 10 * 1000
+    maxAge: 24 * 60 * 60 * 1000
   }
 }));
+
+app.use(passport.initialize());
+
+app.use(session());
+
+app.use('/auth', authRoutes);
 
 app.use('/', express.static(path.join(__dirname, '../client/dist')));
 
