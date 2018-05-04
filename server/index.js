@@ -4,8 +4,7 @@ const passport = require('passport');
 const path = require('path');
 
 require('dotenv').config();
-// Feel free to move or copy/paste the line below 
-// where db queries are required
+
 const db = require('../database');
 const authRoutes = require('./routes/authRoutes');
 
