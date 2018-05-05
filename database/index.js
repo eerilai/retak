@@ -67,6 +67,7 @@ User.sync()
   });
 
 module.exports = {
+  Sequelize,
   sequelize,
   User,
   Game
