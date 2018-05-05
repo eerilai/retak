@@ -1,15 +1,17 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Home = props => (
   <div className="home home-grid">
     <div className="lobby">
       <p>Lobby placeholder</p>
     </div>
-    <button className="createGame" onClick={() => props.changeView('game')} >Create Game</button>
+    <Link to="/game">
+      <button className="createGame">Create Game</button>
+    </Link>
     <div className="leaderboard">
       <p>Leaderboard placeholder</p>
     </div>
-
   </div>
 );
 

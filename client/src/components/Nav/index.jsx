@@ -1,11 +1,19 @@
-import React from 'react';
-
+import React from "react";
+import { Link } from "react-router-dom";
 const Nav = props => (
   <div id="nav">
-    <nav onClick={() => { props.changeView('home'); }}>Home</nav>
-    <nav>(Profile)</nav>
-    <nav>(Learn)</nav>
-    <nav>(About)</nav>
+    <nav>
+      <Link to="/">Home</Link>
+    </nav>
+    <nav>
+      <Link to="/profile">Profile</Link>
+    </nav>
+    <nav>
+      <Link to="/learn">Learn</Link>
+    </nav>
+    <nav>
+      <Link to="/about">About</Link>
+    </nav>
   </div>
 );
 
