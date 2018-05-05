@@ -1,0 +1,12 @@
+## Config Files ##
+.env
+package-lock.json
+
+## Build Files ##
+client/dist/bundle.js
+
+## NPM ##
+node_modules
+
+## Mac OSX ##
+.DS_Store

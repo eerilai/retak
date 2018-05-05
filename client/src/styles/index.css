@@ -1,0 +1,52 @@
+body {
+  background-color: #EEEEEE;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  font-family:helvetica;
+}
+
+button {
+  height: 50px;
+  width: 200px;
+}
+
+#page {
+  display: grid;
+  margin: auto;
+  grid-template-columns: auto 200px 600px 200px auto;
+}
+
+#nav {
+  grid-column: 3;
+  display: flex;
+}
+
+nav {
+  font-size: 12px;
+  cursor:pointer;
+  padding: 5px 10px;
+  text-shadow: 2px 2px 2px #DCDCDC;
+}
+
+nav:hover {
+  background-color: #fff;
+}
+
+.main {
+  grid-column: 3;
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+.lobby, .leaderboard {
+  border-style: solid;
+  border-width: 2px;
+  min-height: 400px;
+}
+
+.board {
+  min-height: 600px;
+}
+
