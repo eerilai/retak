@@ -7,7 +7,7 @@ class AuthNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalView: '',
+      modalView: 'off',
     };
     this.changeView = this.changeView.bind(this);
   }
@@ -19,17 +19,17 @@ class AuthNav extends Component {
   }
 
   render() {
-    // TODO: Conditional need to be set in place for
-    // rendering either login/signup nav or logout
+    // TODO: Conditionals need to be set in place for
+    // rendering either login/signup nav or logout nav
       // - will need access to redux state once redux implemented
-      // - will pass local state to individual modals
     const { modalView } = this.state;
     return (
       <div>
         <nav onClick={() => {this.changeView('login')}}>(Login/Signup)</nav>
-        <SignupModal modalView={modalView} />
-        <LoginModal modalView={modalView} />
-        <LogoutModal modalView={modalView} />
+        <nav onClick={() => {this.changeView('logout')}}>(Logout)</nav>
+        <SignupModal toggleView={this.changeView} modalView={modalView} />
+        <LoginModal toggleView={this.changeView} modalView={modalView} />
+        <LogoutModal toggleView={this.changeView} modalView={modalView} />
       </div>
     );
   }

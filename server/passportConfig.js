@@ -1,6 +1,10 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
+const {
+  findUserById,
+  findOrCreateUserByGoogleId
+} = require('../database/queries');
 const { User, Sequelize } = require('../database');
 
 passport.serializeUser((user, done) => {
@@ -8,10 +12,13 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  User.findById(id)
-   .then((user) => {
-     done(null, user);
-   });
+  findUserById(id)
+    .then((user) => {
+      done(null, user);
+    })
+    .catch((err) => {
+      done(err);
+    });
 });
 
 passport.use(new GoogleStrategy(
@@ -20,28 +27,24 @@ passport.use(new GoogleStrategy(
     clientSecret: process.env.GOOGLE_OAUTH_SECRET,
     callbackURL: '/auth/google/redirect'
   }, (accesToken, refreshToken, profile, done) => {
-    User.findOrCreate({
-      where: {
-        googleID: profile.id
-      },
-      defaults: {
-        username: 'Tak-user-' + Math.random().toString(36).slice(2,9)
-      }
-    })
-      .then(([user, created]) => {
+    findOrCreateUserByGoogleId(profile.id)
+      .then((user) => {
         done(null, user);
+      })
+      .catch((err) => {
+        done(err);
       });
   })
 );
 
 passport.use(new LocalStrategy(
-  (emailOrUsername, password, done) => {
+  (usernameOrEmail, password, done) => {
     const Op = Sequelize.Op;
     User.findOne({
       where: {
         [Op.or]: [
-          { username: emailOrUsername },
-          { email: emailOrUsername }
+          { username: usernameOrEmail },
+          { email: usernameOrEmail }
         ]
       }
     })

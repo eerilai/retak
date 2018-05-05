@@ -6,8 +6,7 @@ class LoginModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
-      email: '',
+      usernameOrEmail: '',
       password: ''
     };
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -17,7 +16,7 @@ class LoginModal extends Component {
 
   handleUsernameChange(e) {
     this.setState({
-      username: e.target.value
+      usernameOrEmail: e.target.value
     });
   }
 
@@ -28,10 +27,10 @@ class LoginModal extends Component {
   }
 
   handleSubmit() {
-    console.log('handleSubmit fired');
-    const { username, password } = this.state;
+    const { usernameOrEmail, password } = this.state;
     axios.post('/auth/login', {
-      username, password
+      username: usernameOrEmail,
+      password
     });
   }
 
@@ -39,12 +38,28 @@ class LoginModal extends Component {
     return (
       <Modal isOpen={this.props.modalView === 'login'}>
         <div>
+          <a href="/auth/google">
+            <button>Sign in with Google</button>
+          </a>
           <p>Login</p>
           <form onSubmit={this.handleSubmit}>
-            <input type="text" value={this.state.username} onChange={this.handleUsernameChange} />
-            <input type="text" value={this.state.password} onChange={this.handlePasswordChange} />
-            <input type="submit" value="Login" />
+            <div>
+              <p>Username</p>
+              <input type="text" value={this.state.username} onChange={this.handleUsernameChange} />
+            </div>
+            <div>
+              <p>Password</p>
+              <input type="text" value={this.state.password} onChange={this.handlePasswordChange} />
+            </div>
+            <div>
+              <button>
+                <input type="submit" value="Login" />
+              </button>
+            </div>
           </form>
+          <p>Here for the first time?</p>
+          <button onClick={() => { this.props.toggleView('signup') }}>Click here to signup</button>
+          <button onClick={() => { this.props.toggleView('off') }}>Cancel</button>
         </div>
       </Modal>
     );
