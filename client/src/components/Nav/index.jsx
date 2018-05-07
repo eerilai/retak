@@ -1,4 +1,5 @@
 import React from "react";
+import AuthNav from './AuthNav';
 import { Link } from "react-router-dom";
 const Nav = props => (
   <div id="nav">
@@ -14,6 +15,7 @@ const Nav = props => (
     <nav>
       <Link to="/about">About</Link>
     </nav>
+    <AuthNav />
   </div>
 );
 
