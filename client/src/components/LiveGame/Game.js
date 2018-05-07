@@ -1,9 +1,11 @@
+import Stack from './Stack';
+
 const createBoard = (size) => {
   const board = [];
   for (let i = 0; i < size; i += 1) {
     board[i] = [];
     for (let j = 0; j < size; j += 1) {
-      board[i][j] = [];
+      board[i][j] = new Stack();
     }
   }
   return board;
@@ -15,10 +17,7 @@ class Game {
     this.first = player1;
     this.second = player2;
     this.board = createBoard(size);
-  }
-
-  select(col, row) {
-    this.board[col][row].push(1);
+    this.toPlay = 1;
   }
 }
 

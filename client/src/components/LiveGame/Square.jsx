@@ -3,10 +3,10 @@ import { convertCoord } from './gameUtil';
 
 const Square = (props) => {
   const coord = convertCoord([props.col, props.row]);
-
+  const squareSize = 600 / props.game.size;
   const style = {
-    width: '120px',
-    height: '120px',
+    width: squareSize,
+    height: squareSize,
     'border-width': '2px',
     'border-color': 'black',
     'background-color': props.color,
@@ -17,7 +17,7 @@ const Square = (props) => {
       className={coord}
       onClick={() => { props.select(props.col, props.row); }}
     >
-      {props.game.board[props.col][props.row]}
+      {props.game.board[props.col][props.row].stack}
     </div>
   );
 };

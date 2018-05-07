@@ -23,11 +23,11 @@ const Board = (props) => {
     }
   }
   const style = {
-    'width': '600px',
-    'height': '600px',
+    width: '600px',
+    height: '600px',
     display: 'flex',
     'flex-direction': 'row',
-    'flex-wrap': 'wrap'
+    'flex-wrap': 'wrap',
   };
   return <div style={style}>{squares}</div>;
 };
