@@ -16,6 +16,10 @@ class Game {
     this.second = player2;
     this.board = createBoard(size);
   }
+
+  select(col, row) {
+    this.board[col][row].push(1);
+  }
 }
 
 export default Game;

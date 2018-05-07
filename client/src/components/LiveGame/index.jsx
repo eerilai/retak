@@ -9,13 +9,22 @@ class LiveGame extends Component {
     this.state = {
       game: newGame,
     };
+    this.select = this.select.bind(this);
+  }
+
+  select(col, row) {
+    const newBoard = this.state.game;
+    newBoard.board[col][row].push(1);
+    this.setState({
+      game: newBoard,
+    });
   }
 
   render() {
     return (
       <div className="home game">
         <div className="board">
-          <Board game={this.state.game} />
+          <Board game={this.state.game} select={this.select} />
         </div>
       </div>
     );
