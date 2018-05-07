@@ -29,7 +29,9 @@ class SignupModal extends Component {
         username, email, password
       })
       .then((res) => {
-        // TODO: Not sure if anything should go here
+        if (res.status === 200) {
+          this.props.toggleView('off');
+        }
       });
     } else {
       console.log('both password fields must match');
@@ -51,14 +53,14 @@ class SignupModal extends Component {
             </div>
             <div>
               <p>Email</p>              
-              <input type="text" value={this.state.email} onChange={(e) => {this.handleInputChange(e, 'email')}} />
+              <input type="email" value={this.state.email} onChange={(e) => {this.handleInputChange(e, 'email')}} />
             </div>
             <div>
-              <p>Password</p>              
+              <p>Password</p>
               <input type="text" value={this.state.password} onChange={(e) => {this.handleInputChange(e, 'password')}} />
             </div>
             <div>
-              <p>Retype Password</p>              
+              <p>Retype Password</p>         
               <input type="text" value={this.state.passwordRetype} onChange={(e) => {this.handleInputChange(e, 'passwordRetype')}} />
             </div>
             <div>

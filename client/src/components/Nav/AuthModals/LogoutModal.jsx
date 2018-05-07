@@ -12,13 +12,13 @@ const LogoutModal = (props) => {
         console.log(err);
       });
   }
-  const isOpen = props.modalView === 'logout'  
+  const isOpen = props.modalView === 'logout';
   return (
     <Modal isOpen={isOpen}>
       <div>
         <p>Logout</p>
         <button onClick={logout}>Logout</button>
-        <button onClick={() => { props.toggleView('off') }}>Cancel</button>        
+        <button onClick={() => { props.toggleView('off') }}>Cancel</button>  
       </div>
     </Modal>
   );
