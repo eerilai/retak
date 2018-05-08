@@ -50,6 +50,12 @@ class LiveGame extends Component {
         this.isMoving = false;
         newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
       }
+    } else if (stack.stone === 'S' &&
+               this.toMove.stone === 'C' &&
+               this.toMove.stack.length === 1) {
+      stack.place(this.toMove.stack.pop(), 'C');
+      this.isMoving = false;
+      newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
     }
 
     this.setState({
