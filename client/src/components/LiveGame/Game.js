@@ -20,8 +20,8 @@ class Game {
     this.board = createBoard(size);
     this.toPlay = 1;
     this.pieces = {
-      1: pieceCount[size],
-      2: pieceCount[size],
+      1: { ...pieceCount[size] }, // Props ['F'], ['C'], ['Total']
+      2: { ...pieceCount[size] },
     };
   }
 }

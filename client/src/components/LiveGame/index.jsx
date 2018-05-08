@@ -9,26 +9,29 @@ class LiveGame extends Component {
     const newGame = new Game(5);
     this.state = {
       game: newGame,
-      stone: 'F',
+      stone: '',
     };
     this.toMove = [];
     this.isMoving = false;
-    this.select = this.select.bind(this);
+    this.selectSquare = this.selectSquare.bind(this);
+    this.selectStone = this.selectStone.bind(this);
   }
 
-  select(col, row) {
+  selectSquare(col, row) {
     const newBoard = this.state.game;
     const stack = newBoard.board[col][row];
     const { isOccupied } = stack;
     if (!this.isMoving) {
       if (!isOccupied) {
-        if (newBoard.toPlay === 1) {
-          newBoard.board[col][row].place(1);
-          newBoard.toPlay = 2;
-        } else if (newBoard.toPlay === 2) {
-          newBoard.board[col][row].place(2);
-          newBoard.toPlay = 1;
+        newBoard.board[col][row].place(newBoard.toPlay, this.state.stone);
+        if (this.state.stone === 'C') {
+          newBoard.pieces[newBoard.toPlay].C -= 1;
+          this.setState({ stone: '' });
+        } else {
+          newBoard.pieces[newBoard.toPlay].F -= 1;
+          if (this.state.stone === 'S') this.setState({ stone: '' });
         }
+        newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
       } else if (isOccupied && (stack.owner === newBoard.toPlay)) {
         this.toMove = stack.stack;
         newBoard.board[col][row] = new Stack();
@@ -47,21 +50,27 @@ class LiveGame extends Component {
     });
   }
 
+  selectStone(stone) {
+    this.setState({
+      stone,
+    });
+  }
+
   render() {
     return (
       <div className="home game">
         <div className="board">
-          <Board game={this.state.game} select={this.select} />
+          <Board game={this.state.game} selectSquare={this.selectSquare} />
           <div className="stone-select">
             <div className="active-stone">{this.state.stone}</div>
-            <button className="piece" onClick={this.selectStone}>
+            <button className="piece" onClick={() => { this.selectStone(''); }}>
             F ({ this.state.game.pieces[1].F })
             </button>
-            <button className="piece" onClick={this.selectStone}>
+            <button className="piece" onClick={() => { this.selectStone('S'); }}>
             S
             </button>
-            <button className="piece" onClick={this.selectStone}>
-            C ({this.state.game.pieces[2].C})
+            <button className="piece" onClick={() => { this.selectStone('C'); }}>
+            C ({this.state.game.pieces[1].C})
             </button>
           </div>
         </div>
