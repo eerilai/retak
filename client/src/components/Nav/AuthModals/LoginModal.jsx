@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Modal } from 'reactstrap';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toggleLoginLogout, login } from '../../../actions/actions';
+
 class LoginModal extends Component {
   constructor(props) {
     super(props);
@@ -49,7 +53,7 @@ class LoginModal extends Component {
             </div>
             <div>
               <p>Password</p>
-              <input type="text" value={this.state.password} onChange={this.handlePasswordChange} />
+              <input type="password" value={this.state.password} onChange={this.handlePasswordChange} />
             </div>
             <div>
               <button>
@@ -66,4 +70,12 @@ class LoginModal extends Component {
   }
 }
 
-export default LoginModal
+function mapStateToProps(state) {
+  return { hasLoggedIn : state.state.hasLoggedIn }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ toggleLoginLogout, login }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginModal);

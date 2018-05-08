@@ -3,7 +3,7 @@ import { Component } from 'react';
 
 import SampleList from '../containers/sampleComponentContainer'
 
-export default class App extends Component {
+export default class SampleApp extends Component {
   render() {
     return (
       <div>

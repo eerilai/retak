@@ -2,6 +2,10 @@ import React from 'react';
 import { Modal } from 'reactstrap';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toggleLoginLogout, login } from '../../../actions/actions';
+
 const LogoutModal = (props) => {
   const logout = () => {
     axios.post('/auth/logout')
@@ -24,4 +28,12 @@ const LogoutModal = (props) => {
   );
 };
 
-export default LogoutModal
+function mapStateToProps(state) {
+  return { hasLoggedOut : state.state.hasLoggedOut }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ toggleLoginLogout, login }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogoutModal);

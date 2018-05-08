@@ -50,3 +50,66 @@ nav:hover {
   min-height: 600px;
 }
 
+/* Tables CSS */
+.tg  {
+  /* border-collapse:collapse; */
+  grid-column: 3;
+  width: 100%;
+  border-spacing:0;
+  border-color:#ccc;
+  margin: auto;
+}
+.tg th{
+  font-family:"Lucida Console", Monaco, monospace !important;
+  font-size:14px;
+  font-weight:normal;
+  padding:10px 5px;
+  border-style:solid;
+  border-width:1px;
+  overflow:hidden;
+  word-break:normal;
+  border-top-width:1px;
+  border-bottom-width:1px;
+  border-color:#ccc;
+  color:#333;
+  background-color:#f0f0f0;
+}
+.tg td{
+  font-family:"Lucida Console", Monaco, monospace !important;
+  font-size:12px;
+  padding:10px 5px;
+  border-style:solid;
+  border-width:0px;
+  overflow:hidden;
+  word-break:normal;
+  border-top-width:1px;
+  border-bottom-width:1px;
+  border-color:#ccc;
+  color:#333;
+  background-color:#fff;
+  cursor: pointer;
+}
+.tg .tg-yw4l{
+  vertical-align:top
+}
+.tg .tg-colName1{
+  border-color:inherit;
+  vertical-align:top
+}
+.tg .tg-colNames{
+  font-size:14px;
+  font-family:"Lucida Console", Monaco, monospace !important;
+  border-color:inherit;
+  vertical-align:top
+}
+.tg .tg-row{
+  background-color:rgb(255, 255, 255);
+  border-color:inherit;
+  vertical-align:top
+}
+.tg-row:hover{
+  background-color: cornflowerblue;
+}
+.tg .row:hover{
+  background-color: #333;
+}
