@@ -3,7 +3,7 @@ import { convertCoord } from './gameUtil';
 
 const Square = (props) => {
   const coord = convertCoord([props.col, props.row]);
-  const squareSize = 600 / props.game.size;
+  const squareSize = 595 / props.game.size;
   const style = {
     width: squareSize,
     height: squareSize,
