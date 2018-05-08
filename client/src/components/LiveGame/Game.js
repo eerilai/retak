@@ -3,10 +3,10 @@ import Stack from './Stack';
 
 const createBoard = (size) => {
   const board = [];
-  for (let i = 0; i < size; i += 1) {
-    board[i] = [];
-    for (let j = 0; j < size; j += 1) {
-      board[i][j] = new Stack();
+  for (let row = 0; row < size; row += 1) {
+    board[row] = [];
+    for (let col = 0; col < size; col += 1) {
+      board[row][col] = new Stack(this, row, col);
     }
   }
   return board;

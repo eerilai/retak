@@ -5,14 +5,14 @@ const Board = (props) => {
   const squares = [];
   let count = 0;
   let color = '';
-  for (let i = 0; i < props.game.size; i += 1) {
-    for (let j = 0; j < props.game.size; j += 1) {
-      color = (i % 2 !== j % 2) ? '#DEE3E6' : '#8CA2AD';
+  for (let row = 0; row < props.game.size; row += 1) {
+    for (let col = 0; col < props.game.size; col += 1) {
+      color = (row % 2 !== col % 2) ? '#DEE3E6' : '#8CA2AD';
       count += 1;
       squares.push(<Square
         game={props.game}
-        row={i}
-        col={j}
+        row={row}
+        col={col}
         color={color}
         selectSquare={props.selectSquare}
       />);
