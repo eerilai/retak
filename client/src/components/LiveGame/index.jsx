@@ -11,7 +11,7 @@ class LiveGame extends Component {
       game: newGame,
       stone: '',
     };
-    this.toMove = [];
+    this.toMove = {};
     this.isMoving = false;
     this.selectSquare = this.selectSquare.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
@@ -33,13 +33,18 @@ class LiveGame extends Component {
         }
         newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
       } else if (isOccupied && (stack.owner === newBoard.toPlay)) {
-        this.toMove = stack.stack;
-        newBoard.board[col][row] = new Stack();
+        this.toMove.stack = stack.stack.splice(0, newBoard.size);
+        this.toMove.stone = stack.stone;
+        stack.stone = '';
+        stack.owner = stack.stack[0] || 0;
+        stack.isOccupied = 0;
         this.isMoving = true;
       }
-    } else {
-      stack.place(this.toMove.shift());
-      if (!this.toMove.length) {
+    } else if (stack.stone === '') {
+      stack.place(this.toMove.stack.pop());
+      if (!this.toMove.stack.length) {
+        stack.stone = this.toMove.stone;
+        this.toMove = {};
         this.isMoving = false;
         newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
       }

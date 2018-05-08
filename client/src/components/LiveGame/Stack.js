@@ -7,7 +7,7 @@ class Stack {
   }
 
   place(player, stone = '') {
-    this.stack.push(player);
+    this.stack.unshift(player);
     this.stone = stone;
     this.owner = player;
     this.isOccupied = true;

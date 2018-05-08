@@ -18,7 +18,7 @@ const Square = (props) => {
       className={coord}
       onClick={() => { props.selectSquare(props.col, props.row); }}
     >
-      {stack.stack + stack.stone}
+      {stack.stone + stack.stack}
     </div>
   );
 };
