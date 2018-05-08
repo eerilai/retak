@@ -23,15 +23,17 @@ class LiveGame extends Component {
     const { isOccupied } = stack;
     if (!this.isMoving) {
       if (!isOccupied) {
-        newBoard.board[col][row].place(newBoard.toPlay, this.state.stone);
-        if (this.state.stone === 'C') {
-          newBoard.pieces[newBoard.toPlay].C -= 1;
-          this.setState({ stone: '' });
-        } else {
-          newBoard.pieces[newBoard.toPlay].F -= 1;
-          if (this.state.stone === 'S') this.setState({ stone: '' });
+        if (newBoard.pieces[newBoard.toPlay].F !== 0) {
+          newBoard.board[col][row].place(newBoard.toPlay, this.state.stone);
+          if (this.state.stone === 'C') {
+            newBoard.pieces[newBoard.toPlay].C -= 1;
+            this.setState({ stone: '' });
+          } else {
+            newBoard.pieces[newBoard.toPlay].F -= 1;
+            if (this.state.stone === 'S') this.setState({ stone: '' });
+          }
+          newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
         }
-        newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
       } else if (isOccupied && (stack.owner === newBoard.toPlay)) {
         this.toMove.stack = stack.stack.splice(0, newBoard.size);
         this.toMove.stone = stack.stone;
