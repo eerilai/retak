@@ -14,7 +14,7 @@ class LiveGame extends Component {
     this.toMove = [];
     this.isMoving = false;
     this.selectSquare = this.selectSquare.bind(this);
-    this.selectStone = this.selectStone.bind(this);
+    this.selectCapstone = this.selectCapstone.bind(this);
   }
 
   selectSquare(col, row) {
@@ -50,10 +50,20 @@ class LiveGame extends Component {
     });
   }
 
-  selectStone(stone) {
-    this.setState({
-      stone,
-    });
+  selectCapstone(stone) {
+    if (this.state.game.pieces[this.state.game.toPlay].C > 0) {
+      this.setState({
+        stone,
+      });
+    }
+  }
+
+  toggleStanding() {
+    if (this.state.stone === '') {
+      this.setState({ stone: 'S' });
+    } else {
+      this.setState({ stone: '' });
+    }
   }
 
   render() {
@@ -63,13 +73,10 @@ class LiveGame extends Component {
           <Board game={this.state.game} selectSquare={this.selectSquare} />
           <div className="stone-select">
             <div className="active-stone">{this.state.stone}</div>
-            <button className="piece" onClick={() => { this.selectStone(''); }}>
-            F ({ this.state.game.pieces[1].F })
+            <button className="piece" onClick={() => { this.toggleStanding(); }}>
+              { this.state.stone === 'S' ? 'F' : 'S' }({ this.state.game.pieces[1].F })
             </button>
-            <button className="piece" onClick={() => { this.selectStone('S'); }}>
-            S
-            </button>
-            <button className="piece" onClick={() => { this.selectStone('C'); }}>
+            <button className="piece" onClick={() => { this.selectCapstone('C'); }}>
             C ({this.state.game.pieces[1].C})
             </button>
           </div>
