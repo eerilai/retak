@@ -10,16 +10,13 @@ import Chat from "./LiveGame/chat";
 const App = () => (
   <div id="page">
     <Nav />
-    <Chat />
-    <div className="main">
-      <Switch>
-        <Route path="/learn" component={Learn} />
-        <Route path="/about" component={About} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/game" component={Game} />
-        <Route path="/" component={Home} />
-      </Switch>
-    </div>
+    <Switch>
+      <Route path="/learn" component={Learn} />
+      <Route path="/about" component={About} />
+      <Route path="/profile" component={Profile} />
+      <Route path="/game" component={Game} />
+      <Route path="/" component={Home} />
+    </Switch>
   </div>
 );
 export default App;

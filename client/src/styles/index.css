@@ -106,3 +106,23 @@ input {
 #output strong {
   color: #575ed8;
 }
+
+table,
+td,
+th {
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  padding: 15px;
+}
+.room:hover {
+  cursor: pointer;
+}
