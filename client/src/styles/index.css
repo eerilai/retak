@@ -1,9 +1,9 @@
 body {
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
   overflow-x: hidden;
   margin: 0;
   padding: 0;
-  font-family:helvetica;
+  font-family: helvetica;
 }
 
 button {
@@ -24,9 +24,9 @@ button {
 
 nav {
   font-size: 12px;
-  cursor:pointer;
+  cursor: pointer;
   padding: 5px 10px;
-  text-shadow: 2px 2px 2px #DCDCDC;
+  text-shadow: 2px 2px 2px #dcdcdc;
 }
 
 nav:hover {
@@ -40,7 +40,8 @@ nav:hover {
   text-align: center;
 }
 
-.lobby, .leaderboard {
+.lobby,
+.leaderboard {
   border-style: solid;
   border-width: 2px;
   min-height: 400px;
@@ -50,3 +51,58 @@ nav:hover {
   min-height: 600px;
 }
 
+button {
+  background: #575ed8;
+  color: #fff;
+  font-size: 18px;
+  border: 0;
+  padding: 12px 0;
+  width: 100%;
+  border-radius: 0 0 2px 2px;
+}
+#chat {
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0, 0.05);
+  border-radius: 2px;
+  text-align: left;
+  max-width: 800px;
+  border: 1px solid #ddd;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0, 0.05);
+  border-radius: 2px;
+  grid-column: 5;
+  grid-row: 2;
+  margin-right: 20px;
+  margin-top: 100px;
+  height: 500px;
+}
+#chat-window {
+  height: 500px;
+  overflow: auto;
+  background: #f9f9f9;
+}
+input {
+  padding: 10px 20px;
+  box-sizing: border-box;
+  background: #eee;
+  border: 1px solid #ddd;
+  display: block;
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  font-size: 10px;
+}
+#output p {
+  padding: 14px 0px;
+  margin: 0 20px;
+  border-bottom: 1px solid #e9e9e9;
+  color: #555;
+}
+
+#feedback p {
+  color: #aaa;
+  padding: 14px 0px;
+  margin: 0 20px;
+}
+
+#output strong {
+  color: #575ed8;
+}

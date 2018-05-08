@@ -3,6 +3,7 @@ const session = require("express-session");
 const passport = require("passport");
 const path = require("path");
 const bodyParser = require("body-parser");
+const socket = require("socket.io");
 
 require("dotenv").config();
 
@@ -42,12 +43,26 @@ app.get("/bundle.js", (req, res) => {
   console.log("getting bundle");
   res.sendFile(path.join(__dirname, "../client/dist/bundle.js"));
 });
+
 app.get("/*", (req, res) => {
   console.log("Wildcard route, sending back index.html :)");
   res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
+});
+
+//Socket Setup
+const io = socket(server);
+io.on("connection", function(socket) {
+  console.log("made socket connection", socket.id);
+  socket.on("chat", function(data) {
+    io.sockets.emit("chat", data);
+  });
+  socket.on("typing", function(data) {
+    console.log("data", data);
+    socket.broadcast.emit("typing", data);
+  });
 });
