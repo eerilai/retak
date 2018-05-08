@@ -11,13 +11,14 @@ const Square = (props) => {
     'border-color': 'black',
     'background-color': props.color,
   };
+  const stack = props.game.board[props.col][props.row];
   return (
     <div
       style={style}
       className={coord}
-      onClick={() => { props.select(props.col, props.row); }}
+      onClick={() => { props.selectSquare(props.col, props.row); }}
     >
-      {props.game.board[props.col][props.row].stack}
+      {stack.stone + stack.stack}
     </div>
   );
 };

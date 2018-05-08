@@ -18,7 +18,7 @@ const Board = (props) => {
         row={i}
         col={j}
         color={color}
-        select={props.select}
+        selectSquare={props.selectSquare}
       />);
     }
   }

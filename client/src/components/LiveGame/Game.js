@@ -1,3 +1,4 @@
+import { pieceCount } from './gameUtil';
 import Stack from './Stack';
 
 const createBoard = (size) => {
@@ -18,6 +19,10 @@ class Game {
     this.second = player2;
     this.board = createBoard(size);
     this.toPlay = 1;
+    this.pieces = {
+      1: { ...pieceCount[size] }, // Props ['F'], ['C'], ['Total']
+      2: { ...pieceCount[size] },
+    };
   }
 }
 
