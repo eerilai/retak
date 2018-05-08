@@ -22,10 +22,10 @@ class LiveGame extends Component {
     if (!this.isMoving) {
       if (!isOccupied) {
         if (newBoard.toPlay === 1) {
-          newBoard.board[col][row] = new Stack(1);
+          newBoard.board[col][row].place(1);
           newBoard.toPlay = 2;
         } else if (newBoard.toPlay === 2) {
-          newBoard.board[col][row] = new Stack(2);
+          newBoard.board[col][row].place(2);
           newBoard.toPlay = 1;
         }
       } else if (isOccupied && (stack.owner === newBoard.toPlay)) {
@@ -34,7 +34,7 @@ class LiveGame extends Component {
         this.isMoving = true;
       }
     } else {
-      stack.stack.push(this.toMove.shift());
+      stack.place(this.toMove.shift());
       if (!this.toMove.length) {
         this.isMoving = false;
         newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
