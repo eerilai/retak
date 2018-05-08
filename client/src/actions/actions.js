@@ -27,12 +27,12 @@ export const toggleLoginLogout = (status) => (
   }
 );
 
-export const setLoggedInPlayers = (username1, username2) => (
+export const setLoggedInPlayers = (player1, player2) => (
   {
     type: type.SET_LOGGEDIN_PLAYERS,
     payload:{
-      player1: username1,
-      player2: username2
+      player1,
+      player2
     }
   }
 )
