@@ -3,10 +3,10 @@ class Stack {
     this.stone = '';
     this.owner = player;
     this.stack = [];
-    player === 0 ? this.isOccupied = false : this.isOccupied = true;
+    this.isOccupied = player !== 0;
   }
 
-  place(player, stone) {
+  place(player, stone = 'F') {
     this.stack.push(player);
     this.stone = stone;
     this.owner = player;
