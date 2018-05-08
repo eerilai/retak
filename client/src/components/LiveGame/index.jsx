@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import axios from 'axios';
+
 import Game from "./Game";
 import Board from "./Board";
 import Stack from "./Stack";
@@ -9,11 +11,23 @@ class LiveGame extends Component {
     super(props);
     const newGame = new Game(5);
     this.state = {
-      game: newGame
+      game: newGame,
+      username: ''
     };
     this.toMove = [];
     this.isMoving = false;
     this.select = this.select.bind(this);
+  }
+
+  componentWillMount() {
+    axios.post('/game/newGame')
+      .then((res) => {
+        const { username } = res.data;
+        console.log('username: ' + username);
+        this.setState({
+          username
+        });
+      });
   }
 
   select(col, row) {
@@ -49,11 +63,13 @@ class LiveGame extends Component {
 
   render() {
     return (
-      <div className="home game">
-        <div className="board">
-          <Board game={this.state.game} select={this.select} />
+      <div className="main">
+        <div className="home game">
+          <div className="board">
+            <Board game={this.state.game} select={this.select} />
+          </div>
+          <Chat username={this.state.username} />
         </div>
-        <Chat />
       </div>
     );
   }

@@ -6,7 +6,6 @@ class Chat extends Component {
     super(props);
 
     this.state = {
-      username: "",
       message: "",
       messages: [],
       typing: ""
@@ -30,7 +29,7 @@ class Chat extends Component {
     this.sendMessage = ev => {
       ev.preventDefault();
       this.socket.emit("chat", {
-        author: this.state.username,
+        author: this.props.username,
         message: this.state.message
       });
       this.setState({ message: "" });
@@ -38,7 +37,7 @@ class Chat extends Component {
 
     this.handleTyping = () => {
       this.socket.emit("typing", {
-        author: this.state.username
+        author: this.props.username
       });
     };
   }
@@ -66,7 +65,7 @@ class Chat extends Component {
           id="handle"
           type="text"
           placeholder="Username"
-          value={this.state.username}
+          value={this.props.username}
           onChange={ev => this.setState({ username: ev.target.value })}
         />
 

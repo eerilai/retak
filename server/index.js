@@ -9,6 +9,7 @@ require("dotenv").config();
 
 const db = require("../database");
 const authRoutes = require("./routes/authRoutes");
+const gameRoutes = require("./routes/gameRoutes");
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRoutes);
+app.use("/game", gameRoutes);
 
 // Implement authorization check for relevant requests, ie profile, logout, etc
 const authCheck = (req, res, next) => {
