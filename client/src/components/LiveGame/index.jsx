@@ -9,6 +9,7 @@ class LiveGame extends Component {
     const newGame = new Game(5);
     this.state = {
       game: newGame,
+      stone: 'F',
     };
     this.toMove = [];
     this.isMoving = false;
@@ -51,6 +52,18 @@ class LiveGame extends Component {
       <div className="home game">
         <div className="board">
           <Board game={this.state.game} select={this.select} />
+          <div className="stone-select">
+            <div className="active-stone">{this.state.stone}</div>
+            <button className="piece" onClick={this.selectStone}>
+            F ({ this.state.game.pieces[1].F })
+            </button>
+            <button className="piece" onClick={this.selectStone}>
+            S
+            </button>
+            <button className="piece" onClick={this.selectStone}>
+            C ({this.state.game.pieces[2].C})
+            </button>
+          </div>
         </div>
       </div>
     );
