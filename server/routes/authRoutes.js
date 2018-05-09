@@ -13,7 +13,7 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
 });
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.redirect('/');
+  res.send('Success');
 });
 
 router.post('/signup', (req, res) => {
@@ -22,9 +22,9 @@ router.post('/signup', (req, res) => {
       req.login(user, (err) => {
         if (err) {
           res.status(500)
-          res.redirect('/');
+          res.send('Server Error');
         }
-        res.redirect('/');
+        res.send('Success');
       });
     })
     .catch((err) => {
@@ -35,7 +35,7 @@ router.post('/signup', (req, res) => {
 
 router.post('/logout', (req, res) => {
   req.session.destroy((err) => {
-    res.redirect('/');
+    res.send('Success');
   });
 });
 

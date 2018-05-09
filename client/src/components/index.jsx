@@ -5,7 +5,7 @@ import Home from "./Home";
 import Learn from "./Learn";
 import About from "./About";
 import Profile from "./Profile";
-import Game from "./LiveGame";
+import LiveGame from "./LiveGame";
 
 const App = () => (
   <div id="page">
@@ -15,7 +15,7 @@ const App = () => (
         <Route path="/learn" component={Learn} />
         <Route path="/about" component={About} />
         <Route path="/profile" component={Profile} />
-        <Route path="/game" component={Game} />
+        <Route path="/game" component={LiveGame} />
         <Route path="/" component={Home} />
       </Switch>
     </div>

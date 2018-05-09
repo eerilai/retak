@@ -1,4 +1,4 @@
-import types from './types';
+import types, { LOGGEDIN, TOGGLE_LOGIN_LOGOUT, SET_LOGGEDIN_PLAYERS } from './types';
 
 // EXAPMLE =>
 /*
@@ -13,23 +13,23 @@ export const actionFunc = () => {
 }
 */
 
-export const login = (username) => (
+export const login = (usernameOrEmail) => (
   {
-    type: types.LOGGEDIN,
-    payload: username
+    type: LOGGEDIN,
+    payload: usernameOrEmail
   }
 );
 
 export const toggleLoginLogout = (status) => (
   {
-    type: types.TOGGLE_LOGIN_LOGOUT,
+    type: TOGGLE_LOGIN_LOGOUT,
     payload: status
   }
 );
 
 export const setLoggedInPlayers = (player1, player2) => (
   {
-    type: types.SET_LOGGEDIN_PLAYERS,
+    type: SET_LOGGEDIN_PLAYERS,
     payload:{
       player1,
       player2

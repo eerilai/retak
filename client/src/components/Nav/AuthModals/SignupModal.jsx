@@ -83,15 +83,16 @@ class SignupModal extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return { 
-    hasLoggedIn: state.state.hasLoggedIn,
-    hasSignedUp: state.state.hasSignedUp
-  }
-}
+// function mapStateToProps(state) {
+//   return { 
+//     hasLoggedIn: state.state.hasLoggedIn,
+//     hasSignedUp: state.state.hasSignedUp
+//   }
+// }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ toggleLoginLogout, login }, dispatch);
-}
+// function mapDispatchToProps(dispatch) {
+//   return bindActionCreators({ toggleLoginLogout, login }, dispatch);
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignupModal);
+// export default connect(mapStateToProps, mapDispatchToProps)(SignupModal);
+export default SignupModal;

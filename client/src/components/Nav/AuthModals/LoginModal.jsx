@@ -35,7 +35,17 @@ class LoginModal extends Component {
     axios.post('/auth/login', {
       username: usernameOrEmail,
       password
-    });
+    })
+    .then((res) => {
+      console.log('You have logedIn', res)
+      this.props.toggleView('off');
+      this.props.toggleLoginLogout(true);
+      this.props.login(usernameOrEmail);
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+
   }
 
   render() {
@@ -71,7 +81,11 @@ class LoginModal extends Component {
 }
 
 function mapStateToProps(state) {
-  return { hasLoggedIn : state.state.hasLoggedIn }
+  console.log('state in LoginModal', state)
+  return { 
+    isLoggedIn: state.isLoggedIn,
+    userLoggedIn: state.userLoggedIn
+  }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -79,3 +93,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginModal);
+// export default LoginModal;

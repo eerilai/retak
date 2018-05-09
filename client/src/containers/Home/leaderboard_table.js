@@ -64,10 +64,11 @@ render() {
   }
 }
 
-function mapStateToProps({ users }) {
 // This section is just a templeate and not currently being used.
 // It needs to FILLLLED IN once the correct data stucture has been determined.
-  return { users };
-}
+// function mapStateToProps({ users }) {
+//   return { users };
+// }
 
-export default connect(mapStateToProps)(LeaderboardTable);
+// export default connect(mapStateToProps)(LeaderboardTable);
+export default LeaderboardTable;

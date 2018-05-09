@@ -55,13 +55,14 @@ class LobbyTable extends Component {
 
 // This section is just a templeate and not currently being used.
 // It needs to FILLLLED IN once the correct data stucture has been determined.
-function mapStateToProps({ games }) {
-  return { games };
-}
+// function mapStateToProps({ games }) {
+//   return { games };
+// }
 
 // function mapDispatchToProps(dispatch) {
 //   return bindActionCreators({ games }, dispatch);
 // }
 
-// export default connect(mapStateToProps, mapDispatchToProps)(LobbyList);
-export default connect(mapStateToProps)(LobbyTable);
+// export default connect(mapStateToProps, mapDispatchToProps)(LobbyTable);
+// export default connect(mapStateToProps)(LobbyTable);
+export default LobbyTable;
