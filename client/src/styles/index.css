@@ -45,21 +45,3 @@ nav:hover {
   border-width: 2px;
   min-height: 400px;
 }
-
-.board {
-  min-height: 600px;
-}
-
-.stone {
-  border-radius: 8px;
-  margin: auto;
-  box-shadow: 2px 2px rgba(0, 0, 0, 0.1);
-}
-
-.p1 {
-  background-color: #fff;
-}
-
-.p2 {
-  background-color: #608292;
-}

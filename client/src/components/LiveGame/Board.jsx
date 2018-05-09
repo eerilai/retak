@@ -1,31 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Square from './Square';
 
-const Board = (props) => {
+const Board = ({ game, selectSquare }) => {
   const squares = [];
-  let count = 0;
-  let color = '';
-  for (let row = 0; row < props.game.size; row += 1) {
-    for (let col = 0; col < props.game.size; col += 1) {
-      color = (row % 2 !== col % 2) ? '#DEE3E6' : '#8CA2AD';
-      count += 1;
+  for (let row = 0; row < game.size; row += 1) {
+    for (let col = 0; col < game.size; col += 1) {
       squares.push(<Square
-        game={props.game}
+        game={game}
         row={row}
         col={col}
-        color={color}
-        selectSquare={props.selectSquare}
+        selectSquare={selectSquare}
       />);
     }
   }
-  const style = {
-    width: '600px',
-    height: '600px',
-    display: 'flex',
-    'flex-direction': 'row',
-    'flex-wrap': 'wrap',
-  };
-  return <div style={style}>{squares}</div>;
+  return <div className="board">{squares}</div>;
 };
 
 export default Board;

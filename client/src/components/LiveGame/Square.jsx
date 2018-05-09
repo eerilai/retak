@@ -1,68 +1,56 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { convertCoord } from './gameUtil';
 
-const Square = (props) => {
-  const coord = convertCoord([props.col, props.row]);
-  const squareSize = 599 / props.game.size;
-  const style = {
+const Square = ({ game, row, col, selectSquare }) => {
+  const squareSize = 599 / game.size;
+  const color = (row % 2 !== col % 2) ? '#DEE3E6' : '#8CA2AD';
+  const coord = convertCoord([col, row]);
+  const stack = game.board[col][row];
+
+  const squareStyle = {
     width: squareSize,
     height: squareSize,
-    'background-color': props.color,
-    display: 'flex',
-    'flex-direction': 'column',
+    'background-color': color,
   };
-  const percentDecrease = squareSize / 3;
-  const stoneSize = `${squareSize - percentDecrease}px`;
+  const stoneSize = `${squareSize - (squareSize * 0.4)}px`;
   const stoneStyle = {
     width: stoneSize,
     height: stoneSize,
   };
-  const spec = {
-    position: 'absolute',
-    'margin-left': '3px',
-    'border-radius': '5px',
-    color: '#55656D',
+  const leftMargin = squareSize - (squareSize * 0.12);
+  const stackOverflowStyle = {
+    'margin-left': `${leftMargin}px`,
   };
-  const percentLeft = squareSize / 8;
-  const left = squareSize - percentLeft;
-  const smallDivStyle = {
-    display: 'flex',
-    'flex-direction': 'column',
-    position: 'fixed',
-    'margin-left': `${left}px`,
-  }
-  const smallStyle = {
-    width: '10px',
-    height: '10px',
-  };
-  const stack = props.game.board[props.col][props.row];
+
   const renderStones = () => {
-    if (stack.stack.length <= 5) {
+    if (stack.stack.length <= game.size) {
       return (
-        <div style={style}>
-          <p style={spec}>{` ${stack.stone} `}</p>
-          {stack.stack.map((x, i) => <div className={`p${x} stone`} style={stoneStyle} />)}
+        <div className="square" style={squareStyle}>
+          <p className="non-flat">{` ${stack.stone} `}</p>
+          {stack.stack.map(x => <div className={`p${x} stone`} style={stoneStyle} />)}
         </div>
       );
-    } else if (stack.stack.length > 5) {
-      const top = stack.stack.slice(0, 5);
-      const rest = stack.stack.slice(5);
+    } else if (stack.stack.length > game.size) {
+      const top = stack.stack.slice(0, game.size);
+      const rest = stack.stack.slice(game.size);
       return (
-        <div style={style}>
-          <p style={spec}>{` ${stack.stone} `}</p>
-          {top.map((x, i) => <div className={`p${x} stone`} style={stoneStyle} />)}
-          <div style={smallDivStyle}>
-            {rest.map((x, i) => <div className={`p${x} stone`} style={smallStyle} />)}
+        <div className="square" style={squareStyle}>
+          <p className="non-flat">{` ${stack.stone} `}</p>
+          {top.map(x => <div className={`p${x} stone`} style={stoneStyle} />)}
+          <div className="stack-overflow" style={stackOverflowStyle}>
+            {rest.map(x => <div className={`p${x} stone overflow-stone`} />)}
           </div>
         </div>
       );
     }
+    return <div>Error rendering stones</div>;
   };
+
   return (
     <div
-      style={style}
-      className={coord}
-      onClick={() => { props.selectSquare(props.col, props.row); }}
+      style={squareStyle}
+      className={`square ${coord}`}
+      onClick={() => { selectSquare(col, row); }}
     >
       {renderStones()}
     </div>
