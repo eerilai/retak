@@ -5,6 +5,7 @@ import Game from "./Game";
 import Board from "./Board";
 import Stack from "./Stack";
 import Chat from "./chat";
+import '../../styles/livegame.css';
 
 class LiveGame extends Component {
   constructor(props) {
@@ -38,7 +39,7 @@ class LiveGame extends Component {
     if (!this.isMoving) {
       if (!isOccupied) {
         if (newBoard.pieces[newBoard.toPlay].F !== 0) {
-          newBoard.board[col][row].place(newBoard.toPlay, this.state.stone);
+          stack.place(newBoard.toPlay, this.state.stone);
           if (this.state.stone === 'C') {
             newBoard.pieces[newBoard.toPlay].C -= 1;
             this.setState({ stone: '' });
@@ -95,17 +96,19 @@ class LiveGame extends Component {
 
   render() {
     return (
-      <div className="home game">
-        <div className="board">
-          <Board game={this.state.game} selectSquare={this.selectSquare} />
-          <div className="stone-select">
-            <div className="active-stone">{this.state.stone}</div>
-            <button className="piece" onClick={() => { this.toggleStanding(); }}>
-              { this.state.stone === 'S' ? 'F' : 'S' }({ this.state.game.pieces[1].F })
-            </button>
-            <button className="piece" onClick={() => { this.selectCapstone('C'); }}>
-            C ({this.state.game.pieces[1].C})
-            </button>
+      <div className="main">
+        <div className="home game">
+          <div className="board">
+            <Board game={this.state.game} selectSquare={this.selectSquare} />
+            <div className="stone-select">
+              <div className="active-stone">{this.state.stone}</div>
+              <button className="piece" onClick={() => { this.toggleStanding(); }}>
+                { this.state.stone === 'S' ? 'F' : 'S' }({ this.state.game.pieces[1].F })
+              </button>
+              <button className="piece" onClick={() => { this.selectCapstone('C'); }}>
+              C ({this.state.game.pieces[1].C})
+              </button>
+            </div>
           </div>
         </div>
       </div>

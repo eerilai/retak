@@ -32,7 +32,7 @@ class App extends Component {
 
   render() {
     return (
-    <div id="page">
+      <div id="page">
         <Nav />
         <Switch>
           <Route path="/learn" component={Learn} />

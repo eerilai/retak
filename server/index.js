@@ -63,7 +63,7 @@ io.on("connection", function(socket) {
 
   socket.on('newRoom', () => {
     socket.leave(socket.id);
-    socket.join('some room');
+    socket.join('some room'); // randomize roomName
     for (let room in io.sockets.adapter.rooms) {
       console.log(`Number of sockets in ${room}: ${JSON.stringify(io.sockets.adapter.rooms[room].length)}`);
     }
