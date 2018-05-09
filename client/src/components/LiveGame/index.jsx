@@ -12,8 +12,6 @@ class LiveGame extends Component {
       game: newGame,
       stone: '',
     };
-    this.toMove = {};
-    this.isMoving = false;
     this.selectSquare = this.selectSquare.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
   }
@@ -23,7 +21,7 @@ class LiveGame extends Component {
     const coord = convertCoord([col, row]);
     const stack = game.squares[coord];
     const { isEmpty } = stack;
-    if (!this.isMoving) {
+    if (!game.isMoving) {
       if (isEmpty) {
         if (game.pieces[game.toPlay].F !== 0) {
           stack.place(game.toPlay, this.state.stone);
@@ -37,28 +35,28 @@ class LiveGame extends Component {
           game.toPlay = (game.toPlay === 1) ? 2 : 1;
         }
       } else if (!isEmpty && (stack.owner === game.toPlay)) {
-        this.toMove.stack = stack.stack.splice(0, game.size);
-        this.toMove.stone = stack.stone;
+        game.toMove.stack = stack.stack.splice(0, game.size);
+        game.toMove.stone = stack.stone;
         stack.stone = '';
         stack.owner = stack.stack[0] || 0;
         stack.isEmpty = !stack.stack.length;
-        this.isMoving = true;
+        game.isMoving = true;
         game.moveFrom = coord;
       }
-    } else if (this.isMoving &&
+    } else if (game.isMoving &&
                stack.stone === '') {
-      stack.place(this.toMove.stack.pop());
-      if (!this.toMove.stack.length) {
-        stack.stone = this.toMove.stone;
-        this.toMove = {};
-        this.isMoving = false;
+      stack.place(game.toMove.stack.pop());
+      if (!game.toMove.stack.length) {
+        stack.stone = game.toMove.stone;
+        game.toMove = {};
+        game.isMoving = false;
         game.toPlay = (game.toPlay === 1) ? 2 : 1;
       }
     } else if (stack.stone === 'S' &&
-               this.toMove.stone === 'C' &&
-               this.toMove.stack.length === 1) {
-      stack.place(this.toMove.stack.pop(), 'C');
-      this.isMoving = false;
+               game.toMove.stone === 'C' &&
+               game.toMove.stack.length === 1) {
+      stack.place(game.toMove.stack.pop(), 'C');
+      game.isMoving = false;
       game.toPlay = (game.toPlay === 1) ? 2 : 1;
     }
 
