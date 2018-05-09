@@ -6,19 +6,43 @@ import Learn from "./Learn";
 import About from "./About";
 import Profile from "./Profile";
 import Game from "./LiveGame";
+import Chat from "./LiveGame/chat";
+import socketIOClient from "socket.io-client";
 
-const App = () => (
-  <div id="page">
-    <Nav />
-    <div className="main">
-      <Switch>
-        <Route path="/learn" component={Learn} />
-        <Route path="/about" component={About} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/game" component={Game} />
-        <Route path="/" component={Home} />
-      </Switch>
-    </div>
-  </div>
-);
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      socket: {}
+    }
+  }
+
+  componentWillMount() {
+    let socket = socketIOClient();
+    this.setState({
+      socket
+    });
+    socket.emit('newRoom');
+    socket.emit('test1');
+    socket.on('test2', (data) => {
+      console.log(data);
+    });
+  }
+
+  render() {
+    return (
+    <div id="page">
+        <Nav />
+        <Switch>
+          <Route path="/learn" component={Learn} />
+          <Route path="/about" component={About} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/game" component={Game} />
+          <Route path="/" render={() => (<Home socket={this.state.socket} />)} />
+        </Switch>
+      </div>
+    );
+  }
+}
 export default App;

@@ -1,7 +1,10 @@
-import React, { Component } from 'react';
-import Game from './Game';
-import Board from './Board';
-import Stack from './Stack';
+import React, { Component } from "react";
+import axios from 'axios';
+
+import Game from "./Game";
+import Board from "./Board";
+import Stack from "./Stack";
+import Chat from "./chat";
 
 class LiveGame extends Component {
   constructor(props) {
@@ -15,6 +18,17 @@ class LiveGame extends Component {
     this.isMoving = false;
     this.selectSquare = this.selectSquare.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
+  }
+
+  componentWillMount() {
+    axios.post('/game/newGame')
+      .then((res) => {
+        const { username } = res.data;
+        console.log('username: ' + username);
+        this.setState({
+          username
+        });
+      });
   }
 
   selectSquare(col, row) {
@@ -48,7 +62,7 @@ class LiveGame extends Component {
         stack.stone = this.toMove.stone;
         this.toMove = {};
         this.isMoving = false;
-        newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
+        newBoard.toPlay = newBoard.toPlay === 1 ? 2 : 1;
       }
     } else if (stack.stone === 'S' &&
                this.toMove.stone === 'C' &&
@@ -59,7 +73,7 @@ class LiveGame extends Component {
     }
 
     this.setState({
-      game: newBoard,
+      game: newBoard
     });
   }
 
