@@ -1,9 +1,15 @@
+import { convertCoord } from './gameUtil';
+
 class Stack {
-  constructor(player = 0) {
+  constructor(game, col, row) {
+    this.game = game;
+    this.loc = [col, row];
+    this.coord = convertCoord(this.loc);
     this.stone = '';
-    this.owner = player;
+    this.owner = 0;
     this.stack = [];
-    this.isOccupied = player !== 0;
+    this.isOccupied = false;
+    this.neighbors = {};
   }
 
   place(player, stone = '') {
