@@ -19,49 +19,51 @@ class LiveGame extends Component {
   }
 
   selectSquare(col, row) {
-    const newBoard = this.state.game;
+    const { game } = this.state;
     const coord = convertCoord([col, row]);
-    const stack = newBoard.squares[coord];
-    const { isOccupied } = stack;
+    const stack = game.squares[coord];
+    const { isEmpty } = stack;
     if (!this.isMoving) {
-      if (!isOccupied) {
-        if (newBoard.pieces[newBoard.toPlay].F !== 0) {
-          stack.place(newBoard.toPlay, this.state.stone);
+      if (isEmpty) {
+        if (game.pieces[game.toPlay].F !== 0) {
+          stack.place(game.toPlay, this.state.stone);
           if (this.state.stone === 'C') {
-            newBoard.pieces[newBoard.toPlay].C -= 1;
+            game.pieces[game.toPlay].C -= 1;
             this.setState({ stone: '' });
           } else {
-            newBoard.pieces[newBoard.toPlay].F -= 1;
+            game.pieces[game.toPlay].F -= 1;
             if (this.state.stone === 'S') this.setState({ stone: '' });
           }
-          newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
+          game.toPlay = (game.toPlay === 1) ? 2 : 1;
         }
-      } else if (isOccupied && (stack.owner === newBoard.toPlay)) {
-        this.toMove.stack = stack.stack.splice(0, newBoard.size);
+      } else if (!isEmpty && (stack.owner === game.toPlay)) {
+        this.toMove.stack = stack.stack.splice(0, game.size);
         this.toMove.stone = stack.stone;
         stack.stone = '';
         stack.owner = stack.stack[0] || 0;
-        stack.isOccupied = 0;
+        stack.isEmpty = !stack.stack.length;
         this.isMoving = true;
+        game.moveFrom = coord;
       }
-    } else if (stack.stone === '') {
+    } else if (this.isMoving &&
+               stack.stone === '') {
       stack.place(this.toMove.stack.pop());
       if (!this.toMove.stack.length) {
         stack.stone = this.toMove.stone;
         this.toMove = {};
         this.isMoving = false;
-        newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
+        game.toPlay = (game.toPlay === 1) ? 2 : 1;
       }
     } else if (stack.stone === 'S' &&
                this.toMove.stone === 'C' &&
                this.toMove.stack.length === 1) {
       stack.place(this.toMove.stack.pop(), 'C');
       this.isMoving = false;
-      newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
+      game.toPlay = (game.toPlay === 1) ? 2 : 1;
     }
 
     this.setState({
-      game: newBoard,
+      game,
     });
   }
 

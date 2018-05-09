@@ -10,7 +10,7 @@ class Stack {
     this.stone = '';
     this.owner = 0;
     this.stack = [];
-    this.isOccupied = false;
+    this.isEmpty = true;
     this.neighbors = {};
     this.edges = [];
     this.isEW = false;
@@ -21,7 +21,7 @@ class Stack {
     this.stack.unshift(player);
     this.stone = stone;
     this.owner = player;
-    this.isOccupied = true;
+    this.isEmpty = false;
   }
 
   setNeighbors() {

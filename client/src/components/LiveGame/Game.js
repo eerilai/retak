@@ -14,6 +14,8 @@ class Game {
       1: { ...pieceCount[size] }, // Props ['F'], ['C'], ['Total']
       2: { ...pieceCount[size] },
     };
+    this.moveFrom = '';
+    this.moveDir = '';
   }
 
   createBoard(size) {
