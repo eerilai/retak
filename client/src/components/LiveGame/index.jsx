@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Game from './Game';
 import Board from './Board';
 import '../../styles/livegame.css';
+import { convertCoord } from './gameUtil';
 
 class LiveGame extends Component {
   constructor(props) {
@@ -19,7 +20,8 @@ class LiveGame extends Component {
 
   selectSquare(col, row) {
     const newBoard = this.state.game;
-    const stack = newBoard.board[col][row];
+    const coord = convertCoord([col, row]);
+    const stack = newBoard.squares[coord];
     const { isOccupied } = stack;
     if (!this.isMoving) {
       if (!isOccupied) {

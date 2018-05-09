@@ -25,6 +25,8 @@ class Game {
         this.squares[stack.coord] = stack;
       }
     }
+    Object.values(this.squares)
+      .forEach(square => square.setNeighbors());
   }
 }
 
