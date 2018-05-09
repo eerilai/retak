@@ -1,0 +1,45 @@
+.board {
+  min-height: 600px;
+  width: 600px;
+  height: 600px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.square {
+  display: flex;
+  flex-direction: column;
+}
+
+.stone {
+  border-radius: 8px;
+  margin: auto;
+  box-shadow: 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.p1 {
+  background-color: #fff;
+}
+
+.p2 {
+  background-color: #608292;
+}
+
+.non-flat {
+  position: absolute;
+  margin-left: 3px;
+  border-radius: 5px;
+  color: #55656D;
+}
+
+.stack-overflow {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+}
+
+.overflow-stone {
+  width: 10px;
+  height: 10px;
+}
