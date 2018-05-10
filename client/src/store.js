@@ -1,11 +1,8 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-
 import rootReducer from './reducers';
 import initialState from './initialState';
-// import {  } from './actions'
 
-// const initialState = {};
 
 const middleware = [thunk];
 
@@ -18,13 +15,8 @@ const store = createStore(
   )
 );
 
-// Dispatch actions
-// store.dispatch(action);
-
 store.subscribe(() => {
 	console.log('store changed', store.getState())
 });
-
-// store.unsubscribe();
 
 export default store;
