@@ -54,7 +54,7 @@
 .stack-overflow {
   display: flex;
   flex-direction: column;
-  position: fixed;
+  position: absolute;
 }
 
 .overflow-stone {
