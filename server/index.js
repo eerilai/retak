@@ -37,6 +37,10 @@ const authCheck = ((req, res, next) => {
 
 app.use('/', express.static(path.join(__dirname, '../client/dist')));
 
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => { console.log(`Listening on port ${PORT}`); });
