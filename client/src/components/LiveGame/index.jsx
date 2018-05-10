@@ -2,64 +2,117 @@ import React, { Component } from 'react';
 import Game from './Game';
 import Board from './Board';
 import '../../styles/livegame.css';
+import { convertCoord } from './gameUtil';
 
 class LiveGame extends Component {
   constructor(props) {
     super(props);
-    const newGame = new Game(5);
+    const newGame = new Game(6);
     this.state = {
       game: newGame,
       stone: '',
     };
-    this.toMove = {};
-    this.isMoving = false;
     this.selectSquare = this.selectSquare.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
   }
 
   selectSquare(col, row) {
-    const newBoard = this.state.game;
-    const stack = newBoard.board[col][row];
-    const { isOccupied } = stack;
-    if (!this.isMoving) {
-      if (!isOccupied) {
-        if (newBoard.pieces[newBoard.toPlay].F !== 0) {
-          stack.place(newBoard.toPlay, this.state.stone);
+    const { game } = this.state;
+    const coord = convertCoord([col, row]);
+    const stack = game.squares[coord];
+    const { isEmpty } = stack;
+    if (!game.isMoving) {
+      // Place a Stone
+      if (isEmpty) {
+        if (game.pieces[game.toPlay].F !== 0) {
+          stack.place(game.toPlay, this.state.stone);
           if (this.state.stone === 'C') {
-            newBoard.pieces[newBoard.toPlay].C -= 1;
+            game.pieces[game.toPlay].C -= 1;
             this.setState({ stone: '' });
           } else {
-            newBoard.pieces[newBoard.toPlay].F -= 1;
+            game.pieces[game.toPlay].F -= 1;
             if (this.state.stone === 'S') this.setState({ stone: '' });
           }
-          newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
+          game.toPlay = (game.toPlay === 1) ? 2 : 1;
         }
-      } else if (isOccupied && (stack.owner === newBoard.toPlay)) {
-        this.toMove.stack = stack.stack.splice(0, newBoard.size);
-        this.toMove.stone = stack.stone;
+      // Start a move
+      } else if (!isEmpty && (stack.owner === game.toPlay)) {
+        game.moveStack = [...stack.stack];
+        game.toMove.stack = stack.stack.splice(0, game.size);
+        game.toMove.stone = stack.stone;
         stack.stone = '';
         stack.owner = stack.stack[0] || 0;
-        stack.isOccupied = 0;
-        this.isMoving = true;
+        stack.isEmpty = !stack.stack.length;
+        game.isMoving = true;
+        game.moveOrigin = game.squares[coord];
+        game.moveOrigin.validMove = true;
+        Object.keys(stack.neighbors)
+          .forEach((dir) => {
+            if (stack.neighbors[dir].stone === '') {
+              stack.neighbors[dir].validMove = true;
+            } else if (stack.neighbors[dir].stone === 'S' &&
+                       game.toMove.stone === 'C' &&
+                       game.toMove.stack.length === 1) {
+              stack.neighbors[dir].validMove = true;
+            }
+          });
       }
-    } else if (stack.stone === '') {
-      stack.place(this.toMove.stack.pop());
-      if (!this.toMove.stack.length) {
-        stack.stone = this.toMove.stone;
-        this.toMove = {};
-        this.isMoving = false;
-        newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
+    // Continue Movement
+    } else if (game.isMoving &&
+               stack.stone === '' &&
+               stack.validMove === true) {
+      game.setMoveDir(stack);
+      if (game.moveDir !== '') {
+        game.moveOrigin.validMove = false;
+        Object.keys(game.moveOrigin.neighbors)
+          .forEach((dir) => { game.moveOrigin.neighbors[dir].validMove = false; });
+        if (Object.prototype.hasOwnProperty.call(stack.neighbors, game.moveDir)) {
+          if (stack.neighbors[game.moveDir].stone === '') {
+            stack.neighbors[game.moveDir].validMove = true;
+          } else if (stack.neighbors[game.moveDir].stone === 'S' &&
+                     game.toMove.stone === 'C' &&
+                     game.toMove.stack.length === 2) {
+            stack.neighbors[game.moveDir].validMove = true;
+          }
+        }
+        stack.validMove = true;
+        game.step = stack;
       }
-    } else if (stack.stone === 'S' &&
-               this.toMove.stone === 'C' &&
-               this.toMove.stack.length === 1) {
-      stack.place(this.toMove.stack.pop(), 'C');
-      this.isMoving = false;
-      newBoard.toPlay = (newBoard.toPlay === 1) ? 2 : 1;
+      stack.place(game.toMove.stack.pop());
+      if (game.toMove.stack.length === 1 && game.toMove.stone === 'C') {
+        Object.keys(game.moveOrigin.neighbors)
+          .forEach((dir) => {
+            if (stack.neighbors[dir].stone === 'S') {
+              stack.neighbors[dir].validMove = true;
+            }
+          });
+      }
+      if (!game.toMove.stack.length) {
+        stack.stone = game.toMove.stone;
+        game.toMove = {};
+        game.isMoving = false;
+        game.moveOrigin.validMove = false;
+        Object.keys(game.squares)
+          .forEach((c) => { game.squares[c].validMove = false; });
+        if (game.moveDir !== '') {
+          game.toPlay = (game.toPlay === 1) ? 2 : 1;
+        }
+        game.moveDir = '';
+      }
+    // Wallsmash
+    } else if (game.isMoving &&
+               stack.stone === 'S' &&
+               game.toMove.stone === 'C' &&
+               game.toMove.stack.length === 1) {
+      stack.place(game.toMove.stack.pop(), 'C');
+      Object.keys(game.squares)
+        .forEach((c) => { game.squares[c].validMove = false; });
+      game.isMoving = false;
+      game.toPlay = (game.toPlay === 1) ? 2 : 1;
     }
 
     this.setState({
-      game: newBoard,
+      game,
     });
   }
 
