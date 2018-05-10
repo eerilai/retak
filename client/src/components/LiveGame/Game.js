@@ -16,7 +16,7 @@ class Game {
     };
     this.toMove = {};
     this.isMoving = false;
-    this.moveFrom = '';
+    this.moveOrigin = {};
     this.moveDir = '';
   }
 
@@ -31,6 +31,22 @@ class Game {
     }
     Object.values(this.squares)
       .forEach(square => square.setNeighbors());
+  }
+
+  setMoveDir(stack) {
+    if (stack.col > this.moveOrigin.col &&
+        stack.row === this.moveOrigin.row) {
+      this.moveDir = '>';
+    } else if (stack.col < this.moveOrigin.col &&
+               stack.row === this.moveOrigin.row) {
+      this.moveDir = '<';
+    } else if (stack.col === this.moveOrigin.col &&
+               stack.row < this.moveOrigin.row) {
+      this.moveDir = '+';
+    } else if (stack.col === this.moveOrigin.col &&
+               stack.row > this.moveOrigin.row) {
+      this.moveDir = '-';
+    }
   }
 }
 

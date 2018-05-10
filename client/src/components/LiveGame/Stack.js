@@ -15,6 +15,7 @@ class Stack {
     this.edges = [];
     this.isEW = false;
     this.isNS = false;
+    this.validMove = false;
   }
 
   place(player, stone = '') {

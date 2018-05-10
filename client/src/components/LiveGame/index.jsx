@@ -21,7 +21,7 @@ class LiveGame extends Component {
     const coord = convertCoord([col, row]);
     const stack = game.squares[coord];
     const { isEmpty } = stack;
-    if (!game.isMoving) {
+    if (!game.isMoving && !game.canMove) {
       if (isEmpty) {
         if (game.pieces[game.toPlay].F !== 0) {
           stack.place(game.toPlay, this.state.stone);
@@ -35,22 +35,35 @@ class LiveGame extends Component {
           game.toPlay = (game.toPlay === 1) ? 2 : 1;
         }
       } else if (!isEmpty && (stack.owner === game.toPlay)) {
+        game.moveStack = [...stack.stack];
         game.toMove.stack = stack.stack.splice(0, game.size);
         game.toMove.stone = stack.stone;
         stack.stone = '';
         stack.owner = stack.stack[0] || 0;
         stack.isEmpty = !stack.stack.length;
         game.isMoving = true;
-        game.moveFrom = coord;
+        game.moveOrigin = game.squares[coord];
+        game.moveOrigin.validMove = true;
+        console.log(game.moveOrigin);
+        Object.values(stack.neighbors)
+          .forEach((s) => { if (s.stone === '') s.validMove = true; });
       }
     } else if (game.isMoving &&
-               stack.stone === '') {
+               stack.stone === '' &&
+               stack.validMove === true) {
+      game.setMoveDir(stack);
       stack.place(game.toMove.stack.pop());
       if (!game.toMove.stack.length) {
+        game.moveDir = '';
         stack.stone = game.toMove.stone;
         game.toMove = {};
         game.isMoving = false;
-        game.toPlay = (game.toPlay === 1) ? 2 : 1;
+        game.moveOrigin.validMove = false;
+        Object.values(game.moveOrigin.neighbors)
+          .forEach((s) => { s.validMove = false; });
+        if (JSON.stringify(game.moveOrigin.stack) !== JSON.stringify(game.moveStack)) {
+          game.toPlay = (game.toPlay === 1) ? 2 : 1;
+        }
       }
     } else if (stack.stone === 'S' &&
                game.toMove.stone === 'C' &&
