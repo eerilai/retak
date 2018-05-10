@@ -7,7 +7,7 @@ import { convertCoord } from './gameUtil';
 class LiveGame extends Component {
   constructor(props) {
     super(props);
-    const newGame = new Game(5);
+    const newGame = new Game(6);
     this.state = {
       game: newGame,
       stone: '',
@@ -21,7 +21,8 @@ class LiveGame extends Component {
     const coord = convertCoord([col, row]);
     const stack = game.squares[coord];
     const { isEmpty } = stack;
-    if (!game.isMoving && !game.canMove) {
+    if (!game.isMoving) {
+      // Place a Stone
       if (isEmpty) {
         if (game.pieces[game.toPlay].F !== 0) {
           stack.place(game.toPlay, this.state.stone);
@@ -34,6 +35,7 @@ class LiveGame extends Component {
           }
           game.toPlay = (game.toPlay === 1) ? 2 : 1;
         }
+      // Start a move
       } else if (!isEmpty && (stack.owner === game.toPlay)) {
         game.moveStack = [...stack.stack];
         game.toMove.stack = stack.stack.splice(0, game.size);
@@ -44,40 +46,67 @@ class LiveGame extends Component {
         game.isMoving = true;
         game.moveOrigin = game.squares[coord];
         game.moveOrigin.validMove = true;
-        Object.values(stack.neighbors)
-          .forEach((s) => { if (s.stone === '') s.validMove = true; });
+        Object.keys(stack.neighbors)
+          .forEach((dir) => {
+            if (stack.neighbors[dir].stone === '') {
+              stack.neighbors[dir].validMove = true;
+            } else if (stack.neighbors[dir].stone === 'S' &&
+                       game.toMove.stone === 'C' &&
+                       game.toMove.stack.length === 1) {
+              stack.neighbors[dir].validMove = true;
+            }
+          });
       }
+    // Continue Movement
     } else if (game.isMoving &&
                stack.stone === '' &&
                stack.validMove === true) {
       game.setMoveDir(stack);
       if (game.moveDir !== '') {
         game.moveOrigin.validMove = false;
-        Object.values(game.moveOrigin.neighbors)
-          .forEach((s) => { s.validMove = false; });
+        Object.keys(game.moveOrigin.neighbors)
+          .forEach((dir) => { game.moveOrigin.neighbors[dir].validMove = false; });
         if (Object.prototype.hasOwnProperty.call(stack.neighbors, game.moveDir)) {
-          stack.neighbors[game.moveDir].validMove = true;
+          if (stack.neighbors[game.moveDir].stone === '') {
+            stack.neighbors[game.moveDir].validMove = true;
+          } else if (stack.neighbors[game.moveDir].stone === 'S' &&
+                     game.toMove.stone === 'C' &&
+                     game.toMove.stack.length === 2) {
+            stack.neighbors[game.moveDir].validMove = true;
+          }
         }
         stack.validMove = true;
         game.step = stack;
       }
       stack.place(game.toMove.stack.pop());
+      if (game.toMove.stack.length === 1 && game.toMove.stone === 'C') {
+        Object.keys(game.moveOrigin.neighbors)
+          .forEach((dir) => {
+            if (stack.neighbors[dir].stone === 'S') {
+              stack.neighbors[dir].validMove = true;
+            }
+          });
+      }
       if (!game.toMove.stack.length) {
         stack.stone = game.toMove.stone;
         game.toMove = {};
         game.isMoving = false;
         game.moveOrigin.validMove = false;
-        Object.values(game.squares)
-          .forEach((s) => { s.validMove = false; });
+        Object.keys(game.squares)
+          .forEach((c) => { game.squares[c].validMove = false; });
         if (game.moveDir !== '') {
           game.toPlay = (game.toPlay === 1) ? 2 : 1;
         }
         game.moveDir = '';
       }
-    } else if (stack.stone === 'S' &&
+    // Wallsmash
+    } else if (game.isMoving &&
+               stack.stone === 'S' &&
                game.toMove.stone === 'C' &&
                game.toMove.stack.length === 1) {
       stack.place(game.toMove.stack.pop(), 'C');
+      Object.keys(game.squares)
+        .forEach((c) => { game.squares[c].validMove = false; });
       game.isMoving = false;
       game.toPlay = (game.toPlay === 1) ? 2 : 1;
     }
