@@ -46,10 +46,10 @@ app.get("/bundle.js", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/dist/bundle.js"));
 });
 
-app.get("/*", (req, res) => {
-  console.log("Wildcard route, sending back index.html :)");
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
+
 const PORT = process.env.PORT || 3000;
 
 const server = app.listen(PORT, () => {
@@ -78,7 +78,7 @@ io.on("connection", function(socket) {
         pendingGames.push({ ...currentRoom, name: room});
       }
     }
-    socket.broadcast.emit('postGames', pendingGames);
+    socket.broadcast.emit('updateLobby', pendingGames);
   });
 
   socket.on('broadcastGameUpdate', (data) => {

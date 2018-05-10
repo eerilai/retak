@@ -3,17 +3,22 @@ import Stack from './Stack';
 
 class Game {
   constructor(size, player1 = 'p1', player2 = 'p2') {
+    this.toPlay = 1;
     this.first = player1;
     this.second = player2;
     this.size = size;
     this.board = [];
     this.squares = {};
     this.createBoard(size);
-    this.toPlay = 1;
     this.pieces = {
       1: { ...pieceCount[size] }, // Props ['F'], ['C'], ['Total']
       2: { ...pieceCount[size] },
     };
+    this.toMove = {};
+    this.isMoving = false;
+    this.moveOrigin = {};
+    this.step = {};
+    this.moveDir = '';
   }
 
   createBoard(size) {
@@ -24,6 +29,24 @@ class Game {
         this.board[row][col] = stack;
         this.squares[stack.coord] = stack;
       }
+    }
+    Object.values(this.squares)
+      .forEach(square => square.setNeighbors());
+  }
+
+  setMoveDir(stack) {
+    if (stack.col > this.moveOrigin.col &&
+        stack.row === this.moveOrigin.row) {
+      this.moveDir = '>';
+    } else if (stack.col < this.moveOrigin.col &&
+               stack.row === this.moveOrigin.row) {
+      this.moveDir = '<';
+    } else if (stack.col === this.moveOrigin.col &&
+               stack.row < this.moveOrigin.row) {
+      this.moveDir = '+';
+    } else if (stack.col === this.moveOrigin.col &&
+               stack.row > this.moveOrigin.row) {
+      this.moveDir = '-';
     }
   }
 }

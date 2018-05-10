@@ -21,9 +21,7 @@ class Lobby extends Component {
   }
 
   joinGame(name) {
-    console.log('join game fired');
     const { socket } = this.state;
-    console.log('')
     socket.emit('joinGame', name);
   }
 
