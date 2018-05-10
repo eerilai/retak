@@ -44,7 +44,6 @@ class LiveGame extends Component {
         game.isMoving = true;
         game.moveOrigin = game.squares[coord];
         game.moveOrigin.validMove = true;
-        console.log(game.moveOrigin);
         Object.values(stack.neighbors)
           .forEach((s) => { if (s.stone === '') s.validMove = true; });
       }
@@ -52,18 +51,28 @@ class LiveGame extends Component {
                stack.stone === '' &&
                stack.validMove === true) {
       game.setMoveDir(stack);
+      if (game.moveDir !== '') {
+        game.moveOrigin.validMove = false;
+        Object.values(game.moveOrigin.neighbors)
+          .forEach((s) => { s.validMove = false; });
+        if (Object.prototype.hasOwnProperty.call(stack.neighbors, game.moveDir)) {
+          stack.neighbors[game.moveDir].validMove = true;
+        }
+        stack.validMove = true;
+        game.step = stack;
+      }
       stack.place(game.toMove.stack.pop());
       if (!game.toMove.stack.length) {
-        game.moveDir = '';
         stack.stone = game.toMove.stone;
         game.toMove = {};
         game.isMoving = false;
         game.moveOrigin.validMove = false;
-        Object.values(game.moveOrigin.neighbors)
+        Object.values(game.squares)
           .forEach((s) => { s.validMove = false; });
-        if (JSON.stringify(game.moveOrigin.stack) !== JSON.stringify(game.moveStack)) {
+        if (game.moveDir !== '') {
           game.toPlay = (game.toPlay === 1) ? 2 : 1;
         }
+        game.moveDir = '';
       }
     } else if (stack.stone === 'S' &&
                game.toMove.stone === 'C' &&

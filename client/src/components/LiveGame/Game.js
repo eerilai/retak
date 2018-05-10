@@ -17,6 +17,7 @@ class Game {
     this.toMove = {};
     this.isMoving = false;
     this.moveOrigin = {};
+    this.step = {};
     this.moveDir = '';
   }
 
