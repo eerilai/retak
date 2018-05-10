@@ -107,6 +107,7 @@ class LiveGame extends Component {
                game.toMove.stone === 'C' &&
                game.toMove.stack.length === 1) {
       stack.place(game.toMove.stack.pop(), 'C');
+      game.toMove.coord = '';
       Object.keys(game.squares)
         .forEach((c) => { game.squares[c].validMove = false; });
       game.isMoving = false;
