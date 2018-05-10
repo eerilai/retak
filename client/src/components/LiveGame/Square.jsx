@@ -24,6 +24,16 @@ const Square = ({ game, row, col, selectSquare }) => {
     'margin-left': `${leftMargin}px`,
   };
 
+  const renderSelected = () => {
+    if (coord === game.toMove.coord && game.toMove.stack) {
+      return (
+        <div className="selected">
+          {game.toMove.stack.map(x => <div className={`p${x} stone`} style={stoneStyle} />)}
+        </div>
+      );
+    }
+  };
+
   const renderStones = () => {
     if (stack.stack.length <= game.size) {
       return (
@@ -33,6 +43,7 @@ const Square = ({ game, row, col, selectSquare }) => {
           onClick={() => { selectSquare(col, row); }}
         >
           <p className="non-flat">{` ${stack.stone} `}</p>
+          {renderSelected()}
           {stack.stack.map(x => <div className={`p${x} stone`} style={stoneStyle} />)}
         </div>
       );
@@ -46,6 +57,7 @@ const Square = ({ game, row, col, selectSquare }) => {
           onClick={() => { selectSquare(col, row); }}
         >
           <p className="non-flat">{` ${stack.stone} `}</p>
+          {renderSelected()}
           {top.map(x => <div className={`p${x} stone`} style={stoneStyle} />)}
           <div className="stack-overflow" style={stackOverflowStyle}>
             {rest.map(x => <div className={`p${x} stone overflow-stone`} />)}

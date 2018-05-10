@@ -14,7 +14,10 @@ class Game {
       1: { ...pieceCount[size] }, // Props ['F'], ['C'], ['Total']
       2: { ...pieceCount[size] },
     };
-    this.toMove = {};
+    this.toMove = {
+      stack: [],
+      stone: '',
+    };
     this.isMoving = false;
     this.moveOrigin = {};
     this.step = {};
