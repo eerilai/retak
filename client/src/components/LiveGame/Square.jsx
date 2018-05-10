@@ -50,7 +50,7 @@ const Square = ({ game, row, col, selectSquare }) => {
     <div
       style={squareStyle}
       className={`square ${coord}`}
-      onClick={() => { selectSquare(col, row); }}
+      onClick={() => { selectSquare(col, row, true); }}
     >
       {renderStones()}
     </div>

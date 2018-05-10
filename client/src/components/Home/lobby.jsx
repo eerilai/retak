@@ -12,8 +12,8 @@ class Lobby extends Component {
     this.joinGame = this.joinGame.bind(this);
 
     const { socket } = props;
-    socket.emit('getGames');
-    socket.on('postGames', (data) => {
+    socket.emit('fetchLobby');
+    socket.on('updateLobby', (data) => {
       this.setState({
         games: data,
       });

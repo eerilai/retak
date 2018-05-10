@@ -13,19 +13,26 @@ class LiveGame extends Component {
     const newGame = new Game(5);
     this.state = {
       game: newGame,
+      username: '',
       stone: '',
-      socket: props.socket
     };
     this.toMove = {};
     this.isMoving = false;
     this.selectSquare = this.selectSquare.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
     
-    const { socket } = this.state;
-    socket.emit('newGame');
+    const { socket } = props;
+    socket.emit('createOrJoinGame');
+    socket.on('updateGame', (moves) => {
+      if (moves.length) {
+        // TODO: should recieve moves array from server
+        moves.forEach((move) => {
+          this.selectSquare(move.col, move.row, false);
+        });
+      }
+    });
   }
-
-  selectSquare(col, row) {
+  selectSquare(col, row, isPlayerMove) {
     const newBoard = this.state.game;
     const stack = newBoard.board[col][row];
     const { isOccupied } = stack;
@@ -69,6 +76,9 @@ class LiveGame extends Component {
     this.setState({
       game: newBoard
     });
+    if (isPlayerMove) {
+      this.props.socket.emit('broadcastGameUpdate', { col, row });
+    }
   }
 
   selectCapstone(stone) {
@@ -104,6 +114,7 @@ class LiveGame extends Component {
             </div>
           </div>
         </div>
+        <Chat username={this.state.username} socket={this.props.socket} />
       </div>
     );
   }

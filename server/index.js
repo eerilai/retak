@@ -61,8 +61,14 @@ const io = socket(server);
 io.on("connection", function(socket) {
   socket.leave(socket.id);
 
-  socket.on('newGame', () => {
-    socket.join('some room'); // randomize roomName
+  socket.on('createOrJoinGame', async() => {
+    if (Object.keys(socket.rooms).length) { 
+      socket.emit('updateGame', []); // TODO: send move history associated with room to client
+    } else {
+      await socket.join('testRoom'); // TODO: randomize roomName
+      console.log('socket.rooms', socket.rooms);
+      socket.to('testRoom').emit('updateGame', []);
+    }
     const pendingGames = [];
     const { rooms } = io.sockets.adapter;
     for (let room in rooms) {
@@ -75,18 +81,21 @@ io.on("connection", function(socket) {
     socket.broadcast.emit('postGames', pendingGames);
   });
 
+  socket.on('broadcastGameUpdate', (data) => {
+    console.log('broadcastGameUpdate triggered', data);
+    socket.to('testRoom').emit('updateGame', [data]);
+  });
 
-  socket.on('getGames', () => {
+  socket.on('fetchLobby', () => {
     const games = [];
     const { rooms } = io.sockets.adapter;
     for (let room in rooms) {
       const currentRoom = rooms[room];
-
       if (currentRoom.length === 1) {
         games.push({ ...currentRoom, name: room});
       }
     }
-    socket.emit('postGames', games);
+    socket.emit('updateLobby', games);
   });
 
   socket.on('joinGame', (name) => {
@@ -95,11 +104,11 @@ io.on("connection", function(socket) {
     console.log(`${name}: ${JSON.stringify(io.sockets.adapter.rooms[name])}`);
   });
 
-  // socket.on("chat", function(data) {
-  //   io.sockets.emit("chat", data);
-  // });
-  // socket.on("typing", function(data) {
-  //   console.log("data", data);
-  //   socket.broadcast.emit("typing", data);
-  // });
+  socket.on("chat", function(data) {
+    io.sockets.emit("chat", data);
+  });
+  socket.on("typing", function(data) {
+    console.log("data", data);
+    socket.broadcast.emit("typing", data);
+  });
 });

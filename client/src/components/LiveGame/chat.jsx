@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import socketIOClient from "socket.io-client";
 
 class Chat extends Component {
   constructor(props) {
@@ -11,14 +10,13 @@ class Chat extends Component {
       typing: ""
     };
 
-    this.socket = io("localhost:3000");
 
-    var self = this;
-    this.socket.on("typing", function(data) {
+    const { socket } = props
+    socket.on("typing", function(data) {
       self.setState({ typing: data.author + " is typing..." });
     });
 
-    this.socket.on("chat", function(data) {
+    socket.on("chat", function(data) {
       addMessage(data);
     });
 
@@ -28,7 +26,7 @@ class Chat extends Component {
 
     this.sendMessage = ev => {
       ev.preventDefault();
-      this.socket.emit("chat", {
+      socket.emit("chat", {
         author: this.props.username,
         message: this.state.message
       });
@@ -36,7 +34,7 @@ class Chat extends Component {
     };
 
     this.handleTyping = () => {
-      this.socket.emit("typing", {
+      socket.emit("typing", {
         author: this.props.username
       });
     };
