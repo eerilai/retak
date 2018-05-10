@@ -1,27 +1,55 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Modal } from 'reactstrap';
 import axios from 'axios';
 
-const LogoutModal = (props) => {
-  const logout = () => {
-    axios.post('/auth/logout')
-      .then(() => {
-        props.toggleView('off');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-  const isOpen = props.modalView === 'logout';
-  return (
-    <Modal isOpen={isOpen}>
-      <div>
-        <p>Logout</p>
-        <button onClick={logout}>Logout</button>
-        <button onClick={() => { props.toggleView('off') }}>Cancel</button>  
-      </div>
-    </Modal>
-  );
-};
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toggleLoginLogout, login } from '../../../actions/actions';
 
-export default LogoutModal
+class LogoutModal extends Component {
+  constructor(props) {
+    super(props);
+    this.state ={};
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+  
+  handleLogout(){
+    axios.post('/auth/logout')
+    .then(() => {
+      console.log('You have Logged Out')
+      this.props.toggleView('off');
+      this.props.toggleLoginLogout(false);
+      this.props.login('guest');
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  }
+  
+  render() {
+    return (
+      <Modal isOpen={this.props.modalView === 'logout'}>
+        <div>
+          <p>Are you sure you want to Logout?</p>
+          <button onClick={this.handleLogout}>Logout</button>
+          <button onClick={() => { this.props.toggleView('off') }}>Cancel</button>  
+        </div>
+      </Modal>
+    )
+  }
+
+}
+
+function mapStateToProps(state) {
+  console.log('state in LogoutModal', state)
+  return { 
+    isLoggedIn: state.isLoggedIn,
+    currentUser: state.currentUser
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ toggleLoginLogout, login }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogoutModal);

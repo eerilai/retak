@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Modal } from 'reactstrap';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toggleLoginLogout, login } from '../../../actions/actions';
+
 class LoginModal extends Component {
   constructor(props) {
     super(props);
@@ -26,12 +30,23 @@ class LoginModal extends Component {
     });
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     const { usernameOrEmail, password } = this.state;
     axios.post('/auth/login', {
       username: usernameOrEmail,
       password
-    });
+    })
+    .then((res) => {
+      console.log('You have Logged In', res)
+      this.props.toggleView('off');
+      this.props.toggleLoginLogout(true);
+      this.props.login(usernameOrEmail);
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+
   }
 
   render() {
@@ -49,7 +64,7 @@ class LoginModal extends Component {
             </div>
             <div>
               <p>Password</p>
-              <input type="text" value={this.state.password} onChange={this.handlePasswordChange} />
+              <input type="password" value={this.state.password} onChange={this.handlePasswordChange} />
             </div>
             <div>
               <button>
@@ -66,4 +81,16 @@ class LoginModal extends Component {
   }
 }
 
-export default LoginModal
+function mapStateToProps(state) {
+  console.log('state in LoginModal', state)
+  return { 
+    isLoggedIn: state.isLoggedIn,
+    currentUser: state.currentUser
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ toggleLoginLogout, login }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginModal);
