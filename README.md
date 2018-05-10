@@ -1,5 +1,5 @@
-# tak
-web-based app for Tak the board game
+# Takless
+Multiplayer web app for Tak the board game
 
 # Setup
 `npm i`

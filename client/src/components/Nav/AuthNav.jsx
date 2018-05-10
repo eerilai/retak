@@ -39,7 +39,7 @@ class AuthNav extends Component {
   }
 
   render() {
-    // TODO: Conditionals need to be set in place for
+    // Conditionals need to be set in place for
     // rendering either login/signup nav or logout nav
     // - will need access to redux state once redux implemented
     const { modalView } = this.state;
@@ -72,7 +72,7 @@ function mapStateToProps(state) {
   console.log('AuthNav state.isLoggedIn', state.isLoggedIn)
   return { 
     isLoggedIn: state.isLoggedIn,
-    userLoggedIn: state.userLoggedIn
+    currentUser: state.currentUser
   }
 }
 

@@ -11,7 +11,7 @@ const rootReducer = (state = initialState, action) => {
       let usernameOrEmail = action.payload;
       return {
         ...state, 
-        userLoggedIn: usernameOrEmail
+        currentUser: usernameOrEmail
       };
     case TOGGLE_LOGIN_LOGOUT:
       console.log('Reducer toggle Login/Logout payload:', action.payload)

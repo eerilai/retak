@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Modal } from 'reactstrap';
 import axios from 'axios';
 
-// import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toggleLoginLogout, login } from '../../../actions/actions';
@@ -91,7 +90,7 @@ function mapStateToProps(state) {
   console.log('state in SignUpModal', state)
   return { 
     isLoggedIn: state.isLoggedIn,
-    userLoggedIn: state.userLoggedIn
+    currentUser: state.currentUser
   }
 }
 

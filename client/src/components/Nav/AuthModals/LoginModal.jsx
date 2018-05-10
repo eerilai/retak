@@ -85,7 +85,7 @@ function mapStateToProps(state) {
   console.log('state in LoginModal', state)
   return { 
     isLoggedIn: state.isLoggedIn,
-    userLoggedIn: state.userLoggedIn
+    currentUser: state.currentUser
   }
 }
 
@@ -94,4 +94,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginModal);
-// export default LoginModal;
