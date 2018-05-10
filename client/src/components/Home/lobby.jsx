@@ -1,20 +1,30 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
 
 class Lobby extends Component {
   constructor(props) {
     super(props);
-    
-    console.log('props', props);
-    console.log('this.props', this.props);
     this.state = {
-      games: {},
-      socket: this.props.socket
+      games: [],
+      socket: props.socket
     };
-    console.log('this.state.socket', this.state.socket);
+    this.joinGame = this.joinGame.bind(this);
+
+    const { socket } = props;
+    socket.emit('getGames');
+    socket.on('postGames', (data) => {
+      this.setState({
+        games: data,
+      });
+    });
   }
 
-  componentWillMount() {
-    
+  joinGame(name) {
+    console.log('join game fired');
+    const { socket } = this.state;
+    console.log('')
+    socket.emit('joinGame', name);
   }
 
   render() {
@@ -24,12 +34,11 @@ class Lobby extends Component {
           <th>Player</th>
           <th>Mode</th>
         </tr>
-
-        <tr className="room">
-          <td>Anonymous</td>
-
-          <td>Casual</td>
-        </tr>
+        {this.state.games.map((game) => (
+          <tr className="room">
+            <td><Link to="/game" onClick={() => {this.joinGame(game.name)}}>{game.name}</Link></td>
+          </tr>
+        ))}
       </table>
     );
   }

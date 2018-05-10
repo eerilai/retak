@@ -59,22 +59,41 @@ const server = app.listen(PORT, () => {
 //Socket Setup
 const io = socket(server);
 io.on("connection", function(socket) {
-  console.log("made socket connection", socket.id);
+  socket.leave(socket.id);
 
-  socket.on('newRoom', () => {
-    socket.leave(socket.id);
+  socket.on('newGame', () => {
     socket.join('some room'); // randomize roomName
-    for (let room in io.sockets.adapter.rooms) {
-      console.log(`Number of sockets in ${room}: ${JSON.stringify(io.sockets.adapter.rooms[room].length)}`);
+    const pendingGames = [];
+    const { rooms } = io.sockets.adapter;
+    for (let room in rooms) {
+      const currentRoom = rooms[room];
+
+      if (currentRoom.length === 1) {
+        pendingGames.push({ ...currentRoom, name: room});
+      }
     }
-    console.log(`Socket ${socket.id} joined 'some room'`);
+    socket.broadcast.emit('postGames', pendingGames);
   });
 
-  socket.on('test1', () => {
-    io.to('some room').emit('test2', socket.rooms);
+
+  socket.on('getGames', () => {
+    const games = [];
+    const { rooms } = io.sockets.adapter;
+    for (let room in rooms) {
+      const currentRoom = rooms[room];
+
+      if (currentRoom.length === 1) {
+        games.push({ ...currentRoom, name: room});
+      }
+    }
+    socket.emit('postGames', games);
   });
 
-  
+  socket.on('joinGame', (name) => {
+    socket.join(name);
+    console.log(`someone has joined ${name}`);
+    console.log(`${name}: ${JSON.stringify(io.sockets.adapter.rooms[name])}`);
+  });
 
   // socket.on("chat", function(data) {
   //   io.sockets.emit("chat", data);

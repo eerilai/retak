@@ -14,22 +14,15 @@ class LiveGame extends Component {
     this.state = {
       game: newGame,
       stone: '',
+      socket: props.socket
     };
     this.toMove = {};
     this.isMoving = false;
     this.selectSquare = this.selectSquare.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
-  }
-
-  componentWillMount() {
-    axios.post('/game/newGame')
-      .then((res) => {
-        const { username } = res.data;
-        console.log('username: ' + username);
-        this.setState({
-          username
-        });
-      });
+    
+    const { socket } = this.state;
+    socket.emit('newGame');
   }
 
   selectSquare(col, row) {

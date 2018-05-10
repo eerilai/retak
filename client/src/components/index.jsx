@@ -14,20 +14,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      socket: {}
+      socket: socketIOClient()
     }
-  }
-
-  componentWillMount() {
-    let socket = socketIOClient();
-    this.setState({
-      socket
-    });
-    socket.emit('newRoom');
-    socket.emit('test1');
-    socket.on('test2', (data) => {
-      console.log(data);
-    });
   }
 
   render() {
@@ -38,7 +26,7 @@ class App extends Component {
           <Route path="/learn" component={Learn} />
           <Route path="/about" component={About} />
           <Route path="/profile" component={Profile} />
-          <Route path="/game" component={Game} />
+          <Route path="/game" render={() => (<Game socket={this.state.socket} />)} />
           <Route path="/" render={() => (<Home socket={this.state.socket} />)} />
         </Switch>
       </div>
