@@ -32,7 +32,7 @@ class LogoutModal extends Component {
         <div>
           <p>Are you sure you want to Logout?</p>
           <button onClick={this.handleLogout}>Logout</button>
-          <button onClick={() => { props.toggleView('off') }}>Cancel</button>  
+          <button onClick={() => { this.props.toggleView('off') }}>Cancel</button>  
         </div>
       </Modal>
     )

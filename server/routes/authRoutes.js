@@ -48,7 +48,13 @@ const authCheck = ((req, res, next) => {
   }
 });
 
+router.get('/check', authCheck, (req, res) => {
+  console.log("testing current user")
+  res.send(req.user.username);
+});
+
 router.get('/test', authCheck, (req, res) => {
+  console.log("testing current user")
   res.send(JSON.stringify(req.user));
 });
 

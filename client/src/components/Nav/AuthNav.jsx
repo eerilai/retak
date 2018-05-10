@@ -3,7 +3,10 @@ import SignupModal from './AuthModals/SignupModal';
 import LoginModal from './AuthModals/LoginModal';
 import LogoutModal from './AuthModals/LogoutModal';
 
+import axios from 'axios';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toggleLoginLogout, login } from '../../actions/actions';
 
 class AuthNav extends Component {
   constructor(props) {
@@ -12,6 +15,21 @@ class AuthNav extends Component {
       modalView: 'off',
     };
     this.changeView = this.changeView.bind(this);
+  }
+
+  componentDidMount(){
+    axios.get('/auth/check')
+    .then((res) => {
+      let currentUser = res.data;
+      if(currentUser[0] !== "<"){
+        console.log('Auth check current logged in user', currentUser)
+        this.props.toggleLoginLogout(true);
+        this.props.login(currentUser);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    });
   }
 
   changeView(view) {
@@ -50,13 +68,16 @@ class AuthNav extends Component {
   }
 };
 
-// AuthNav.propTypes = {
-//   isLoggedIn: React.propTypes.object.isRequiered
-// }
-
 function mapStateToProps(state) {
   console.log('AuthNav state.isLoggedIn', state.isLoggedIn)
-  return { isLoggedIn: state.isLoggedIn }
+  return { 
+    isLoggedIn: state.isLoggedIn,
+    userLoggedIn: state.userLoggedIn
+  }
 }
 
-export default connect(mapStateToProps)(AuthNav);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ toggleLoginLogout, login }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthNav);
