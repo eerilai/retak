@@ -30,14 +30,15 @@ class LoginModal extends Component {
     });
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     const { usernameOrEmail, password } = this.state;
     axios.post('/auth/login', {
       username: usernameOrEmail,
       password
     })
     .then((res) => {
-      console.log('You have logedIn', res)
+      console.log('You have Logged In', res)
       this.props.toggleView('off');
       this.props.toggleLoginLogout(true);
       this.props.login(usernameOrEmail);

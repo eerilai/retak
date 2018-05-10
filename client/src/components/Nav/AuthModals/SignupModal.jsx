@@ -35,8 +35,12 @@ class SignupModal extends Component {
       .then((res) => {
         if (res.status === 200) {
           this.props.toggleView('off');
-          // this.props.toggleLoginLogout('logout');
+          this.props.toggleLoginLogout(true);
+          this.props.login(username);
         }
+      })
+      .catch((err) => {
+        console.error(err);
       });
     } else {
       console.log('both password fields must match');
@@ -83,16 +87,16 @@ class SignupModal extends Component {
   }
 }
 
-// function mapStateToProps(state) {
-//   return { 
-//     hasLoggedIn: state.state.hasLoggedIn,
-//     hasSignedUp: state.state.hasSignedUp
-//   }
-// }
+function mapStateToProps(state) {
+  console.log('state in SignUpModal', state)
+  return { 
+    isLoggedIn: state.isLoggedIn,
+    userLoggedIn: state.userLoggedIn
+  }
+}
 
-// function mapDispatchToProps(dispatch) {
-//   return bindActionCreators({ toggleLoginLogout, login }, dispatch);
-// }
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ toggleLoginLogout, login }, dispatch);
+}
 
-// export default connect(mapStateToProps, mapDispatchToProps)(SignupModal);
-export default SignupModal;
+export default connect(mapStateToProps, mapDispatchToProps)(SignupModal);

@@ -17,6 +17,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 });
 
 router.post('/signup', (req, res) => {
+  // Add a check to see form filds are correct
   createUser(req.body)
     .then((user) => {
       req.login(user, (err) => {

@@ -29,7 +29,7 @@ app.use('/auth', authRoutes);
 // Implement authorization check for relevant requests, ie profile, logout, etc
 const authCheck = ((req, res, next) => {
   if(!req.user) {
-    res.redirect('/');
+    res.redirect('/', req.user);
   } else {
     next();
   }

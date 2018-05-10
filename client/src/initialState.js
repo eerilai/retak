@@ -1,6 +1,6 @@
 const initialState = {
   users:{},
-  userLoggedIn: {},
+  userLoggedIn: 'guest',
   isLoggedIn: false
 };
 

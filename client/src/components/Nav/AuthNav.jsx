@@ -26,7 +26,7 @@ class AuthNav extends Component {
     // - will need access to redux state once redux implemented
     const { modalView } = this.state;
     const { isLoggedIn } = this.props;
-    console.log('AuthNav isLoggedIn', isLoggedIn)
+    console.log('AuthNav isLoggedIn is', isLoggedIn)
 
     const userNavLink = (
         <nav onClick={() => {this.changeView('logout')}}>(Logout)</nav>
@@ -60,4 +60,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(AuthNav);
-// export default AuthNav;
