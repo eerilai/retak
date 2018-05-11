@@ -1,0 +1,6 @@
+// EXAMPLE => 
+// export const CHANGE_STORE = 'CHANGE_STORE';
+
+export const LOGGEDIN = 'LOGGEDIN';
+export const TOGGLE_LOGIN_LOGOUT = 'TOGGLE_LOGIN_LOGOUT';
+export const SET_LOGGEDIN_PLAYERS = 'SET_LOGGEDIN_PLAYERS';

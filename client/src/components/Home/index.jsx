@@ -1,15 +1,22 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import Lobby from './lobby';
+import LeaderboardTable from "../../containers/Home/leaderboard_table";
+import LobbyTable from "../../containers/Home/lobby_table";
 
 const Home = props => (
-  <div className="home home-grid">
-    <div className="lobby">
-      <p>Lobby placeholder</p>
+  <div className="main">
+    <div className="home home-grid">
+      <div className="lobby">
+        <Lobby socket={props.socket} />
+      </div>
+      <Link to="/game">
+        <button className="createGame">Create Game</button>
+      </Link>
+      <div className="leaderboard">
+        <LeaderboardTable />
+      </div>
     </div>
-    <button className="createGame" onClick={() => props.changeView('game')} >Create Game</button>
-    <div className="leaderboard">
-      <p>Leaderboard placeholder</p>
-    </div>
-
   </div>
 );
 
