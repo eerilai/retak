@@ -139,6 +139,9 @@ class LiveGame extends Component {
     return (
       <div className="home game">
         <div className="board">
+          <div className="stone-count">
+            Black | F({this.state.game.pieces[2].F}) / C({this.state.game.pieces[2].C})
+          </div>
           <Board game={this.state.game} selectSquare={this.selectSquare} />
           <div className="stone-select">
             <div className="active-stone">{this.state.stone}</div>

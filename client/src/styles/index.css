@@ -1,3 +1,7 @@
+html {
+  background-color: #EEEEEE;
+}
+
 body {
   background-color: #EEEEEE;
   overflow-x: hidden;
@@ -7,11 +11,22 @@ body {
 }
 
 button {
+  font-weight: bold;
+  color: #848484;
   height: 50px;
   width: 200px;
+  box-shadow: none;
+  border: 1px solid #ccc;
+  border-top: 0;
+  border-bottom: 0;
+}
+
+button:hover {
+  background-color: #f7f7f7;
 }
 
 #page {
+  background-color: #EEEEEE;
   display: grid;
   margin: auto;
   grid-template-columns: auto 200px 600px 200px auto;
@@ -19,14 +34,41 @@ button {
 
 #nav {
   grid-column: 3;
+  display: grid;
+  grid-template-columns: 80% 20%;
+}
+
+#main-nav {
+  grid-column: 1;
   display: flex;
 }
 
-nav {
+#user-nav {
+  grid-column: 2;
+}
+
+#main-nav>nav>a {
   font-size: 12px;
   cursor:pointer;
   padding: 5px 10px;
   text-shadow: 2px 2px 2px #DCDCDC;
+  color: black;
+}
+
+#main-nav>nav>a:hover {
+  text-decoration: none;
+  font-size: 12px;
+  padding: 5px 10px;
+  text-shadow: 2px 2px 2px #DCDCDC;
+  color: black;
+}
+
+nav {
+  text-shadow: 2px 2px 2px #dcdcdc;
+  padding: 3px 5px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
 }
 
 nav:hover {
@@ -41,9 +83,9 @@ nav:hover {
 }
 
 .lobby, .leaderboard {
-  border-style: solid;
-  border-width: 2px;
+  border: 1px solid #ccc;
   min-height: 400px;
+  background-color: #f7f7f7
 }
 
 /* Tables CSS */
@@ -61,14 +103,12 @@ nav:hover {
   font-weight:normal;
   padding:10px 5px;
   border-style:solid;
-  border-width:1px;
+  border-width:0;
   overflow:hidden;
   word-break:normal;
-  border-top-width:1px;
-  border-bottom-width:1px;
   border-color:#ccc;
   color:#333;
-  background-color:#f0f0f0;
+  background-color:#f7f7f7;
 }
 .tg td{
   font-family:"Lucida Console", Monaco, monospace !important;
@@ -82,7 +122,7 @@ nav:hover {
   border-bottom-width:1px;
   border-color:#ccc;
   color:#333;
-  background-color:#fff;
+  background-color:#f7f7f7;
   cursor: pointer;
 }
 .tg .tg-yw4l{
@@ -99,13 +139,13 @@ nav:hover {
   vertical-align:top
 }
 .tg .tg-row{
-  background-color:rgb(255, 255, 255);
+  background-color:#f7f7f7;
   border-color:inherit;
   vertical-align:top
 }
 .tg-row:hover{
-  background-color: cornflowerblue;
+  background-color: rgba(0,0,155,.2);
 }
 .tg .row:hover{
-  background-color: #333;
+  background-color: rgba(0,0,155,.2);
 }

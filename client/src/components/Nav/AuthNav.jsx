@@ -47,18 +47,17 @@ class AuthNav extends Component {
     console.log('AuthNav isLoggedIn is', isLoggedIn)
 
     const userNavLink = (
-        <nav onClick={() => {this.changeView('logout')}}>(Logout)</nav>
+        <nav onClick={() => {this.changeView('logout')}}>Logout</nav>
     );
 
     const guestNavLink = (
       <div>
-        <nav onClick={() => {this.changeView('login')}}>(Login)</nav>
-        <nav onClick={() => {this.changeView('signup')}}>(Signup)</nav>
+        <nav onClick={() => {this.changeView('login')}}>Login</nav>
       </div>
     );
       
       return (
-        <div>
+      <div>
         { isLoggedIn ? userNavLink : guestNavLink }
         <SignupModal toggleView={this.changeView} modalView={modalView} />
         <LoginModal toggleView={this.changeView} modalView={modalView} />
