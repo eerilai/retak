@@ -47,10 +47,10 @@ class Game {
                stack.row === this.moveOrigin.row) {
       this.moveDir = '<';
     } else if (stack.col === this.moveOrigin.col &&
-               stack.row < this.moveOrigin.row) {
+               stack.row > this.moveOrigin.row) {
       this.moveDir = '+';
     } else if (stack.col === this.moveOrigin.col &&
-               stack.row > this.moveOrigin.row) {
+               stack.row < this.moveOrigin.row) {
       this.moveDir = '-';
     }
   }
