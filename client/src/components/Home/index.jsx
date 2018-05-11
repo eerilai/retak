@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
 import Lobby from './lobby';
+import LeaderboardTable from "../../containers/Home/leaderboard_table";
+import LobbyTable from "../../containers/Home/lobby_table";
 
 const Home = props => (
   <div className="main">
@@ -13,7 +14,7 @@ const Home = props => (
         <button className="createGame">Create Game</button>
       </Link>
       <div className="leaderboard">
-        <p>Leaderboard placeholder</p>
+        <LeaderboardTable />
       </div>
     </div>
   </div>

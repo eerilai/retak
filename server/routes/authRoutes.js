@@ -13,18 +13,19 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
 });
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.redirect('/');
+  res.send('Success');
 });
 
 router.post('/signup', (req, res) => {
+  // Add a check to see form filds are correct
   createUser(req.body)
     .then((user) => {
       req.login(user, (err) => {
         if (err) {
           res.status(500)
-          res.redirect('/');
+          res.send('Server Error');
         }
-        res.redirect('/');
+        res.send('Success');
       });
     })
     .catch((err) => {
@@ -35,7 +36,7 @@ router.post('/signup', (req, res) => {
 
 router.post('/logout', (req, res) => {
   req.session.destroy((err) => {
-    res.redirect('/');
+    res.send('Success');
   });
 });
 
@@ -47,7 +48,13 @@ const authCheck = ((req, res, next) => {
   }
 });
 
+router.get('/check', authCheck, (req, res) => {
+  console.log("testing current user")
+  res.send(req.user.username);
+});
+
 router.get('/test', authCheck, (req, res) => {
+  console.log("testing current user")
   res.send(JSON.stringify(req.user));
 });
 

@@ -51,6 +51,7 @@ class LiveGame extends Component {
         game.moveStack = [...stack.stack];
         game.toMove.stack = stack.stack.splice(0, game.size);
         game.toMove.stone = stack.stone;
+        game.toMove.coord = coord;
         stack.stone = '';
         stack.owner = stack.stack[0] || 0;
         stack.isEmpty = !stack.stack.length;
@@ -73,6 +74,7 @@ class LiveGame extends Component {
                stack.stone === '' &&
                stack.validMove === true) {
       game.setMoveDir(stack);
+      game.toMove.coord = coord;
       if (game.moveDir !== '') {
         game.moveOrigin.validMove = false;
         Object.keys(game.moveOrigin.neighbors)
