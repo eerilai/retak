@@ -34,19 +34,19 @@ class Stack {
       this.isEW = true;
     }
     if (this.row === 0) {
-      this.edges.push('+');
+      this.edges.push('-');
       this.isNS = true;
     } else if (this.row === this.game.size - 1) {
-      this.edges.push('-');
+      this.edges.push('+');
       this.isNS = true;
     }
 
     if (this.row !== 0) {
-      this.neighbors['+'] =
+      this.neighbors['-'] =
         this.game.squares[convertCoord([this.col, this.row - 1])];
     }
     if (this.row !== this.game.size - 1) {
-      this.neighbors['-'] =
+      this.neighbors['+'] =
         this.game.squares[convertCoord([this.col, this.row + 1])];
     }
     if (this.col !== 0) {
