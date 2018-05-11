@@ -60,6 +60,12 @@ class LiveGame extends Component {
     }
   }
 
+  winner() {
+    if (this.state.game.victor !== 0) {
+      return <h3>Player {this.state.game.victor} wins!</h3>;
+    }
+  }
+
   render() {
     return (
       <div className="main">
@@ -67,6 +73,9 @@ class LiveGame extends Component {
           <div className="board">
             <div className="stone-count">
               Black | F({this.state.game.pieces[2].F}) / C({this.state.game.pieces[2].C})
+            </div>
+            <div>
+              { this.winner() }
             </div>
             <Board game={this.state.game} selectSquare={this.selectSquare} />
             <div className="stone-select">
