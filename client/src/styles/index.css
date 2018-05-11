@@ -3,11 +3,11 @@ html {
 }
 
 body {
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
   overflow-x: hidden;
   margin: 0;
   padding: 0;
-  font-family:helvetica;
+  font-family: helvetica;
 }
 
 button {
@@ -49,7 +49,7 @@ button:hover {
 
 #main-nav>nav>a {
   font-size: 12px;
-  cursor:pointer;
+  cursor: pointer;
   padding: 5px 10px;
   text-shadow: 2px 2px 2px #DCDCDC;
   color: black;
