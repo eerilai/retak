@@ -18,7 +18,7 @@ class LiveGame extends Component {
     };
     this.selectSquare = this.selectSquare.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
-    
+
     const { socket } = props;
     socket.emit('createGame'); // Only creates if not already in game
     socket.on('updateGame', ({ col, row, stone }) => {
@@ -29,7 +29,11 @@ class LiveGame extends Component {
   selectSquare(col, row, isPlayerMove, stone = this.state.stone) {
     const { game } = this.state;
     game.selectStack(col, row, stone);
-
+    if (this.state.stone !== '') {
+      this.setState({
+        stone: '',
+      });
+    }
     this.setState({
       game,
     });

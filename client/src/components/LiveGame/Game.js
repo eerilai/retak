@@ -6,8 +6,8 @@ class Game {
     this.toPlay = 1; // TODO: keep track of active player?
     this.first = player1;
     this.second = player2;
-    this.victor = 0;   //0, 1, or 2
-    this.winType = ''; //R, F, or 1
+    this.victor = 0; // 0, 1, or 2
+    this.winType = ''; // R, F, or 1
     this.size = size;
     this.board = [];
     this.squares = {};
@@ -27,7 +27,7 @@ class Game {
   }
 
   createBoard(size) {
-    for (let row = this.size-1; row >= 0; row -= 1) {
+    for (let row = this.size - 1; row >= 0; row -= 1) {
       this.board[row] = [];
       for (let col = 0; col < size; col += 1) {
         const stack = new Stack(this, row, col);
@@ -67,11 +67,10 @@ class Game {
           stack.place(this.toPlay, stone);
           if (stone === 'C') {
             this.pieces[this.toPlay].C -= 1;
-            this.setState({ stone: '' });
           } else {
             this.pieces[this.toPlay].F -= 1;
-            if (stone === 'S') this.setState({ stone: '' });
           }
+          this.checkRoads();
           this.toPlay = (this.toPlay === 1) ? 2 : 1;
         }
       // Start a move
@@ -136,6 +135,7 @@ class Game {
         Object.keys(this.squares)
           .forEach((c) => { this.squares[c].validMove = false; });
         if (this.moveDir !== '') {
+          this.checkRoads();
           this.toPlay = (this.toPlay === 1) ? 2 : 1;
         }
         this.moveDir = '';
@@ -150,7 +150,56 @@ class Game {
       Object.keys(this.squares)
         .forEach((c) => { this.squares[c].validMove = false; });
       this.isMoving = false;
+      this.checkRoads();
       this.toPlay = (this.toPlay === 1) ? 2 : 1;
+    }
+  }
+
+  checkRoads() {
+    let checkNS = false;
+    let checkEW = false;
+    let player = 0;
+    const checked = [];
+    const followRoad = (square, p) => {
+      if ((checkNS && square.edges.includes('+')) ||
+          (checkEW && square.edges.includes('>'))) {
+        this.victor = p;
+      } else {
+        checked.push(square.coord);
+        const up = square.neighbors['+'];
+        const left = square.neighbors['<'];
+        const right = square.neighbors['>'];
+        const down = square.neighbors['-'];
+        if (square.row < this.size - 1 && up.owner === p && up.stone !== 'S' && !checked.includes(up.coord)) {
+          followRoad(up, p);
+        }
+        if (square.col > 0 && left.owner === p && left.stone !== 'S' && !checked.includes(left.coord)) {
+          followRoad(left, p);
+        }
+        if (square.col < this.size - 1 && right.owner === p && right.stone !== 'S' && !checked.includes(right.coord)) {
+          followRoad(right, p);
+        }
+        if (square.row > 0 && down.owner === p && down.stone !== 'S' && !checked.includes(down.coord)) {
+          followRoad(down, p);
+        }
+      }
+    };
+    checkNS = true;
+    for (let col = 0; col < this.size; col += 1) {
+      player = this.board[col][0].owner;
+      if (player !== 0 && this.board[col][1].owner === player && this.board[col][1].stone !== 'S') {
+        checked.push(this.board[col][0].coord);
+        followRoad(this.board[col][1], player);
+      }
+    }
+    checkNS = false;
+    checkEW = true;
+    for (let row = 0; row < this.size; row += 1) {
+      player = this.board[0][row].owner;
+      if (player !== 0 && this.board[1][row].owner === player && this.board[1][row].stone !== 'S') {
+        checked.push(this.board[0][row].coord);
+        followRoad(this.board[1][row], player);
+      }
     }
   }
 }
