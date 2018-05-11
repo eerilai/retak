@@ -40,7 +40,7 @@ const Square = ({ game, row, col, selectSquare }) => {
         <div
           className={`square ${coord} ${valid} ${origin}`}
           style={squareStyle}
-          onClick={() => { selectSquare(col, row); }}
+          onClick={() => { selectSquare(col, row, true); }} // TODO: check if game.activePlayer = state.user
         >
           <p className="non-flat">{` ${stack.stone} `}</p>
           {renderSelected()}
@@ -54,7 +54,7 @@ const Square = ({ game, row, col, selectSquare }) => {
         <div
           className={`square ${coord} ${valid}`}
           style={squareStyle}
-          onClick={() => { selectSquare(col, row); }}
+          onClick={() => { selectSquare(col, row, true); }} // TODO: check if game.activePlayer = state.user
         >
           <p className="non-flat">{` ${stack.stone} `}</p>
           {renderSelected()}

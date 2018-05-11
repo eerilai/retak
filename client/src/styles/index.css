@@ -1,9 +1,9 @@
 body {
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
   overflow-x: hidden;
   margin: 0;
   padding: 0;
-  font-family:helvetica;
+  font-family: helvetica;
 }
 
 button {
@@ -24,9 +24,9 @@ button {
 
 nav {
   font-size: 12px;
-  cursor:pointer;
+  cursor: pointer;
   padding: 5px 10px;
-  text-shadow: 2px 2px 2px #DCDCDC;
+  text-shadow: 2px 2px 2px #dcdcdc;
 }
 
 nav:hover {
@@ -40,7 +40,8 @@ nav:hover {
   text-align: center;
 }
 
-.lobby, .leaderboard {
+.lobby,
+.leaderboard {
   border-style: solid;
   border-width: 2px;
   min-height: 400px;
