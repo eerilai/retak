@@ -39,7 +39,6 @@ const authCheck = (req, res, next) => {
     next();
   }
 };
-//app.use("/", express.static(path.join(__dirname, "../client/dist/")));
 
 app.get("/bundle.js", (req, res) => {
   console.log("getting bundle");
@@ -61,19 +60,16 @@ const io = socket(server);
 io.on("connection", function(socket) {
   socket.leave(socket.id);
 
-  socket.on('createOrJoinGame', async() => {
-    if (Object.keys(socket.rooms).length) { 
-      socket.emit('updateGame', []); // TODO: send move history associated with room to client
-    } else {
-      await socket.join('testRoom'); // TODO: randomize roomName
-      console.log('socket.rooms', socket.rooms);
-      socket.to('testRoom').emit('updateGame', []);
+  socket.on('createGame', async() => {
+    // Only creates new game if not already in one
+    if (!Object.keys(socket.rooms).length) {
+      await socket.join('testRoom'); // TODO: randomize room name
+      ('socket.rooms', socket.rooms);
     }
     const pendingGames = [];
     const { rooms } = io.sockets.adapter;
     for (let room in rooms) {
       const currentRoom = rooms[room];
-
       if (currentRoom.length === 1) {
         pendingGames.push({ ...currentRoom, name: room});
       }
@@ -83,7 +79,7 @@ io.on("connection", function(socket) {
 
   socket.on('broadcastGameUpdate', (data) => {
     console.log('broadcastGameUpdate triggered', data);
-    socket.to('testRoom').emit('updateGame', [data]);
+    socket.to('testRoom').emit('updateGame', data); // TODO: randomize room name
   });
 
   socket.on('fetchLobby', () => {
@@ -102,13 +98,5 @@ io.on("connection", function(socket) {
     socket.join(name);
     console.log(`someone has joined ${name}`);
     console.log(`${name}: ${JSON.stringify(io.sockets.adapter.rooms[name])}`);
-  });
-
-  socket.on("chat", function(data) {
-    io.sockets.emit("chat", data);
-  });
-  socket.on("typing", function(data) {
-    console.log("data", data);
-    socket.broadcast.emit("typing", data);
   });
 });

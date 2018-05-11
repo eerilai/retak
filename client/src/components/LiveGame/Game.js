@@ -3,7 +3,7 @@ import Stack from './Stack';
 
 class Game {
   constructor(size, player1 = 'p1', player2 = 'p2') {
-    this.toPlay = 1;
+    this.toPlay = 1; // TODO: keep track of active player?
     this.first = player1;
     this.second = player2;
     this.size = size;
