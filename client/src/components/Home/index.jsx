@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-import Lobby from "./lobby";
+import Lobby from './lobby';
 
 const Home = props => (
   <div className="main">

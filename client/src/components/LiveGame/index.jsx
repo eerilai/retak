@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import axios from 'axios';
 
-import Game from "./Game";
-import Board from "./Board";
-import Stack from "./Stack";
-import Chat from "./chat"; // not in use currently
+import Game from './Game';
+import Board from './Board';
+import Stack from './Stack';
+import Chat from './chat'; // not in use currently
 import '../../styles/livegame.css';
 import { convertCoord } from './gameUtil';
 

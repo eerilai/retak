@@ -1,40 +1,40 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class Chat extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      message: "",
+      message: '',
       messages: [],
-      typing: ""
+      typing: ''
     };
 
 
     const { socket } = props
-    socket.on("typing", function(data) {
-      self.setState({ typing: data.author + " is typing..." });
+    socket.on('typing', function(data) {
+      self.setState({ typing: data.author + ' is typing...' });
     });
 
-    socket.on("chat", function(data) {
+    socket.on('chat', function(data) {
       addMessage(data);
     });
 
     const addMessage = data => {
-      this.setState({ messages: [...this.state.messages, data], typing: "" });
+      this.setState({ messages: [...this.state.messages, data], typing: '' });
     };
 
     this.sendMessage = ev => {
       ev.preventDefault();
-      socket.emit("chat", {
+      socket.emit('chat', {
         author: this.props.username,
         message: this.state.message
       });
-      this.setState({ message: "" });
+      this.setState({ message: '' });
     };
 
     this.handleTyping = () => {
-      socket.emit("typing", {
+      socket.emit('typing', {
         author: this.props.username
       });
     };
