@@ -161,7 +161,7 @@ class Game {
     let checkNS = false;
     let checkEW = false;
     let player = 0;
-    const checked = [];
+    let checked = [];
     const followRoad = (square, p) => {
       if ((checkNS && square.edges.includes('+')) ||
           (checkEW && square.edges.includes('>'))) {
@@ -195,6 +195,7 @@ class Game {
         followRoad(this.board[col][1], player);
       }
     }
+    checked = [];
     checkNS = false;
     checkEW = true;
     for (let row = 0; row < this.size; row += 1) {
