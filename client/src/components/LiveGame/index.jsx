@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
 import Game from './Game';
 import Board from './Board';
 import Stack from './Stack';
@@ -118,6 +117,7 @@ class LiveGame extends Component {
                game.toMove.stone === 'C' &&
                game.toMove.stack.length === 1) {
       stack.place(game.toMove.stack.pop(), 'C');
+      game.toMove.coord = '';
       Object.keys(game.squares)
         .forEach((c) => { game.squares[c].validMove = false; });
       game.isMoving = false;
@@ -155,6 +155,9 @@ class LiveGame extends Component {
       <div className="main">
         <div className="home game">
           <div className="board">
+            <div className="stone-count">
+              Black | F({this.state.game.pieces[2].F}) / C({this.state.game.pieces[2].C})
+            </div>
             <Board game={this.state.game} selectSquare={this.selectSquare} />
             <div className="stone-select">
               <div className="active-stone">{this.state.stone}</div>
