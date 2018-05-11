@@ -1,15 +1,15 @@
-const express = require("express");
-const session = require("express-session");
-const passport = require("passport");
-const path = require("path");
-const bodyParser = require("body-parser");
-const socket = require("socket.io");
+const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
+const path = require('path');
+const bodyParser = require('body-parser');
+const socket = require('socket.io');
 
-require("dotenv").config();
+require('dotenv').config();
 
-const db = require("../database");
-const authRoutes = require("./routes/authRoutes");
-const gameRoutes = require("./routes/gameRoutes");
+const db = require('../database');
+const authRoutes = require('./routes/authRoutes');
+const gameRoutes = require('./routes/gameRoutes');
 
 const app = express();
 
@@ -28,22 +28,19 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/auth", authRoutes);
-app.use("/game", gameRoutes);
+app.use('/auth', authRoutes);
+app.use('/game', gameRoutes);
 
 // Implement authorization check for relevant requests, ie profile, logout, etc
 const authCheck = (req, res, next) => {
   if (!req.user) {
-    res.redirect("/");
+    res.redirect('/');
   } else {
     next();
   }
 };
 
-app.get("/bundle.js", (req, res) => {
-  console.log("getting bundle");
-  res.sendFile(path.join(__dirname, "../client/dist/bundle.js"));
-});
+app.use('/', express.static(path.join(__dirname, '../client/dist')));
 
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
@@ -57,7 +54,7 @@ const server = app.listen(PORT, () => {
 
 //Socket Setup
 const io = socket(server);
-io.on("connection", function(socket) {
+io.on('connection', function(socket) {
   socket.leave(socket.id);
 
   socket.on('createGame', async() => {
