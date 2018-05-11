@@ -6,6 +6,8 @@ class Game {
     this.toPlay = 1; // TODO: keep track of active player?
     this.first = player1;
     this.second = player2;
+    this.victor = 0;   //0, 1, or 2
+    this.winType = ''; //R, F, or 1
     this.size = size;
     this.board = [];
     this.squares = {};
@@ -25,7 +27,7 @@ class Game {
   }
 
   createBoard(size) {
-    for (let row = 0; row < size; row += 1) {
+    for (let row = this.size-1; row >= 0; row -= 1) {
       this.board[row] = [];
       for (let col = 0; col < size; col += 1) {
         const stack = new Stack(this, row, col);
