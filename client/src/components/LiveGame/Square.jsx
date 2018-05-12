@@ -14,10 +14,23 @@ const Square = ({ game, row, col, handleSquareClick }) => {
     height: squareSize,
     'background-color': color,
   };
-  const stoneSize = `${squareSize - (squareSize * 0.4)}px`;
+  const stoneSize = squareSize - (squareSize * 0.4);
   const stoneStyle = {
-    width: stoneSize,
-    height: stoneSize,
+    width: `${stoneSize}px`,
+    height: `${stoneSize}px`,
+  };
+  const topStyle = {
+    ...stoneStyle,
+    'min-height': stoneSize,
+  };
+  const selectedSize = stoneSize - (stoneSize * 0.35);
+  const selectedStone = {
+    width: `${selectedSize}px`,
+    height: `${selectedSize}px`,
+
+  };
+  const selectedStyle = {
+    'max-height': squareSize,
   };
   const leftMargin = squareSize - (squareSize * 0.12);
   const stackOverflowStyle = {
@@ -27,38 +40,64 @@ const Square = ({ game, row, col, handleSquareClick }) => {
   const renderSelected = () => {
     if (coord === game.toMove.coord && game.toMove.stack) {
       return (
-        <div className="selected">
-          {game.toMove.stack.map(x => <div className={`p${x} stone`} style={stoneStyle} />)}
+        <div className="selected" style={selectedStyle}>
+          {game.toMove.stack.map((x, i) =>
+             (i === 0 ?
+               <div className={`p${x} stone top`} style={{ ...selectedStone, 'z-index': '999' }}>
+                 <p className="non-flat">{game.toMove.stone}</p>
+               </div> :
+               <div
+                 className={`p${x} stone captive`}
+                 style={
+                  {
+                    ...selectedStone,
+                    'z-index': `${999 - i}`,
+                    'margin-top': '-65%',
+                  }}
+               />))
+          }
         </div>
       );
     }
   };
 
   const renderStones = () => {
-    if (stack.stack.length <= game.size) {
+    const maxStack = game.size > 6 ? 6 : game.size;
+    if (stack.stack.length <= maxStack) {
       return (
         <div
-          className={`square ${coord} ${valid} ${origin}`}
+          className={`square ${valid} ${origin}`}
+          id={coord}
           style={squareStyle}
           onClick={() => { handleSquareClick(col, row); }}
         >
-          <p className="non-flat">{` ${stack.stone} `}</p>
           {renderSelected()}
-          {stack.stack.map(x => <div className={`p${x} stone`} style={stoneStyle} />)}
+          {stack.stack.map((x, i) =>
+             (i === 0 ?
+               <div className={`p${x} stone top`} style={topStyle}>
+                 <p className="non-flat">{` ${stack.stone} `}</p>
+               </div> :
+               <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${999 - i}` }} />))
+          }
         </div>
       );
-    } else if (stack.stack.length > game.size) {
-      const top = stack.stack.slice(0, game.size);
-      const rest = stack.stack.slice(game.size);
+    } else if (stack.stack.length > maxStack) {
+      const top = stack.stack.slice(0, maxStack);
+      const rest = stack.stack.slice(maxStack);
       return (
         <div
           className={`square ${coord} ${valid}`}
           style={squareStyle}
           onClick={() => { handleSquareClick(col, row); }}
         >
-          <p className="non-flat">{` ${stack.stone} `}</p>
           {renderSelected()}
-          {top.map(x => <div className={`p${x} stone`} style={stoneStyle} />)}
+          {top.map((x, i) =>
+             (i === 0 ?
+               <div className={`p${x} stone top`} style={topStyle}>
+                 <p className="non-flat">{` ${stack.stone} `}</p>
+               </div> :
+               <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${999 - i}` }} />))
+          }
           <div className="stack-overflow" style={stackOverflowStyle}>
             {rest.map(x => <div className={`p${x} stone overflow-stone`} />)}
           </div>

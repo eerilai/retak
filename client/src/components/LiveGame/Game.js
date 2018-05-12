@@ -70,11 +70,12 @@ class Game {
         // Place a Stone
         if (isEmpty) {
           if (this.pieces[this.toPlay].total !== 0) {
-            stack.place(this.toPlay, stone);
-            if (stone === 'C') {
+            if (stone === 'C' && this.pieces[this.toPlay].C !== 0) {
+              stack.place(this.toPlay, stone);
               this.pieces[this.toPlay].C -= 1;
               this.pieces[this.toPlay].total -= 1;
-            } else {
+            } else if (stone !== 'C' && this.pieces[this.toPlay].F !== 0) {
+              stack.place(this.toPlay, stone);
               this.pieces[this.toPlay].F -= 1;
               this.pieces[this.toPlay].total -= 1;
             }
@@ -233,10 +234,10 @@ class Game {
     Object.values(this.squares).forEach(square => {
       if(square.isEmpty === false){
         isOccupiedCnt++;
-        if(square.stack[0] === 1){
+        if(square.owner === 1 && square.stone === ''){
           p1FCnt++;
         }
-        if(square.stack[0] === 2){
+        if(square.owner === 2 && square.stone === ''){
           p2FCnt++;
         }
       } 
