@@ -63,7 +63,7 @@ const Square = ({ game, row, col, handleSquareClick }) => {
   };
 
   const renderStones = () => {
-    if (stack.stack.length <= game.size) {
+    if (stack.stack.length <= 6) {
       return (
         <div
           className={`square ${valid} ${origin}`}
@@ -80,9 +80,9 @@ const Square = ({ game, row, col, handleSquareClick }) => {
           }
         </div>
       );
-    } else if (stack.stack.length > game.size) {
-      const top = stack.stack.slice(0, game.size);
-      const rest = stack.stack.slice(game.size);
+    } else if (stack.stack.length > 6) {
+      const top = stack.stack.slice(0, 6);
+      const rest = stack.stack.slice(6);
       return (
         <div
           className={`square ${coord} ${valid}`}
