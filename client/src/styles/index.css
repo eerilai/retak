@@ -30,24 +30,24 @@ button:hover {
   display: grid;
   margin: auto;
   grid-template-columns: auto 1000px auto;
-  grid-template-rows: 30px auto;
-  grid-template-areas: "l nav r"
-                       "l takless r";
+  grid-template-areas:"l nav r"
+                      "l takless r";
 }
 
 #nav {
   grid-area: nav;
   display: grid;
-  grid-template-columns: 80% 20%;
+  grid-template-columns: 200px 500px 100px 200px;
+  grid-template-areas: "navl main-nav user-nav navr";
 }
 
 #main-nav {
-  grid-column: 1;
+  grid-area: main-nav;
   display: flex;
 }
 
 #user-nav {
-  grid-column: 2;
+  grid-area: user-nav;
 }
 
 #main-nav>nav>a {
