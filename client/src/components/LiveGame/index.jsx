@@ -74,7 +74,42 @@ class LiveGame extends Component {
   }
 
   winner() {
-    if (this.state.game.victor !== 0) {
+    if (this.state.game.winType === '1/2') {
+      return <h3>It's a tied! No one wins!</h3>;
+    }
+    else if (this.state.game.winType === '1/2' && this.state.game.isBoardFull){
+      return (
+        <div>
+          <h3>Board is Full <br/></h3>
+          <h3>It's a tied! No one wins!</h3>
+        </div>
+      );
+    }
+    else if (this.state.game.winType === 'R'){
+      return (
+        <div>
+          <h3>Road Complited <br/></h3>
+          <h3>Player {this.state.game.victor} wins!</h3>
+        </div>
+      );
+    }
+    else if (this.state.game.winType === 'F' && this.state.game.isBoardFull){
+      return (
+        <div>
+          <h3>Board is Full <br/></h3>
+          <h3>Player {this.state.game.victor} wins!</h3>
+        </div>
+      );
+    }
+    else if (this.state.game.winType === 'F'){
+      return (
+        <div>
+          <h3>A Player Ran Out of Pieces <br/></h3>
+          <h3>Player {this.state.game.victor} wins!</h3>
+        </div>
+      );
+    }
+    else if (this.state.game.winType !== null) {
       return <h3>Player {this.state.game.victor} wins!</h3>;
     }
   }
@@ -86,7 +121,11 @@ class LiveGame extends Component {
         <div className="home game">
           <div className="board">
             <div className="stone-count">
-              Black | F({game.pieces[2].F}) / C({game.pieces[2].C})
+              White | F({game.pieces[1].F}) / C({game.pieces[1].C}) | Total Flats: ({game.p1TotalFlatsCnt})
+            </div>
+            <br/><br/>
+            <div className="stone-count">
+              Black | F({game.pieces[2].F}) / C({game.pieces[2].C}) | Total Flats: ({game.p2TotoalFlatsCnt})
             </div>
             <div>
               { this.winner() }

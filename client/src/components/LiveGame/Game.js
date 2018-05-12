@@ -8,7 +8,7 @@ class Game {
     this.player1 = null;
     this.player2 = null;
     this.victor = 0; // 0, 1, or 2
-    this.winType = ''; // R, F, or 1
+    this.winType = null; // null, R, F, 1 or 1/2
     this.size = size;
     this.board = [];
     this.squares = {};
@@ -25,6 +25,10 @@ class Game {
     this.moveOrigin = {};
     this.step = {};
     this.moveDir = '';
+
+    this.isBoardFull = false;
+    this.p1TotalFlatsCnt = 0;
+    this.p2TotoalFlatsCnt = 0;
   }
 
   createBoard(size) {
@@ -61,20 +65,28 @@ class Game {
     const stack = this.squares[coord];
     const { isEmpty } = stack;
 
-    if (this.victor === 0) {
+    if (this.winType === null) {
       if (!this.isMoving) {
         // Place a Stone
         if (isEmpty) {
-          if (this.pieces[this.toPlay].F !== 0) {
+          if (this.pieces[this.toPlay].total !== 0) {
             stack.place(this.toPlay, stone);
             if (stone === 'C') {
               this.pieces[this.toPlay].C -= 1;
+              this.pieces[this.toPlay].total -= 1;
             } else {
               this.pieces[this.toPlay].F -= 1;
+              this.pieces[this.toPlay].total -= 1;
             }
             this.checkRoads();
+            this.checkFullBoardWins();
+            if(this.pieces[this.toPlay].total === 0){
+              this.checkOutOfPiecesWins();
+            }
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
             this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
+          } else {
+            this.checkOutOfPiecesWins();
           }
         // Start a move
         } else if (!isEmpty && (stack.owner === this.toPlay)) {
@@ -139,6 +151,7 @@ class Game {
             .forEach((c) => { this.squares[c].validMove = false; });
           if (this.moveDir !== '') {
             this.checkRoads();
+            this.checkFullBoardWins();
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
             this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;            
           }
@@ -155,6 +168,7 @@ class Game {
           .forEach((c) => { this.squares[c].validMove = false; });
         this.isMoving = false;
         this.checkRoads();
+        this.checkFullBoardWins();
         this.toPlay = (this.toPlay === 1) ? 2 : 1;
         this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
       }
@@ -210,6 +224,49 @@ class Game {
       }
     }
   }
+
+  checkFullBoardWins(){
+    let isOccupiedCnt = 0;
+    let p1FCnt = 0;
+    let p2FCnt =0;
+    
+    Object.values(this.squares).forEach(square => {
+      if(square.isEmpty === false){
+        isOccupiedCnt++;
+        if(square.stack[0] === 1){
+          p1FCnt++;
+        }
+        if(square.stack[0] === 2){
+          p2FCnt++;
+        }
+      } 
+    })
+    this.p1TotalFlatsCnt = p1FCnt;
+    this.p2TotoalFlatsCnt = p2FCnt;
+    if( isOccupiedCnt === (this.size * this.size)){
+      this.isBoardFull = true;
+      if(this.p1TotalFlatsCnt === this.p2TotoalFlatsCnt){
+        this.victor = 0;
+        this.winType = '1/2';
+      } else {
+        this.victor = this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt ? 1 : 2;
+        this.winType = 'F';
+      }
+    }
+    return;
+  }
+
+  checkOutOfPiecesWins(){
+    if(this.p1TotalFlatsCnt === this.p2TotoalFlatsCnt){
+      this.victor = 0;
+      this.winType = '1/2';
+    } else {
+      this.victor = this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt ? 1 : 2;
+      this.winType = 'F';
+    }
+    return;
+  }
+
 }
 
 export default Game;
