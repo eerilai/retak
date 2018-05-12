@@ -5,8 +5,8 @@ import LeaderboardTable from "../../containers/Home/leaderboard_table";
 import LobbyTable from "../../containers/Home/lobby_table";
 
 const Home = props => (
-  <div className="main">
-    <div className="home home-grid">
+  <div className="takless">
+    <div className="main">
       <div className="lobby">
         <Lobby socket={props.socket} />
       </div>
