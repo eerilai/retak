@@ -138,7 +138,7 @@ class Game {
         if (this.toMove.stack.length === 1 && this.toMove.stone === 'C') {
           Object.keys(this.moveOrigin.neighbors)
             .forEach((dir) => {
-              if (stack.neighbors[dir].stone === 'S') {
+              if (stack.neighbors[dir] && stack.neighbors[dir].stone === 'S') {
                 stack.neighbors[dir].validMove = true;
               }
             });
