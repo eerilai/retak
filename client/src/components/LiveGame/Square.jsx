@@ -57,7 +57,8 @@ const Square = ({ game, row, col, handleSquareClick }) => {
     if (stack.stack.length <= game.size) {
       return (
         <div
-          className={`square ${coord} ${valid} ${origin}`}
+          className={`square ${valid} ${origin}`}
+          id={coord}
           style={squareStyle}
           onClick={() => { handleSquareClick(col, row); }}
         >
