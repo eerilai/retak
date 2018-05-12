@@ -22,6 +22,10 @@ class Game {
     this.moveOrigin = {};
     this.step = {};
     this.moveDir = '';
+
+    this.isBoardFull = false;
+    this.p1TotalFlatsCnt = 0;
+    this.p2TotoalFlatsCnt = 0;
   }
 
   createBoard(size) {
@@ -61,16 +65,27 @@ class Game {
     if (!this.isMoving) {
       // Place a Stone
       if (isEmpty) {
-        if (this.pieces[this.toPlay].F !== 0) {
+        if (this.pieces[this.toPlay].total !== 0) {
           stack.place(this.toPlay, stone);
           if (stone === 'C') {
             this.pieces[this.toPlay].C -= 1;
+            this.pieces[this.toPlay].total -= 1;
             this.setState({ stone: '' });
           } else {
             this.pieces[this.toPlay].F -= 1;
+            this.pieces[this.toPlay].total -= 1;
             if (stone === 'S') this.setState({ stone: '' });
           }
+          // @@@@ HERE
+          this.checkFullBoardWins(col, row);
+          // console.log('p1TotalFlatsCnt', this.p1TotalFlatsCnt, 'p2TotalFlatsCnt', this.p2TotoalFlatsCnt)
+          if(this.pieces[this.toPlay].total === 0){
+            this.checkOutOfPiecesWins(col, row);
+          }
+          // console.log(`Player ${this.toPlay} total`, this.pieces[this.toPlay].total)
           this.toPlay = (this.toPlay === 1) ? 2 : 1;
+        } else {
+          this.checkOutOfPiecesWins(col, row);
         }
       // Start a move
       } else if (!isEmpty && (stack.owner === this.toPlay)) {
@@ -134,6 +149,11 @@ class Game {
         Object.keys(this.squares)
           .forEach((c) => { this.squares[c].validMove = false; });
         if (this.moveDir !== '') {
+          // @@@@ HERE
+          this.checkFullBoardWins(col, row);
+          if(this.pieces[this.toPlay].total === 0){
+            this.checkOutOfPiecesWins(col, row);
+          }
           this.toPlay = (this.toPlay === 1) ? 2 : 1;
         }
         this.moveDir = '';
@@ -148,8 +168,57 @@ class Game {
       Object.keys(this.squares)
         .forEach((c) => { this.squares[c].validMove = false; });
       this.isMoving = false;
+      // @@@@ HERE
+      this.checkFullBoardWins(col, row);
+      if(this.pieces[this.toPlay].total === 0){
+        this.checkOutOfPiecesWins(col, row);
+      }
       this.toPlay = (this.toPlay === 1) ? 2 : 1;
     }
+  }
+
+  checkFullBoardWins(col, row){
+    let isOccupiedCnt = 0;
+    let p1FCnt = 0;
+    let p2FCnt =0;
+    
+    // If board is full
+    Object.values(this.squares).forEach(square => {
+      if(square.isEmpty === false){
+        isOccupiedCnt++;
+        if(square.stack[0] === 1){
+          p1FCnt++;
+        }
+        if(square.stack[0] === 2){
+          p2FCnt++;
+        }
+      } 
+    })
+    // console.log('p1FCnt', p1FCnt, 'p2FCnt', p2FCnt)
+    this.p1TotalFlatsCnt = p1FCnt;
+    this.p2TotoalFlatsCnt = p2FCnt;
+    if( isOccupiedCnt === (this.size * this.size)){
+      console.log(`FULLLL BOARD! Last move by Player ${this.toPlay}`)
+      this.isBoardFull = true;
+      if(this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt){
+        console.log(`Player 1 Wins!!!`)
+      } else {
+        console.log(`Player 2 Wins!!!`)
+      }
+    }
+    // console.log('isOccupiedCnt', isOccupiedCnt)
+    return;
+  }
+
+  // If a player runs out of pices
+  checkOutOfPiecesWins(col, row){
+    console.log(`Player ${this.toPlay} ran out of pieces`, this.squares.a1.game)
+    if(this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt){
+      console.log(`Player 1 Wins!!!`)
+    } else {
+      console.log(`Player 2 Wins!!!`)
+    }
+    return;
   }
 }
 
