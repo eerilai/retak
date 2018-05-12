@@ -30,18 +30,32 @@
 .selected {
   display: flex;
   flex-direction: column;
-  margin-top: -20px;
-  max-height: 75px;
+  margin-top: -10px;
+  position:absolute;
+  border-radius: 3px;
+  z-index: 9999;
 }
 
 .selected>div{
   box-shadow: 3px 3px rgba(0,185,0,.5);
+
 }
 
 .stone {
   border-radius: 8px;
   margin: auto;
-  box-shadow: 2px 2px rgba(0, 0, 0, 0.1);
+  display:absolute;
+  box-shadow: 2px 2px rgba(50, 50, 50, 0.3), -2px 2px rgba(50, 50, 50, 0.1);
+}
+
+.top {
+  z-index: 999;
+}
+
+.captive {
+  border-radius: 0 0 5px 5px;
+  margin-top: -55%;
+  box-shadow: 0 2px rgba(50, 50, 50, 0.3)
 }
 
 .p1 {
@@ -53,10 +67,17 @@
 }
 
 .non-flat {
+  font-weight: bold;
   position: absolute;
   margin-left: 3px;
   border-radius: 5px;
-  color: #55656D;
+  color: #2F5659;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .stack-overflow {

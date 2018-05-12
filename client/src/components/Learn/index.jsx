@@ -1,11 +1,9 @@
 import React from 'react';
 
 const Learn = props => (
-  <div className="main">
-    <div className="home game">
-      <div className="board">
-        <p>Learn placeholder</p>
-      </div>
+  <div className="takless">
+    <div className="main">
+      <p>Learn placeholder</p>
     </div>
   </div>
 );
