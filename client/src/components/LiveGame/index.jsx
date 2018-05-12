@@ -18,7 +18,7 @@ class LiveGame extends Component {
     };
     this.selectSquare = this.selectSquare.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
-    
+
     const { socket } = props;
     socket.emit('createGame'); // Only creates if not already in game
     socket.on('updateGame', ({ col, row, stone }) => {
@@ -29,7 +29,11 @@ class LiveGame extends Component {
   selectSquare(col, row, isPlayerMove, stone = this.state.stone) {
     const { game } = this.state;
     game.selectStack(col, row, stone);
-
+    if (this.state.stone !== '') {
+      this.setState({
+        stone: '',
+      });
+    }
     this.setState({
       game,
     });
@@ -56,6 +60,12 @@ class LiveGame extends Component {
     }
   }
 
+  winner() {
+    if (this.state.game.victor !== 0) {
+      return <h3>Player {this.state.game.victor} wins!</h3>;
+    }
+  }
+
   render() {
     return (
       <div className="main">
@@ -63,6 +73,9 @@ class LiveGame extends Component {
           <div className="board">
             <div className="stone-count">
               Black | F({this.state.game.pieces[2].F}) / C({this.state.game.pieces[2].C})
+            </div>
+            <div>
+              { this.winner() }
             </div>
             <Board game={this.state.game} selectSquare={this.selectSquare} />
             <div className="stone-select">
