@@ -46,7 +46,9 @@ const Square = ({ game, row, col, handleSquareClick }) => {
         <div className="selected" style={selectedStyle}>
           {game.toMove.stack.map((x, i) =>
              (i === 0 ?
-               <div className={`p${x} stone top`} style={{ ...selectedStone, 'z-index': '999' }} /> :
+               <div className={`p${x} stone top`} style={{ ...selectedStone, 'z-index': '999' }}>
+                 <p className="non-flat">{game.toMove.stone}</p>
+               </div> :
                <div
                  className={`p${x} stone captive`}
                  style={
@@ -71,11 +73,12 @@ const Square = ({ game, row, col, handleSquareClick }) => {
           style={squareStyle}
           onClick={() => { handleSquareClick(col, row); }}
         >
-          <p className="non-flat">{` ${stack.stone} `}</p>
           {renderSelected()}
           {stack.stack.map((x, i) =>
              (i === 0 ?
-               <div className={`p${x} stone top`} style={topStyle} /> :
+               <div className={`p${x} stone top`} style={topStyle}>
+                 <p className="non-flat">{` ${stack.stone} `}</p>
+               </div> :
                <div className={`p${x} stone captive`} style={{ ...captiveStyle, 'z-index': `${999 - i}` }} />))
           }
         </div>
@@ -89,11 +92,12 @@ const Square = ({ game, row, col, handleSquareClick }) => {
           style={squareStyle}
           onClick={() => { handleSquareClick(col, row); }}
         >
-          <p className="non-flat">{` ${stack.stone} `}</p>
           {renderSelected()}
           {top.map((x, i) =>
              (i === 0 ?
-               <div className={`p${x} stone top`} style={topStyle} /> :
+               <div className={`p${x} stone top`} style={topStyle}>
+                 <p className="non-flat">{` ${stack.stone} `}</p>
+               </div> :
                <div className={`p${x} stone captive`} style={{ ...captiveStyle, 'z-index': `${999 - i}` }} />))
           }
           <div className="stack-overflow" style={stackOverflowStyle}>

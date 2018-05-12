@@ -66,10 +66,11 @@
 }
 
 .non-flat {
+  font-weight: bold;
   position: absolute;
   margin-left: 3px;
   border-radius: 5px;
-  color: #55656D;
+  color: #2F5659;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
