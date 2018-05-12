@@ -48,12 +48,21 @@
   box-shadow: 2px 2px rgba(50, 50, 50, 0.3), -2px 2px rgba(50, 50, 50, 0.1);
 }
 
+div.S {
+  background-image: url(https://puu.sh/Al0no/fd801ad23a.png);
+  background-size: cover;
+}
+div.C {
+  /*background-image: url(https://puu.sh/Al1Zg/caae853ce3.png);*/
+  background-size: cover;
+  border-radius: 100%;
+}
 .top {
   z-index: 999;
 }
 
 .captive {
-  border-radius: 0 0 5px 5px;
+  border-radius: 30px 30px 5px 5px;
   margin-top: -55%;
   box-shadow: 0 2px rgba(50, 50, 50, 0.3)
 }
