@@ -29,11 +29,14 @@ button:hover {
   background-color: #EEEEEE;
   display: grid;
   margin: auto;
-  grid-template-columns: auto 200px 600px 200px auto;
+  grid-template-columns: auto 1000px auto;
+  grid-template-rows: 30px auto;
+  grid-template-areas: "l nav r"
+                       "l takless r";
 }
 
 #nav {
-  grid-column: 3;
+  grid-area: nav;
   display: grid;
   grid-template-columns: 80% 20%;
 }
@@ -75,11 +78,18 @@ nav:hover {
   background-color: #fff;
 }
 
-.main {
-  grid-column: 3;
+.takless {
+  grid-area: takless;
+  display: grid;
+  grid-template-columns: 200px 600px 200px;
+  grid-template-areas: "left main right";
   width: 100%;
   margin: auto;
   text-align: center;
+}
+
+.main {
+  grid-area: main;
 }
 
 .lobby, .leaderboard {

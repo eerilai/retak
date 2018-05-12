@@ -82,16 +82,18 @@ class LiveGame extends Component {
   render() {
     const { game, stone } = this.state;
     return (
-      <div className="main">
-        <div className="home game">
-          <div className="board">
+      <div className="takless">
+        <div className="main">
+          <div className="game">
             <div className="stone-count">
               Black | F({game.pieces[2].F}) / C({game.pieces[2].C})
             </div>
             <div>
               { this.winner() }
             </div>
-            <Board game={game} handleSquareClick={this.handleSquareClick} />
+            <div className="board">
+              <Board game={game} handleSquareClick={this.handleSquareClick} />
+            </div>
             <div className="stone-select">
               <div className="active-stone">{stone}</div>
               <button className="piece" onClick={() => { this.toggleStanding(); }}>
