@@ -42,7 +42,7 @@ class SignupModal extends Component {
         console.error(err);
       });
     } else {
-      console.log('both password fields must match');
+      // TODO: Alert user passwords must match
     }
   }
 
@@ -87,7 +87,6 @@ class SignupModal extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log('state in SignUpModal', state)
   return { 
     isLoggedIn: state.isLoggedIn,
     currentUser: state.currentUser
