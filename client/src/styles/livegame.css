@@ -30,7 +30,7 @@
 .selected {
   display: flex;
   flex-direction: column;
-  margin-top: -20px;
+  margin-top: -10px;
   position:absolute;
   border-radius: 3px;
   z-index: 9999;
@@ -45,7 +45,7 @@
   border-radius: 8px;
   margin: auto;
   display:absolute;
-  box-shadow: 2px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 2px rgba(25, 25, 25, 0.3), -2px 2px rgba(25, 25, 25, 0.1);
 }
 
 .top {

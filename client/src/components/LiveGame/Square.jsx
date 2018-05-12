@@ -14,10 +14,10 @@ const Square = ({ game, row, col, handleSquareClick }) => {
     height: squareSize,
     'background-color': color,
   };
-  const stoneSize = `${squareSize - (squareSize * 0.4)}px`;
+  const stoneSize = squareSize - (squareSize * 0.4);
   const stoneStyle = {
-    width: stoneSize,
-    height: stoneSize,
+    width: `${stoneSize}px`,
+    height: `${stoneSize}px`,
   };
   const topStyle = {
     ...stoneStyle,
@@ -26,11 +26,12 @@ const Square = ({ game, row, col, handleSquareClick }) => {
   const captiveStyle = {
     ...stoneStyle,
   };
-  // const selectedSize = `${stoneSize - (stoneSize * 0.5)}px`;
-  // const selectedStone = {
-  //   width: `${selectedSize}`,
-  //   height: `${selectedSize}`,
-  // };
+  const selectedSize = stoneSize - (stoneSize * 0.35);
+  const selectedStone = {
+    width: `${selectedSize}px`,
+    height: `${selectedSize}px`,
+
+  };
   const selectedStyle = {
     'max-height': squareSize,
   };
@@ -45,8 +46,16 @@ const Square = ({ game, row, col, handleSquareClick }) => {
         <div className="selected" style={selectedStyle}>
           {game.toMove.stack.map((x, i) =>
              (i === 0 ?
-               <div className={`p${x} stone top`} style={{ ...stoneStyle, ...topStyle }} /> :
-               <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${999 - i}` }} />))
+               <div className={`p${x} stone top`} style={{ ...selectedStone, 'z-index': '999' }} /> :
+               <div
+                 className={`p${x} stone captive`}
+                 style={
+                  {
+                    ...selectedStone,
+                    'z-index': `${999 - i}`,
+                    'margin-top': '-65%',
+                  }}
+               />))
           }
         </div>
       );
