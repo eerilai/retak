@@ -19,6 +19,21 @@ const Square = ({ game, row, col, handleSquareClick }) => {
     width: stoneSize,
     height: stoneSize,
   };
+  const topStyle = {
+    ...stoneStyle,
+    'min-height': stoneSize,
+  };
+  const captiveStyle = {
+    ...stoneStyle,
+  };
+  // const selectedSize = `${stoneSize - (stoneSize * 0.5)}px`;
+  // const selectedStone = {
+  //   width: `${selectedSize}`,
+  //   height: `${selectedSize}`,
+  // };
+  const selectedStyle = {
+    'max-height': squareSize,
+  };
   const leftMargin = squareSize - (squareSize * 0.12);
   const stackOverflowStyle = {
     'margin-left': `${leftMargin}px`,
@@ -27,8 +42,12 @@ const Square = ({ game, row, col, handleSquareClick }) => {
   const renderSelected = () => {
     if (coord === game.toMove.coord && game.toMove.stack) {
       return (
-        <div className="selected">
-          {game.toMove.stack.map(x => <div className={`p${x} stone`} style={stoneStyle} />)}
+        <div className="selected" style={selectedStyle}>
+          {game.toMove.stack.map((x, i) =>
+             (i === 0 ?
+               <div className={`p${x} stone top`} style={{ ...stoneStyle, ...topStyle }} /> :
+               <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${999 - i}` }} />))
+          }
         </div>
       );
     }
@@ -44,7 +63,11 @@ const Square = ({ game, row, col, handleSquareClick }) => {
         >
           <p className="non-flat">{` ${stack.stone} `}</p>
           {renderSelected()}
-          {stack.stack.map(x => <div className={`p${x} stone`} style={stoneStyle} />)}
+          {stack.stack.map((x, i) =>
+             (i === 0 ?
+               <div className={`p${x} stone top`} style={topStyle} /> :
+               <div className={`p${x} stone captive`} style={{ ...captiveStyle, 'z-index': `${999 - i}` }} />))
+          }
         </div>
       );
     } else if (stack.stack.length > game.size) {
@@ -58,7 +81,11 @@ const Square = ({ game, row, col, handleSquareClick }) => {
         >
           <p className="non-flat">{` ${stack.stone} `}</p>
           {renderSelected()}
-          {top.map(x => <div className={`p${x} stone`} style={stoneStyle} />)}
+          {top.map((x, i) =>
+             (i === 0 ?
+               <div className={`p${x} stone top`} style={topStyle} /> :
+               <div className={`p${x} stone captive`} style={{ ...captiveStyle, 'z-index': `${999 - i}` }} />))
+          }
           <div className="stack-overflow" style={stackOverflowStyle}>
             {rest.map(x => <div className={`p${x} stone overflow-stone`} />)}
           </div>
