@@ -79,17 +79,14 @@ class Game {
               this.pieces[this.toPlay].total -= 1;
             }
             this.checkRoads();
-            // @@@@ HERE
-            this.checkFullBoardWins(col, row);
-            console.log('p1TotalFlatsCnt', this.p1TotalFlatsCnt, 'p2TotalFlatsCnt', this.p2TotoalFlatsCnt)
+            this.checkFullBoardWins();
             if(this.pieces[this.toPlay].total === 0){
-              this.checkOutOfPiecesWins(col, row);
+              this.checkOutOfPiecesWins();
             }
-            // console.log(`Player ${this.toPlay} total`, this.pieces[this.toPlay].total)
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
             this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
           } else {
-            this.checkOutOfPiecesWins(col, row);
+            this.checkOutOfPiecesWins();
           }
         // Start a move
         } else if (!isEmpty && (stack.owner === this.toPlay)) {
@@ -154,11 +151,7 @@ class Game {
             .forEach((c) => { this.squares[c].validMove = false; });
           if (this.moveDir !== '') {
             this.checkRoads();
-            // @@@@ HERE
-            this.checkFullBoardWins(col, row);
-            if(this.pieces[this.toPlay].total === 0){
-              this.checkOutOfPiecesWins(col, row);
-            }
+            this.checkFullBoardWins();
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
             this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;            
           }
@@ -175,11 +168,7 @@ class Game {
           .forEach((c) => { this.squares[c].validMove = false; });
         this.isMoving = false;
         this.checkRoads();
-        // @@@@ HERE
-        this.checkFullBoardWins(col, row);
-        if(this.pieces[this.toPlay].total === 0){
-          this.checkOutOfPiecesWins(col, row);
-        }
+        this.checkFullBoardWins();
         this.toPlay = (this.toPlay === 1) ? 2 : 1;
         this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
       }
@@ -236,12 +225,11 @@ class Game {
     }
   }
 
-  checkFullBoardWins(col, row){
+  checkFullBoardWins(){
     let isOccupiedCnt = 0;
     let p1FCnt = 0;
     let p2FCnt =0;
     
-    // If board is full
     Object.values(this.squares).forEach(square => {
       if(square.isEmpty === false){
         isOccupiedCnt++;
@@ -253,13 +241,10 @@ class Game {
         }
       } 
     })
-    // console.log('p1FCnt', p1FCnt, 'p2FCnt', p2FCnt)
     this.p1TotalFlatsCnt = p1FCnt;
     this.p2TotoalFlatsCnt = p2FCnt;
     if( isOccupiedCnt === (this.size * this.size)){
-      console.log(`FULLLL BOARD! Last move by Player ${this.toPlay}`)
       this.isBoardFull = true;
-
       if(this.p1TotalFlatsCnt === this.p2TotoalFlatsCnt){
         this.victor = 0;
         this.winType = '1/2';
@@ -267,27 +252,11 @@ class Game {
         this.victor = this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt ? 1 : 2;
         this.winType = 'F';
       }
-      console.log(`Player ${this.victor} Wins!!!`, this.winType)
-
-      
-      // if(this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt){
-      //   console.log(`Player 1 Wins!!!`)
-      //   this.victor = 1;
-      //   this.winType = 'F';
-      // }
-      // if(this.p2TotalFlatsCnt > this.p1TotoalFlatsCnt) {
-      //   console.log(`Player 2 Wins!!!`)
-      //   this.victor = 2;
-      //   this.winType = 'F';
-      // }
     }
-    // console.log('isOccupiedCnt', isOccupiedCnt)
     return;
   }
 
-  // If a player runs out of pices
-  checkOutOfPiecesWins(col, row){
-    console.log(`Player ${this.toPlay} ran out of pieces`, this.squares.a1.game)
+  checkOutOfPiecesWins(){
     if(this.p1TotalFlatsCnt === this.p2TotoalFlatsCnt){
       this.victor = 0;
       this.winType = '1/2';
@@ -295,15 +264,9 @@ class Game {
       this.victor = this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt ? 1 : 2;
       this.winType = 'F';
     }
-    console.log(`Player ${this.victor} Wins!!!`, this.winType)
-
-    // if(this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt){
-    //   console.log(`Player 1 Wins!!!`)
-    // } else {
-    //   console.log(`Player 2 Wins!!!`)
-    // }
     return;
   }
+
 }
 
 export default Game;

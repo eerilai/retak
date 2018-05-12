@@ -12,7 +12,7 @@ import { convertCoord } from './gameUtil';
 class LiveGame extends Component {
   constructor(props) {
     super(props);
-    const newGame = new Game(4);
+    const newGame = new Game(5);
     this.state = {
       game: newGame,
       stone: '',
