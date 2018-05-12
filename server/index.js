@@ -55,12 +55,19 @@ const io = socket(server);
 io.on('connection', function(socket) {
   socket.leave(socket.id);
 
-  socket.on('createGame', async() => {
+  socket.on('syncGame', async(username) => {
     // Only creates new game if not already in one
     if (!Object.keys(socket.rooms).length) {
-      await socket.join('testRoom'); // TODO: randomize room name
-      ('socket.rooms', socket.rooms);
+      await socket.join(username);
+      io.sockets.adapter.rooms[username].player1 = username;
+    } else {
+      Object.keys(socket.rooms).forEach((room) => {
+        gameRoom = io.sockets.adapter.rooms[room];
+        io.in(room).emit('playerJoin', gameRoom.player1, username);
+      })
     }
+
+    // Find rooms with only one socket attached (i.e. pending games)
     const pendingGames = [];
     const { rooms } = io.sockets.adapter;
     for (let room in rooms) {
@@ -72,11 +79,12 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('updateLobby', pendingGames);
   });
 
+  // Update game for each piece move
   socket.on('broadcastGameUpdate', (data) => {
-    console.log('broadcastGameUpdate triggered', data);
-    socket.to('testRoom').emit('updateGame', data); // TODO: randomize room name
+    socket.to(data.game).emit('updateGame', data);
   });
 
+  // Serve pending game list to lobby on lobby initialize
   socket.on('fetchLobby', () => {
     const games = [];
     const { rooms } = io.sockets.adapter;
@@ -89,9 +97,9 @@ io.on('connection', function(socket) {
     socket.emit('updateLobby', games);
   });
 
-  socket.on('joinGame', (name) => {
-    socket.join(name);
-    console.log(`someone has joined ${name}`);
-    console.log(`${name}: ${JSON.stringify(io.sockets.adapter.rooms[name])}`);
+  // Join user to pending game
+  socket.on('joinGame', (roomName, username) => {
+    socket.join(roomName);
+    io.sockets.adapter.rooms[roomName].player2 = username;
   });
 });

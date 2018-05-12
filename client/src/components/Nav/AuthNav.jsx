@@ -22,7 +22,6 @@ class AuthNav extends Component {
     .then((res) => {
       let currentUser = res.data;
       if(currentUser[0] !== "<"){
-        console.log('Auth check current logged in user', currentUser)
         this.props.toggleLoginLogout(true);
         this.props.login(currentUser);
       }
@@ -44,8 +43,6 @@ class AuthNav extends Component {
     // - will need access to redux state once redux implemented
     const { modalView } = this.state;
     const { isLoggedIn } = this.props;
-    console.log('AuthNav isLoggedIn is', isLoggedIn)
-
     const userNavLink = (
         <nav onClick={() => {this.changeView('logout')}}>Logout</nav>
     );
@@ -68,7 +65,6 @@ class AuthNav extends Component {
 };
 
 function mapStateToProps(state) {
-  console.log('AuthNav state.isLoggedIn', state.isLoggedIn)
   return { 
     isLoggedIn: state.isLoggedIn,
     currentUser: state.currentUser

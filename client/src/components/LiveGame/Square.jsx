@@ -1,7 +1,7 @@
 import React from 'react';
 import { convertCoord } from './gameUtil';
 
-const Square = ({ game, row, col, selectSquare }) => {
+const Square = ({ game, row, col, handleSquareClick }) => {
   const squareSize = 599 / game.size;
   const color = (row % 2 !== col % 2) ? '#DEE3E6' : '#8CA2AD';
   const coord = convertCoord([col, row]);
@@ -40,7 +40,7 @@ const Square = ({ game, row, col, selectSquare }) => {
         <div
           className={`square ${coord} ${valid} ${origin}`}
           style={squareStyle}
-          onClick={() => { selectSquare(col, row, true); }} // TODO: check if game.activePlayer = state.user
+          onClick={() => { handleSquareClick(col, row); }}
         >
           <p className="non-flat">{` ${stack.stone} `}</p>
           {renderSelected()}
@@ -54,7 +54,7 @@ const Square = ({ game, row, col, selectSquare }) => {
         <div
           className={`square ${coord} ${valid}`}
           style={squareStyle}
-          onClick={() => { selectSquare(col, row, true); }} // TODO: check if game.activePlayer = state.user
+          onClick={() => { handleSquareClick(col, row); }}
         >
           <p className="non-flat">{` ${stack.stone} `}</p>
           {renderSelected()}

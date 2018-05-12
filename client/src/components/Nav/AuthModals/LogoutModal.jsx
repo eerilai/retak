@@ -16,7 +16,6 @@ class LogoutModal extends Component {
   handleLogout(){
     axios.post('/auth/logout')
     .then(() => {
-      console.log('You have Logged Out')
       this.props.toggleView('off');
       this.props.toggleLoginLogout(false);
       this.props.login('guest');
@@ -41,7 +40,6 @@ class LogoutModal extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log('state in LogoutModal', state)
   return { 
     isLoggedIn: state.isLoggedIn,
     currentUser: state.currentUser
