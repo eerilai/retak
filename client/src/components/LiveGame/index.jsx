@@ -20,7 +20,6 @@ class LiveGame extends Component {
     this.movePieces = this.movePieces.bind(this);
     this.handleSquareClick = this.handleSquareClick.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
-<<<<<<< HEAD
     
     const { socket, username } = props;
     const { game } = this.state;
@@ -30,11 +29,6 @@ class LiveGame extends Component {
       game.player2 = player2;
       game.activePlayer = player1;
     });
-=======
-
-    const { socket } = props;
-    socket.emit('createGame'); // Only creates if not already in game
->>>>>>> e92bbfdcaf5b755d109c946515f665c83b7afe06
     socket.on('updateGame', ({ col, row, stone }) => {
       this.movePieces(col, row, false, stone);
     });
@@ -94,14 +88,10 @@ class LiveGame extends Component {
             <div className="stone-count">
               Black | F({game.pieces[2].F}) / C({game.pieces[2].C})
             </div>
-<<<<<<< HEAD
-            <Board game={game} handleSquareClick={this.handleSquareClick} />
-=======
             <div>
               { this.winner() }
             </div>
-            <Board game={this.state.game} selectSquare={this.selectSquare} />
->>>>>>> e92bbfdcaf5b755d109c946515f665c83b7afe06
+            <Board game={game} handleSquareClick={this.handleSquareClick} />
             <div className="stone-select">
               <div className="active-stone">{stone}</div>
               <button className="piece" onClick={() => { this.toggleStanding(); }}>
