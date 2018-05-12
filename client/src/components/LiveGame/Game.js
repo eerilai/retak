@@ -3,9 +3,10 @@ import Stack from './Stack';
 
 class Game {
   constructor(size, player1 = 'p1', player2 = 'p2') {
-    this.toPlay = 1; // TODO: keep track of active player?
-    this.first = player1;
-    this.second = player2;
+    this.toPlay = 1;
+    this.activePlayer = null;
+    this.player1 = null;
+    this.player2 = null;
     this.victor = 0; // 0, 1, or 2
     this.winType = ''; // R, F, or 1
     this.size = size;
@@ -73,6 +74,7 @@ class Game {
             }
             this.checkRoads();
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
+            this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
           }
         // Start a move
         } else if (!isEmpty && (stack.owner === this.toPlay)) {
@@ -138,6 +140,7 @@ class Game {
           if (this.moveDir !== '') {
             this.checkRoads();
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
+            this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;            
           }
           this.moveDir = '';
         }
@@ -153,6 +156,7 @@ class Game {
         this.isMoving = false;
         this.checkRoads();
         this.toPlay = (this.toPlay === 1) ? 2 : 1;
+        this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
       }
     }
   }
