@@ -45,7 +45,7 @@
   border-radius: 8px;
   margin: auto;
   display:absolute;
-  box-shadow: 2px 2px rgba(25, 25, 25, 0.3), -2px 2px rgba(25, 25, 25, 0.1);
+  box-shadow: 2px 2px rgba(50, 50, 50, 0.3), -2px 2px rgba(50, 50, 50, 0.1);
 }
 
 .top {
@@ -54,7 +54,8 @@
 
 .captive {
   border-radius: 0 0 5px 5px;
-  margin-top: -5px;
+  margin-top: -55%;
+  box-shadow: 0 2px rgba(50, 50, 50, 0.3)
 }
 
 .p1 {

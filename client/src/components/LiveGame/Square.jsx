@@ -23,9 +23,6 @@ const Square = ({ game, row, col, handleSquareClick }) => {
     ...stoneStyle,
     'min-height': stoneSize,
   };
-  const captiveStyle = {
-    ...stoneStyle,
-  };
   const selectedSize = stoneSize - (stoneSize * 0.35);
   const selectedStone = {
     width: `${selectedSize}px`,
@@ -65,7 +62,8 @@ const Square = ({ game, row, col, handleSquareClick }) => {
   };
 
   const renderStones = () => {
-    if (stack.stack.length <= 6) {
+    const maxStack = game.size > 6 ? 6 : game.size;
+    if (stack.stack.length <= maxStack) {
       return (
         <div
           className={`square ${valid} ${origin}`}
@@ -79,13 +77,13 @@ const Square = ({ game, row, col, handleSquareClick }) => {
                <div className={`p${x} stone top`} style={topStyle}>
                  <p className="non-flat">{` ${stack.stone} `}</p>
                </div> :
-               <div className={`p${x} stone captive`} style={{ ...captiveStyle, 'z-index': `${999 - i}` }} />))
+               <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${999 - i}` }} />))
           }
         </div>
       );
-    } else if (stack.stack.length > 6) {
-      const top = stack.stack.slice(0, 6);
-      const rest = stack.stack.slice(6);
+    } else if (stack.stack.length > maxStack) {
+      const top = stack.stack.slice(0, maxStack);
+      const rest = stack.stack.slice(maxStack);
       return (
         <div
           className={`square ${coord} ${valid}`}
@@ -98,7 +96,7 @@ const Square = ({ game, row, col, handleSquareClick }) => {
                <div className={`p${x} stone top`} style={topStyle}>
                  <p className="non-flat">{` ${stack.stone} `}</p>
                </div> :
-               <div className={`p${x} stone captive`} style={{ ...captiveStyle, 'z-index': `${999 - i}` }} />))
+               <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${999 - i}` }} />))
           }
           <div className="stack-overflow" style={stackOverflowStyle}>
             {rest.map(x => <div className={`p${x} stone overflow-stone`} />)}
