@@ -128,7 +128,7 @@ class LiveGame extends Component {
   render() {
     const { game, stone } = this.state;
     const { socket } = this.props;
-    console.log("socket", socket);
+
     return (
       <div className="takless">
         <div className="main">
