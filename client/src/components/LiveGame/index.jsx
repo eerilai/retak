@@ -74,14 +74,16 @@ class LiveGame extends Component {
   }
 
   winner() {
+    let winner = this.state.game.victorUsername;
+    let looser = this.state.game.looserUsername;
     if (this.state.game.winType === '1/2') {
-      return <h3>It's a tied! No one wins!</h3>;
+      return <h3>{`It's a tied! ${winner} wins!`}</h3>;
     }
     else if (this.state.game.winType === '1/2' && this.state.game.isBoardFull){
       return (
         <div>
           <h3>Board is Full <br/></h3>
-          <h3>It's a tied! No one wins!</h3>
+          <h3>{`It's a tied! ${winner} wins!`}</h3>
         </div>
       );
     }
@@ -89,7 +91,7 @@ class LiveGame extends Component {
       return (
         <div>
           <h3>Road Complited <br/></h3>
-          <h3>Player {this.state.game.victor} wins!</h3>
+          <h3>{`Player ${winner} wins! & Player ${looser} lost!`}</h3>
         </div>
       );
     }
@@ -97,7 +99,7 @@ class LiveGame extends Component {
       return (
         <div>
           <h3>Board is Full <br/></h3>
-          <h3>Player {this.state.game.victor} wins!</h3>
+          <h3>{`Player ${winner} wins! & Player ${looser} lost!`}</h3>
         </div>
       );
     }
@@ -105,12 +107,12 @@ class LiveGame extends Component {
       return (
         <div>
           <h3>A Player Ran Out of Pieces <br/></h3>
-          <h3>Player {this.state.game.victor} wins!</h3>
+          <h3>{`Player ${winner} wins! & Player ${looser} lost!`}</h3>
         </div>
       );
     }
     else if (this.state.game.winType !== null) {
-      return <h3>Player {this.state.game.victor} wins!</h3>;
+      return <h3>{`Player ${winner} wins! & Player ${looser} lost!`}</h3>;
     }
   }
 
