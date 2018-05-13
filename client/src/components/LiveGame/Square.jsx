@@ -43,8 +43,8 @@ const Square = ({ game, row, col, handleSquareClick }) => {
         <div className="selected" style={selectedStyle}>
           {game.toMove.stack.map((x, i) =>
              (i === 0 ?
-               <div className={`p${x} stone top`} style={{ ...selectedStone, 'z-index': '999' }}>
-                 <p className="non-flat">{game.toMove.stone}</p>
+               <div className={`p${x} ${game.toMove.stone} stone top`} style={{ ...selectedStone, 'z-index': '999' }}>
+                 {/* <p className="non-flat">{game.toMove.stone}</p> */}
                </div> :
                <div
                  className={`p${x} stone captive`}
@@ -74,8 +74,8 @@ const Square = ({ game, row, col, handleSquareClick }) => {
           {renderSelected()}
           {stack.stack.map((x, i) =>
              (i === 0 ?
-               <div className={`p${x} stone top`} style={topStyle}>
-                 <p className="non-flat">{` ${stack.stone} `}</p>
+               <div className={`p${x} ${stack.stone} stone top`} style={topStyle}>
+                 {/* <p className="non-flat">{` ${stack.stone} `}</p> */}
                </div> :
                <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${999 - i}` }} />))
           }
@@ -94,7 +94,7 @@ const Square = ({ game, row, col, handleSquareClick }) => {
           {top.map((x, i) =>
              (i === 0 ?
                <div className={`p${x} stone top`} style={topStyle}>
-                 <p className="non-flat">{` ${stack.stone} `}</p>
+                 {/* <p className="non-flat">{` ${stack.stone} `}</p> */}
                </div> :
                <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${999 - i}` }} />))
           }
