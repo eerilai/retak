@@ -1,5 +1,5 @@
 html {
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
 }
 
 body {
@@ -26,12 +26,13 @@ button:hover {
 }
 
 #page {
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
   display: grid;
   margin: auto;
   grid-template-columns: auto 1000px auto;
-  grid-template-areas:"l nav r"
-                      "l takless r";
+  grid-template-areas:
+    "l nav r"
+    "l takless r";
 }
 
 #nav {
@@ -50,19 +51,19 @@ button:hover {
   grid-area: user-nav;
 }
 
-#main-nav>nav>a {
+#main-nav > nav > a {
   font-size: 12px;
   cursor: pointer;
   padding: 5px 10px;
-  text-shadow: 2px 2px 2px #DCDCDC;
+  text-shadow: 2px 2px 2px #dcdcdc;
   color: black;
 }
 
-#main-nav>nav>a:hover {
+#main-nav > nav > a:hover {
   text-decoration: none;
   font-size: 12px;
   padding: 5px 10px;
-  text-shadow: 2px 2px 2px #DCDCDC;
+  text-shadow: 2px 2px 2px #dcdcdc;
   color: black;
 }
 
@@ -81,7 +82,7 @@ nav:hover {
 .takless {
   grid-area: takless;
   display: grid;
-  grid-template-columns: 200px 600px 200px;
+  grid-template-columns: 200px 600px 280px;
   grid-template-areas: "left main right";
   width: 100%;
   margin: auto;
@@ -92,70 +93,129 @@ nav:hover {
   grid-area: main;
 }
 
-.lobby, .leaderboard {
+.lobby,
+.leaderboard {
   border: 1px solid #ccc;
   min-height: 400px;
-  background-color: #f7f7f7
+  background-color: #f7f7f7;
 }
 
 /* Tables CSS */
-.tg  {
+.tg {
   /* border-collapse:collapse; */
   grid-column: 3;
   width: 100%;
-  border-spacing:0;
-  border-color:#ccc;
+  border-spacing: 0;
+  border-color: #ccc;
   margin: auto;
 }
-.tg th{
-  font-family:"Lucida Console", Monaco, monospace !important;
-  font-size:14px;
-  font-weight:normal;
-  padding:10px 5px;
-  border-style:solid;
-  border-width:0;
-  overflow:hidden;
-  word-break:normal;
-  border-color:#ccc;
-  color:#333;
-  background-color:#f7f7f7;
+.tg th {
+  font-family: "Lucida Console", Monaco, monospace !important;
+  font-size: 14px;
+  font-weight: normal;
+  padding: 10px 5px;
+  border-style: solid;
+  border-width: 0;
+  overflow: hidden;
+  word-break: normal;
+  border-color: #ccc;
+  color: #333;
+  background-color: #f7f7f7;
 }
-.tg td{
-  font-family:"Lucida Console", Monaco, monospace !important;
-  font-size:12px;
-  padding:10px 5px;
-  border-style:solid;
-  border-width:0px;
-  overflow:hidden;
-  word-break:normal;
-  border-top-width:1px;
-  border-bottom-width:1px;
-  border-color:#ccc;
-  color:#333;
-  background-color:#f7f7f7;
+.tg td {
+  font-family: "Lucida Console", Monaco, monospace !important;
+  font-size: 12px;
+  padding: 10px 5px;
+  border-style: solid;
+  border-width: 0px;
+  overflow: hidden;
+  word-break: normal;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-color: #ccc;
+  color: #333;
+  background-color: #f7f7f7;
   cursor: pointer;
 }
-.tg .tg-yw4l{
-  vertical-align:top
+.tg .tg-yw4l {
+  vertical-align: top;
 }
-.tg .tg-colName1{
-  border-color:inherit;
-  vertical-align:top
+.tg .tg-colName1 {
+  border-color: inherit;
+  vertical-align: top;
 }
-.tg .tg-colNames{
-  font-size:14px;
-  font-family:"Lucida Console", Monaco, monospace !important;
-  border-color:inherit;
-  vertical-align:top
+.tg .tg-colNames {
+  font-size: 14px;
+  font-family: "Lucida Console", Monaco, monospace !important;
+  border-color: inherit;
+  vertical-align: top;
 }
-.tg .tg-row{
-  background-color:#f7f7f7;
-  border-color:inherit;
-  vertical-align:top
+.tg .tg-row {
+  background-color: #f7f7f7;
+  border-color: inherit;
+  vertical-align: top;
 }
-.tg-row:hover{
-  background-color: rgba(0,0,155,.2);
+.tg-row:hover {
+  background-color: rgba(0, 0, 155, 0.2);
 }
-.tg .row:hover{
-  background-color: rgba(0,0,155,.2);
+.tg .row:hover {
+  background-color: rgba(0, 0, 155, 0.2);
+}
+#send {
+  background: #575ed8;
+  color: #fff;
+  font-size: 18px;
+  border: 0;
+  padding: 12px 0;
+  width: 100%;
+  border-radius: 0 0 2px 2px;
+}
+#chat {
+  text-align: left;
+  max-width: 800px;
+  border: 1px solid #ddd;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0, 0.05);
+  border-radius: 2px;
+
+  margin-top: 100px;
+  height: 600px;
+  grid-column: 3;
+  margin-left: 20px;
+}
+#chat-window {
+  height: 420px;
+  overflow: auto;
+  background: #f9f9f9;
+}
+input {
+  padding: 10px 20px;
+  box-sizing: border-box;
+  background: #eee;
+  border: 1px solid #ddd;
+  display: block;
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  font-size: 10px;
+}
+#output p {
+  padding: 14px 0px;
+  margin: 0 20px;
+  border-bottom: 1px solid #e9e9e9;
+  color: #555;
+}
+
+#feedback p {
+  color: #aaa;
+  padding: 14px 0px;
+  margin: 0 20px;
+}
+
+#output strong {
+  color: #575ed8;
+}
+#tak {
+  width: 258px;
+  color: black;
+  background-color: yellowgreen;
 }
