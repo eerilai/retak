@@ -1,6 +1,5 @@
 import React from "react";
 import { Header, Icon, Image, Container } from "semantic-ui-react";
-import tak from "./tak.png";
 const About = props => (
   <div className="takless">
     <div className="main">

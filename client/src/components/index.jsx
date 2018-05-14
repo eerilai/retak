@@ -8,7 +8,6 @@ import Profile from "./Profile";
 import Game from "./LiveGame";
 import Chat from "./LiveGame/chat";
 import socketIOClient from "socket.io-client";
-import Background from "./chess.jpg";
 
 var sectionStyle = {
   width: "100%",

@@ -8,7 +8,6 @@ import Stack from "./Stack";
 import Chat from "./chat"; // not in use currently
 import "../../styles/livegame.css";
 import { convertCoord } from "./gameUtil";
-import coffee from "./coffee.gif";
 
 class LiveGame extends Component {
   constructor(props) {
@@ -84,45 +83,34 @@ class LiveGame extends Component {
   }
 
   winner() {
-    if (this.state.game.winType === "1/2") {
-      return <h3>It's a tied! No one wins!</h3>;
-    } else if (
-      this.state.game.winType === "1/2" &&
-      this.state.game.isBoardFull
-    ) {
+    if (this.state.game.winType === '1/2') {
+      return <h3>Draw!</h3>;
+    }
+    else if (this.state.game.winType === '1/2' && this.state.game.isBoardFull){
       return (
         <div>
-          <h3>
-            Board is Full <br />
-          </h3>
-          <h3>It's a tied! No one wins!</h3>
+          <h3>Board is Full <br/></h3>
+          <h3>Draw!</h3>
         </div>
       );
     } else if (this.state.game.winType === "R") {
       return (
         <div>
-          <h3>
-            Road Complited <br />
-          </h3>
-          <h3>Player {this.state.game.victor} wins!</h3>
+          <h3>Player {this.state.game.victor} has has finished a Road!<br/></h3>
         </div>
       );
     } else if (this.state.game.winType === "F" && this.state.game.isBoardFull) {
       return (
         <div>
-          <h3>
-            Board is Full <br />
-          </h3>
-          <h3>Player {this.state.game.victor} wins!</h3>
+          <h3>Board is Full <br/></h3>
+          <h3>Player {this.state.game.victor} wins by flats!</h3>
         </div>
       );
     } else if (this.state.game.winType === "F") {
       return (
         <div>
-          <h3>
-            A Player Ran Out of Pieces <br />
-          </h3>
-          <h3>Player {this.state.game.victor} wins!</h3>
+          <h3>A Player Ran Out of Pieces <br/></h3>
+          <h3>Player {this.state.game.victor} wins by flats!</h3>
         </div>
       );
     } else if (this.state.game.winType !== null) {
@@ -137,23 +125,22 @@ class LiveGame extends Component {
     return (
       <div className="takless">
         <div id="coffee">
-          <img src={coffee} width="180px" height="180px" />
+          <img width="180px" height="180px" />
         </div>
         <div className="main">
           <div className="game">
             <div className="stone-count">
-              White | F({game.pieces[1].F}) / C({game.pieces[1].C}) | Total
-              Flats: ({game.p1TotalFlatsCnt})
+              Black | F({game.pieces[2].F}) / C({game.pieces[2].C}) | Total Flats: ({game.p2TotoalFlatsCnt})
             </div>
-
-            <br />
-            <div className="stone-count">
-              Black | F({game.pieces[2].F}) / C({game.pieces[2].C}) | Total
-              Flats: ({game.p2TotoalFlatsCnt})
+            <div>
+              { this.winner() }
             </div>
             <div>{this.winner()}</div>
             <div className="board">
               <Board game={game} handleSquareClick={this.handleSquareClick} />
+            </div>
+            <div className="stone-count">
+              White | F({game.pieces[1].F}) / C({game.pieces[1].C}) | Total Flats: ({game.p1TotalFlatsCnt})
             </div>
             <div className="stone-select">
               <div className="active-stone">{stone}</div>
