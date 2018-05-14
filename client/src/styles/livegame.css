@@ -37,7 +37,7 @@
 }
 
 .selected>div{
-  box-shadow: 3px 3px rgba(0,185,0,.5);
+  box-shadow: 3px 3px rgba(0,185,0,.3);
 
 }
 
