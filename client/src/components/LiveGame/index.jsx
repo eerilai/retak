@@ -128,21 +128,23 @@ class LiveGame extends Component {
 
     return (
       <div className="takless">
+        <div id="coffee">
+          <img width="180px" height="180px" />
+        </div>
         <div className="main">
           <div className="game">
             <div className="stone-count">
-              White | F({game.pieces[1].F}) / C({game.pieces[1].C}) | Total
-              Flats: ({game.p1TotalFlatsCnt})
+              Black | F({game.pieces[2].F}) / C({game.pieces[2].C}) | Total Flats: ({game.p2TotoalFlatsCnt})
             </div>
-
-            <br />
-            <div className="stone-count">
-              Black | F({game.pieces[2].F}) / C({game.pieces[2].C}) | Total
-              Flats: ({game.p2TotoalFlatsCnt})
+            <div>
+              { this.winner() }
             </div>
             <div>{this.winner()}</div>
             <div className="board">
               <Board game={game} handleSquareClick={this.handleSquareClick} />
+            </div>
+            <div className="stone-count">
+              White | F({game.pieces[1].F}) / C({game.pieces[1].C}) | Total Flats: ({game.p1TotalFlatsCnt})
             </div>
             <div className="stone-select">
               <div className="active-stone">{stone}</div>
