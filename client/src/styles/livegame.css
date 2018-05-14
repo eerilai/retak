@@ -8,15 +8,22 @@
 
 .game-info {
   margin-top: 100%;
+}
+
+.game-info>table {
   border: 1px solid #D2D2D2;
   background-color: #e5e5e5;
   grid-area: left;
-  margin-right: 5px;
+  margin-right: 10px;
   height: 200px;
 }
 
 .game-info>table>tr {
   height: 30px;
+}
+
+.to-play {
+  min-height: 21px;
 }
 
 .ptn {
