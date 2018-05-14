@@ -23,8 +23,13 @@ class Game {
     };
     this.isMoving = false;
     this.moveOrigin = {};
-    this.step = {};
+    this.step = '';
+    this.lastStep = '';
     this.moveDir = '';
+
+    this.move = 0;
+    this.ptn = [];
+    this.plyPtn = [];
 
     this.isBoardFull = false;
     this.p1TotalFlatsCnt = 0;
@@ -62,6 +67,42 @@ class Game {
     }
   }
 
+  parsePTN(coord, stone) {
+    if (!this.isMoving && this.toPlay === 1) {
+      this.ptn.push([`${stone}${coord}`]);
+    } else if (!this.isMoving) {
+      this.ptn[this.move].push(`${stone}${coord}`);
+    } else if (this.plyPtn.length === 0 && this.moveDir) {
+      this.plyPtn.push(this.toMove.stack.length + 1);
+      this.plyPtn.push(`${this.moveOrigin.coord}${this.moveDir}`);
+      this.plyPtn.push(1);
+      this.lastStep = this.step;
+    } else if (this.plyPtn.length && this.lastStep === this.step) {
+      this.plyPtn[this.plyPtn.length - 1] += 1;
+    } else if (this.plyPtn.length) {
+      this.plyPtn.push(1);
+      this.lastStep = this.step;
+    }
+    if (this.isMoving && this.toMove.stack.length === 0) {
+      if (this.plyPtn[0] === 1) {
+        this.plyPtn.shift();
+      }
+      if (((this.plyPtn.length === 3 || this.plyPtn.length === 2) &&
+          this.plyPtn[this.plyPtn.length - 1] === 1) ||
+          this.plyPtn[0] === this.plyPtn[2]) {
+        this.plyPtn.pop();
+      }
+      if (this.plyPtn.length) {
+        if (this.toPlay === 1) {
+          this.ptn.push([this.plyPtn.join('')]);
+        } else {
+          this.ptn[this.move].push(this.plyPtn.join(''));
+        }
+        this.plyPtn = [];
+      }
+    }
+  }
+
   selectStack(col, row, stone = '') {
     const coord = convertCoord([col, row]);
     const stack = this.squares[coord];
@@ -83,10 +124,12 @@ class Game {
             }
             this.checkRoads();
             this.checkFullBoardWins();
-            if(this.pieces[this.toPlay].total === 0){ 
-              this.checkOutOfPiecesWins(); 
+            if (this.pieces[this.toPlay].total === 0) {
+              this.checkOutOfPiecesWins();
             }
+            this.parsePTN(coord, stone);
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
+            if (this.toPlay === 1) this.move += 1;
             this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
           } else {
             this.checkOutOfPiecesWins();
@@ -134,9 +177,11 @@ class Game {
             }
           }
           stack.validMove = true;
-          this.step = stack;
+          this.step = stack.coord;
         }
         stack.place(this.toMove.stack.pop());
+        console.log(this.toMove.stack);
+        this.parsePTN();
         if (this.toMove.stack.length === 1 && this.toMove.stone === 'C') {
           Object.keys(this.moveOrigin.neighbors)
             .forEach((dir) => {
@@ -156,7 +201,8 @@ class Game {
             this.checkRoads();
             this.checkFullBoardWins();
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
-            this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;            
+            if (this.toPlay === 1) this.move += 1;
+            this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
           }
           this.moveDir = '';
         }
@@ -173,6 +219,7 @@ class Game {
         this.checkRoads();
         this.checkFullBoardWins();
         this.toPlay = (this.toPlay === 1) ? 2 : 1;
+        if (this.toPlay === 1) this.move += 1;
         this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
       }
     }

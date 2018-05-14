@@ -6,6 +6,7 @@ import Game from "./Game";
 import Board from "./Board";
 import Stack from "./Stack";
 import Chat from "./chat"; // not in use currently
+import PTN from "./PTN"
 import "../../styles/livegame.css";
 import { convertCoord } from "./gameUtil";
 
@@ -122,12 +123,37 @@ class LiveGame extends Component {
     }
   }
 
+  opponentTurn() {
+    const { activePlayer } = this.state.game;
+    if (activePlayer !== this.props.username) {
+      return <div className="to-play">Waiting for Opponent...</div>;
+    }
+    return <div className="to-play" />;
+  }
+  
+  userTurn() {
+    const { activePlayer } = this.state.game;
+    if (activePlayer === this.props.username) {
+      return <div className="to-play">Your turn</div>;
+    }
+    return <div className="to-play" />;
+  }
+
   render() {
     const { game, stone } = this.state;
     const { socket } = this.props;
 
     return (
       <div className="takless">
+        <div className="game-info">
+          {this.opponentTurn()}
+          <table>
+            <tr>{this.state.game.player2}</tr>
+            <PTN ptn={this.state.game.ptn} />
+            <tr>{this.props.username}</tr>
+          </table>
+          {this.userTurn()}
+        </div>
         <div className="main">
           <div className="game">
             <div className="stone-count">
