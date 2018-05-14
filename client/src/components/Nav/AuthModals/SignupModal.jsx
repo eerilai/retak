@@ -51,7 +51,7 @@ class SignupModal extends Component {
 
   render() {
     return (
-      <Modal isOpen={this.props.modalView === "signup"} closeIcon>
+      <Modal isOpen={this.props.modalView === "signup"}>
         <div className="log">
           <Header icon='SignUp' content='Sign Up' />
           <a href="/auth/google">
@@ -63,72 +63,72 @@ class SignupModal extends Component {
 
           <form onSubmit={this.handleSubmit} className="signupForm">
             <div>
-              <p className="logTag">Username</p>
-              <Input className="hvr-shadow-radial" required>
-                <div className="ui left icon input">
-                  <i class="user icon"></i>
-                  <input
-                    type="text"
-                    placeholder="Username"
-                    value={this.state.username}
-                    onChange={e => {
-                      this.handleInputChange(e, "username");
-                    }}
-                  />
-                </div>
-              </Input>
+              <div>
+                <p className="logTag">Username:</p>
+                <Input className="hvr-shadow-radial" required>
+                  <div className="ui left icon input">
+                    <i class="user icon"></i>
+                    <input
+                      type="text"
+                      placeholder="Username"
+                      value={this.state.username}
+                      onChange={e => {
+                        this.handleInputChange(e, "username");
+                      }}
+                    />
+                  </div>
+                </Input>
+              </div>
+              <div>
+                <p className="logTag">Email:</p>
+                <Input className="hvr-shadow-radial" required>
+                  <div className="ui left icon input">
+                    <i class="user icon"></i>
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      value={this.state.email}
+                      onChange={e => {
+                        this.handleInputChange(e, "email");
+                      }}
+                    />
+                  </div>
+                </Input>
+              </div>
+              <div>
+                <p className="logTag">Password:</p>
+                <Input className="hvr-shadow-radial" required>
+                  <div class="ui left icon input">
+                    <i class="lock icon"></i>
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      value={this.state.password}
+                      onChange={e => {
+                        this.handleInputChange(e, "password");
+                      }}
+                    />
+                  </div>
+                </Input>
+              </div>
+              <div>
+                <p className="logTag">Retype Password:</p>
+                <Input className="hvr-shadow-radial" required>
+                  <div class="ui left icon input">
+                    <i class="lock icon"></i>
+                    <input
+                      type="password"
+                      placeholder="Re-Type Password"
+                      value={this.state.passwordRetype}
+                      onChange={e => {
+                        this.handleInputChange(e, "passwordRetype");
+                      }}
+                    />
+                  </div>
+                </Input>
+              </div>
             </div>
-            <div>
-              <p className="logTag">Email</p>
-              <Input className="hvr-shadow-radial" required>
-                <div className="ui left icon input">
-                  <i class="user icon"></i>
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    value={this.state.email}
-                    onChange={e => {
-                      this.handleInputChange(e, "email");
-                    }}
-                  />
-                </div>
-              </Input>
-            </div>
-            <div>
-              <p className="logTag">Password</p>
-              <Input className="hvr-shadow-radial" required>
-                <div class="ui left icon input">
-                  <i class="lock icon"></i>
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    value={this.state.password}
-                    onChange={e => {
-                      this.handleInputChange(e, "password");
-                    }}
-                  />
-                </div>
-              </Input>
-            </div>
-            <div>
-              <p className="logTag">Retype Password</p>
-              <Input className="hvr-shadow-radial" required>
-                <div class="ui left icon input">
-                  <i class="lock icon"></i>
-                  <input
-                    type="password"
-                    placeholder="Re-Type Password"
-                    value={this.state.passwordRetype}
-                    onChange={e => {
-                      this.handleInputChange(e, "passwordRetype");
-                    }}
-                  />
-                </div>
-              </Input>
-            </div>
-            <Button id="loginButton" size="large" animated>
-              <Button color="#4cc560">Sign Up  <Icon size="large" name="add user" corner="true"/></Button>
-            </Button>
+            <Button id="signupButton" size="large" color="#4cc560">Sign Up  <Icon size="large" name="add user" corner="true"/></Button>
           </form>
           <p className="question">Already have an account?</p>
           <Button
