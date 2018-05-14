@@ -12,7 +12,6 @@ import socketIOClient from "socket.io-client";
 var sectionStyle = {
   width: "100%",
   height: "100%",
-  backgroundImage: `url(${Background})`,
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover"
 };

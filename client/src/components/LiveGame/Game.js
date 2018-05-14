@@ -29,6 +29,8 @@ class Game {
     this.isBoardFull = false;
     this.p1TotalFlatsCnt = 0;
     this.p2TotoalFlatsCnt = 0;
+    this.victorUsername = 'Nobody'; // Wining Player Username or 'Nobody'
+    this.looserUsername = 'Nobody'; // Loosing Player Username or 'Nobody'
   }
 
   createBoard(size) {
@@ -81,8 +83,8 @@ class Game {
             }
             this.checkRoads();
             this.checkFullBoardWins();
-            if(this.pieces[this.toPlay].total === 0){
-              this.checkOutOfPiecesWins();
+            if(this.pieces[this.toPlay].total === 0){ 
+              this.checkOutOfPiecesWins(); 
             }
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
             this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
@@ -138,7 +140,7 @@ class Game {
         if (this.toMove.stack.length === 1 && this.toMove.stone === 'C') {
           Object.keys(this.moveOrigin.neighbors)
             .forEach((dir) => {
-              if (stack.neighbors[dir].stone === 'S') {
+              if (stack.neighbors[dir] && stack.neighbors[dir].stone === 'S') {
                 stack.neighbors[dir].validMove = true;
               }
             });
@@ -185,6 +187,8 @@ class Game {
       if ((checkNS && square.edges.includes('+')) ||
           (checkEW && square.edges.includes('>'))) {
         this.victor = p;
+        this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
+        this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
         this.winType = 'R';
       } else {
         checked.push(square.coord);
@@ -251,6 +255,8 @@ class Game {
         this.winType = '1/2';
       } else {
         this.victor = this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt ? 1 : 2;
+        this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
+        this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
         this.winType = 'F';
       }
     }
@@ -263,6 +269,8 @@ class Game {
       this.winType = '1/2';
     } else {
       this.victor = this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt ? 1 : 2;
+      this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
+      this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
       this.winType = 'F';
     }
     return;
