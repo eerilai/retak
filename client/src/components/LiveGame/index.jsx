@@ -8,7 +8,6 @@ import Stack from "./Stack";
 import Chat from "./chat"; // not in use currently
 import "../../styles/livegame.css";
 import { convertCoord } from "./gameUtil";
-import coffee from "./coffee.gif";
 
 class LiveGame extends Component {
   constructor(props) {
@@ -85,41 +84,41 @@ class LiveGame extends Component {
 
   winner() {
     let winner = this.state.game.victorUsername;
-    let looser = this.state.game.looserUsername;
+    let loser = this.state.game.looserUsername;
     if (this.state.game.winType === '1/2') {
-      return <h3>{`It's a tied! ${winner} wins!`}</h3>;
+      return <h3>{`It's a Draw! ${winner} wins!`}</h3>;
     }
     else if (this.state.game.winType === '1/2' && this.state.game.isBoardFull){
       return (
         <div>
           <h3>Board is Full <br/></h3>
-          <h3>{`It's a tied! ${winner} wins!`}</h3>
+          <h3>{`It's a Draw! ${winner} wins!`}</h3>
         </div>
       );
     } else if (this.state.game.winType === "R") {
       return (
         <div>
           <h3>Road Complited <br/></h3>
-          <h3>{`Player ${winner} wins! & Player ${looser} lost!`}</h3>
+          <h3>{`Player ${winner} wins! & Player ${loser} lost!`}</h3>
         </div>
       );
     } else if (this.state.game.winType === "F" && this.state.game.isBoardFull) {
       return (
         <div>
           <h3>Board is Full <br/></h3>
-          <h3>{`Player ${winner} wins! & Player ${looser} lost!`}</h3>
+          <h3>{`Player ${winner} wins! & Player ${loser} lost!`}</h3>
         </div>
       );
     } else if (this.state.game.winType === "F") {
       return (
         <div>
           <h3>A Player Ran Out of Pieces <br/></h3>
-          <h3>{`Player ${winner} wins! & Player ${looser} lost!`}</h3>
+          <h3>{`Player ${winner} wins! & Player ${loser} lost!`}</h3>
         </div>
       );
     }
     else if (this.state.game.winType !== null) {
-      return <h3>{`Player ${winner} wins! & Player ${looser} lost!`}</h3>;
+      return <h3>{`Player ${winner} wins! & Player ${loser} lost!`}</h3>;
     }
   }
 
@@ -129,9 +128,6 @@ class LiveGame extends Component {
 
     return (
       <div className="takless">
-        <div id="coffee">
-          <img src={coffee} width="180px" height="180px" />
-        </div>
         <div className="main">
           <div className="game">
             <div className="stone-count">
