@@ -120,10 +120,6 @@ class LiveGame extends Component {
         <div className="main">
           <div className="game">
             <div className="stone-count">
-              White | F({game.pieces[1].F}) / C({game.pieces[1].C}) | Total Flats: ({game.p1TotalFlatsCnt})
-            </div>
-            <br/><br/>
-            <div className="stone-count">
               Black | F({game.pieces[2].F}) / C({game.pieces[2].C}) | Total Flats: ({game.p2TotoalFlatsCnt})
             </div>
             <div>
@@ -131,6 +127,9 @@ class LiveGame extends Component {
             </div>
             <div className="board">
               <Board game={game} handleSquareClick={this.handleSquareClick} />
+            </div>
+            <div className="stone-count">
+              White | F({game.pieces[1].F}) / C({game.pieces[1].C}) | Total Flats: ({game.p1TotalFlatsCnt})
             </div>
             <div className="stone-select">
               <div className="active-stone">{stone}</div>
