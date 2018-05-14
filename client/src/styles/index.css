@@ -166,7 +166,7 @@ nav {
 #send {
   background: #575ed8;
   color: #fff;
-  font-size: 18px;
+  font-size: 15px;
   border: 0;
   padding: 12px 0;
   width: 100%;
@@ -176,12 +176,6 @@ nav {
   background: #575ed8;
   color: #fff;
   font-size: 18px;
-  border: 0;
-  padding: 12px 0;
-  width: 100%;
-  border-radius: 0 0 2px 2px;
-  cursor: pointer;
-  font-size: 80%;
 }
 #chat {
   text-align: left;
@@ -198,6 +192,12 @@ nav {
   height: 420px;
   overflow: auto;
   background: #f9f9f9;
+}
+
+.signupForm {
+  display: flex;
+  justify-content: space-around;
+  flex-flow: row wrap;
 }
 textarea {
   padding: 10px 20px;

@@ -59,7 +59,7 @@ class SignupModal extends Component {
             </Button>
           </a>
 
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit} className="signupForm">
             <div>
               <p className="logTag">Username</p>
               <Input className="hvr-shadow-radial" required>

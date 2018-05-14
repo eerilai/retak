@@ -66,15 +66,13 @@ class Chat extends Component {
       this.setState({ message: "" });
     };
   }
-
+  // make chatbox scroll effect
   scrollToBottom = () => {
-    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    this.messagesEnd.scrollIntoView({ block: "end" });
   };
 
   componentDidMount() {
     this.scrollToBottom();
-
-    window.scrollTo(0, 0);
   }
 
   componentDidUpdate() {
@@ -105,7 +103,6 @@ class Chat extends Component {
             <div className="MessageContainer">
               <div className="MessagesList">{this.renderMessages()}</div>
               <div
-                style={{ float: "left", clear: "both" }}
                 ref={el => {
                   this.messagesEnd = el;
                 }}
