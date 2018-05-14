@@ -27,7 +27,6 @@
     "express-session": "^1.15.6",
     "file-loader": "^1.1.11",
     "image-webpack-loader": "^4.2.0",
-    "material-ui": "^0.20.0",
     "passport": "^0.4.0",
     "passport-google-oauth20": "^1.0.0",
     "passport-local": "^1.0.0",

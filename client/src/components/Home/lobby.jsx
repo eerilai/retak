@@ -32,9 +32,9 @@ class Lobby extends Component {
           <th>Player</th>
           <th>Mode</th>
         </tr>
-        {this.state.games.map((game) => (
+        {this.state.games.map(game => (
           <tr className="room">
-            <td><Link to="/game" onClick={() => {this.joinGame(game.name)}}>{game.name}</Link></td>
+            <td><Link to={`/game/${game.name}`} onClick={() => {this.joinGame(game.name)}}>{game.name}</Link></td>
           </tr>
         ))}
       </table>
