@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -8,6 +9,18 @@ import Stack from './Stack';
 import Chat from './chat'; // not in use currently
 import '../../styles/livegame.css';
 import { convertCoord } from './gameUtil';
+=======
+import React, { Component } from "react";
+import axios from "axios";
+import { connect } from "react-redux";
+import sound_brick_drop from "./Sounds/brick_drop_concrete.wav";
+import Game from "./Game";
+import Board from "./Board";
+import Stack from "./Stack";
+import Chat from "./chat"; // not in use currently
+import "../../styles/livegame.css";
+import { convertCoord } from "./gameUtil";
+>>>>>>> Stashed changes
 
 class LiveGame extends Component {
   constructor(props) {
@@ -117,6 +130,9 @@ class LiveGame extends Component {
     const { game, stone } = this.state;
     return (
       <div className="takless">
+        <div id="coffee">
+          <img width="180px" height="180px" />
+        </div>
         <div className="main">
           <div className="game">
             <div className="stone-count">

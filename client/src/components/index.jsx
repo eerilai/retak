@@ -1,15 +1,20 @@
-import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import Nav from './Nav';
-import Home from './Home';
-import Learn from './Learn';
-import About from './About';
-import Profile from './Profile';
-import Game from './LiveGame';
-import Chat from './LiveGame/chat';
-import socketIOClient from 'socket.io-client';
+import React, { Component } from "react";
+import { Route, Switch } from "react-router-dom";
+import Nav from "./Nav";
+import Home from "./Home";
+import Learn from "./Learn";
+import About from "./About";
+import Profile from "./Profile";
+import Game from "./LiveGame";
+import Chat from "./LiveGame/chat";
+import socketIOClient from "socket.io-client";
 
-
+var sectionStyle = {
+  width: "100%",
+  height: "100%",
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "cover"
+};
 class App extends Component {
   constructor(props) {
     super(props);
