@@ -1,15 +1,3 @@
-<<<<<<< Updated upstream
-import React, { Component } from 'react';
-import axios from 'axios';
-import { connect } from 'react-redux';
-
-import Game from './Game';
-import Board from './Board';
-import Stack from './Stack';
-import Chat from './chat'; // not in use currently
-import '../../styles/livegame.css';
-import { convertCoord } from './gameUtil';
-=======
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
@@ -20,7 +8,6 @@ import Stack from "./Stack";
 import Chat from "./chat"; // not in use currently
 import "../../styles/livegame.css";
 import { convertCoord } from "./gameUtil";
->>>>>>> Stashed changes
 
 class LiveGame extends Component {
   constructor(props) {
@@ -28,61 +15,70 @@ class LiveGame extends Component {
     const newGame = new Game(5);
     this.state = {
       game: newGame,
-      stone: '',
+      stone: ""
     };
     this.movePieces = this.movePieces.bind(this);
     this.handleSquareClick = this.handleSquareClick.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
-    
+
     const { socket, username } = props;
     const { game } = this.state;
-    socket.emit('syncGame', username); // Creates new room if not already in one
-    socket.on('playerJoin', (player1, player2) => {
+    socket.emit("syncGame", username); // Creates new room if not already in one
+    socket.on("playerJoin", (player1, player2) => {
       game.player1 = player1;
       game.player2 = player2;
       game.activePlayer = player1;
     });
-    socket.on('updateGame', ({ col, row, stone }) => {
+    socket.on("updateGame", ({ col, row, stone }) => {
       this.movePieces(col, row, false, stone);
     });
+
+    //Sound Effect
+    this.sounds = { brick: sound_brick_drop };
   }
 
   movePieces(col, row, isPlayerMove, stone = this.state.stone) {
     const { game } = this.state;
     game.selectStack(col, row, stone);
-    if (this.state.stone !== '') {
+    if (this.state.stone !== "") {
       this.setState({
-        stone: '',
+        stone: ""
       });
     }
     this.setState({
-      game,
+      game
     });
 
     if (isPlayerMove) {
-      this.props.socket.emit('broadcastGameUpdate', { col, row, stone, game: game.player1 });
+      this.props.socket.emit("broadcastGameUpdate", {
+        col,
+        row,
+        stone,
+        game: game.player1
+      });
     }
   }
 
   handleSquareClick(col, row) {
     if (this.props.username === this.state.game.activePlayer) {
       this.movePieces(col, row, true);
+      this.play("brick");
     }
   }
 
   selectCapstone(stone) {
     if (this.state.game.pieces[this.state.game.toPlay].C > 0) {
       this.setState({
-        stone,
+        stone
       });
     }
   }
 
   toggleStanding() {
-    if (this.state.stone === '') {
-      this.setState({ stone: 'S' });
+    if (this.state.stone === "") {
+      this.setState({ stone: "S" });
     } else {
-      this.setState({ stone: '' });
+      this.setState({ stone: "" });
     }
   }
 
@@ -97,37 +93,35 @@ class LiveGame extends Component {
           <h3>Draw!</h3>
         </div>
       );
-    }
-    else if (this.state.game.winType === 'R'){
+    } else if (this.state.game.winType === "R") {
       return (
         <div>
           <h3>Player {this.state.game.victor} has has finished a Road!<br/></h3>
         </div>
       );
-    }
-    else if (this.state.game.winType === 'F' && this.state.game.isBoardFull){
+    } else if (this.state.game.winType === "F" && this.state.game.isBoardFull) {
       return (
         <div>
           <h3>Board is Full <br/></h3>
           <h3>Player {this.state.game.victor} wins by flats!</h3>
         </div>
       );
-    }
-    else if (this.state.game.winType === 'F'){
+    } else if (this.state.game.winType === "F") {
       return (
         <div>
           <h3>A Player Ran Out of Pieces <br/></h3>
           <h3>Player {this.state.game.victor} wins by flats!</h3>
         </div>
       );
-    }
-    else if (this.state.game.winType !== null) {
+    } else if (this.state.game.winType !== null) {
       return <h3>Player {this.state.game.victor} wins!</h3>;
     }
   }
 
   render() {
     const { game, stone } = this.state;
+    const { socket } = this.props;
+
     return (
       <div className="takless">
         <div id="coffee">
@@ -141,6 +135,7 @@ class LiveGame extends Component {
             <div>
               { this.winner() }
             </div>
+            <div>{this.winner()}</div>
             <div className="board">
               <Board game={game} handleSquareClick={this.handleSquareClick} />
             </div>
@@ -149,24 +144,41 @@ class LiveGame extends Component {
             </div>
             <div className="stone-select">
               <div className="active-stone">{stone}</div>
-              <button className="piece" onClick={() => { this.toggleStanding(); }}>
-                { stone === 'S' ? 'F' : 'S' }({ game.pieces[1].F })
+              <button
+                className="piece"
+                onClick={() => {
+                  this.toggleStanding();
+                }}
+              >
+                {stone === "S" ? "F" : "S"}({game.pieces[1].F})
               </button>
-              <button className="piece" onClick={() => { this.selectCapstone('C'); }}>
-              C ({game.pieces[1].C})
+              <button
+                className="piece"
+                onClick={() => {
+                  this.selectCapstone("C");
+                }}
+              >
+                C ({game.pieces[1].C})
               </button>
             </div>
           </div>
         </div>
+        <Chat socket={socket} />
       </div>
     );
   }
+
+  //play sounds function
+  play(src) {
+    var sound = new Audio(this.sounds[src]);
+    sound.play();
+  }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     username: state.currentUser
   };
-}
+};
 
 export default connect(mapStateToProps)(LiveGame);

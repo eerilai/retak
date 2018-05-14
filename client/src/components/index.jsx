@@ -12,6 +12,7 @@ import socketIOClient from "socket.io-client";
 var sectionStyle = {
   width: "100%",
   height: "100%",
+  backgroundImage: `url(${Background})`,
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover"
 };
@@ -20,19 +21,22 @@ class App extends Component {
     super(props);
     this.state = {
       socket: socketIOClient()
-    }
+    };
   }
 
   render() {
     return (
-      <div id="page">
+      <div id="page" style={sectionStyle}>
         <Nav />
         <Switch>
-          <Route path='/learn' component={Learn} />
-          <Route path='/about' component={About} />
-          <Route path='/profile' component={Profile} />
-          <Route path='/game' render={() => (<Game socket={this.state.socket} />)} />
-          <Route path='/' render={() => (<Home socket={this.state.socket} />)} />
+          <Route path="/learn" component={Learn} />
+          <Route path="/about" component={About} />
+          <Route path="/profile" component={Profile} />
+          <Route
+            path="/game"
+            render={() => <Game socket={this.state.socket} />}
+          />
+          <Route path="/" render={() => <Home socket={this.state.socket} />} />
         </Switch>
       </div>
     );
