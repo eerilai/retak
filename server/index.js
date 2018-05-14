@@ -108,11 +108,9 @@ io.on("connection", function(socket) {
 
   //Chat/Typing
   socket.on("chat", function(data) {
-    console.log("data,", data);
     io.sockets.emit("chat", data);
   });
   socket.on("typing", function(data) {
-    console.log("typingdata", data);
     socket.broadcast.emit("typing", data);
   });
 });

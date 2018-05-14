@@ -15,7 +15,6 @@ class Chat extends Component {
     var self = this;
     const { socket } = props;
     socket.on("typing", function(data) {
-      console.log("receive typiny", data);
       self.setState({ typing: data.author + " is typing..." });
     });
 
@@ -31,7 +30,6 @@ class Chat extends Component {
       ev.preventDefault();
       if (this.state.message) {
         const roomID = this.props.location.pathname.split("/").pop();
-        console.log("roomId", roomID);
 
         socket.emit("chat", {
           author: this.props.username,
@@ -49,14 +47,12 @@ class Chat extends Component {
       }
     };
     this.handleTyping = () => {
-      console.log("Iam typing~~~~");
       socket.emit("typing", {
         author: this.props.username
       });
     };
     this.handleTak = ev => {
       const roomID = this.props.location.pathname.split("/").pop();
-      console.log("roomId", roomID);
       ev.preventDefault();
       socket.emit("chat", {
         author: this.props.username,

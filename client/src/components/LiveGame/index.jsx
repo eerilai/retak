@@ -128,9 +128,6 @@ class LiveGame extends Component {
 
     return (
       <div className="takless">
-        <div id="coffee">
-          <img width="180px" height="180px" />
-        </div>
         <div className="main">
           <div className="game">
             <div className="stone-count">
