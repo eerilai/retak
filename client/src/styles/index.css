@@ -12,8 +12,7 @@ body {
 
 button {
   font-weight: bold;
-  color: #848484;
-  height: 50px;
+  color: #4cc560;
   width: 200px;
   box-shadow: none;
   border: 1px solid #ccc;
@@ -23,6 +22,24 @@ button {
 
 button:hover {
   background-color: #f7f7f7;
+}
+.ui.button {
+  background: #28a745 none;
+  color: rgb(255, 255, 255);
+}
+.ui.button:hover {
+  background: #4cc560 none;
+  color: rgb(255, 255, 255);
+}
+
+.ui.red.button:hover, .ui.red.buttons .button:hover {
+  background-color: #d01919cf;
+  color: #fff;
+  text-shadow: none;
+}
+
+i.icon.sign.in:before {
+  float: right;
 }
 
 #page {
@@ -252,12 +269,7 @@ p.question {
   margin-top: 10px;
   margin-bottom: 1rem;
 }
-p.question:hover {
-  color: blue;
-  font-size: 15px;
-  margin-top: 10px;
-  margin-bottom: 1rem;
-}
+
 #loginButton {
   padding-left: 0px;
   background-color: transparent;
