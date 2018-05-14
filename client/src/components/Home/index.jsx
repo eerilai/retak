@@ -10,12 +10,12 @@ const Home = props => (
       <div className="lobby">
         <Lobby socket={props.socket} />
       </div>
-      <button className="createGame hvr-skew-forward">Play with Bot</button>
+      <button className="createGame">Play with Bot</button>
       <Link to="/game">
-        <button className="createGame hvr-skew-forward">Create Game</button>
+        <button className="createGame">Create Game</button>
       </Link>
 
-      <button className="createGame hvr-skew-forward">Play with Friend</button>
+      <button className="createGame">Play with Friend</button>
 
       <div className="leaderboard ">
         <LeaderboardTable />

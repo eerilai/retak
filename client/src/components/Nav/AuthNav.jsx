@@ -46,7 +46,6 @@ class AuthNav extends Component {
     const { isLoggedIn } = this.props;
     const userNavLink = (
       <nav
-        className="hvr-grow-shadow"
         onClick={() => {
           this.changeView("logout");
         }}
@@ -56,19 +55,17 @@ class AuthNav extends Component {
     );
 
     const guestNavLink = (
-      <div className="hvr-grow-shadow">
-        <nav
-          onClick={() => {
-            this.changeView("login");
-          }}
-        >
-          Login
-        </nav>
-      </div>
+      <nav
+        onClick={() => {
+          this.changeView("login");
+        }}
+      >
+        Login
+      </nav>
     );
 
     return (
-      <div>
+      <div id="user-nav">
         {isLoggedIn ? userNavLink : guestNavLink}
         <SignupModal toggleView={this.changeView} modalView={modalView} />
         <LoginModal toggleView={this.changeView} modalView={modalView} />
