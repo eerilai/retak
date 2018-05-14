@@ -6,6 +6,7 @@ import Game from "./Game";
 import Board from "./Board";
 import Stack from "./Stack";
 import Chat from "./chat"; // not in use currently
+import PTN from "./PTN"
 import "../../styles/livegame.css";
 import { convertCoord } from "./gameUtil";
 
@@ -128,6 +129,9 @@ class LiveGame extends Component {
 
     return (
       <div className="takless">
+        <div className="ptn">
+          <PTN ptn={this.state.game.ptn} />
+        </div>
         <div className="main">
           <div className="game">
             <div className="stone-count">

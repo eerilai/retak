@@ -6,6 +6,21 @@
   border-top: 1px;
 }
 
+.ptn {
+  grid-area: left;
+  table-layout: fixed;
+  width:100%;
+}
+
+.turn-number {
+  background-color: #C6C6C6;
+  width: 20%;
+}
+
+.ptn-ply {
+  width: 45%;
+}
+
 .board {
   min-height: 600px;
   width: 600px;
