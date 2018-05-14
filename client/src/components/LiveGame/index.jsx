@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-
+import sound_brick_drop from "./Sounds/brick_drop_concrete.wav";
 import Game from "./Game";
 import Board from "./Board";
 import Stack from "./Stack";
 import Chat from "./chat"; // not in use currently
 import "../../styles/livegame.css";
 import { convertCoord } from "./gameUtil";
+import coffee from "./coffee.gif";
 
 class LiveGame extends Component {
   constructor(props) {
@@ -32,6 +33,9 @@ class LiveGame extends Component {
     socket.on("updateGame", ({ col, row, stone }) => {
       this.movePieces(col, row, false, stone);
     });
+
+    //Sound Effect
+    this.sounds = { brick: sound_brick_drop };
   }
 
   movePieces(col, row, isPlayerMove, stone = this.state.stone) {
@@ -59,6 +63,7 @@ class LiveGame extends Component {
   handleSquareClick(col, row) {
     if (this.props.username === this.state.game.activePlayer) {
       this.movePieces(col, row, true);
+      this.play("brick");
     }
   }
 
@@ -131,13 +136,16 @@ class LiveGame extends Component {
 
     return (
       <div className="takless">
+        <div id="coffee">
+          <img src={coffee} width="180px" height="180px" />
+        </div>
         <div className="main">
           <div className="game">
             <div className="stone-count">
               White | F({game.pieces[1].F}) / C({game.pieces[1].C}) | Total
               Flats: ({game.p1TotalFlatsCnt})
             </div>
-            <br />
+
             <br />
             <div className="stone-count">
               Black | F({game.pieces[2].F}) / C({game.pieces[2].C}) | Total
@@ -171,6 +179,12 @@ class LiveGame extends Component {
         <Chat socket={socket} />
       </div>
     );
+  }
+
+  //play sounds function
+  play(src) {
+    var sound = new Audio(this.sounds[src]);
+    sound.play();
   }
 }
 

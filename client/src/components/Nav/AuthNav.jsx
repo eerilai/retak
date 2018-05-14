@@ -1,34 +1,35 @@
-import React, { Component } from 'react';
-import SignupModal from './AuthModals/SignupModal';
-import LoginModal from './AuthModals/LoginModal';
-import LogoutModal from './AuthModals/LogoutModal';
+import React, { Component } from "react";
+import SignupModal from "./AuthModals/SignupModal";
+import LoginModal from "./AuthModals/LoginModal";
+import LogoutModal from "./AuthModals/LogoutModal";
 
-import axios from 'axios';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { toggleLoginLogout, login } from '../../actions/actions';
+import axios from "axios";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { toggleLoginLogout, login } from "../../actions/actions";
 
 class AuthNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalView: 'off',
+      modalView: "off"
     };
     this.changeView = this.changeView.bind(this);
   }
 
-  componentDidMount(){
-    axios.get('/auth/check')
-    .then((res) => {
-      let currentUser = res.data;
-      if(currentUser[0] !== "<"){
-        this.props.toggleLoginLogout(true);
-        this.props.login(currentUser);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  componentDidMount() {
+    axios
+      .get("/auth/check")
+      .then(res => {
+        let currentUser = res.data;
+        if (currentUser[0] !== "<") {
+          this.props.toggleLoginLogout(true);
+          this.props.login(currentUser);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 
   changeView(view) {
@@ -44,31 +45,44 @@ class AuthNav extends Component {
     const { modalView } = this.state;
     const { isLoggedIn } = this.props;
     const userNavLink = (
-        <nav onClick={() => {this.changeView('logout')}}>Logout</nav>
+      <nav
+        className="hvr-grow-shadow"
+        onClick={() => {
+          this.changeView("logout");
+        }}
+      >
+        Logout
+      </nav>
     );
 
     const guestNavLink = (
-      <div>
-        <nav onClick={() => {this.changeView('login')}}>Login</nav>
+      <div className="hvr-grow-shadow">
+        <nav
+          onClick={() => {
+            this.changeView("login");
+          }}
+        >
+          Login
+        </nav>
       </div>
     );
-      
-      return (
+
+    return (
       <div>
-        { isLoggedIn ? userNavLink : guestNavLink }
+        {isLoggedIn ? userNavLink : guestNavLink}
         <SignupModal toggleView={this.changeView} modalView={modalView} />
         <LoginModal toggleView={this.changeView} modalView={modalView} />
         <LogoutModal toggleView={this.changeView} modalView={modalView} />
       </div>
     );
   }
-};
+}
 
 function mapStateToProps(state) {
-  return { 
+  return {
     isLoggedIn: state.isLoggedIn,
     currentUser: state.currentUser
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {

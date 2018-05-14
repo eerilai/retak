@@ -96,7 +96,7 @@ class Chat extends Component {
 
   render() {
     return (
-      <div id="chat">
+      <div id="chat" className="hvr-curl-top-right ">
         <button onClick={this.handleTak} id="tak">
           Tak
         </button>
