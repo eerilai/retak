@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { Icon } from "semantic-ui-react";
 
 class Chat extends Component {
   constructor(props) {
@@ -90,9 +91,10 @@ class Chat extends Component {
 
   render() {
     return (
-      <div id="chat" className="hvr-curl-top-right ">
+      <div id="chat">
         <button onClick={this.handleTak} id="tak">
           Tak
+          <Icon size="large" name="road" corner="true"/>
         </button>
         <div id="chat-window">
           <div id="output">
@@ -121,7 +123,7 @@ class Chat extends Component {
             onChange={ev => this.setState({ message: ev.target.value })}
           />
 
-          <button id="send">Send</button>
+          <button id="send" >Send <Icon size="large" name="talk" corner="true"/></button>
         </form>
       </div>
     );
