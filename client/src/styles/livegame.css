@@ -6,10 +6,36 @@
   border-top: 1px;
 }
 
-.ptn {
+.game-info {
+  margin-top: 100%;
+  border: 1px solid #D2D2D2;
+  background-color: #e5e5e5;
   grid-area: left;
-  table-layout: fixed;
+  margin-right: 5px;
+  height: 200px;
+}
+
+.game-info>table>tr {
+  height: 30px;
+}
+
+.ptn {
+  overflow: auto;
+  border: 1px solid #D2D2D2;
+  border-left: 0;
+  border-right: 0;
+  height: 140px;
   width:100%;
+}
+
+.moves {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.moves>table>tr,
+.move>table>tr>td {
+  max-height: 10px;
 }
 
 .turn-number {

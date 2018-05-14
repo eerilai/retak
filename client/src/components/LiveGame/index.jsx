@@ -129,8 +129,12 @@ class LiveGame extends Component {
 
     return (
       <div className="takless">
-        <div className="ptn">
+        <div className="game-info">
+          <table>
+          <tr>Opponent Username</tr>
           <PTN ptn={this.state.game.ptn} />
+          <tr>{this.state.game.activePlayer}</tr>
+          </table>
         </div>
         <div className="main">
           <div className="game">
