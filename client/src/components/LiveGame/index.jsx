@@ -75,21 +75,20 @@ class LiveGame extends Component {
 
   winner() {
     if (this.state.game.winType === '1/2') {
-      return <h3>It's a tied! No one wins!</h3>;
+      return <h3>Draw!</h3>;
     }
     else if (this.state.game.winType === '1/2' && this.state.game.isBoardFull){
       return (
         <div>
           <h3>Board is Full <br/></h3>
-          <h3>It's a tied! No one wins!</h3>
+          <h3>Draw!</h3>
         </div>
       );
     }
     else if (this.state.game.winType === 'R'){
       return (
         <div>
-          <h3>Road Complited <br/></h3>
-          <h3>Player {this.state.game.victor} wins!</h3>
+          <h3>Player {this.state.game.victor} has has finished a Road!<br/></h3>
         </div>
       );
     }
@@ -97,7 +96,7 @@ class LiveGame extends Component {
       return (
         <div>
           <h3>Board is Full <br/></h3>
-          <h3>Player {this.state.game.victor} wins!</h3>
+          <h3>Player {this.state.game.victor} wins by flats!</h3>
         </div>
       );
     }
@@ -105,7 +104,7 @@ class LiveGame extends Component {
       return (
         <div>
           <h3>A Player Ran Out of Pieces <br/></h3>
-          <h3>Player {this.state.game.victor} wins!</h3>
+          <h3>Player {this.state.game.victor} wins by flats!</h3>
         </div>
       );
     }
