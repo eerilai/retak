@@ -51,8 +51,10 @@ class LiveGame extends Component {
         game
       });
     });
-    socket.on("opponentMove", ({ col, row, stone }) => {
-      this.movePieces(col, row, false, stone);
+    socket.on("opponentMove", ({ col, row, stone, roomId }) => {
+      if (roomId === props.match.params.roomId) {
+        this.movePieces(col, row, false, stone);
+      }
     });
 
     //Sound Effect
