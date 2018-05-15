@@ -40,7 +40,6 @@ const authCheck = (req, res, next) => {
 
 app.use("/", express.static(path.join(__dirname, "../client/dist")));
 app.get("/bundle.js", (req, res) => {
-  console.log("getting bundle");
   res.sendFile(path.join(__dirname, "../client/dist/bundle.js"));
 });
 app.get("/*", (req, res) => {
@@ -54,56 +53,72 @@ const server = app.listen(PORT, () => {
 });
 
 //Socket Setup
+let rooms = 0;
 const io = socket(server);
-io.on("connection", function(socket) {
+
+io.on('connection', (socket) => {
   socket.leave(socket.id);
 
-  socket.on("syncGame", async username => {
+  socket.on('syncGame', async ({ username, roomId }) => {
     // Only creates new game if not already in one
-    if (!Object.keys(socket.rooms).length) {
-      await socket.join(username);
-      io.sockets.adapter.rooms[username].player1 = username;
-    } else {
-      Object.keys(socket.rooms).forEach(room => {
-        gameRoom = io.sockets.adapter.rooms[room];
-        io.in(room).emit("playerJoin", gameRoom.player1, username);
-      });
+    const room = io.sockets.adapter.rooms[roomId];
+    if (username !== room.player1) {
+      if (!room.player2) {
+        await socket.join(roomId);
+        room.player2 = username;
+        io.in(roomId).emit('playerJoin', {
+          boardSize: room.boardSize,
+          player1: room.player1,
+          player2: room.player2
+        });
+      } else if (room.isPrivate) {
+        socket.emit('fullRoom');
+      } else {
+        socket.join(roomId);
+      }
     }
 
-    // Find rooms with only one socket attached (i.e. pending games)
+    // Update lobby
     const pendingGames = [];
     const { rooms } = io.sockets.adapter;
     for (let room in rooms) {
       const currentRoom = rooms[room];
-      if (currentRoom.length === 1) {
+      if (!currentRoom.isPrivate && !currentRoom.player2) {
         pendingGames.push({ ...currentRoom, name: room });
       }
     }
-    socket.broadcast.emit("updateLobby", pendingGames);
+    socket.broadcast.emit('updateLobby', pendingGames);
   });
 
   // Update game for each piece move
-  socket.on("broadcastGameUpdate", data => {
-    socket.to(data.game).emit("updateGame", data);
+  socket.on('updateGame', ({ col, row, stone, roomId }) => {
+    socket.to(roomId).emit('opponentMove', { col, row, stone });
   });
 
   // Serve pending game list to lobby on lobby initialize
-  socket.on("fetchLobby", () => {
+  socket.on('fetchLobby', () => {
     const games = [];
     const { rooms } = io.sockets.adapter;
     for (let room in rooms) {
       const currentRoom = rooms[room];
-      if (currentRoom.length === 1) {
+      if (!currentRoom.isPrivate && !currentRoom.player2) {
         games.push({ ...currentRoom, name: room });
       }
     }
-    socket.emit("updateLobby", games);
+    socket.emit('updateLobby', games);
   });
 
-  // Join user to pending game
-  socket.on("joinGame", (roomName, username) => {
-    socket.join(roomName);
-    io.sockets.adapter.rooms[roomName].player2 = username;
+  // Create a new game
+  socket.on('createGame', async ({ username, boardSize, isPrivate }) => {
+    const roomId = Math.random().toString(36).slice(2, 9);
+    await socket.join(roomId);
+    const room = io.sockets.adapter.rooms[roomId];
+    room.player1 = username;
+    room.boardSize = boardSize;
+    room.isPrivate = isPrivate;
+    socket.emit('gameInitiated', {
+      roomId
+    });
   });
 
   //Chat/Typing

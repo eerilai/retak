@@ -45,6 +45,16 @@
   max-height: 10px;
 }
 
+.btn-player1-piece {
+  background-color: #fff;
+  color: #608292
+}
+
+.btn-player2-piece {
+  background-color: #608292;
+  color: #fff;
+}
+
 .turn-number {
   background-color: #C6C6C6;
   width: 20%;
