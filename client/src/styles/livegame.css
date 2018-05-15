@@ -26,6 +26,10 @@
   min-height: 21px;
 }
 
+.score > table {
+  width: 100%;
+}
+
 .ptn {
   overflow: auto;
   border: 1px solid #D2D2D2;
