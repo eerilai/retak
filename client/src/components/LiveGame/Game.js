@@ -31,13 +31,14 @@ class Game {
 
     this.turn = 0;
     this.ptn = [];
+    this.ptnString = '';
     this.plyPtn = [];
 
     this.isBoardFull = false;
     this.p1FlatScore = 0;
     this.p2FlatScore = 0;
     this.victorUsername = 'Nobody'; // Wining Player Username or 'Nobody'
-    this.looserUsername = 'Nobody'; // Loosing Player Username or 'Nobody'
+    this.loserUsername = 'Nobody'; // Loosing Player Username or 'Nobody'
   }
 
   createBoard(size) {
@@ -240,7 +241,7 @@ class Game {
           (checkEW && square.edges.includes('>'))) {
         this.victor = p;
         this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
-        this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
+        this.loserUsername = (this.victor === 1) ? this.player2 : this.player1;
         this.winType = 'R';
         this.setWinString();
       } else {
@@ -310,7 +311,7 @@ class Game {
       } else {
         this.victor = this.p1FlatScore > this.p2FlatScore ? 1 : 2;
         this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
-        this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
+        this.loserUsername = (this.victor === 1) ? this.player2 : this.player1;
         this.winType = 'F';
         this.setWinString();
       }
@@ -326,7 +327,7 @@ class Game {
     } else {
       this.victor = this.p1FlatScore > this.p2FlatScore ? 1 : 2;
       this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
-      this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
+      this.loserUsername = (this.victor === 1) ? this.player2 : this.player1;
       this.winType = 'F';
       this.setWinString();
     }
@@ -341,14 +342,26 @@ class Game {
     }
   }
 
-  handleWin() {
-    let stringPTN = '';
+  printPTN() {
     this.ptn.forEach((turn, i) => {
       if (i !== this.ptn.length - 1) {
-        stringPTN += `${i + 1}. ${turn.join(' ')} `;
+        this.ptnString += `${i + 1}. ${turn.join(' ')} `;
       } else {
-        stringPTN += turn;
+        this.ptnString += turn;
       }
+    });
+  }
+
+  handleWin() {
+    this.printPTN();
+    const { player1, player2, ptnString, victorUsername, size, winType } = this;
+    axios.post('/record', {
+      player1,
+      player2,
+      size,
+      winType,
+      victor: victorUsername,
+      ptn: ptnString,
     });
   }
 }

@@ -39,6 +39,11 @@ const authCheck = (req, res, next) => {
 };
 
 app.use("/", express.static(path.join(__dirname, "../client/dist")));
+
+app.post('/record', (req, res) => {
+  console.log(req.body);
+});
+
 app.get("/bundle.js", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/dist/bundle.js"));
 });
