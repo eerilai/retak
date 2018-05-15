@@ -180,7 +180,6 @@ class Game {
           this.step = stack.coord;
         }
         stack.place(this.toMove.stack.pop());
-        console.log(this.toMove.stack);
         this.parsePTN();
         if (this.toMove.stack.length === 1 && this.toMove.stone === 'C') {
           Object.keys(this.moveOrigin.neighbors)
