@@ -58,7 +58,7 @@ class LiveGame extends Component {
     });
 
     //Sound Effect
-    this.sounds = { brick: sound_brick_drop };
+    // this.sounds = { brick: sound_brick_drop };
   }
 
   movePieces(col, row, isPlayerMove, stone = this.state.stone) {
@@ -86,7 +86,7 @@ class LiveGame extends Component {
   handleSquareClick(col, row) {
     if (this.props.username === this.state.game.activePlayer) {
       this.movePieces(col, row, true);
-      this.play("brick");
+      // this.play("brick");
     }
   }
 
@@ -110,39 +110,39 @@ class LiveGame extends Component {
     let winner = this.state.game.victorUsername;
     let loser = this.state.game.looserUsername;
     if (this.state.game.winType === '1/2') {
-      return <h3>{`It's a Draw! ${winner} wins!`}</h3>;
+      return <p>{`It's a Draw! ${winner} wins!`}</p>;
     }
     else if (this.state.game.winType === '1/2' && this.state.game.isBoardFull){
       return (
         <div>
-          <h3>Board is Full <br/></h3>
-          <h3>{`It's a Draw! ${winner} wins!`}</h3>
+          <p>Board is Full <br/></p>
+          <p>{`It's a Draw! ${winner} wins!`}</p>
         </div>
       );
     } else if (this.state.game.winType === "R") {
       return (
         <div>
-          <h3>Road Complited <br/></h3>
-          <h3>{`Player ${winner} wins! & Player ${loser} lost!`}</h3>
+          <p>Road Complited <br/></p>
+          <p>{`Player ${winner} wins! & Player ${loser} lost!`}</p>
         </div>
       );
     } else if (this.state.game.winType === "F" && this.state.game.isBoardFull) {
       return (
         <div>
-          <h3>Board is Full <br/></h3>
-          <h3>{`Player ${winner} wins! & Player ${loser} lost!`}</h3>
+          <p>Board is Full <br/></p>
+          <p>{`Player ${winner} wins! & Player ${loser} lost!`}</p>
         </div>
       );
     } else if (this.state.game.winType === "F") {
       return (
         <div>
-          <h3>A Player Ran Out of Pieces <br/></h3>
-          <h3>{`Player ${winner} wins! & Player ${loser} lost!`}</h3>
+          <p>A Player Ran Out of Pieces <br/></p>
+          <p>{`Player ${winner} wins! & Player ${loser} lost!`}</p>
         </div>
       );
     }
     else if (this.state.game.winType !== null) {
-      return <h3>{`Player ${winner} wins! & Player ${loser} lost!`}</h3>;
+      return <p>{`Player ${winner} wins! & Player ${loser} lost!`}</p>;
     }
   }
 
@@ -168,45 +168,35 @@ class LiveGame extends Component {
 
     let PlayerPieces;
     let OpponentPieces;
-    
-    if (!game.player1) {
-      PlayerPieces = <div></div>;
-      OpponentPieces = <div></div>;
-    } else if (this.props.username === game.player1) {
-      PlayerPieces = (
-        <div>
-          <button className="btn-player1-piece" onClick={() => { this.toggleStanding(); }}>
-            { stone === 'S' ? 'F' : 'S' }({ game.pieces[1].F })
-          </button>
-          <button className="btn-player1-piece" onClick={() => { this.selectCapstone('C'); }}>
-          C ({game.pieces[1].C})
-          </button>
-        </div>
-      );
-      OpponentPieces = (
-        <div>
-          <p>{`F(${game.pieces[2].F}) / C(${game.pieces[2].C})`}</p>
-          <h5>{game.player2}</h5>
-        </div>
-      );
+    let opponentName, opponentNo, playerNo, color;
+    if (username === game.player1) {
+      opponentName = game.player2;
+      opponentNo = 2;
+      playerNo = 1;
+      color = 'btn-player1-piece';
     } else {
-      PlayerPieces = (
-        <div>
-          <button className="btn-player2-piece" onClick={() => { this.toggleStanding(); }}>
-            { stone === 'S' ? 'F' : 'S' }({ game.pieces[2].F })
-          </button>
-          <button className="btn-player2-piece" onClick={() => { this.selectCapstone('C'); }}>
-          C ({game.pieces[2].C})
-          </button>
-        </div>
-      );
-      OpponentPieces = (
-        <div>
-          <p>{`F(${game.pieces[1].F}) / C(${game.pieces[1].C})`}</p>
-          <h5>{game.player1}</h5>
-        </div>
-      );
+      opponentName = game.player1;
+      opponentNo = 1;
+      playerNo = 2;
+      color = 'btn-player2-piece';
     }
+
+    PlayerPieces = (
+      <div className="score">
+      <table>
+        <tr><td>{`${game.pieces[playerNo].F} / ${game.pieces[playerNo].C}`}</td><td>{game[`p${playerNo}FlatScore`]}</td></tr>
+        <tr style={{'font-size': '10px'}}><td>Stones</td><td>Score</td></tr>
+      </table>
+      </div>
+    );
+    OpponentPieces = (
+      <div className="score">
+      <table>
+        <tr style={{'font-size': '10px'}}><td>Stones</td><td>Score</td></tr>
+        <tr><td>{`${game.pieces[opponentNo].F} / ${game.pieces[opponentNo].C}`}</td><td>{game[`p${opponentNo}FlatScore`]}</td></tr>
+      </table>
+      </div>
+    );
 
     if (!game) {
       return <div></div>
@@ -214,26 +204,30 @@ class LiveGame extends Component {
     return (
       <div className="takless">
         <div className="game-info">
+          <div>{this.winner()}</div>
           {this.opponentTurn()}
           <table>
-            <tr>{this.state.game.player2}</tr>
+            {OpponentPieces}
+            <tr>{opponentName}</tr>
             <PTN ptn={this.state.game.ptn} />
             <tr>{this.props.username}</tr>
+            {PlayerPieces}
           </table>
           {this.userTurn()}
         </div>
         <div className="main">
           <div className="game">
-            <div className="stone-count">
-              {OpponentPieces}
-            </div>
-            <div>{this.winner()}</div>
             <div className="board">
               <Board game={game} handleSquareClick={this.handleSquareClick} />
             </div>
             <div className="stone-select">
               <div className="active-stone">{stone}</div>
-              {PlayerPieces}
+              <button className={color} onClick={() => { this.toggleStanding(); }}>
+                { stone === 'S' ? 'F' : 'S' }({ game.pieces[playerNo].F })
+              </button>
+              <button className={color} onClick={() => { this.selectCapstone('C'); }}>
+              C ({game.pieces[playerNo].C})
+              </button>
             </div>
           </div>
         </div>

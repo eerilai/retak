@@ -27,11 +27,11 @@ const GameLink = ({ modalView, changeView, gameType, url, link }) => {
   }
 
   return (
-    <Transition animation={"pulse"} duration={100} visible={true}>
       <Modal
         open={modalView === 'GameLink'}
         size={"tiny"}
         closeIcon
+        dimmer={false}
         onClose={() => changeView('')}
       >
         <Modal.Header>{header}</Modal.Header>
@@ -51,7 +51,6 @@ const GameLink = ({ modalView, changeView, gameType, url, link }) => {
           </Link>
         </Modal.Actions>
       </Modal>
-    </Transition>
   );
 }
 

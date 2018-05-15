@@ -32,8 +32,8 @@ class Game {
     this.plyPtn = [];
 
     this.isBoardFull = false;
-    this.p1TotalFlatsCnt = 0;
-    this.p2TotoalFlatsCnt = 0;
+    this.p1FlatScore = 0;
+    this.p2FlatScore = 0;
     this.victorUsername = 'Nobody'; // Wining Player Username or 'Nobody'
     this.looserUsername = 'Nobody'; // Loosing Player Username or 'Nobody'
   }
@@ -292,15 +292,15 @@ class Game {
         }
       } 
     })
-    this.p1TotalFlatsCnt = p1FCnt;
-    this.p2TotoalFlatsCnt = p2FCnt;
+    this.p1FlatScore = p1FCnt;
+    this.p2FlatScore = p2FCnt;
     if( isOccupiedCnt === (this.size * this.size)){
       this.isBoardFull = true;
-      if(this.p1TotalFlatsCnt === this.p2TotoalFlatsCnt){
+      if(this.p1FlatScore === this.p2FlatScore){
         this.victor = 0;
         this.winType = '1/2';
       } else {
-        this.victor = this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt ? 1 : 2;
+        this.victor = this.p1FlatScore > this.p2FlatScore ? 1 : 2;
         this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
         this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
         this.winType = 'F';
@@ -310,11 +310,11 @@ class Game {
   }
 
   checkOutOfPiecesWins(){
-    if(this.p1TotalFlatsCnt === this.p2TotoalFlatsCnt){
+    if(this.p1FlatScore === this.p2FlatScore){
       this.victor = 0;
       this.winType = '1/2';
     } else {
-      this.victor = this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt ? 1 : 2;
+      this.victor = this.p1FlatScore > this.p2FlatScore ? 1 : 2;
       this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
       this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
       this.winType = 'F';
