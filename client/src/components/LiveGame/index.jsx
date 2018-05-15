@@ -38,22 +38,34 @@ class LiveGame extends Component {
 
     const { socket, username } = props;
     const { roomId } = props.match.params;
-    socket.emit('syncGame', {
+    
+    socket.emit('fetchGame', {
       username,
       roomId
     });
-    socket.on('playerJoin', ({ boardSize, player1, player2 }) => {
-      const game = new Game(boardSize);
-      game.player1 = player1;
-      game.player2 = player2;
-      game.activePlayer = player1;
-      this.setState({
-        game
-      });
-    });
-    socket.on("opponentMove", ({ col, row, stone, roomId }) => {
+    
+    socket.on('syncGame', ({ game, roomId }) => {
       if (roomId === props.match.params.roomId) {
-        this.movePieces(col, row, false, stone);
+        this.setState({
+          game
+        });
+      }
+    });
+
+    socket.on('pendingGame', ({ game, roomId }) => {
+      if (roomId === props.match.params.roomId) {
+        game.player2 = username;
+        this.setState({
+          game
+        });
+      }
+    });
+
+    socket.on('gameAccessDenied', (roomId) => {
+      if (roomId === props.match.params.roomId) {
+        this.setState({
+          accessDenied: true
+        });
       }
     });
 
@@ -61,8 +73,8 @@ class LiveGame extends Component {
     this.sounds = { brick: sound_brick_drop };
   }
 
-  movePieces(col, row, isPlayerMove, stone = this.state.stone) {
-    const { game } = this.state;
+  movePieces(col, row) {
+    const { game, stone } = this.state;
     game.selectStack(col, row, stone);
     if (this.state.stone !== "") {
       this.setState({
@@ -73,19 +85,17 @@ class LiveGame extends Component {
       game
     });
 
-    if (isPlayerMove) {
-      this.props.socket.emit("updateGame", {
-        col,
-        row,
-        stone,
-        roomId: this.props.match.params.roomId,
-      });
-    }
+    this.props.socket.emit("updateGame", {
+      col,
+      row,
+      stone,
+      roomId: this.props.match.params.roomId,
+    });
   }
 
   handleSquareClick(col, row) {
     if (this.props.username === this.state.game.activePlayer) {
-      this.movePieces(col, row, true);
+      this.movePieces(col, row);
       this.play("brick");
     }
   }
@@ -122,7 +132,7 @@ class LiveGame extends Component {
     } else if (this.state.game.winType === "R") {
       return (
         <div>
-          <h3>Road Complited <br/></h3>
+          <h3>Road Completed <br/></h3>
           <h3>{`Player ${winner} wins! & Player ${loser} lost!`}</h3>
         </div>
       );

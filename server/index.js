@@ -9,6 +9,7 @@ require("dotenv").config();
 
 const db = require("../database");
 const authRoutes = require("./routes/authRoutes");
+const Game = require('./Game/Game');
 
 const app = express();
 
@@ -59,50 +60,62 @@ const io = socket(server);
 io.on('connection', (socket) => {
   socket.leave(socket.id);
 
-  socket.on('syncGame', async ({ username, roomId }) => {
-    // Only creates new game if not already in one
+  socket.on('fetchGame', async ({ username, roomId }) => {
     const room = io.sockets.adapter.rooms[roomId];
-    if (username !== room.player1) {
-      if (!room.player2) {
-        await socket.join(roomId);
-        room.player2 = username;
-        io.in(roomId).emit('playerJoin', {
-          boardSize: room.boardSize,
-          player1: room.player1,
-          player2: room.player2
-        });
-      } else if (room.isPrivate) {
-        socket.emit('fullRoom');
+    const { game, isPrivate, spectators } = room;
+    const { player1, player2 } = game;
+    if (username === player1) {
+      if (!player2) {
+        console.log('condition met');
+        console.log('game', game);
+        socket.emit('pendingGame', { game, roomId });
       } else {
-        socket.join(roomId);
+        socket.emit('syncGame', { game, roomId });
       }
+    } else if (!player2) {
+      await socket.join(roomId);
+      game.player2 = username;
+      socket.emit('syncGame', { game, roomId });
+    } else if (username !== player2 && isPrivate) {
+      socket.emit('gameAccessDenied');
+    } else {
+      if (!spectators[username]) {
+        await socket.join(roomId);
+        room.spectators[username] = username;
+      }
+      socket.emit('syncGame', { game, roomId });      
     }
 
     // Update lobby
-    const pendingGames = [];
+    const games = [];
     const { rooms } = io.sockets.adapter;
     for (let room in rooms) {
       const currentRoom = rooms[room];
-      if (!currentRoom.isPrivate && !currentRoom.player2) {
-        pendingGames.push({ ...currentRoom, name: room });
+      if (!currentRoom.isPrivate) {
+        games.push({ name: room, isPending: !room.game.player2 });
       }
     }
-    socket.broadcast.emit('updateLobby', pendingGames);
+    socket.broadcast.emit('updateLobby', games);
   });
 
   // Update game for each piece move
   socket.on('updateGame', ({ col, row, stone, roomId }) => {
-    socket.to(roomId).emit('opponentMove', { col, row, stone, roomId });
+    const { game } = io.sockets.adapter.rooms[roomId];    
+    let lastActivePlayer = game.activePlayer;
+    game.selectStack(col, row, stone);
+    if (lastActivePlayer !== game.activePlayer) {
+      socket.to(roomId).emit('syncGame', { game, roomId });
+    }
   });
 
   // Serve pending game list to lobby on lobby initialize
   socket.on('fetchLobby', () => {
     const games = [];
     const { rooms } = io.sockets.adapter;
-    for (let room in rooms) {
-      const currentRoom = rooms[room];
-      if (!currentRoom.isPrivate && !currentRoom.player2) {
-        games.push({ ...currentRoom, name: room });
+    for (let roomId in rooms) {
+      const currentRoom = rooms[roomId];
+      if (!currentRoom.isPrivate) {
+        games.push({ name: roomId, isPending: !rooms[roomId].game.player2 });
       }
     }
     socket.emit('updateLobby', games);
@@ -113,9 +126,11 @@ io.on('connection', (socket) => {
     const roomId = Math.random().toString(36).slice(2, 9);
     await socket.join(roomId);
     const room = io.sockets.adapter.rooms[roomId];
-    room.player1 = username;
-    room.boardSize = boardSize;
+    room.game = new Game(boardSize);
+    room.game.player1 = username;
+    room.game.activePlayer = username;
     room.isPrivate = isPrivate;
+    room.spectators = {};
     socket.emit('gameInitiated', {
       roomId
     });
