@@ -62,37 +62,36 @@ class LoginModal extends Component {
           </a>
           <form onSubmit={this.handleSubmit}>
             <div>
-              <p className="logTag">Username:</p>
-              <Input className="hvr-shadow-radial" required>
-                <div className="ui left icon input">
-                  <i class="user icon"></i>
-                  <input
-                    type="text"
-                    placeholder="Username"
-                    value={this.state.username}
-                    onChange={this.handleUsernameChange}
-                  />
-                </div>
-              </Input>
+              <div>
+                <p className="logTag">Username:</p>
+                <Input className="hvr-shadow-radial" required>
+                  <div className="ui left icon input">
+                    <i class="user icon"></i>
+                    <input
+                      type="text"
+                      placeholder="Username"
+                      value={this.state.username}
+                      onChange={this.handleUsernameChange}
+                      />
+                  </div>
+                </Input>
+              </div>
+              <div>
+                <p className="logTag">Password:</p>
+                <Input className="hvr-shadow-radial" required>
+                  <div class="ui left icon input">
+                    <i class="lock icon"></i>
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      value={this.state.password}
+                      onChange={this.handlePasswordChange}
+                      />
+                  </div>
+                </Input>
+              </div>
             </div>
-            <div>
-              <p className="logTag">Password:</p>
-              <Input className="hvr-shadow-radial" required>
-                <div class="ui left icon input">
-                  <i class="lock icon"></i>
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    value={this.state.password}
-                    onChange={this.handlePasswordChange}
-                  />
-                </div>
-              </Input>
-            </div>
-
-            <Button id="loginButton" size="large" animated>
-              <Button>Log In  <Icon size="large" name="sign in" corner="true"/></Button>
-            </Button>
+            <Button id="loginButton" size="large">Log In  <Icon size="large" name="sign in" corner="true"/></Button>
           </form>
           <p className="question">Here for the first time?</p>
           <Button
