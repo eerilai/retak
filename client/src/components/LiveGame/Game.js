@@ -51,7 +51,41 @@ class Game {
       }
     }
     Object.values(this.squares)
-      .forEach(square => square.setNeighbors());
+      .forEach(square => this.setNeighbors(square));
+  }
+
+  setNeighbors(square) {
+    if (square.col === 0) {
+      square.edges.push('<');
+      square.isEW = true;
+    } else if (square.col === this.size - 1) {
+      square.edges.push('>');
+      square.isEW = true;
+    }
+    if (square.row === 0) {
+      square.edges.push('-');
+      square.isNS = true;
+    } else if (square.row === this.size - 1) {
+      square.edges.push('+');
+      square.isNS = true;
+    }
+
+    if (square.row !== 0) {
+      square.neighbors['-'] =
+        this.squares[convertCoord([square.col, square.row - 1])];
+    }
+    if (square.row !== this.size - 1) {
+      square.neighbors['+'] =
+        this.squares[convertCoord([square.col, square.row + 1])];
+    }
+    if (square.col !== 0) {
+      square.neighbors['<'] =
+        this.squares[convertCoord([square.col - 1, square.row])];
+    }
+    if (square.col !== this.size - 1) {
+      square.neighbors['>'] =
+        this.squares[convertCoord([square.col + 1, square.row])];
+    }
   }
 
   setMoveDir(stack) {
