@@ -3,7 +3,7 @@ import { pieceCount, convertCoord } from './gameUtil';
 import Stack from './Stack';
 
 class Game {
-  constructor(size, player1 = 'p1', player2 = 'p2') {
+  constructor(size, player1 = 'p1', player2 = 'p2', ranked = false) {
     this.toPlay = 1;
     this.activePlayer = null;
     this.player1 = null;
@@ -11,6 +11,7 @@ class Game {
     this.victor = 0; // 0, 1, or 2
     this.winType = null; // null, R, F, 1 or 1/2
     this.winString = '';
+    this.ranked = ranked;
     this.size = size;
     this.board = [];
     this.squares = {};
@@ -354,7 +355,7 @@ class Game {
 
   handleWin() {
     this.printPTN();
-    const { player1, player2, ptnString, victorUsername, size, winType } = this;
+    const { player1, player2, ptnString, victorUsername, size, winType, ranked } = this;
     axios.post('/record', {
       player1,
       player2,
@@ -362,6 +363,7 @@ class Game {
       winType,
       victor: victorUsername,
       ptn: ptnString,
+      ranked,
     });
   }
 }

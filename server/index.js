@@ -8,6 +8,7 @@ const socket = require("socket.io");
 require("dotenv").config();
 
 const db = require("../database");
+const { logGame } = require("../database/queries")
 const authRoutes = require("./routes/authRoutes");
 
 const app = express();
@@ -41,7 +42,7 @@ const authCheck = (req, res, next) => {
 app.use("/", express.static(path.join(__dirname, "../client/dist")));
 
 app.post('/record', (req, res) => {
-  console.log(req.body);
+  logGame(req.body);
 });
 
 app.get("/bundle.js", (req, res) => {
