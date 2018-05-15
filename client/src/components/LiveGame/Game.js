@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { pieceCount, convertCoord } from './gameUtil';
 import Stack from './Stack';
 
@@ -9,6 +10,7 @@ class Game {
     this.player2 = null;
     this.victor = 0; // 0, 1, or 2
     this.winType = null; // null, R, F, 1 or 1/2
+    this.winString = '';
     this.size = size;
     this.board = [];
     this.squares = {};
@@ -27,7 +29,7 @@ class Game {
     this.lastStep = '';
     this.moveDir = '';
 
-    this.move = 0;
+    this.turn = 0;
     this.ptn = [];
     this.plyPtn = [];
 
@@ -71,7 +73,7 @@ class Game {
     if (!this.isMoving && this.toPlay === 1) {
       this.ptn.push([`${stone}${coord}`]);
     } else if (!this.isMoving) {
-      this.ptn[this.move].push(`${stone}${coord}`);
+      this.ptn[this.turn].push(`${stone}${coord}`);
     } else if (this.plyPtn.length === 0 && this.moveDir) {
       this.plyPtn.push(this.toMove.stack.length + 1);
       this.plyPtn.push(`${this.moveOrigin.coord}${this.moveDir}`);
@@ -96,10 +98,14 @@ class Game {
         if (this.toPlay === 1) {
           this.ptn.push([this.plyPtn.join('')]);
         } else {
-          this.ptn[this.move].push(this.plyPtn.join(''));
+          this.ptn[this.turn].push(this.plyPtn.join(''));
         }
         this.plyPtn = [];
       }
+    }
+    if (this.victor !== 0) {
+      this.ptn.push([this.winString]);
+      this.handleWin();
     }
   }
 
@@ -129,7 +135,7 @@ class Game {
             }
             this.parsePTN(coord, stone);
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
-            if (this.toPlay === 1) this.move += 1;
+            if (this.toPlay === 1) this.turn += 1;
             this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
           } else {
             this.checkOutOfPiecesWins();
@@ -200,7 +206,7 @@ class Game {
             this.checkRoads();
             this.checkFullBoardWins();
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
-            if (this.toPlay === 1) this.move += 1;
+            if (this.toPlay === 1) this.turn += 1;
             this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
           }
           this.moveDir = '';
@@ -218,7 +224,7 @@ class Game {
         this.checkRoads();
         this.checkFullBoardWins();
         this.toPlay = (this.toPlay === 1) ? 2 : 1;
-        if (this.toPlay === 1) this.move += 1;
+        if (this.toPlay === 1) this.turn += 1;
         this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
       }
     }
@@ -236,6 +242,7 @@ class Game {
         this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
         this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
         this.winType = 'R';
+        this.setWinString();
       } else {
         checked.push(square.coord);
         const up = square.neighbors['+'];
@@ -299,11 +306,13 @@ class Game {
       if(this.p1FlatScore === this.p2FlatScore){
         this.victor = 0;
         this.winType = '1/2';
+        this.setWinString();
       } else {
         this.victor = this.p1FlatScore > this.p2FlatScore ? 1 : 2;
         this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
         this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
         this.winType = 'F';
+        this.setWinString();
       }
     }
     return;
@@ -313,15 +322,35 @@ class Game {
     if(this.p1FlatScore === this.p2FlatScore){
       this.victor = 0;
       this.winType = '1/2';
+      this.setWinString();
     } else {
       this.victor = this.p1FlatScore > this.p2FlatScore ? 1 : 2;
       this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
       this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
       this.winType = 'F';
+      this.setWinString();
     }
     return;
   }
 
+  setWinString() {
+    if (this.winType === '1/2') {
+      this.winString = '1/2—1/2';
+    } else {
+      this.winString = this.victor === 1 ? `${this.winType}—0` : `0—${this.winType}`;
+    }
+  }
+
+  handleWin() {
+    let stringPTN = '';
+    this.ptn.forEach((turn, i) => {
+      if (i !== this.ptn.length - 1) {
+        stringPTN += `${i + 1}. ${turn.join(' ')} `;
+      } else {
+        stringPTN += turn;
+      }
+    });
+  }
 }
 
 export default Game;
