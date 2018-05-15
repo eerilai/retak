@@ -168,49 +168,35 @@ class LiveGame extends Component {
 
     let PlayerPieces;
     let OpponentPieces;
-    
-    if (!game.player1) {
-      PlayerPieces = <div></div>;
-      OpponentPieces = <div></div>;
-    } else if (this.props.username === game.player1) {
-      PlayerPieces = (
-        <div>
-          <button className="btn-player1-piece" onClick={() => { this.toggleStanding(); }}>
-            { stone === 'S' ? 'F' : 'S' }({ game.pieces[1].F })
-          </button>
-          <button className="btn-player1-piece" onClick={() => { this.selectCapstone('C'); }}>
-          C ({game.pieces[1].C})
-          </button>
-        </div>
-      );
-      OpponentPieces = (
-        <div className="score">
-        <table>
-          <tr style={{'font-size': '10px'}}><td>Flats</td><td>Capstones</td><td>Score</td></tr>
-          <tr><td>{game.pieces[2].F}</td><td>{game.pieces[2].C}</td><td>{game.p2TotoalFlatsCnt}</td></tr>
-        </table>
-        </div>
-      );
+    let opponentName, opponentNo, playerNo, color;
+    if (username === game.player1) {
+      opponentName = game.player2;
+      opponentNo = 2;
+      playerNo = 1;
+      color = 'btn-player1-piece';
     } else {
-      PlayerPieces = (
-        <div>
-          <button className="btn-player2-piece" onClick={() => { this.toggleStanding(); }}>
-            { stone === 'S' ? 'F' : 'S' }({ game.pieces[2].F })
-          </button>
-          <button className="btn-player2-piece" onClick={() => { this.selectCapstone('C'); }}>
-          C ({game.pieces[2].C})
-          </button>
-        </div>
-      );
-      OpponentPieces = (
-        <div className="score">
-        <table>
-          <tr style={{'font-size': '10px'}}><td>Flats</td><td>Capstones</td><td>Score</td></tr>
-          <tr><td>{game.pieces[1].F}</td><td>{game.pieces[1].C}</td><td>{game.p1TotalFlatsCnt}</td></tr>
-        </table>
-        </div>
-      );
+      opponentName = game.player1;
+      opponentNo = 1;
+      playerNo = 2;
+      color = 'btn-player2-piece';
     }
+
+    PlayerPieces = (
+      <div className="score">
+      <table>
+        <tr><td>{`${game.pieces[playerNo].F} / ${game.pieces[playerNo].C}`}</td><td>{game[`p${playerNo}FlatScore`]}</td></tr>
+        <tr style={{'font-size': '10px'}}><td>Stones</td><td>Score</td></tr>
+      </table>
+      </div>
+    );
+    OpponentPieces = (
+      <div className="score">
+      <table>
+        <tr style={{'font-size': '10px'}}><td>Stones</td><td>Score</td></tr>
+        <tr><td>{`${game.pieces[opponentNo].F} / ${game.pieces[opponentNo].C}`}</td><td>{game[`p${opponentNo}FlatScore`]}</td></tr>
+      </table>
+      </div>
+    );
 
     if (!game) {
       return <div></div>
@@ -222,9 +208,10 @@ class LiveGame extends Component {
           {this.opponentTurn()}
           <table>
             {OpponentPieces}
-            <tr>{this.state.game.player2}</tr>
+            <tr>{opponentName}</tr>
             <PTN ptn={this.state.game.ptn} />
             <tr>{this.props.username}</tr>
+            {PlayerPieces}
           </table>
           {this.userTurn()}
         </div>
@@ -235,7 +222,12 @@ class LiveGame extends Component {
             </div>
             <div className="stone-select">
               <div className="active-stone">{stone}</div>
-              {PlayerPieces}
+              <button className={color} onClick={() => { this.toggleStanding(); }}>
+                { stone === 'S' ? 'F' : 'S' }({ game.pieces[playerNo].F })
+              </button>
+              <button className={color} onClick={() => { this.selectCapstone('C'); }}>
+              C ({game.pieces[playerNo].C})
+              </button>
             </div>
           </div>
         </div>
