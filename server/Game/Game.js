@@ -32,8 +32,8 @@ class Game {
     this.plyPtn = [];
 
     this.isBoardFull = false;
-    this.p1TotalFlatsCnt = 0;
-    this.p2TotoalFlatsCnt = 0;
+    this.p1FlatScore = 0;
+    this.p2FlatScore = 0;
     this.victorUsername = 'Nobody'; // Wining Player Username or 'Nobody'
     this.looserUsername = 'Nobody'; // Loosing Player Username or 'Nobody'
   }
@@ -48,7 +48,41 @@ class Game {
       }
     }
     Object.values(this.squares)
-      .forEach(square => square.setNeighbors());
+      .forEach(square => this.setNeighbors(square));
+  }
+
+  setNeighbors(square) {
+    if (square.col === 0) {
+      square.edges.push('<');
+      square.isEW = true;
+    } else if (square.col === this.size - 1) {
+      square.edges.push('>');
+      square.isEW = true;
+    }
+    if (square.row === 0) {
+      square.edges.push('-');
+      square.isNS = true;
+    } else if (square.row === this.size - 1) {
+      square.edges.push('+');
+      square.isNS = true;
+    }
+
+    if (square.row !== 0) {
+      square.neighbors['-'] =
+        this.squares[convertCoord([square.col, square.row - 1])];
+    }
+    if (square.row !== this.size - 1) {
+      square.neighbors['+'] =
+        this.squares[convertCoord([square.col, square.row + 1])];
+    }
+    if (square.col !== 0) {
+      square.neighbors['<'] =
+        this.squares[convertCoord([square.col - 1, square.row])];
+    }
+    if (square.col !== this.size - 1) {
+      square.neighbors['>'] =
+        this.squares[convertCoord([square.col + 1, square.row])];
+    }
   }
 
   setMoveDir(stack) {
@@ -292,15 +326,15 @@ class Game {
         }
       } 
     })
-    this.p1TotalFlatsCnt = p1FCnt;
-    this.p2TotoalFlatsCnt = p2FCnt;
+    this.p1FlatScore = p1FCnt;
+    this.p2FlatScore = p2FCnt;
     if( isOccupiedCnt === (this.size * this.size)){
       this.isBoardFull = true;
-      if(this.p1TotalFlatsCnt === this.p2TotoalFlatsCnt){
+      if(this.p1FlatScore === this.p2FlatScore){
         this.victor = 0;
         this.winType = '1/2';
       } else {
-        this.victor = this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt ? 1 : 2;
+        this.victor = this.p1FlatScore > this.p2FlatScore ? 1 : 2;
         this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
         this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
         this.winType = 'F';
@@ -310,11 +344,11 @@ class Game {
   }
 
   checkOutOfPiecesWins(){
-    if(this.p1TotalFlatsCnt === this.p2TotoalFlatsCnt){
+    if(this.p1FlatScore === this.p2FlatScore){
       this.victor = 0;
       this.winType = '1/2';
     } else {
-      this.victor = this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt ? 1 : 2;
+      this.victor = this.p1FlatScore > this.p2FlatScore ? 1 : 2;
       this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
       this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
       this.winType = 'F';
