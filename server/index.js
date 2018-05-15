@@ -92,7 +92,7 @@ io.on('connection', (socket) => {
 
   // Update game for each piece move
   socket.on('updateGame', ({ col, row, stone, roomId }) => {
-    socket.to(roomId).emit('opponentMove', { col, row, stone });
+    socket.to(roomId).emit('opponentMove', { col, row, stone, roomId });
   });
 
   // Serve pending game list to lobby on lobby initialize
