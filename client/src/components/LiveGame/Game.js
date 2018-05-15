@@ -34,6 +34,7 @@ class Game {
     this.ptn = [];
     this.ptnString = '';
     this.plyPtn = [];
+    this.tps = '';
 
     this.isBoardFull = false;
     this.p1FlatScore = 0;
@@ -111,6 +112,24 @@ class Game {
     }
   }
 
+  parseTPS(board) {
+    const tpsArray = [];
+    for (let row = this.size - 1; row >= 0; row -= 1) {
+      const tpsRow = [];
+      for (let col = 0; col < this.size; col += 1) {
+        const stack = board[col][row];
+        if (!stack.isEmpty) {
+          tpsRow.push([...stack.stack, stack.stone].join(''));
+        } else {
+          tpsRow.push('x');
+        }
+      }
+      tpsArray.push(tpsRow.join(','));
+    }
+    let tps = tpsArray.join('/');
+    this.tps = `[TPS] "${tps} ${this.toPlay} ${this.turn + 1}"`;
+  }
+
   selectStack(col, row, stone = '') {
     const coord = convertCoord([col, row]);
     const stack = this.squares[coord];
@@ -138,6 +157,7 @@ class Game {
             this.parsePTN(coord, stone);
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
             if (this.toPlay === 1) this.turn += 1;
+            this.parseTPS(this.board);
             this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
           } else {
             this.checkOutOfPiecesWins();
@@ -209,6 +229,7 @@ class Game {
             this.checkFullBoardWins();
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
             if (this.toPlay === 1) this.turn += 1;
+            this.parseTPS(this.board);
             this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
           }
           this.moveDir = '';
@@ -227,6 +248,7 @@ class Game {
         this.checkFullBoardWins();
         this.toPlay = (this.toPlay === 1) ? 2 : 1;
         if (this.toPlay === 1) this.turn += 1;
+        this.parseTPS(this.board);
         this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
       }
     }
@@ -355,6 +377,7 @@ class Game {
 
   handleWin() {
     this.printPTN();
+    this.parseTPS(this.board);
     const { player1, player2, ptnString, victorUsername, size, winType, ranked } = this;
     axios.post('/record', {
       player1,
