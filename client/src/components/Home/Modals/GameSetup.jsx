@@ -36,11 +36,11 @@ class GameSetup extends Component {
       { key: '3', text: '3', value: '3' }
     ];
     return (
-      <Transition animation={"pulse"} duration={100} visible={true}>
         <Modal
           open={this.props.modalView === 'GameSetup'}
           size={"tiny"}
           onClose={() => this.props.changeView('')}
+          dimmer={false}
           closeIcon
         >
           <Modal.Header>GameSetup</Modal.Header>
@@ -65,7 +65,6 @@ class GameSetup extends Component {
             />
           </Modal.Actions>
         </Modal>
-      </Transition>
     );
   }
 }

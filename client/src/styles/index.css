@@ -42,6 +42,10 @@ button:hover {
   text-shadow: none;
 }
 
+.ui.tiny.modal {
+  height: 50%;
+}
+
 i.icon.sign.in:before {
   float: right;
 }

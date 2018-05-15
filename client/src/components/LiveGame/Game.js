@@ -104,6 +104,9 @@ class Game {
   }
 
   selectStack(col, row, stone = '') {
+    console.log(col, row);
+    console.log(this.squares);
+
     const coord = convertCoord([col, row]);
     const stack = this.squares[coord];
     const { isEmpty } = stack;
