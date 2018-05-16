@@ -56,11 +56,23 @@ const createUser = (userInfo) => {
 }
 
 const logGame = (gameInfo) => {
-  return new Promise((res, rej) => {
+  return new Promise(async (res, rej) => {
     const { player1, player2, size, winType, victor, ptn, tps, ranked } = gameInfo;
+    let player1_id = null;
+    let player2_id = null;
+    try {
+      const p1 = await User.findAll({ where: { username: player1 } });
+      const p2 = await User.findAll({ where: { username: player2 } });
+      player1_id = p1[0] ? p1[0].dataValues.id : null;
+      player2_id = p2[0] ? p2[0].dataValues.id : null;
+    } catch (err) {
+      console.error(err);
+    }
     Game.create({
       player1,
+      player1_id,
       player2,
+      player2_id,
       ptn,
       victor,
       board_state: tps,

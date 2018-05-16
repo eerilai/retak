@@ -44,18 +44,11 @@ const Game = sequelize.define('game', {
   player1: {
     type: Sequelize.STRING,
   },
-  player1_id: {
-    type: Sequelize.INTEGER,
-  },
   player2: {
     type: Sequelize.STRING,
   },
-  player2_id: {
-    type: Sequelize.INTEGER,
-  },
   board_state: {
-    // TODO: Not 100% sure if boardState will be JSON
-    type: Sequelize.JSON,
+    type: Sequelize.STRING,
   },
   ptn: {
     type: Sequelize.STRING,
@@ -74,8 +67,8 @@ const Game = sequelize.define('game', {
   },
 });
 
-// Game.hasMany(User, { foreignKey: 'player1_id', sourceKey: 'id' });
-// Game.hasMany(User, { foreignKey: 'player2_id', sourceKey: 'id' });
+User.hasMany(Game, { foreignKey: 'player1_id' });
+User.hasMany(Game, { foreignKey: 'player2_id' });
 
 // to drop table if exists, pass { force: true } as argument in User.sync
 User.sync()
