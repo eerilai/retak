@@ -216,6 +216,10 @@ class LiveGame extends Component {
       color = 'btn-player1-piece';
     }
 
+    if (game.player1 === game.player2) {
+      topPlayerName = 'Waiting for Match...'
+    }
+
     PlayerPieces = (
       <div className="score">
       <table>
