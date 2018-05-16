@@ -74,8 +74,8 @@ const Game = sequelize.define('game', {
   },
 });
 
-Game.hasMany(User, { foreignKey: 'player1ID', sourceKey: 'id' });
-Game.hasMany(User, { foreignKey: 'player2ID', sourceKey: 'id' });
+// Game.hasMany(User, { foreignKey: 'player1_id', sourceKey: 'id' });
+// Game.hasMany(User, { foreignKey: 'player2_id', sourceKey: 'id' });
 
 // to drop table if exists, pass { force: true } as argument in User.sync
 User.sync()
