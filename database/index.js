@@ -82,15 +82,21 @@ const Game = sequelize.define('game', {
 User.hasMany(Game, { foreignKey: 'player1_id' });
 User.hasMany(Game, { foreignKey: 'player2_id' });
 
-// to drop table if exists, pass { force: true } as argument in User.sync
-User.sync()
-  .then(() => {
-    console.log('user table created');
-  });
+// pass { force: true} into these if you'd like to only reset one table
+// User.sync()
+//   .then(() => {
+//     console.log('user table created');
+//   });
 
-Game.sync()
+// Game.sync()
+//   .then(() => {
+//     console.log('game table created');
+//   });
+
+// syncs all tables, drop and rebuild all tables with { force: true }
+sequelize.sync()
   .then(() => {
-    console.log('game table created');
+    console.log('tables synced');
   });
 
 module.exports = {

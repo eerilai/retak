@@ -8,7 +8,7 @@ const socket = require('socket.io');
 require('dotenv').config();
 
 const db = require('../database');
-const { logGame } = require('../database/queries')
+const { logGame, getLeaderboard } = require('../database/queries');
 const authRoutes = require('./routes/authRoutes');
 const filterLobbyList = require('./lobbyHelper');
 
@@ -45,6 +45,11 @@ app.use('/', express.static(path.join(__dirname, '../client/dist')));
 app.post('/record', (req, res) => {
   logGame(req.body);
 });
+
+app.get('/leaderboard', async (req, res) => {
+  const board = await getLeaderboard();
+  res.json(board);
+})
 
 app.get('/bundle.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/bundle.js'));

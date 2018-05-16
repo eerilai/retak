@@ -101,9 +101,21 @@ const logGame = (gameInfo) => {
   });
 };
 
+const getLeaderboard = () => {
+  return new Promise(async (res, rej) => {
+    const board =
+      await User.findAll({
+        attributes: ['username', 'total_games', 'ranked_games', 'ranked_wins'],
+        order: [['ranked_wins', 'DESC']],
+      });
+    res(board);
+  });
+};
+
 module.exports = {
   findUserById,
   findOrCreateUserByGoogleId,
   createUser,
-  logGame
+  logGame,
+  getLeaderboard,
 };
