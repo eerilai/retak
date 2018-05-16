@@ -1,14 +1,17 @@
+import axios from 'axios';
 import { pieceCount, convertCoord } from './gameUtil';
 import Stack from './Stack';
 
 class Game {
-  constructor(size, player1 = 'p1', player2 = 'p2') {
+  constructor(size, gameState = 'new', ranked = false, player1 = 'p1', player2 = 'p2' ) {
     this.toPlay = 1;
     this.activePlayer = null;
     this.player1 = null;
     this.player2 = null;
     this.victor = 0; // 0, 1, or 2
     this.winType = null; // null, R, F, 1 or 1/2
+    this.winString = '';
+    this.ranked = ranked;
     this.size = size;
     this.board = [];
     this.squares = {};
@@ -27,15 +30,24 @@ class Game {
     this.lastStep = '';
     this.moveDir = '';
 
-    this.move = 0;
+    this.turn = 0;
     this.ptn = [];
+    this.ptnString = '';
     this.plyPtn = [];
+    this.tps = '';
 
     this.isBoardFull = false;
-    this.p1TotalFlatsCnt = 0;
-    this.p2TotoalFlatsCnt = 0;
+    this.p1FlatScore = 0;
+    this.p2FlatScore = 0;
     this.victorUsername = 'Nobody'; // Wining Player Username or 'Nobody'
-    this.looserUsername = 'Nobody'; // Loosing Player Username or 'Nobody'
+    this.loserUsername = 'Nobody'; // Loosing Player Username or 'Nobody'
+
+    if (gameState !== 'new') {
+      const { tps, ptn } = gameState;
+      this.readTPS(tps);
+      this.tps = tps;
+      this.ptn = ptn;
+    }
   }
 
   createBoard(size) {
@@ -71,7 +83,7 @@ class Game {
     if (!this.isMoving && this.toPlay === 1) {
       this.ptn.push([`${stone}${coord}`]);
     } else if (!this.isMoving) {
-      this.ptn[this.move].push(`${stone}${coord}`);
+      this.ptn[this.turn].push(`${stone}${coord}`);
     } else if (this.plyPtn.length === 0 && this.moveDir) {
       this.plyPtn.push(this.toMove.stack.length + 1);
       this.plyPtn.push(`${this.moveOrigin.coord}${this.moveDir}`);
@@ -96,9 +108,58 @@ class Game {
         if (this.toPlay === 1) {
           this.ptn.push([this.plyPtn.join('')]);
         } else {
-          this.ptn[this.move].push(this.plyPtn.join(''));
+          this.ptn[this.turn].push(this.plyPtn.join(''));
         }
         this.plyPtn = [];
+      }
+    }
+    if (this.victor !== 0) {
+      this.ptn.push([this.winString]);
+      this.handleWin();
+    }
+  }
+
+  parseTPS(board) {
+    const tpsArray = [];
+    for (let row = this.size - 1; row >= 0; row -= 1) {
+      const tpsRow = [];
+      for (let col = 0; col < this.size; col += 1) {
+        const stack = board[col][row];
+        if (!stack.isEmpty) {
+          const rstack = [...stack.stack].reverse();
+          tpsRow.push([...rstack, stack.stone].join(''));
+        } else {
+          tpsRow.push('x');
+        }
+      }
+      tpsArray.push(tpsRow.join(','));
+    }
+    let tps = tpsArray.join('/');
+    this.tps = `[TPS "${tps} ${this.toPlay} ${this.turn + 1}"]`;
+  }
+
+  readTPS(tps) {
+    let parsedTPS = tps.split('').slice(6, tps.length - 2).join('').split(' ');
+    this.turn = +parsedTPS.pop();
+    this.toPlay = +parsedTPS.pop();
+    parsedTPS = parsedTPS.join('').split('/');
+    parsedTPS.forEach((row, i) => { parsedTPS[i] = row.split(',') });
+    parsedTPS = parsedTPS.join(',').split(',');
+    for (let row = this.size - 1; row >= 0; row -= 1) {
+      for (let col = 0; col < this.size; col += 1) {
+        const stack = this.board[col][row];
+        let square = parsedTPS.shift();
+        if (square !== 'x') {
+          const stone = square[square.length - 1];
+          if (stone === 'C' || stone === 'S') {
+            stack.stone = square.split('').pop();
+            square = square.slice(0, square.length - 1);
+          }
+          let s = square.split('').reverse().map(x=>+x);
+          stack.stack = s;
+          stack.isEmpty = false;
+          stack.owner = s[0];
+        }
       }
     }
   }
@@ -129,7 +190,8 @@ class Game {
             }
             this.parsePTN(coord, stone);
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
-            if (this.toPlay === 1) this.move += 1;
+            if (this.toPlay === 1) this.turn += 1;
+            this.parseTPS(this.board);
             this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
           } else {
             this.checkOutOfPiecesWins();
@@ -200,7 +262,8 @@ class Game {
             this.checkRoads();
             this.checkFullBoardWins();
             this.toPlay = (this.toPlay === 1) ? 2 : 1;
-            if (this.toPlay === 1) this.move += 1;
+            if (this.toPlay === 1) this.turn += 1;
+            this.parseTPS(this.board);
             this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
           }
           this.moveDir = '';
@@ -218,7 +281,8 @@ class Game {
         this.checkRoads();
         this.checkFullBoardWins();
         this.toPlay = (this.toPlay === 1) ? 2 : 1;
-        if (this.toPlay === 1) this.move += 1;
+        if (this.toPlay === 1) this.turn += 1;
+        this.parseTPS(this.board);
         this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
       }
     }
@@ -234,8 +298,9 @@ class Game {
           (checkEW && square.edges.includes('>'))) {
         this.victor = p;
         this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
-        this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
+        this.loserUsername = (this.victor === 1) ? this.player2 : this.player1;
         this.winType = 'R';
+        this.setWinString();
       } else {
         checked.push(square.coord);
         const up = square.neighbors['+'];
@@ -292,36 +357,72 @@ class Game {
         }
       } 
     })
-    this.p1TotalFlatsCnt = p1FCnt;
-    this.p2TotoalFlatsCnt = p2FCnt;
+    this.p1FlatScore = p1FCnt;
+    this.p2FlatScore = p2FCnt;
     if( isOccupiedCnt === (this.size * this.size)){
       this.isBoardFull = true;
-      if(this.p1TotalFlatsCnt === this.p2TotoalFlatsCnt){
+      if(this.p1FlatScore === this.p2FlatScore){
         this.victor = 0;
         this.winType = '1/2';
+        this.setWinString();
       } else {
-        this.victor = this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt ? 1 : 2;
+        this.victor = this.p1FlatScore > this.p2FlatScore ? 1 : 2;
         this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
-        this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
+        this.loserUsername = (this.victor === 1) ? this.player2 : this.player1;
         this.winType = 'F';
+        this.setWinString();
       }
     }
     return;
   }
 
   checkOutOfPiecesWins(){
-    if(this.p1TotalFlatsCnt === this.p2TotoalFlatsCnt){
+    if(this.p1FlatScore === this.p2FlatScore){
       this.victor = 0;
       this.winType = '1/2';
+      this.setWinString();
     } else {
-      this.victor = this.p1TotalFlatsCnt > this.p2TotoalFlatsCnt ? 1 : 2;
+      this.victor = this.p1FlatScore > this.p2FlatScore ? 1 : 2;
       this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
-      this.looserUsername = (this.victor === 1) ? this.player2 : this.player1;
+      this.loserUsername = (this.victor === 1) ? this.player2 : this.player1;
       this.winType = 'F';
+      this.setWinString();
     }
     return;
   }
 
+  setWinString() {
+    if (this.winType === '1/2') {
+      this.winString = '1/2—1/2';
+    } else {
+      this.winString = this.victor === 1 ? `${this.winType}—0` : `0—${this.winType}`;
+    }
+  }
+
+  printPTN() {
+    this.ptn.forEach((turn, i) => {
+      if (i !== this.ptn.length - 1) {
+        this.ptnString += `${i + 1}. ${turn.join(' ')} `;
+      } else {
+        this.ptnString += turn;
+      }
+    });
+  }
+
+  handleWin() {
+    this.printPTN();
+    this.parseTPS(this.board);
+    const { player1, player2, ptnString, victorUsername, size, winType, ranked } = this;
+    axios.post('/record', {
+      player1,
+      player2,
+      size,
+      winType,
+      victor: victorUsername,
+      ptn: ptnString,
+      ranked,
+    });
+  }
 }
 
 export default Game;
