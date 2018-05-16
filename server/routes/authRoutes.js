@@ -36,7 +36,7 @@ router.post('/signup', (req, res) => {
 
 router.post('/logout', (req, res) => {
   req.session.destroy((err) => {
-    res.send('Success');
+    res.send('Failed to logout');
   });
 });
 
