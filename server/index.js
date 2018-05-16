@@ -10,6 +10,7 @@ require('dotenv').config();
 const db = require('../database');
 const { logGame } = require('../database/queries')
 const authRoutes = require('./routes/authRoutes');
+const filterLobbyList = require('./lobbyHelper');
 
 const app = express();
 
@@ -65,6 +66,25 @@ const io = socket(server);
 io.on('connection', (socket) => {
   socket.leave(socket.id);
 
+  // Create a new game
+  socket.on('createGame', async ({ username, boardSize, isFriendGame, isPrivate, roomName }) => {
+    let roomId = roomName;
+    if (io.sockets.adapter.rooms[roomId]) {
+      roomId = Math.random().toString(36).slice(2, 9);
+    }
+    await socket.join(roomId);
+    const room = io.sockets.adapter.rooms[roomId];
+    room.player1 = username;
+    room.activePlayer = username;
+    room.boardSize = boardSize
+    room.isFriendGame = isFriendGame;
+    room.isPrivate = isPrivate;
+    room.spectators = {};
+    socket.emit('gameInitiated', {
+      roomId
+    });
+  });
+
   socket.on('fetchGame', async ({ username, roomId }) => {
     const room = io.sockets.adapter.rooms[roomId];
     const { gameState, activePlayer, boardSize, isPrivate, spectators } = room;
@@ -90,15 +110,8 @@ io.on('connection', (socket) => {
     }
 
     // Update lobby
-    const games = [];
-    const { rooms } = io.sockets.adapter;
-    for (let roomId in rooms) {
-      const currentRoom = rooms[roomId];
-      if (!currentRoom.isFriendly && !(currentRoom.isPrivate && currentRoom.player2)) {
-        games.push({ name: roomId, boardSize: currentRoom.boardSize, isPending: !currentRoom.player2 });
-      }
-    }
-    socket.broadcast.emit('updateLobby', games);
+    const lobbyList = filterLobbyList(io.sockets.adapter.rooms);
+    socket.broadcast.emit('updateLobby', lobbyList);
   });
 
   // Update game for each piece move
@@ -111,36 +124,17 @@ io.on('connection', (socket) => {
     socket.to(roomId).emit('syncGame', { boardSize, gameState, player1, player2, activePlayer, roomId });
   });
 
-  // Serve pending game list to lobby on lobby initialize
-  socket.on('fetchLobby', () => {
-    const games = [];
-    const { rooms } = io.sockets.adapter;
-    for (let roomId in rooms) {
-      const currentRoom = rooms[roomId];
-      if (!currentRoom.isFriendly && !(currentRoom.isPrivate && currentRoom.player2)) {
-        games.push({ name: roomId, boardSize: currentRoom.boardSize, isPending: !currentRoom.player2 });
-      }
-    }
-    socket.emit('updateLobby', games);
+  // Add 'isClosed' property to finished game and update lobby
+  socket.on('closeGame', (roomId) => {
+    io.sockets.adapter.rooms[roomId].isClosed = true;
+    const lobbyList = filterLobbyList(io.sockets.adapter.rooms);
+    socket.broadcast.emit('updateLobby', lobbyList);
   });
 
-  // Create a new game
-  socket.on('createGame', async ({ username, boardSize, isFriendGame, isPrivate, roomName }) => {
-    let roomId = roomName;
-    if (io.sockets.adapter.rooms[roomId]) {
-      roomId = Math.random().toString(36).slice(2, 9);
-    }
-    await socket.join(roomId);
-    const room = io.sockets.adapter.rooms[roomId];
-    room.player1 = username;
-    room.activePlayer = username;
-    room.boardSize = boardSize
-    room.isFriendGame = isFriendGame;
-    room.isPrivate = isPrivate;
-    room.spectators = {};
-    socket.emit('gameInitiated', {
-      roomId
-    });
+  // Serve pending game list to lobby on lobby initialize
+  socket.on('fetchLobby', () => {
+    const lobbyList = filterLobbyList(io.sockets.adapter.rooms);
+    socket.emit('updateLobby', lobbyList);
   });
 
   //Chat/Typing
