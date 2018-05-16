@@ -38,6 +38,18 @@ const User = sequelize.define('user', {
     type: Sequelize.STRING,
     unique: true,
   },
+  total_games: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+  },
+  ranked_games: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+  },
+  ranked_wins: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+  },
 });
 
 const Game = sequelize.define('game', {

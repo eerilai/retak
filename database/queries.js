@@ -57,7 +57,8 @@ const createUser = (userInfo) => {
 
 const logGame = (gameInfo) => {
   return new Promise(async (res, rej) => {
-    const { player1, player2, size, winType, victor, ptn, tps, ranked } = gameInfo;
+    const { player1, player2, size, winType, victor, ptn, tps } = gameInfo;
+    let { ranked } = gameInfo;
     let player1_id = null;
     let player2_id = null;
     try {
@@ -68,6 +69,7 @@ const logGame = (gameInfo) => {
     } catch (err) {
       console.error(err);
     }
+    if (player1_id && player2_id) ranked = true;
     Game.create({
       player1,
       player1_id,
@@ -80,6 +82,22 @@ const logGame = (gameInfo) => {
       board_size: size,
       ranked,
     });
+    if (player1_id !== null) {
+      User.increment('total_games', { where: { id: player1_id } });
+      if (ranked === true && player1 === victor) {
+        User.increment(['ranked_games', 'ranked_wins'], { where: { id: player1_id } });
+      } else if (ranked === true) {
+        User.increment('ranked_games', { where: { id: player1_id } });
+      }
+    }
+    if (player2_id !== null) {
+      User.increment('total_games', { where: { id: player2_id } });
+      if (ranked === true && player2 === victor) {
+        User.increment(['ranked_games', 'ranked_wins'], { where: { id: player2_id } });
+      } else if (ranked === true) {
+        User.increment('ranked_games', { where: { id: player2_id } });
+      }
+    }
   });
 };
 
