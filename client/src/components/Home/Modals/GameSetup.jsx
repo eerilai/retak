@@ -17,10 +17,12 @@ class GameSetup extends Component {
     this.state = {
       boardSize: 0,
       isPrivate: false,
+      roomName: ''
     }
 
     this.handleBoardSizeChange = this.handleBoardSizeChange.bind(this);
     this.handlePrivacyChange = this.handlePrivacyChange.bind(this);
+    this.handleRoomNameChange = this.handleRoomNameChange.bind(this);
   }
 
   handleBoardSizeChange(e, { value }) {
@@ -29,9 +31,15 @@ class GameSetup extends Component {
     });
   }
 
-  handlePrivacyChange(e, { value }) {
+  handlePrivacyChange() {
     this.setState({
       isPrivate: !this.state.isPrivate
+    });
+  }
+
+  handleRoomNameChange(e, { value }) {
+    this.setState({
+      roomName: value
     });
   }
 
@@ -44,6 +52,8 @@ class GameSetup extends Component {
       { key: '4', text: '4', value: '4' },
       { key: '3', text: '3', value: '3' }
     ];
+    const isFriendly = this.props.gameType === 'friend';
+    const { boardSize, isPrivate, roomName } = this.state;
     return (
         <Modal
           open={this.props.modalView === 'GameSetup'}
@@ -67,6 +77,13 @@ class GameSetup extends Component {
                 label="Private"
                 onChange={this.handlePrivacyChange}
               />
+              <Form.Input
+                type="text"
+                label="Room Name"
+                placeholder="optional"
+                value={this.state.roomName}
+                onChange={this.handleRoomNameChange}
+              />
             </Form>
           </Modal.Content>
           <Modal.Actions>
@@ -76,7 +93,7 @@ class GameSetup extends Component {
               size="large"
               labelPosition="right"
               content="New Game"
-              onClick={() => this.props.handleCreateGame(this.state.boardSize, this.props.gameType === 'friend', this.state.isPrivate)}
+              onClick={() => this.props.handleCreateGame(boardSize, isFriendly, isPrivate, roomName)}
             />
           </Modal.Actions>
         </Modal>

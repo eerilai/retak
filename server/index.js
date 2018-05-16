@@ -125,8 +125,11 @@ io.on('connection', (socket) => {
   });
 
   // Create a new game
-  socket.on('createGame', async ({ username, boardSize, isFriendGame, isPrivate }) => {
-    const roomId = Math.random().toString(36).slice(2, 9);
+  socket.on('createGame', async ({ username, boardSize, isFriendGame, isPrivate, roomName }) => {
+    let roomId = roomName;
+    if (io.sockets.adapter.rooms[roomId]) {
+      roomId = Math.random().toString(36).slice(2, 9);
+    }
     await socket.join(roomId);
     const room = io.sockets.adapter.rooms[roomId];
     room.player1 = username;
