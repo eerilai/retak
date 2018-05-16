@@ -184,23 +184,25 @@ class LiveGame extends Component {
 
     let PlayerPieces;
     let OpponentPieces;
-    let opponentName, opponentNo, playerNo, color;
-    if (username === game.player1) {
-      opponentName = game.player2;
-      opponentNo = 2;
-      playerNo = 1;
-      color = 'btn-player1-piece';
-    } else {
-      opponentName = game.player1;
-      opponentNo = 1;
-      playerNo = 2;
+    let topPlayerName, bottomPlayerName, topPlayerNo, bottomPlayerNo, color;
+    if (username === game.player2) {
+      topPlayerName = game.player1;
+      bottomPlayerName = username;
+      topPlayerNo = 1;
+      bottomPlayerNo = 2;
       color = 'btn-player2-piece';
+    } else {
+      topPlayerName = game.player2;
+      bottomPlayerName = game.player1;
+      topPlayerNo = 2;
+      bottomPlayerNo = 1;
+      color = 'btn-player1-piece';
     }
 
     PlayerPieces = (
       <div className="score">
       <table>
-        <tr><td>{`${game.pieces[playerNo].F} / ${game.pieces[playerNo].C}`}</td><td>{game[`p${playerNo}FlatScore`]}</td></tr>
+        <tr><td>{`${game.pieces[bottomPlayerNo].F} / ${game.pieces[bottomPlayerNo].C}`}</td><td>{game[`p${bottomPlayerNo}FlatScore`]}</td></tr>
         <tr style={{'font-size': '10px'}}><td>Stones</td><td>Score</td></tr>
       </table>
       </div>
@@ -209,7 +211,7 @@ class LiveGame extends Component {
       <div className="score">
       <table>
         <tr style={{'font-size': '10px'}}><td>Stones</td><td>Score</td></tr>
-        <tr><td>{`${game.pieces[opponentNo].F} / ${game.pieces[opponentNo].C}`}</td><td>{game[`p${opponentNo}FlatScore`]}</td></tr>
+        <tr><td>{`${game.pieces[topPlayerNo].F} / ${game.pieces[topPlayerNo].C}`}</td><td>{game[`p${topPlayerNo}FlatScore`]}</td></tr>
       </table>
       </div>
     );
@@ -224,9 +226,9 @@ class LiveGame extends Component {
           {this.opponentTurn()}
           <table>
             {OpponentPieces}
-            <tr>{opponentName}</tr>
-            <PTN ptn={this.state.game.ptn} />
-            <tr>{this.props.username}</tr>
+            <tr>{topPlayerName}</tr>
+            <PTN ptn={game.ptn} />
+            <tr>{bottomPlayerName}</tr>
             {PlayerPieces}
           </table>
           {this.userTurn()}
@@ -239,10 +241,10 @@ class LiveGame extends Component {
             <div className="stone-select">
               <div className="active-stone">{stone}</div>
               <button className={color} onClick={() => { this.toggleStanding(); }}>
-                { stone === 'S' ? 'F' : 'S' }({ game.pieces[playerNo].F })
+                { stone === 'S' ? 'F' : 'S' }({ game.pieces[bottomPlayerNo].F })
               </button>
               <button className={color} onClick={() => { this.selectCapstone('C'); }}>
-              C ({game.pieces[playerNo].C})
+              C ({game.pieces[bottomPlayerNo].C})
               </button>
             </div>
           </div>
