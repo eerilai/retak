@@ -57,12 +57,13 @@ const createUser = (userInfo) => {
 
 const logGame = (gameInfo) => {
   return new Promise((res, rej) => {
-    const { player1, player2, size, winType, victor, ptn, ranked } = gameInfo;
+    const { player1, player2, size, winType, victor, ptn, tps, ranked } = gameInfo;
     Game.create({
       player1,
       player2,
       ptn,
       victor,
+      board_state: tps,
       win_type: winType,
       board_size: size,
       ranked,

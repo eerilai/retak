@@ -101,7 +101,7 @@ class LiveGame extends Component {
     if (game.winType) {
       socket.emit('closeGame', match.params.roomId);
       if (game.victorUsername === this.props.username) {
-        const { player1, player2, ptnString, victorUsername, size, winType, ranked } = game;
+        const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
         axios.post('/record', {
           player1,
           player2,
@@ -109,6 +109,7 @@ class LiveGame extends Component {
           winType,
           victor: victorUsername,
           ptn: ptnString,
+          tps,
           ranked,
         });
       }
