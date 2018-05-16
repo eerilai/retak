@@ -278,7 +278,10 @@ class Game {
                  stack.stone === 'S' &&
                  this.toMove.stone === 'C' &&
                  this.toMove.stack.length === 1) {
+        this.setMoveDir(stack);
+        this.toMove.coord = coord;
         stack.place(this.toMove.stack.pop(), 'C');
+        this.parsePTN();
         this.toMove.coord = '';
         Object.keys(this.squares)
           .forEach((c) => { this.squares[c].validMove = false; });
