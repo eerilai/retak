@@ -1,15 +1,15 @@
-const express = require("express");
-const session = require("express-session");
-const passport = require("passport");
-const path = require("path");
-const bodyParser = require("body-parser");
-const socket = require("socket.io");
+const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
+const path = require('path');
+const bodyParser = require('body-parser');
+const socket = require('socket.io');
 
-require("dotenv").config();
+require('dotenv').config();
 
-const db = require("../database");
-const { logGame } = require("../database/queries")
-const authRoutes = require("./routes/authRoutes");
+const db = require('../database');
+const { logGame } = require('../database/queries')
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
@@ -28,28 +28,28 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/auth", authRoutes);
+app.use('/auth', authRoutes);
 
 // Implement authorization check for relevant requests, ie profile, logout, etc
 const authCheck = (req, res, next) => {
   if (!req.user) {
-    res.redirect("/");
+    res.redirect('/');
   } else {
     next();
   }
 };
 
-app.use("/", express.static(path.join(__dirname, "../client/dist")));
+app.use('/', express.static(path.join(__dirname, '../client/dist')));
 
 app.post('/record', (req, res) => {
   logGame(req.body);
 });
 
-app.get("/bundle.js", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/bundle.js"));
+app.get('/bundle.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/bundle.js'));
 });
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
@@ -141,10 +141,10 @@ io.on('connection', (socket) => {
   });
 
   //Chat/Typing
-  socket.on("chat", function(data) {
-    io.sockets.emit("chat", data);
+  socket.on('chat', function(data) {
+    io.sockets.emit('chat', data);
   });
-  socket.on("typing", function(data) {
-    socket.broadcast.emit("typing", data);
+  socket.on('typing', function(data) {
+    socket.broadcast.emit('typing', data);
   });
 });

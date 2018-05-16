@@ -87,14 +87,16 @@ class LiveGame extends Component {
     this.setState({
       game
     });
-    this.props.socket.emit("updateGame", {
-      gameState: {
-        ptn: this.state.game.ptn,
-        tps: this.state.game.tps
-      },
-      activePlayer: this.state.game.activePlayer,
-      roomId: this.props.match.params.roomId,
-    });
+    if (this.state.username !== game.activePlayer) {
+      this.props.socket.emit("updateGame", {
+        gameState: {
+          ptn: this.state.game.ptn,
+          tps: this.state.game.tps
+        },
+        activePlayer: this.state.game.activePlayer,
+        roomId: this.props.match.params.roomId,
+      });
+    }
   }
 
   handleSquareClick(col, row) {

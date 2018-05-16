@@ -140,7 +140,7 @@ class Game {
 
   readTPS(tps) {
     let parsedTPS = tps.split('').slice(6, tps.length - 2).join('').split(' ');
-    this.turn = +parsedTPS.pop();
+    this.turn = +parsedTPS.pop() - 1;
     this.toPlay = +parsedTPS.pop();
     parsedTPS = parsedTPS.join('').split('/');
     parsedTPS.forEach((row, i) => { parsedTPS[i] = row.split(',') });
