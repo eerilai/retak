@@ -3,7 +3,7 @@ import { pieceCount, convertCoord } from './gameUtil';
 import Stack from './Stack';
 
 class Game {
-  constructor(size, player1 = 'p1', player2 = 'p2', ranked = false) {
+  constructor(size, gameState = 'new', ranked = false, player1 = 'p1', player2 = 'p2' ) {
     this.toPlay = 1;
     this.activePlayer = null;
     this.player1 = null;
@@ -41,6 +41,13 @@ class Game {
     this.p2FlatScore = 0;
     this.victorUsername = 'Nobody'; // Wining Player Username or 'Nobody'
     this.loserUsername = 'Nobody'; // Loosing Player Username or 'Nobody'
+
+    if (gameState !== 'new') {
+      const { tps, ptn } = gameState;
+      this.readTPS(tps);
+      this.tps = tps;
+      this.ptn = ptn;
+    }
   }
 
   createBoard(size) {
@@ -119,7 +126,8 @@ class Game {
       for (let col = 0; col < this.size; col += 1) {
         const stack = board[col][row];
         if (!stack.isEmpty) {
-          tpsRow.push([...stack.stack, stack.stone].join(''));
+          const rstack = [...stack.stack].reverse();
+          tpsRow.push([...rstack, stack.stone].join(''));
         } else {
           tpsRow.push('x');
         }
@@ -127,7 +135,33 @@ class Game {
       tpsArray.push(tpsRow.join(','));
     }
     let tps = tpsArray.join('/');
-    this.tps = `[TPS] "${tps} ${this.toPlay} ${this.turn + 1}"`;
+    this.tps = `[TPS "${tps} ${this.toPlay} ${this.turn + 1}"]`;
+  }
+
+  readTPS(tps) {
+    let parsedTPS = tps.split('').slice(6, tps.length - 2).join('').split(' ');
+    this.turn = +parsedTPS.pop();
+    this.toPlay = +parsedTPS.pop();
+    parsedTPS = parsedTPS.join('').split('/');
+    parsedTPS.forEach((row, i) => { parsedTPS[i] = row.split(',') });
+    parsedTPS = parsedTPS.join(',').split(',');
+    for (let row = this.size - 1; row >= 0; row -= 1) {
+      for (let col = 0; col < this.size; col += 1) {
+        const stack = this.board[col][row];
+        let square = parsedTPS.shift();
+        if (square !== 'x') {
+          const stone = square[square.length - 1];
+          if (stone === 'C' || stone === 'S') {
+            stack.stone = square.split('').pop();
+            square = square.slice(0, square.length - 1);
+          }
+          let s = square.split('').reverse().map(x=>+x);
+          stack.stack = s;
+          stack.isEmpty = false;
+          stack.owner = s[0];
+        }
+      }
+    }
   }
 
   selectStack(col, row, stone = '') {
