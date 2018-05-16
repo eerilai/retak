@@ -8,9 +8,9 @@ const Nav = props => (
       <nav>
         <Link to="/">Home</Link>
       </nav>
-      <nav>
+      {/* <nav>
         <Link to="/profile">Profile</Link>
-      </nav>
+      </nav> */}
       <nav>
         <Link to="/learn">Learn</Link>
       </nav>

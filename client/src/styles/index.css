@@ -8,7 +8,6 @@ body {
   margin: 0;
   padding: 0;
   font-family: helvetica;
-  background-color: #eeeeee;
 }
 
 button {
@@ -62,10 +61,10 @@ i.icon.sign.in:before {
 
 #nav {
   font-family: helvetica;
-  font-size: 12px;
+  font-size: 14px;
   grid-area: nav;
   display: grid;
-  grid-template-columns: 200px 500px 100px 200px;
+  grid-template-columns: 200px 560px 240px;
   grid-template-areas: "navl main-nav user-nav navr";
 }
 

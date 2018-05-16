@@ -7,7 +7,7 @@ const Square = ({ game, row, col, handleSquareClick }) => {
   const coord = convertCoord([col, row]);
   const stack = game.board[col][row];
   const valid = stack.validMove ? 'valid' : '';
-  const origin = stack === stack.game.moveFrom ? 'origin' : '';
+  const origin = stack === game.moveOrigin ? 'origin' : '';
 
   const squareStyle = {
     width: squareSize,

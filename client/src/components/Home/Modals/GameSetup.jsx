@@ -7,22 +7,31 @@ import {
   Icon,
   Form,
   Select,
-  Transition
+  Transition,
+  Checkbox
 } from 'semantic-ui-react';
 
 class GameSetup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      boardSize: 0
+      boardSize: 0,
+      isPrivate: false,
     }
 
     this.handleBoardSizeChange = this.handleBoardSizeChange.bind(this);
+    this.handlePrivacyChange = this.handlePrivacyChange.bind(this);
   }
 
   handleBoardSizeChange(e, { value }) {
     this.setState({
       boardSize: Number(value)
+    });
+  }
+
+  handlePrivacyChange(e, { value }) {
+    this.setState({
+      isPrivate: !this.state.isPrivate
     });
   }
 
@@ -45,14 +54,20 @@ class GameSetup extends Component {
         >
           <Modal.Header>GameSetup</Modal.Header>
           <Modal.Content>
-            <Form size={"tiny"} key={"small"} />
-            <Form.Field
-              control={Select}
-              label="Board Size"
-              options={options}
-              placeholder="Board Size"
-              onChange={this.handleBoardSizeChange}
-            />
+            <Form size={"tiny"} key={"small"}>
+              <Form.Field
+                control={Select}
+                label="Board Size"
+                options={options}
+                placeholder="Board Size"
+                onChange={this.handleBoardSizeChange}
+              />
+              <Form.Field
+                control={Checkbox}
+                label="Private"
+                onChange={this.handlePrivacyChange}
+              />
+            </Form>
           </Modal.Content>
           <Modal.Actions>
             <Button
@@ -61,7 +76,7 @@ class GameSetup extends Component {
               size="large"
               labelPosition="right"
               content="New Game"
-              onClick={() => this.props.handleCreateGame(this.state.boardSize, this.props.gameType === 'friend')}
+              onClick={() => this.props.handleCreateGame(this.state.boardSize, this.props.gameType === 'friend', this.state.isPrivate)}
             />
           </Modal.Actions>
         </Modal>
