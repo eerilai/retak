@@ -10,7 +10,6 @@ require("dotenv").config();
 const db = require("../database");
 const { logGame } = require("../database/queries")
 const authRoutes = require("./routes/authRoutes");
-const Game = require('./Game/Game');
 
 const app = express();
 
@@ -68,26 +67,26 @@ io.on('connection', (socket) => {
 
   socket.on('fetchGame', async ({ username, roomId }) => {
     const room = io.sockets.adapter.rooms[roomId];
-    const { game, isPrivate, spectators } = room;
-    const { player1, player2 } = game;
+    const { gameState, activePlayer, boardSize, isPrivate, spectators } = room;
+    const { player1, player2 } = room;
     if (username === player1) {
-      // if (!player2) {
-      //   socket.emit('pendingGame', { game, roomId } );
-      // } else {
-      //   socket.emit('syncGame', { game, roomId });
-      // }
+      if (!player2) {
+        socket.emit('pendingGame', { boardSize, roomId } );
+      } else {
+        io.to(roomId).emit('syncGame', { boardSize, gameState, roomId, player1, player2, activePlayer });
+      }
     } else if (!player2) {
       await socket.join(roomId);
-      game.player2 = username;
-      // socket.emit('syncGame', { game, roomId });
+      room.player2 = username;
+      io.to(roomId).emit('syncGame', { boardSize, gameState: 'new', roomId, player1, player2: room.player2, activePlayer });
     } else if (username !== player2 && isPrivate) {
-      // socket.emit('gameAccessDenied');
+      socket.emit('gameAccessDenied');
     } else {
-      if (!spectators[username]) {
+      if (username !== player2) {
         await socket.join(roomId);
         room.spectators[username] = username;
       }
-      // socket.emit('syncGame', { game, roomId });     
+      socket.emit('syncGame', { boardSize, gameState, roomId, player1, player2, activePlayer });
     }
 
     // Update lobby
@@ -95,21 +94,21 @@ io.on('connection', (socket) => {
     const { rooms } = io.sockets.adapter;
     for (let roomId in rooms) {
       const currentRoom = rooms[roomId];
-      if (!currentRoom.isFriendly && !(currentRoom.isPrivate && currentRoom.game.player2)) {
-        games.push({ name: roomId, boardSize: currentRoom.game.boardSize, isPending: !currentRoom.game.player2 });
+      if (!currentRoom.isFriendly && !(currentRoom.isPrivate && currentRoom.player2)) {
+        games.push({ name: roomId, boardSize: currentRoom.boardSize, isPending: !currentRoom.player2 });
       }
     }
     socket.broadcast.emit('updateLobby', games);
   });
 
   // Update game for each piece move
-  socket.on('updateGame', ({ col, row, stone, roomId }) => {
-    const { game } = io.sockets.adapter.rooms[roomId];    
-    let lastActivePlayer = game.activePlayer;
-    game.selectStack(col, row, stone);
-    if (lastActivePlayer !== game.activePlayer) {
-      socket.to(roomId).emit('syncGame', { game, roomId });
-    }
+  socket.on('updateGame', ({ gameState, activePlayer, roomId }) => {
+    const room = io.sockets.adapter.rooms[roomId];
+    room.gameState = gameState;
+    room.activePlayer = activePlayer;
+    const { boardSize, player1, player2 } = room;
+
+    socket.to(roomId).emit('syncGame', { boardSize, gameState, player1, player2, activePlayer, roomId });
   });
 
   // Serve pending game list to lobby on lobby initialize
@@ -118,8 +117,8 @@ io.on('connection', (socket) => {
     const { rooms } = io.sockets.adapter;
     for (let roomId in rooms) {
       const currentRoom = rooms[roomId];
-      if (!currentRoom.isFriendly && !(currentRoom.isPrivate && currentRoom.game.player2)) {
-        games.push({ name: roomId, boardSize: currentRoom.game.boardSize, isPending: !currentRoom.game.player2 });
+      if (!currentRoom.isFriendly && !(currentRoom.isPrivate && currentRoom.player2)) {
+        games.push({ name: roomId, boardSize: currentRoom.boardSize, isPending: !currentRoom.player2 });
       }
     }
     socket.emit('updateLobby', games);
@@ -130,16 +129,15 @@ io.on('connection', (socket) => {
     const roomId = Math.random().toString(36).slice(2, 9);
     await socket.join(roomId);
     const room = io.sockets.adapter.rooms[roomId];
-    room.game = new Game(boardSize);
-    room.game.player1 = username;
-    room.game.activePlayer = username;
-    room.isPrivate = isPrivate;
+    room.player1 = username;
+    room.activePlayer = username;
+    room.boardSize = boardSize
     room.isFriendGame = isFriendGame;
+    room.isPrivate = isPrivate;
     room.spectators = {};
     socket.emit('gameInitiated', {
       roomId
     });
-    
   });
 
   //Chat/Typing

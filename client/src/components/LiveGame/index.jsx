@@ -44,17 +44,20 @@ class LiveGame extends Component {
       roomId
     });
     
-    socket.on('syncGame', ({ game, roomId }) => {
+    socket.on('syncGame', ({ boardSize, gameState, player1, player2, roomId, activePlayer }) => {
       if (roomId === props.match.params.roomId) {
+        const game = new Game(boardSize, gameState, player1, player2);
+        game.activePlayer = activePlayer;
         this.setState({
           game
         });
       }
     });
 
-    socket.on('pendingGame', ({ game, roomId }) => {
+    socket.on('pendingGame', ({ boardSize, roomId }) => {
       if (roomId === props.match.params.roomId) {
-        game.player2 = username;
+        const game = new Game(boardSize, 'new', username, username);
+        game.activePlayer = username;
         this.setState({
           game
         });
@@ -84,11 +87,12 @@ class LiveGame extends Component {
     this.setState({
       game
     });
-
     this.props.socket.emit("updateGame", {
-      col,
-      row,
-      stone,
+      gameState: {
+        ptn: this.state.game.ptn,
+        tps: this.state.game.tps
+      },
+      activePlayer: this.state.game.activePlayer,
       roomId: this.props.match.params.roomId,
     });
   }

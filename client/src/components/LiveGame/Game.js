@@ -3,11 +3,11 @@ import { pieceCount, convertCoord } from './gameUtil';
 import Stack from './Stack';
 
 class Game {
-  constructor(size, gameState = 'new', ranked = false, player1 = 'p1', player2 = 'p2' ) {
+  constructor(size, gameState = 'new', player1 = null, player2 = null, ranked = false) {
     this.toPlay = 1;
     this.activePlayer = null;
-    this.player1 = null;
-    this.player2 = null;
+    this.player1 = player1;
+    this.player2 = player2;
     this.victor = 0; // 0, 1, or 2
     this.winType = null; // null, R, F, 1 or 1/2
     this.winString = '';
