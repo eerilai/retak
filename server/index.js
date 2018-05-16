@@ -137,7 +137,7 @@ io.on('connection', (socket) => {
     socket.emit('updateLobby', lobbyList);
   });
 
-  //Chat/Typing
+  // Chat/Typing
   socket.on('chat', function(data) {
     io.sockets.emit('chat', data);
   });

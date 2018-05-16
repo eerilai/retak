@@ -167,19 +167,27 @@ class LiveGame extends Component {
   }
 
   opponentTurn() {
-    const { activePlayer } = this.state.game;
-    if (activePlayer !== this.props.username) {
+    const { activePlayer, player1, player2 } = this.state.game;
+    const { username } = this.props;
+    const isPlayer = username === player1 || username === player2;
+    if (activePlayer !== username && isPlayer) {
       return <div className="to-play">Waiting for Opponent...</div>;
+    } else if (isPlayer || activePlayer === player1) {
+      return <div className="to-play" />;
     }
-    return <div className="to-play" />;
+    return <div className="to-play">{player2}'s turn</div>;
   }
   
   userTurn() {
-    const { activePlayer } = this.state.game;
-    if (activePlayer === this.props.username) {
+    const { activePlayer, player1, player2 } = this.state.game;
+    const { username } = this.props;
+    const isPlayer = username === player1 || username === player2;
+    if (activePlayer === username) {
       return <div className="to-play">Your turn</div>;
+    } else if (isPlayer || activePlayer === player2) {
+      return <div className="to-play" />;
     }
-    return <div className="to-play" />;
+    return <div className="to-play">{player1}'s turn</div>;
   }
 
   render() {
