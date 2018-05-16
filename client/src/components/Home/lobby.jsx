@@ -25,10 +25,15 @@ class Lobby extends Component {
         <tr>
           <th>Player</th>
           <th>Mode</th>
+          <th>Board</th>
+          <th>Status</th>
         </tr>
         {this.state.games.map(game => (
           <tr className="room">
             <td><Link to={`/game/${game.name}`}>{game.name}</Link></td>
+            <td>FILL ME IN</td>
+            <td>{game.boardSize}</td>
+            <td>{game.isPending ? 'pending...' : 'active'}</td>
           </tr>
         ))}
       </table>
