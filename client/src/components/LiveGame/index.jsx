@@ -100,6 +100,18 @@ class LiveGame extends Component {
     }
     if (game.winType) {
       socket.emit('closeGame', match.params.roomId);
+      if (game.victorUsername === this.props.username) {
+        const { player1, player2, ptnString, victorUsername, size, winType, ranked } = game;
+        axios.post('/record', {
+          player1,
+          player2,
+          size,
+          winType,
+          victor: victorUsername,
+          ptn: ptnString,
+          ranked,
+        });
+      }
     }
   }
 
@@ -128,7 +140,7 @@ class LiveGame extends Component {
 
   winner() {
     let winner = this.state.game.victorUsername;
-    let loser = this.state.game.looserUsername;
+    let loser = this.state.game.loserUsername;
     if (this.state.game.winType === '1/2') {
       return <p>{`It's a Draw! ${winner} wins!`}</p>;
     }
