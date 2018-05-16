@@ -38,22 +38,37 @@ class LiveGame extends Component {
 
     const { socket, username } = props;
     const { roomId } = props.match.params;
-    socket.emit('syncGame', {
+    
+    socket.emit('fetchGame', {
       username,
       roomId
     });
-    socket.on('playerJoin', ({ boardSize, player1, player2 }) => {
-      const game = new Game(boardSize);
-      game.player1 = player1;
-      game.player2 = player2;
-      game.activePlayer = player1;
-      this.setState({
-        game
-      });
-    });
-    socket.on("opponentMove", ({ col, row, stone, roomId }) => {
+    
+    socket.on('syncGame', ({ boardSize, gameState, player1, player2, roomId, activePlayer }) => {
       if (roomId === props.match.params.roomId) {
-        this.movePieces(col, row, false, stone);
+        const game = new Game(boardSize, gameState, player1, player2);
+        game.activePlayer = activePlayer;
+        this.setState({
+          game
+        });
+      }
+    });
+
+    socket.on('pendingGame', ({ boardSize, roomId }) => {
+      if (roomId === props.match.params.roomId) {
+        const game = new Game(boardSize, 'new', username, username);
+        game.activePlayer = username;
+        this.setState({
+          game
+        });
+      }
+    });
+
+    socket.on('gameAccessDenied', (roomId) => {
+      if (roomId === props.match.params.roomId) {
+        this.setState({
+          accessDenied: true
+        });
       }
     });
 
@@ -61,8 +76,8 @@ class LiveGame extends Component {
     // this.sounds = { brick: sound_brick_drop };
   }
 
-  movePieces(col, row, isPlayerMove, stone = this.state.stone) {
-    const { game } = this.state;
+  movePieces(col, row) {
+    const { game, stone } = this.state;
     game.selectStack(col, row, stone);
     if (this.state.stone !== "") {
       this.setState({
@@ -72,12 +87,13 @@ class LiveGame extends Component {
     this.setState({
       game
     });
-
-    if (isPlayerMove) {
+    if (this.state.username !== game.activePlayer) {
       this.props.socket.emit("updateGame", {
-        col,
-        row,
-        stone,
+        gameState: {
+          ptn: this.state.game.ptn,
+          tps: this.state.game.tps
+        },
+        activePlayer: this.state.game.activePlayer,
         roomId: this.props.match.params.roomId,
       });
     }
@@ -85,7 +101,7 @@ class LiveGame extends Component {
 
   handleSquareClick(col, row) {
     if (this.props.username === this.state.game.activePlayer) {
-      this.movePieces(col, row, true);
+      this.movePieces(col, row);
       // this.play("brick");
     }
   }
@@ -122,7 +138,7 @@ class LiveGame extends Component {
     } else if (this.state.game.winType === "R") {
       return (
         <div>
-          <p>Road Complited <br/></p>
+          <p>Road Completed <br/></p>
           <p>{`Player ${winner} wins! & Player ${loser} lost!`}</p>
         </div>
       );

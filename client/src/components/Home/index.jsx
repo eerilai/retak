@@ -36,11 +36,12 @@ class Home extends Component {
     });
   }
 
-  handleCreateGame(boardSize, isPrivate) {
+  handleCreateGame(boardSize, isFriendly, isPrivate) {
     const { socket, username } = this.props;
     socket.emit('createGame', {
       username,
       boardSize,
+      isFriendly,
       isPrivate
     });
     socket.on('gameInitiated', ({ roomId }) => {
