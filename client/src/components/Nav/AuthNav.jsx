@@ -8,6 +8,7 @@ import { Dropdown, Icon, Image } from 'semantic-ui-react';
 import ProfileModal from "./UserModals/ProfileModal";
 import SettingsModal from "./UserModals/SettingsModal";
 import HelpModal from "./UserModals/HelpModal";
+// import defaultAvatar from "./UserModals/defultAvatar.png";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -19,9 +20,11 @@ class AuthNav extends Component {
     super(props);
     this.state = {
       modalView: "off",
-      open: false
+      open: false,
+      selectModal: ''
     };
     this.changeView = this.changeView.bind(this);
+    this.changeModalView = this.changeModalView.bind(this);
   }
 
   componentDidMount() {
@@ -45,12 +48,17 @@ class AuthNav extends Component {
     });
   }
 
+  changeModalView(view) {
+    this.setState({ selectModal : view });
+  }
+
   onClose = () => { this.setState({open: false}) }
   
   handleChange = (e, { value }) => {
     console.log(e, value);
     if( value === 'profile'){
-      console.log('Profile')
+      console.log('Profile', value)
+      this.setState({selectModal: value})
     }
     if( value === 'settings'){
       console.log('Settings')
@@ -59,7 +67,7 @@ class AuthNav extends Component {
       console.log('Help')
     }
     if(value === 'logout'){
-      this.setState({modalView:'logout'});
+      this.setState({modalView: value});
     }
   }
 
@@ -67,17 +75,19 @@ class AuthNav extends Component {
     // Conditionals need to be set in place for
     // rendering either login/signup nav or logout nav
     // - will need access to redux state once redux implemented
-    const { modalView } = this.state;
+    const { modalView, selectModal } = this.state;
     const { isLoggedIn, currentUser } = this.props;
     const { value } = this.state;
+    // const avatarImg = defaultAvatar;
 
     const userNavLink = (
       <nav>
         <div id="user-nav">
           <Dropdown
             text={<span>
+              {/* <Image avatar src={avatarImg} /> Hello, {currentUser} */}
               <Icon name='user circle outline' /> Hello, {currentUser}
-              {/* <Image avatar src={faker.internet.avatar()} /> {faker.name.findName()} */}
+              {/* <Image avatar src={faker.internet.avatar()} /> Hello, {currentUser} */}              
             </span>} 
             pointing='top left' 
             // icon={null}
@@ -109,6 +119,7 @@ class AuthNav extends Component {
         <SignupModal toggleView={this.changeView} modalView={modalView} />
         <LoginModal toggleView={this.changeView} modalView={modalView} />
         <LogoutModal toggleView={this.changeView} modalView={modalView} />
+        <ProfileModal selectModal={this.state.selectModal} changeModalView={this.changeModalView} handleChange={this.handleChange} />
       </div>
     );
   }
