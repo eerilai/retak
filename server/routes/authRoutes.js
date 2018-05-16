@@ -36,7 +36,7 @@ router.post('/signup', (req, res) => {
 
 router.post('/logout', (req, res) => {
   req.session.destroy((err) => {
-    res.send('Success');
+    // TODO: Put something here?
   });
 });
 

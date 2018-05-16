@@ -1,18 +1,25 @@
 import React, { Component } from "react";
+import axios from "axios";
 import SignupModal from "./AuthModals/SignupModal";
 import LoginModal from "./AuthModals/LoginModal";
 import LogoutModal from "./AuthModals/LogoutModal";
 
-import axios from "axios";
+import { Dropdown, Icon, Image } from 'semantic-ui-react';
+import ProfileModal from "./UserModals/ProfileModal";
+import SettingsModal from "./UserModals/SettingsModal";
+import HelpModal from "./UserModals/HelpModal";
+
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { toggleLoginLogout, login } from "../../actions/actions";
+
 
 class AuthNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalView: "off"
+      modalView: "off",
+      open: false
     };
     this.changeView = this.changeView.bind(this);
   }
@@ -38,19 +45,51 @@ class AuthNav extends Component {
     });
   }
 
+  onClose = () => { this.setState({open: false}) }
+  
+  handleChange = (e, { value }) => {
+    console.log(e, value);
+    if( value === 'profile'){
+      console.log('Profile')
+    }
+    if( value === 'settings'){
+      console.log('Settings')
+    }
+    if( value === 'help'){
+      console.log('Help')
+    }
+    if(value === 'logout'){
+      this.setState({modalView:'logout'});
+    }
+  }
+
   render() {
     // Conditionals need to be set in place for
     // rendering either login/signup nav or logout nav
     // - will need access to redux state once redux implemented
     const { modalView } = this.state;
-    const { isLoggedIn } = this.props;
+    const { isLoggedIn, currentUser } = this.props;
+    const { value } = this.state;
+
     const userNavLink = (
-      <nav
-        onClick={() => {
-          this.changeView("logout");
-        }}
-      >
-        Logout
+      <nav>
+        <div id="user-nav">
+          <Dropdown
+            text={<span>
+              <Icon name='user circle outline' /> Hello, {currentUser}
+              {/* <Image avatar src={faker.internet.avatar()} /> {faker.name.findName()} */}
+            </span>} 
+            pointing='top left' 
+            // icon={null}
+          >
+          <Dropdown.Menu>
+            <Dropdown.Item value="profile" onClick={ this.handleChange }><Icon name='user circle outline' /> Profile </Dropdown.Item>
+            <Dropdown.Item value="settings" onClick={ this.handleChange }><Icon name='settings' />Settings</Dropdown.Item>
+            <Dropdown.Item value="help" onClick={ this.handleChange }><Icon name='help' />Help</Dropdown.Item>
+            <Dropdown.Item value="logout" onClick={ this.handleChange }>Log Out <Icon name='sign out' /></Dropdown.Item>
+          </Dropdown.Menu>
+          </Dropdown>
+        </div>
       </nav>
     );
 
@@ -60,7 +99,7 @@ class AuthNav extends Component {
           this.changeView("login");
         }}
       >
-        Login
+        LogIn / SignUp
       </nav>
     );
 
