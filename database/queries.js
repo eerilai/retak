@@ -1,4 +1,4 @@
-const { User } = require('./index');
+const { User, Game } = require('./index');
 const { hashPassword, comparePassword } = require('./encryptionHelpers');
 
 const findUserById = (id) => {
@@ -55,8 +55,24 @@ const createUser = (userInfo) => {
   });
 }
 
+const logGame = (gameInfo) => {
+  return new Promise((res, rej) => {
+    const { player1, player2, size, winType, victor, ptn, ranked } = gameInfo;
+    Game.create({
+      player1,
+      player2,
+      ptn,
+      victor,
+      win_type: winType,
+      board_size: size,
+      ranked,
+    });
+  });
+};
+
 module.exports = {
   findUserById,
   findOrCreateUserByGoogleId,
-  createUser
+  createUser,
+  logGame
 };
