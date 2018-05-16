@@ -98,7 +98,7 @@ class LiveGame extends Component {
         roomId: match.params.roomId,
       });
     }
-    if (game.winType) {
+    if (game.winType && game.player1 !== game.player2) {
       socket.emit('closeGame', match.params.roomId);
       if (game.victorUsername === this.props.username) {
         const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
