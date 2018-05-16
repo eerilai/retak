@@ -162,6 +162,11 @@ class Game {
         }
       }
     }
+    this.checkRoads();
+    this.checkFullBoardWins();
+    if (this.pieces[this.toPlay].total === 0) {
+      this.checkOutOfPiecesWins();
+    }
   }
 
   selectStack(col, row, stone = '') {
