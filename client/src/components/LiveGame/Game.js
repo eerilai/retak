@@ -280,6 +280,7 @@ class Game {
                  this.toMove.stack.length === 1) {
         this.setMoveDir(stack);
         this.toMove.coord = coord;
+        this.step = stack.coord;
         stack.place(this.toMove.stack.pop(), 'C');
         this.parsePTN();
         this.toMove.coord = '';
