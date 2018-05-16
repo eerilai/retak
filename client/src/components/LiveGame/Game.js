@@ -162,6 +162,11 @@ class Game {
         }
       }
     }
+    this.checkRoads();
+    this.checkFullBoardWins();
+    if (this.pieces[this.toPlay].total === 0) {
+      this.checkOutOfPiecesWins();
+    }
   }
 
   selectStack(col, row, stone = '') {
@@ -273,7 +278,11 @@ class Game {
                  stack.stone === 'S' &&
                  this.toMove.stone === 'C' &&
                  this.toMove.stack.length === 1) {
+        this.setMoveDir(stack);
+        this.toMove.coord = coord;
+        this.step = stack.coord;
         stack.place(this.toMove.stack.pop(), 'C');
+        this.parsePTN();
         this.toMove.coord = '';
         Object.keys(this.squares)
           .forEach((c) => { this.squares[c].validMove = false; });
