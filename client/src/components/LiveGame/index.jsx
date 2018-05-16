@@ -78,8 +78,9 @@ class LiveGame extends Component {
 
   movePieces(col, row) {
     const { game, stone } = this.state;
+    const { socket, match } = this.props;
     game.selectStack(col, row, stone);
-    if (this.state.stone !== "") {
+    if (stone !== "") {
       this.setState({
         stone: ""
       });
@@ -88,14 +89,17 @@ class LiveGame extends Component {
       game
     });
     if (this.state.username !== game.activePlayer) {
-      this.props.socket.emit("updateGame", {
+      socket.emit("updateGame", {
         gameState: {
-          ptn: this.state.game.ptn,
-          tps: this.state.game.tps
+          ptn: game.ptn,
+          tps: game.tps
         },
-        activePlayer: this.state.game.activePlayer,
-        roomId: this.props.match.params.roomId,
+        activePlayer: game.activePlayer,
+        roomId: match.params.roomId,
       });
+    }
+    if (game.winType) {
+      socket.emit('closeGame', match.params.roomId);
     }
   }
 
