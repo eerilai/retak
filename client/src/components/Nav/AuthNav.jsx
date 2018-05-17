@@ -49,7 +49,9 @@ class AuthNav extends Component {
   }
 
   changeModalView(view) {
-    this.setState({ selectModal : view });
+    this.setState({ 
+      selectModal : view 
+    });
   }
 
   onClose = () => { this.setState({open: false}) }
