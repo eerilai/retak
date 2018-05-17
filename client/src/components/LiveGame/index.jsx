@@ -25,7 +25,7 @@ import {
 class LiveGame extends Component {
   constructor(props) {
     super(props);
-    const newGame = new Game(6);
+    const newGame = new Game(8);
     this.state = {
       game: newGame,
       stone: "",

@@ -41,8 +41,16 @@ button:hover {
   text-shadow: none;
 }
 
+.ui.modal > .content{
+ height: 200px;
+}
+
+.ui.modal > .actions {
+  text-align: center;
+}
+
 .ui.tiny.modal {
-  height: 50%;
+  height: 335px;
 }
 
 i.icon.sign.in:before {
