@@ -59,7 +59,7 @@ class Chat extends Component {
       ev.preventDefault();
       socket.emit('chat', {
         author: this.props.username,
-        message: 'Tak',
+        message: 'Tak!',
         room: roomID
       });
       this.setState({ message: '' });
