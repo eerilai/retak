@@ -6,10 +6,12 @@ import { LOGGEDIN, TOGGLE_LOGIN_LOGOUT } from '../actions/types';
 const rootReducer = (state = initialState, action) => {
    switch (action.type) {
     case LOGGEDIN:
-      let usernameOrEmail = action.payload;
+      let currentUserInfo = action.payload;
+      console.log("Reducers", currentUserInfo)
       return {
         ...state, 
-        currentUser: usernameOrEmail
+        currentUser: currentUserInfo.username,
+        
       };
     case TOGGLE_LOGIN_LOGOUT:
       return { 

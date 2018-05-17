@@ -49,7 +49,7 @@ const authCheck = ((req, res, next) => {
 });
 
 router.get('/check', authCheck, (req, res) => {
-  res.send(req.user.username);
+  res.send(req.user);
 });
 
 router.get('/test', authCheck, (req, res) => {

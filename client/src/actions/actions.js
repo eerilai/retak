@@ -1,9 +1,9 @@
 import types, { LOGGEDIN, TOGGLE_LOGIN_LOGOUT, SET_LOGGEDIN_PLAYERS } from './types';
 
-export const login = (usernameOrEmail) => (
+export const login = (currentUserInfo) => (
   {
     type: LOGGEDIN,
-    payload: usernameOrEmail
+    payload: currentUserInfo
   }
 );
 

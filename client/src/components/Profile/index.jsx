@@ -63,11 +63,11 @@ class Profile extends Component{
               <Menu fluid vertical tabular>
                 <Menu.Item name='stats' active={activeItem === 'stats'} onClick={this.handleItemClick} />
                 <Menu.Item name='activity' active={activeItem === 'activity'} onClick={this.handleItemClick} />
-                <Menu.Item name='profile' active={activeItem === 'profile'} onClick={this.handleItemClick} />
+                <Menu.Item name='updateProfile' active={activeItem === 'updateProfile'} onClick={this.handleItemClick} />
               </Menu>
             </Grid.Column>
 
-            <Grid.Column stretched width={12} activeIndex="stats">
+            <Grid.Column stretched width={12}>
               <Segment>
                 these are stats
               </Segment>

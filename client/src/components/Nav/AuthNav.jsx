@@ -31,10 +31,12 @@ class AuthNav extends Component {
     axios
       .get("/auth/check")
       .then(res => {
-        let currentUser = res.data;
-        if (currentUser[0] !== "<") {
+        console.log(res)
+        let currentUser = res.data.username;
+        let currentUserInfo = res.data;
+        if (currentUserInfo[0] !== "<") {
           this.props.toggleLoginLogout(true);
-          this.props.login(currentUser);
+          this.props.login(currentUserInfo);
         }
       })
       .catch(err => {
@@ -58,7 +60,7 @@ class AuthNav extends Component {
   
   handleChange = (e, { value }) => {
     console.log(e, value);
-    if( value === 'profile'){
+    if( value === 'updateProfile'){
       console.log('Profile', value)
       this.setState({selectModal: value})
     }
@@ -95,7 +97,7 @@ class AuthNav extends Component {
             // icon={null}
           >
           <Dropdown.Menu>
-            <Dropdown.Item value="profile" onClick={ this.handleChange }><Icon name='user circle outline' /> Profile </Dropdown.Item>
+            <Dropdown.Item value="updateProfile" onClick={ this.handleChange }><Icon name='user circle outline' /> Update Profile </Dropdown.Item>
             <Dropdown.Item value="settings" onClick={ this.handleChange }><Icon name='settings' />Settings</Dropdown.Item>
             <Dropdown.Item value="help" onClick={ this.handleChange }><Icon name='help' />Help</Dropdown.Item>
             <Dropdown.Item value="logout" onClick={ this.handleChange }>Log Out <Icon name='sign out' /></Dropdown.Item>
