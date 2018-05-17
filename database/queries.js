@@ -1,5 +1,7 @@
+const Sequelize = require('sequelize');
 const { User, Game } = require('./index');
 const { hashPassword, comparePassword } = require('./encryptionHelpers');
+const Op = Sequelize.Op;
 
 const findUserById = (id) => {
   return new Promise((resolve, reject) => {
@@ -112,10 +114,48 @@ const getLeaderboard = () => {
   });
 };
 
+const getUserData = (username) => {
+  return new Promise (async (res, rej) => {
+    const data =
+      await User.find({
+        attributes: [
+          'id',
+          'username',
+          'email',
+          'total_games',
+          'ranked_games',
+          'ranked_wins',
+          'createdAt',
+        ],
+        where: {
+          username,
+        },
+      });
+    res(data);
+  });
+};
+
+const getUserGames = (username) => {
+  return new Promise (async (res, rej) => {
+    const games =
+      await Game.findAll({
+        where: {
+          [Op.or]: [
+            { player1: username },
+            { player2: username },
+          ],
+        },
+      });
+    res(games);
+  });
+};
+
 module.exports = {
   findUserById,
   findOrCreateUserByGoogleId,
   createUser,
   logGame,
   getLeaderboard,
+  getUserData,
+  getUserGames,
 };

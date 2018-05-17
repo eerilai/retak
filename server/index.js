@@ -8,7 +8,7 @@ const sharedSession = require('express-socket.io-session');
 require('dotenv').config();
 
 const db = require('../database');
-const { logGame, getLeaderboard } = require('../database/queries');
+const { logGame, getLeaderboard, getUserGames, getUserData } = require('../database/queries');
 const authRoutes = require('./routes/authRoutes');
 const filterLobbyList = require('./lobbyHelper');
 
@@ -51,7 +51,18 @@ app.post('/record', (req, res) => {
 app.get('/leaderboard', async (req, res) => {
   const board = await getLeaderboard();
   res.json(board);
-})
+});
+
+app.get('/users/:username/data', async (req, res) => {
+  const data = await getUserData(req.params.username);
+  res.json(data);
+});
+
+app.get('/users/:username/games', async (req, res) => {
+  const games = await getUserGames(req.params.username);
+  console.log(games[0].games);
+  res.json(games);
+});
 
 app.get('/bundle.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/bundle.js'));
