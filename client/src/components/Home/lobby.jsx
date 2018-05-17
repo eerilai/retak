@@ -9,7 +9,6 @@ class Lobby extends Component {
       games: [],
       socket: props.socket
     };
-    this.joinGame = this.joinGame.bind(this);
 
     const { socket } = props;
     socket.emit('fetchLobby');
@@ -20,21 +19,21 @@ class Lobby extends Component {
     });
   }
 
-  joinGame(name) {
-    const { socket } = this.state;
-    socket.emit('joinGame', name);
-  }
-
   render() {
     return (
       <table>
         <tr>
           <th>Player</th>
           <th>Mode</th>
+          <th>Board</th>
+          <th>Status</th>
         </tr>
         {this.state.games.map(game => (
           <tr className="room">
-            <td><Link to={`/game/${game.name}`} onClick={() => {this.joinGame(game.name)}}>{game.name}</Link></td>
+            <td><Link to={`/game/${game.name}`}>{game.name}</Link></td>
+            <td>FILL ME IN</td>
+            <td>{game.boardSize}</td>
+            <td>{game.isPending ? 'pending...' : 'active'}</td>
           </tr>
         ))}
       </table>

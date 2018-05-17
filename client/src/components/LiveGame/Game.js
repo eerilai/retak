@@ -3,11 +3,11 @@ import { pieceCount, convertCoord } from './gameUtil';
 import Stack from './Stack';
 
 class Game {
-  constructor(size, gameState = 'new', ranked = false, player1 = 'p1', player2 = 'p2' ) {
+  constructor(size, gameState = 'new', player1 = null, player2 = null, ranked = false) {
     this.toPlay = 1;
     this.activePlayer = null;
-    this.player1 = null;
-    this.player2 = null;
+    this.player1 = player1;
+    this.player2 = player2;
     this.victor = 0; // 0, 1, or 2
     this.winType = null; // null, R, F, 1 or 1/2
     this.winString = '';
@@ -140,7 +140,7 @@ class Game {
 
   readTPS(tps) {
     let parsedTPS = tps.split('').slice(6, tps.length - 2).join('').split(' ');
-    this.turn = +parsedTPS.pop();
+    this.turn = +parsedTPS.pop() - 1;
     this.toPlay = +parsedTPS.pop();
     parsedTPS = parsedTPS.join('').split('/');
     parsedTPS.forEach((row, i) => { parsedTPS[i] = row.split(',') });
@@ -161,6 +161,11 @@ class Game {
           stack.owner = s[0];
         }
       }
+    }
+    this.checkRoads();
+    this.checkFullBoardWins();
+    if (this.pieces[this.toPlay].total === 0) {
+      this.checkOutOfPiecesWins();
     }
   }
 
@@ -273,7 +278,11 @@ class Game {
                  stack.stone === 'S' &&
                  this.toMove.stone === 'C' &&
                  this.toMove.stack.length === 1) {
+        this.setMoveDir(stack);
+        this.toMove.coord = coord;
+        this.step = stack.coord;
         stack.place(this.toMove.stack.pop(), 'C');
+        this.parsePTN();
         this.toMove.coord = '';
         Object.keys(this.squares)
           .forEach((c) => { this.squares[c].validMove = false; });

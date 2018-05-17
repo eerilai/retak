@@ -16,6 +16,7 @@ import {
 } from 'semantic-ui-react';
 import GameSetup from './Modals/GameSetup';
 import GameLink from './Modals/GameLink';
+import generateRoomName from './roomNames';
 
 class Home extends Component {
   constructor(props) {
@@ -36,12 +37,17 @@ class Home extends Component {
     });
   }
 
-  handleCreateGame(boardSize, isPrivate) {
+  handleCreateGame(boardSize, isFriendly, isPrivate, roomName) {
+    if (!roomName) {
+      roomName = generateRoomName();
+    }
     const { socket, username } = this.props;
     socket.emit('createGame', {
       username,
       boardSize,
-      isPrivate
+      isFriendly,
+      isPrivate,
+      roomName
     });
     socket.on('gameInitiated', ({ roomId }) => {
       let url = `http://localhost:3000/game/${roomId}`;

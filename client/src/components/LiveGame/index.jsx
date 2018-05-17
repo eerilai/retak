@@ -38,22 +38,37 @@ class LiveGame extends Component {
 
     const { socket, username } = props;
     const { roomId } = props.match.params;
-    socket.emit('syncGame', {
+    
+    socket.emit('fetchGame', {
       username,
       roomId
     });
-    socket.on('playerJoin', ({ boardSize, player1, player2 }) => {
-      const game = new Game(boardSize);
-      game.player1 = player1;
-      game.player2 = player2;
-      game.activePlayer = player1;
-      this.setState({
-        game
-      });
-    });
-    socket.on("opponentMove", ({ col, row, stone, roomId }) => {
+    
+    socket.on('syncGame', ({ boardSize, gameState, player1, player2, roomId, activePlayer }) => {
       if (roomId === props.match.params.roomId) {
-        this.movePieces(col, row, false, stone);
+        const game = new Game(boardSize, gameState, player1, player2);
+        game.activePlayer = activePlayer;
+        this.setState({
+          game
+        });
+      }
+    });
+
+    socket.on('pendingGame', ({ boardSize, roomId }) => {
+      if (roomId === props.match.params.roomId) {
+        const game = new Game(boardSize, 'new', username, username);
+        game.activePlayer = username;
+        this.setState({
+          game
+        });
+      }
+    });
+
+    socket.on('gameAccessDenied', (roomId) => {
+      if (roomId === props.match.params.roomId) {
+        this.setState({
+          accessDenied: true
+        });
       }
     });
 
@@ -61,10 +76,11 @@ class LiveGame extends Component {
     // this.sounds = { brick: sound_brick_drop };
   }
 
-  movePieces(col, row, isPlayerMove, stone = this.state.stone) {
-    const { game } = this.state;
+  movePieces(col, row) {
+    const { game, stone } = this.state;
+    const { socket, match } = this.props;
     game.selectStack(col, row, stone);
-    if (this.state.stone !== "") {
+    if (stone !== "") {
       this.setState({
         stone: ""
       });
@@ -72,20 +88,24 @@ class LiveGame extends Component {
     this.setState({
       game
     });
-
-    if (isPlayerMove) {
-      this.props.socket.emit("updateGame", {
-        col,
-        row,
-        stone,
-        roomId: this.props.match.params.roomId,
+    if (this.state.username !== game.activePlayer) {
+      socket.emit("updateGame", {
+        gameState: {
+          ptn: game.ptn,
+          tps: game.tps
+        },
+        activePlayer: game.activePlayer,
+        roomId: match.params.roomId,
       });
+    }
+    if (game.winType) {
+      socket.emit('closeGame', match.params.roomId);
     }
   }
 
   handleSquareClick(col, row) {
     if (this.props.username === this.state.game.activePlayer) {
-      this.movePieces(col, row, true);
+      this.movePieces(col, row);
       // this.play("brick");
     }
   }
@@ -122,7 +142,7 @@ class LiveGame extends Component {
     } else if (this.state.game.winType === "R") {
       return (
         <div>
-          <p>Road Complited <br/></p>
+          <p>Road Completed <br/></p>
           <p>{`Player ${winner} wins! & Player ${loser} lost!`}</p>
         </div>
       );
@@ -147,19 +167,27 @@ class LiveGame extends Component {
   }
 
   opponentTurn() {
-    const { activePlayer } = this.state.game;
-    if (activePlayer !== this.props.username) {
+    const { activePlayer, player1, player2 } = this.state.game;
+    const { username } = this.props;
+    const isPlayer = username === player1 || username === player2;
+    if (activePlayer !== username && isPlayer) {
       return <div className="to-play">Waiting for Opponent...</div>;
+    } else if (isPlayer || activePlayer === player1) {
+      return <div className="to-play" />;
     }
-    return <div className="to-play" />;
+    return <div className="to-play">{player2}'s turn</div>;
   }
   
   userTurn() {
-    const { activePlayer } = this.state.game;
-    if (activePlayer === this.props.username) {
+    const { activePlayer, player1, player2 } = this.state.game;
+    const { username } = this.props;
+    const isPlayer = username === player1 || username === player2;
+    if (activePlayer === username) {
       return <div className="to-play">Your turn</div>;
+    } else if (isPlayer || activePlayer === player2) {
+      return <div className="to-play" />;
     }
-    return <div className="to-play" />;
+    return <div className="to-play">{player1}'s turn</div>;
   }
 
   render() {
@@ -168,23 +196,25 @@ class LiveGame extends Component {
 
     let PlayerPieces;
     let OpponentPieces;
-    let opponentName, opponentNo, playerNo, color;
-    if (username === game.player1) {
-      opponentName = game.player2;
-      opponentNo = 2;
-      playerNo = 1;
-      color = 'btn-player1-piece';
-    } else {
-      opponentName = game.player1;
-      opponentNo = 1;
-      playerNo = 2;
+    let topPlayerName, bottomPlayerName, topPlayerNo, bottomPlayerNo, color;
+    if (username === game.player2) {
+      topPlayerName = game.player1;
+      bottomPlayerName = username;
+      topPlayerNo = 1;
+      bottomPlayerNo = 2;
       color = 'btn-player2-piece';
+    } else {
+      topPlayerName = game.player2;
+      bottomPlayerName = game.player1;
+      topPlayerNo = 2;
+      bottomPlayerNo = 1;
+      color = 'btn-player1-piece';
     }
 
     PlayerPieces = (
       <div className="score">
       <table>
-        <tr><td>{`${game.pieces[playerNo].F} / ${game.pieces[playerNo].C}`}</td><td>{game[`p${playerNo}FlatScore`]}</td></tr>
+        <tr><td>{`${game.pieces[bottomPlayerNo].F} / ${game.pieces[bottomPlayerNo].C}`}</td><td>{game[`p${bottomPlayerNo}FlatScore`]}</td></tr>
         <tr style={{'font-size': '10px'}}><td>Stones</td><td>Score</td></tr>
       </table>
       </div>
@@ -193,7 +223,7 @@ class LiveGame extends Component {
       <div className="score">
       <table>
         <tr style={{'font-size': '10px'}}><td>Stones</td><td>Score</td></tr>
-        <tr><td>{`${game.pieces[opponentNo].F} / ${game.pieces[opponentNo].C}`}</td><td>{game[`p${opponentNo}FlatScore`]}</td></tr>
+        <tr><td>{`${game.pieces[topPlayerNo].F} / ${game.pieces[topPlayerNo].C}`}</td><td>{game[`p${topPlayerNo}FlatScore`]}</td></tr>
       </table>
       </div>
     );
@@ -208,9 +238,9 @@ class LiveGame extends Component {
           {this.opponentTurn()}
           <table>
             {OpponentPieces}
-            <tr>{opponentName}</tr>
-            <PTN ptn={this.state.game.ptn} />
-            <tr>{this.props.username}</tr>
+            <tr>{topPlayerName}</tr>
+            <PTN ptn={game.ptn} />
+            <tr>{bottomPlayerName}</tr>
             {PlayerPieces}
           </table>
           {this.userTurn()}
@@ -223,10 +253,10 @@ class LiveGame extends Component {
             <div className="stone-select">
               <div className="active-stone">{stone}</div>
               <button className={color} onClick={() => { this.toggleStanding(); }}>
-                { stone === 'S' ? 'F' : 'S' }({ game.pieces[playerNo].F })
+                { stone === 'S' ? 'F' : 'S' }({ game.pieces[bottomPlayerNo].F })
               </button>
               <button className={color} onClick={() => { this.selectCapstone('C'); }}>
-              C ({game.pieces[playerNo].C})
+              C ({game.pieces[bottomPlayerNo].C})
               </button>
             </div>
           </div>
