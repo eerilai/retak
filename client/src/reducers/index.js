@@ -7,11 +7,13 @@ const rootReducer = (state = initialState, action) => {
    switch (action.type) {
     case LOGGEDIN:
       let currentUserInfo = action.payload;
-      console.log("Reducers", currentUserInfo)
       return {
         ...state, 
-        currentUser: currentUserInfo.username,
-        
+        currentUser: currentUserInfo.currentUser,
+        userEmail: currentUserInfo.userEmail,
+        rankedGames: currentUserInfo.rankedGames,
+        rankedWins: currentUserInfo.rankedWins,
+        totalGames: currentUserInfo.totalGames
       };
     case TOGGLE_LOGIN_LOGOUT:
       return { 

@@ -30,10 +30,11 @@ class App extends Component {
     axios
       .get('/auth/check')
       .then(res => {
-        let currentUser = res.data;
-        if (currentUser[0] !== '<') {
+        let currentUserInfo = res.data;
+        let currentUser = res.data.currentUser;
+        if (currentUserInfo[0] !== '<') {
           props.toggleLoginLogout(true);
-          props.login(currentUser);
+          props.login(currentUserInfo);
         } else {
           socket.emit('anonLogin', props.username,);
         }
@@ -67,7 +68,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    username: state.currentUser,
+    username: state.currentUserInfo,
     isLoggedIn: state.isLoggedIn
   };
 };

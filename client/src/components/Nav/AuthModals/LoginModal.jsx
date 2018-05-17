@@ -40,9 +40,11 @@ class LoginModal extends Component {
         password
       })
       .then(res => {
+        let currentUserInfo = res.data;
+        let currentUser = res.data.currentUser;
         this.props.toggleView("off");
         this.props.toggleLoginLogout(true);
-        this.props.login(usernameOrEmail);
+        this.props.login(currentUserInfo);
       })
       .catch(err => {
         console.error(err);

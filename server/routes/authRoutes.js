@@ -13,7 +13,17 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
 });
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.send('Success');
+  let currentUser = req.user.dataValues;
+  let currentUserInfo = Object.assign({},
+    {
+      currentUser: currentUser.username,
+      userEmail: currentUser.email,
+      rankedGames: currentUser.ranked_games,
+      rankedWins: currentUser.ranked_wins,
+      totalGames: currentUser.total_games
+    } 
+  )
+  res.send(currentUserInfo);
 });
 
 router.post('/signup', (req, res) => {
@@ -25,7 +35,18 @@ router.post('/signup', (req, res) => {
           res.status(500)
           res.send('Server Error');
         }
-        res.send('Success');
+        console.log("SignUp Res", user.dataValues)
+        let currentUser = user.dataValues;
+        let currentUserInfo = Object.assign({},
+          {
+            currentUser: currentUser.username,
+            userEmail: currentUser.email,
+            rankedGames: currentUser.ranked_games,
+            rankedWins: currentUser.ranked_wins,
+            totalGames: currentUser.total_games
+          } 
+        )
+        res.send(currentUserInfo);
       });
     })
     .catch((err) => {
@@ -49,7 +70,18 @@ const authCheck = ((req, res, next) => {
 });
 
 router.get('/check', authCheck, (req, res) => {
-  res.send(req.user);
+  console.log("Server req.user", req.user.dataValues)
+  let currentUser = req.user.dataValues;
+  let currentUserInfo = Object.assign({},
+    {
+      currentUser: currentUser.username,
+      userEmail: currentUser.email,
+      rankedGames: currentUser.ranked_games,
+      rankedWins: currentUser.ranked_wins,
+      totalGames: currentUser.total_games
+    } 
+  )
+  res.send(currentUserInfo);
 });
 
 router.get('/test', authCheck, (req, res) => {
