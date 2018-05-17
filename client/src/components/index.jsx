@@ -1,26 +1,49 @@
-import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
-import Nav from "./Nav";
-import Home from "./Home";
-import Learn from "./Learn";
-import About from "./About";
-import Profile from "./Profile";
-import Game from "./LiveGame";
-import Chat from "./LiveGame/chat";
-import socketIOClient from "socket.io-client";
+import React, { Component } from 'react';
+import { Route, Switch, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import socketIOClient from 'socket.io-client';
+import { bindActionCreators } from 'redux';
+import axios from 'axios';
+import Nav from './Nav';
+import Home from './Home';
+import Learn from './Learn';
+import About from './About';
+import Profile from './Profile';
+import Game from './LiveGame';
+import Chat from './LiveGame/chat';
+import { setAnonUsername, toggleLoginLogout, login } from '../actions/actions';
 
 var sectionStyle = {
-  width: "100%",
-  height: "100%",
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "cover"
+  width: '100%',
+  height: '100%',
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'cover'
 };
+
 class App extends Component {
   constructor(props) {
     super(props);
+    const socket = socketIOClient();
     this.state = {
-      socket: socketIOClient()
+      socket
     };
+    axios
+      .get('/auth/check')
+      .then(res => {
+        let currentUser = res.data;
+        if (currentUser[0] !== '<') {
+          props.toggleLoginLogout(true);
+          props.login(currentUser);
+        } else {
+          socket.emit('anonLogin', props.username,);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      });
+    socket.on('setAnonUsername', (username) => {
+      props.setAnonUsername(username);
+    });
   }
 
   render() {
@@ -40,5 +63,17 @@ class App extends Component {
       </div>
     );
   }
-}
-export default App;
+};
+
+const mapStateToProps = (state) => {
+  return {
+    username: state.currentUser,
+    isLoggedIn: state.isLoggedIn
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({ setAnonUsername, toggleLoginLogout, login }, dispatch);
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

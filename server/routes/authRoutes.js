@@ -36,7 +36,7 @@ router.post('/signup', (req, res) => {
 
 router.post('/logout', (req, res) => {
   req.session.destroy((err) => {
-    // TODO: Put something here?
+    res.end();
   });
 });
 
