@@ -1,29 +1,32 @@
 const express = require('express');
-const session = require('express-session');
 const passport = require('passport');
 const path = require('path');
 const bodyParser = require('body-parser');
 const socket = require('socket.io');
+const sharedSession = require('express-socket.io-session');
 
 require('dotenv').config();
 
 const db = require('../database');
-const { logGame } = require('../database/queries')
+const { logGame, getLeaderboard, getUserGames, getUserData } = require('../database/queries');
 const authRoutes = require('./routes/authRoutes');
+const filterLobbyList = require('./lobbyHelper');
 
 const app = express();
 
 app.use(bodyParser());
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: 24 * 60 * 60 * 1000
-    }
-  })
-);
+
+const session = require('express-session')({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000
+  }
+});
+
+app.use(session);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -45,6 +48,22 @@ app.post('/record', (req, res) => {
   logGame(req.body);
 });
 
+app.get('/leaderboard', async (req, res) => {
+  const board = await getLeaderboard();
+  res.json(board);
+});
+
+app.get('/users/:username/data', async (req, res) => {
+  const data = await getUserData(req.params.username);
+  res.json(data);
+});
+
+app.get('/users/:username/games', async (req, res) => {
+  const games = await getUserGames(req.params.username);
+  console.log(games[0].games);
+  res.json(games);
+});
+
 app.get('/bundle.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/bundle.js'));
 });
@@ -62,9 +81,42 @@ const server = app.listen(PORT, () => {
 let rooms = 0;
 const io = socket(server);
 
-io.on('connection', (socket) => {
-  socket.leave(socket.id);
+io.use(sharedSession(session, {
+  autoSave: true
+}))
 
+io.on('connection', (socket) => {
+
+  // Maintain session for anon users on App initialize
+  socket.on('anonLogin', (username) => {
+    if (!socket.handshake.session.username) {
+      socket.handshake.session.username = username;
+      socket.handshake.session.save();
+    } else {
+      socket.emit('setAnonUsername', socket.handshake.session.username);
+    }
+  });
+
+  // Create a new game and save game state to room
+  socket.on('createGame', async ({ username, boardSize, isFriendGame, isPrivate, roomName }) => {
+    let roomId = roomName;
+    if (io.sockets.adapter.rooms[roomId]) {
+      roomId = Math.random().toString(36).slice(2, 9);
+    }
+    await socket.join(roomId);
+    const room = io.sockets.adapter.rooms[roomId];
+    room.player1 = username;
+    room.activePlayer = username;
+    room.boardSize = boardSize
+    room.isFriendGame = isFriendGame;
+    room.isPrivate = isPrivate;
+    room.spectators = {};
+    socket.emit('gameInitiated', {
+      roomId
+    });
+  });
+
+  // Serve game state on LiveGame component initialize
   socket.on('fetchGame', async ({ username, roomId }) => {
     const room = io.sockets.adapter.rooms[roomId];
     const { gameState, activePlayer, boardSize, isPrivate, spectators } = room;
@@ -90,15 +142,8 @@ io.on('connection', (socket) => {
     }
 
     // Update lobby
-    const games = [];
-    const { rooms } = io.sockets.adapter;
-    for (let roomId in rooms) {
-      const currentRoom = rooms[roomId];
-      if (!currentRoom.isFriendly && !(currentRoom.isPrivate && currentRoom.player2)) {
-        games.push({ name: roomId, boardSize: currentRoom.boardSize, isPending: !currentRoom.player2 });
-      }
-    }
-    socket.broadcast.emit('updateLobby', games);
+    const lobbyList = filterLobbyList(io.sockets.adapter.rooms);
+    socket.broadcast.emit('updateLobby', lobbyList);
   });
 
   // Update game for each piece move
@@ -111,40 +156,24 @@ io.on('connection', (socket) => {
     socket.to(roomId).emit('syncGame', { boardSize, gameState, player1, player2, activePlayer, roomId });
   });
 
-  // Serve pending game list to lobby on lobby initialize
+  // Add 'isClosed' property to finished game and update lobby
+  socket.on('closeGame', (roomId) => {
+    io.sockets.adapter.rooms[roomId].isClosed = true;
+    const lobbyList = filterLobbyList(io.sockets.adapter.rooms);
+    socket.broadcast.emit('updateLobby', lobbyList);
+  });
+
+  // Serve lobby on Lobby component initialize
   socket.on('fetchLobby', () => {
-    const games = [];
-    const { rooms } = io.sockets.adapter;
-    for (let roomId in rooms) {
-      const currentRoom = rooms[roomId];
-      if (!currentRoom.isFriendly && !(currentRoom.isPrivate && currentRoom.player2)) {
-        games.push({ name: roomId, boardSize: currentRoom.boardSize, isPending: !currentRoom.player2 });
-      }
-    }
-    socket.emit('updateLobby', games);
+    const lobbyList = filterLobbyList(io.sockets.adapter.rooms);
+    socket.emit('updateLobby', lobbyList);
   });
 
-  // Create a new game
-  socket.on('createGame', async ({ username, boardSize, isFriendGame, isPrivate }) => {
-    const roomId = Math.random().toString(36).slice(2, 9);
-    await socket.join(roomId);
-    const room = io.sockets.adapter.rooms[roomId];
-    room.player1 = username;
-    room.activePlayer = username;
-    room.boardSize = boardSize
-    room.isFriendGame = isFriendGame;
-    room.isPrivate = isPrivate;
-    room.spectators = {};
-    socket.emit('gameInitiated', {
-      roomId
-    });
-  });
-
-  //Chat/Typing
+  // Chat/Typing
   socket.on('chat', function(data) {
-    io.sockets.emit('chat', data);
+    io.to(data.room).emit('chat', data);
   });
   socket.on('typing', function(data) {
-    socket.broadcast.emit('typing', data);
+    socket.to(data.room).broadcast.emit('typing', data);
   });
 });

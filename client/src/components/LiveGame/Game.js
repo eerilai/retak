@@ -39,8 +39,8 @@ class Game {
     this.isBoardFull = false;
     this.p1FlatScore = 0;
     this.p2FlatScore = 0;
-    this.victorUsername = 'Nobody'; // Wining Player Username or 'Nobody'
-    this.loserUsername = 'Nobody'; // Loosing Player Username or 'Nobody'
+    this.victorUsername = null; // Wining Player Username or null
+    this.loserUsername = null; // Loosing Player Username or null
 
     if (gameState !== 'new') {
       const { tps, ptn } = gameState;
@@ -113,7 +113,7 @@ class Game {
         this.plyPtn = [];
       }
     }
-    if (this.victor !== 0) {
+    if (this.winType !== null) {
       this.ptn.push([this.winString]);
       this.handleWin();
     }
@@ -161,6 +161,11 @@ class Game {
           stack.owner = s[0];
         }
       }
+    }
+    this.checkRoads();
+    this.checkFullBoardWins();
+    if (this.pieces[this.toPlay].total === 0) {
+      this.checkOutOfPiecesWins();
     }
   }
 
@@ -273,7 +278,11 @@ class Game {
                  stack.stone === 'S' &&
                  this.toMove.stone === 'C' &&
                  this.toMove.stack.length === 1) {
+        this.setMoveDir(stack);
+        this.toMove.coord = coord;
+        this.step = stack.coord;
         stack.place(this.toMove.stack.pop(), 'C');
+        this.parsePTN();
         this.toMove.coord = '';
         Object.keys(this.squares)
           .forEach((c) => { this.squares[c].validMove = false; });
@@ -412,16 +421,6 @@ class Game {
   handleWin() {
     this.printPTN();
     this.parseTPS(this.board);
-    const { player1, player2, ptnString, victorUsername, size, winType, ranked } = this;
-    axios.post('/record', {
-      player1,
-      player2,
-      size,
-      winType,
-      victor: victorUsername,
-      ptn: ptnString,
-      ranked,
-    });
   }
 }
 

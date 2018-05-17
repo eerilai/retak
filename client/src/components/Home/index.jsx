@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import Lobby from "./lobby";
-import LeaderboardTable from "../../containers/Home/leaderboard_table";
-import LobbyTable from "../../containers/Home/lobby_table";
+import axios from 'axios';
+import Lobby from './lobby';
+import Leaderboard from './Leaderboard';
+import LobbyTable from '../../containers/Home/lobby_table';
 import { connect } from 'react-redux';
 import {
   Input,
@@ -16,6 +17,7 @@ import {
 } from 'semantic-ui-react';
 import GameSetup from './Modals/GameSetup';
 import GameLink from './Modals/GameLink';
+import generateRoomName from './roomNames';
 
 class Home extends Component {
   constructor(props) {
@@ -24,10 +26,12 @@ class Home extends Component {
       modalView: '',
       gameType: '',
       url: '',
-      link: ''
+      link: '',
+      leaderboard: [],
     };
     this.handleCreateGame = this.handleCreateGame.bind(this);
     this.changeView = this.changeView.bind(this);
+    this.getLeaderboard();
   }
 
   changeView(modalView) {
@@ -36,13 +40,17 @@ class Home extends Component {
     });
   }
 
-  handleCreateGame(boardSize, isFriendly, isPrivate) {
+  handleCreateGame(boardSize, isFriendly, isPrivate, roomName) {
+    if (!roomName) {
+      roomName = generateRoomName();
+    }
     const { socket, username } = this.props;
     socket.emit('createGame', {
       username,
       boardSize,
       isFriendly,
-      isPrivate
+      isPrivate,
+      roomName
     });
     socket.on('gameInitiated', ({ roomId }) => {
       let url = `http://localhost:3000/game/${roomId}`;
@@ -53,6 +61,13 @@ class Home extends Component {
         modalView: 'GameLink'
       });
     });
+  }
+
+  getLeaderboard() {
+    axios.get('/leaderboard')
+      .then((board) => {
+        this.setState({ leaderboard: board.data });
+      });
   }
 
   render() {
@@ -106,9 +121,7 @@ class Home extends Component {
             url={this.state.url}
             link={this.state.link} />      
 
-          <div className="leaderboard ">
-            <LeaderboardTable />
-          </div>
+          <Leaderboard leaderboard={this.state.leaderboard} />
         </div>
       </div>
     );

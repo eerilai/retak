@@ -25,7 +25,7 @@ import {
 class LiveGame extends Component {
   constructor(props) {
     super(props);
-    const newGame = new Game(6);
+    const newGame = new Game(8);
     this.state = {
       game: newGame,
       stone: "",
@@ -78,8 +78,9 @@ class LiveGame extends Component {
 
   movePieces(col, row) {
     const { game, stone } = this.state;
+    const { socket, match } = this.props;
     game.selectStack(col, row, stone);
-    if (this.state.stone !== "") {
+    if (stone !== "") {
       this.setState({
         stone: ""
       });
@@ -88,14 +89,30 @@ class LiveGame extends Component {
       game
     });
     if (this.state.username !== game.activePlayer) {
-      this.props.socket.emit("updateGame", {
+      socket.emit("updateGame", {
         gameState: {
-          ptn: this.state.game.ptn,
-          tps: this.state.game.tps
+          ptn: game.ptn,
+          tps: game.tps
         },
-        activePlayer: this.state.game.activePlayer,
-        roomId: this.props.match.params.roomId,
+        activePlayer: game.activePlayer,
+        roomId: match.params.roomId,
       });
+    }
+    if (game.winType && game.player1 !== game.player2) {
+      socket.emit('closeGame', match.params.roomId);
+      if (game.victorUsername === this.props.username || game.victorUsername === null) {
+        const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
+        axios.post('/record', {
+          player1,
+          player2,
+          size,
+          winType,
+          victor: victorUsername,
+          ptn: ptnString,
+          tps,
+          ranked,
+        });
+      }
     }
   }
 
@@ -124,9 +141,9 @@ class LiveGame extends Component {
 
   winner() {
     let winner = this.state.game.victorUsername;
-    let loser = this.state.game.looserUsername;
+    let loser = this.state.game.loserUsername;
     if (this.state.game.winType === '1/2') {
-      return <p>{`It's a Draw! ${winner} wins!`}</p>;
+      return <p>{`It's a Draw!`}</p>;
     }
     else if (this.state.game.winType === '1/2' && this.state.game.isBoardFull){
       return (
@@ -163,19 +180,27 @@ class LiveGame extends Component {
   }
 
   opponentTurn() {
-    const { activePlayer } = this.state.game;
-    if (activePlayer !== this.props.username) {
+    const { activePlayer, player1, player2 } = this.state.game;
+    const { username } = this.props;
+    const isPlayer = username === player1 || username === player2;
+    if (activePlayer !== username && isPlayer) {
       return <div className="to-play">Waiting for Opponent...</div>;
+    } else if (isPlayer || activePlayer === player1) {
+      return <div className="to-play" />;
     }
-    return <div className="to-play" />;
+    return <div className="to-play">{player2}'s turn</div>;
   }
   
   userTurn() {
-    const { activePlayer } = this.state.game;
-    if (activePlayer === this.props.username) {
+    const { activePlayer, player1, player2 } = this.state.game;
+    const { username } = this.props;
+    const isPlayer = username === player1 || username === player2;
+    if (activePlayer === username) {
       return <div className="to-play">Your turn</div>;
+    } else if (isPlayer || activePlayer === player2) {
+      return <div className="to-play" />;
     }
-    return <div className="to-play" />;
+    return <div className="to-play">{player1}'s turn</div>;
   }
 
   render() {
@@ -184,23 +209,29 @@ class LiveGame extends Component {
 
     let PlayerPieces;
     let OpponentPieces;
-    let opponentName, opponentNo, playerNo, color;
-    if (username === game.player1) {
-      opponentName = game.player2;
-      opponentNo = 2;
-      playerNo = 1;
-      color = 'btn-player1-piece';
-    } else {
-      opponentName = game.player1;
-      opponentNo = 1;
-      playerNo = 2;
+    let topPlayerName, bottomPlayerName, topPlayerNo, bottomPlayerNo, color;
+    if (username === game.player2) {
+      topPlayerName = game.player1;
+      bottomPlayerName = username;
+      topPlayerNo = 1;
+      bottomPlayerNo = 2;
       color = 'btn-player2-piece';
+    } else {
+      topPlayerName = game.player2;
+      bottomPlayerName = game.player1;
+      topPlayerNo = 2;
+      bottomPlayerNo = 1;
+      color = 'btn-player1-piece';
+    }
+
+    if (game.player1 === game.player2) {
+      topPlayerName = 'Waiting for Match...'
     }
 
     PlayerPieces = (
       <div className="score">
       <table>
-        <tr><td>{`${game.pieces[playerNo].F} / ${game.pieces[playerNo].C}`}</td><td>{game[`p${playerNo}FlatScore`]}</td></tr>
+        <tr><td>{`${game.pieces[bottomPlayerNo].F} / ${game.pieces[bottomPlayerNo].C}`}</td><td>{game[`p${bottomPlayerNo}FlatScore`]}</td></tr>
         <tr style={{'font-size': '10px'}}><td>Stones</td><td>Score</td></tr>
       </table>
       </div>
@@ -209,7 +240,7 @@ class LiveGame extends Component {
       <div className="score">
       <table>
         <tr style={{'font-size': '10px'}}><td>Stones</td><td>Score</td></tr>
-        <tr><td>{`${game.pieces[opponentNo].F} / ${game.pieces[opponentNo].C}`}</td><td>{game[`p${opponentNo}FlatScore`]}</td></tr>
+        <tr><td>{`${game.pieces[topPlayerNo].F} / ${game.pieces[topPlayerNo].C}`}</td><td>{game[`p${topPlayerNo}FlatScore`]}</td></tr>
       </table>
       </div>
     );
@@ -224,9 +255,9 @@ class LiveGame extends Component {
           {this.opponentTurn()}
           <table>
             {OpponentPieces}
-            <tr>{opponentName}</tr>
-            <PTN ptn={this.state.game.ptn} />
-            <tr>{this.props.username}</tr>
+            <tr>{topPlayerName}</tr>
+            <PTN ptn={game.ptn} />
+            <tr>{bottomPlayerName}</tr>
             {PlayerPieces}
           </table>
           {this.userTurn()}
@@ -239,10 +270,10 @@ class LiveGame extends Component {
             <div className="stone-select">
               <div className="active-stone">{stone}</div>
               <button className={color} onClick={() => { this.toggleStanding(); }}>
-                { stone === 'S' ? 'F' : 'S' }({ game.pieces[playerNo].F })
+                { stone === 'S' ? 'F' : 'S' }({ game.pieces[bottomPlayerNo].F })
               </button>
               <button className={color} onClick={() => { this.selectCapstone('C'); }}>
-              C ({game.pieces[playerNo].C})
+              C ({game.pieces[bottomPlayerNo].C})
               </button>
             </div>
           </div>
