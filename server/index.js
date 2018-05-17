@@ -1,9 +1,9 @@
 const express = require('express');
-const session = require('express-session');
 const passport = require('passport');
 const path = require('path');
 const bodyParser = require('body-parser');
 const socket = require('socket.io');
+const sharedSession = require('express-socket.io-session');
 
 require('dotenv').config();
 
@@ -15,16 +15,18 @@ const filterLobbyList = require('./lobbyHelper');
 const app = express();
 
 app.use(bodyParser());
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: 24 * 60 * 60 * 1000
-    }
-  })
-);
+
+const session = require('express-session')({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000
+  }
+});
+
+app.use(session);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -68,10 +70,23 @@ const server = app.listen(PORT, () => {
 let rooms = 0;
 const io = socket(server);
 
-io.on('connection', (socket) => {
-  socket.leave(socket.id);
+io.use(sharedSession(session, {
+  autoSave: true
+}))
 
-  // Create a new game
+io.on('connection', (socket) => {
+
+  // Maintain session for anon users on App initialize
+  socket.on('anonLogin', (username) => {
+    if (!socket.handshake.session.username) {
+      socket.handshake.session.username = username;
+      socket.handshake.session.save();
+    } else {
+      socket.emit('setAnonUsername', socket.handshake.session.username);
+    }
+  });
+
+  // Create a new game and save game state to room
   socket.on('createGame', async ({ username, boardSize, isFriendGame, isPrivate, roomName }) => {
     let roomId = roomName;
     if (io.sockets.adapter.rooms[roomId]) {
@@ -90,6 +105,7 @@ io.on('connection', (socket) => {
     });
   });
 
+  // Serve game state on LiveGame component initialize
   socket.on('fetchGame', async ({ username, roomId }) => {
     const room = io.sockets.adapter.rooms[roomId];
     const { gameState, activePlayer, boardSize, isPrivate, spectators } = room;
@@ -136,7 +152,7 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('updateLobby', lobbyList);
   });
 
-  // Serve pending game list to lobby on lobby initialize
+  // Serve lobby on Lobby component initialize
   socket.on('fetchLobby', () => {
     const lobbyList = filterLobbyList(io.sockets.adapter.rooms);
     socket.emit('updateLobby', lobbyList);
