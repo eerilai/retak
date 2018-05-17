@@ -38,24 +38,29 @@ const User = sequelize.define('user', {
     type: Sequelize.STRING,
     unique: true,
   },
+  total_games: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+  },
+  ranked_games: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+  },
+  ranked_wins: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+  },
 });
 
 const Game = sequelize.define('game', {
   player1: {
     type: Sequelize.STRING,
   },
-  player1_id: {
-    type: Sequelize.INTEGER,
-  },
   player2: {
     type: Sequelize.STRING,
   },
-  player2_id: {
-    type: Sequelize.INTEGER,
-  },
   board_state: {
-    // TODO: Not 100% sure if boardState will be JSON
-    type: Sequelize.JSON,
+    type: Sequelize.STRING,
   },
   ptn: {
     type: Sequelize.STRING,
@@ -74,18 +79,24 @@ const Game = sequelize.define('game', {
   },
 });
 
-// Game.hasMany(User, { foreignKey: 'player1_id', sourceKey: 'id' });
-// Game.hasMany(User, { foreignKey: 'player2_id', sourceKey: 'id' });
+User.hasMany(Game, { foreignKey: 'player1_id' });
+User.hasMany(Game, { foreignKey: 'player2_id' });
 
-// to drop table if exists, pass { force: true } as argument in User.sync
-User.sync()
-  .then(() => {
-    console.log('user table created');
-  });
+// pass { force: true} into these if you'd like to only reset one table
+// User.sync()
+//   .then(() => {
+//     console.log('user table created');
+//   });
 
-Game.sync()
+// Game.sync()
+//   .then(() => {
+//     console.log('game table created');
+//   });
+
+// syncs all tables, drop and rebuild all tables with { force: true }
+sequelize.sync()
   .then(() => {
-    console.log('game table created');
+    console.log('tables synced');
   });
 
 module.exports = {
