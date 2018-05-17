@@ -1,43 +1,43 @@
-import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { Icon } from "semantic-ui-react";
+import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Icon } from 'semantic-ui-react';
 
 class Chat extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      username: "",
-      message: "",
+      message: '',
       messages: [],
-      typing: ""
+      typing: '',
     };
-    var self = this;
+    const self = this;
     const { socket } = props;
-    socket.on("typing", function(data) {
-      self.setState({ typing: data.author + " is typing..." });
+    socket.on('typing', (data) => {
+      self.setState({ typing: data.author + ' is typing...' });
+      setTimeout(()=>{self.setState({ typing: '' })}, 1000);
     });
 
-    socket.on("chat", function(data) {
+    socket.on('chat', (data) => {
       addMessage(data);
+      this.scrollToBottom();
     });
 
     const addMessage = data => {
-      this.setState({ messages: [...this.state.messages, data], typing: "" });
+      this.setState({ messages: [...this.state.messages, data], typing: '' });
     };
 
     this.sendMessage = ev => {
       ev.preventDefault();
       if (this.state.message) {
-        const roomID = this.props.location.pathname.split("/").pop();
-
-        socket.emit("chat", {
+        const roomID = this.props.location.pathname.split('/').pop();
+        socket.emit('chat', {
           author: this.props.username,
           message: this.state.message,
           room: roomID
         });
-        this.setState({ message: "" });
+        this.setState({ message: '' });
       }
     };
 
@@ -48,33 +48,27 @@ class Chat extends Component {
       }
     };
     this.handleTyping = () => {
-      socket.emit("typing", {
-        author: this.props.username
+      const roomID = this.props.location.pathname.split('/').pop();
+      socket.emit('typing', {
+        author: this.props.username,
+        room: roomID
       });
     };
     this.handleTak = ev => {
-      const roomID = this.props.location.pathname.split("/").pop();
+      const roomID = this.props.location.pathname.split('/').pop();
       ev.preventDefault();
-      socket.emit("chat", {
+      socket.emit('chat', {
         author: this.props.username,
-        message: "TAK",
+        message: 'Tak!',
         room: roomID
       });
-      this.setState({ message: "" });
+      this.setState({ message: '' });
     };
   }
   // make chatbox scroll effect
-  scrollToBottom = () => {
-    this.messagesEnd.scrollIntoView({ block: "end" });
+  scrollToBottom() {
+    this.messagesEnd.scrollIntoView({ block: 'end' });
   };
-
-  componentDidMount() {
-    this.scrollToBottom();
-  }
-
-  componentDidUpdate() {
-    this.scrollToBottom();
-  }
 
   renderMessages() {
     return this.state.messages.map(message => {
@@ -100,11 +94,6 @@ class Chat extends Component {
           <div id="output">
             <div className="MessageContainer">
               <div className="MessagesList">{this.renderMessages()}</div>
-              <div
-                ref={el => {
-                  this.messagesEnd = el;
-                }}
-              />
             </div>
           </div>
           <div id="feedback">
@@ -112,6 +101,11 @@ class Chat extends Component {
               <em>{this.state.typing}</em>
             </p>
           </div>
+          <div
+            ref={el => {
+              this.messagesEnd = el;
+            }}
+          />
         </div>
         <form onSubmit={this.sendMessage}>
           <textarea
