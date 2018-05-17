@@ -77,7 +77,7 @@ class ProfileModal extends Component {
   }
 
   render() {
-    const { isLoggedIn, currentUser } = this.props;
+    const { isLoggedIn, currentUser, userEmail } = this.props;
 
       return (
         <Modal
@@ -208,7 +208,8 @@ class ProfileModal extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
+    userEmail: state.userEmail
   };
 }
 

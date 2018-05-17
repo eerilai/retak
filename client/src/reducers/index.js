@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import initialState from '../initialState';
 import action from '../actions/actions';
-import { LOGGEDIN, TOGGLE_LOGIN_LOGOUT, SET_ANON_USERNAME } from '../actions/types';
+import { LOGGEDIN, TOGGLE_LOGIN_LOGOUT, SET_ANON_USERNAME, UPDATE_USER_PROFILE } from '../actions/types';
 
 const rootReducer = (state = initialState, action) => {
    switch (action.type) {
@@ -25,6 +25,12 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         currentUser: username
+      };
+    case UPDATE_USER_PROFILE:
+      let newUserInfo = action.payload;
+      return {
+        ...state,
+        currentUser: newUserInfo
       };
     default:
       return state;

@@ -16,6 +16,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
   let currentUser = req.user.dataValues;
   let currentUserInfo = Object.assign({},
     {
+      userID: currentUser.id,
       currentUser: currentUser.username,
       userEmail: currentUser.email,
       rankedGames: currentUser.ranked_games,
@@ -39,6 +40,7 @@ router.post('/signup', (req, res) => {
         let currentUser = user.dataValues;
         let currentUserInfo = Object.assign({},
           {
+            userID: currentUser.id,          
             currentUser: currentUser.username,
             userEmail: currentUser.email,
             rankedGames: currentUser.ranked_games,
@@ -74,6 +76,7 @@ router.get('/check', authCheck, (req, res) => {
   let currentUser = req.user.dataValues;
   let currentUserInfo = Object.assign({},
     {
+      userID: currentUser.id,
       currentUser: currentUser.username,
       userEmail: currentUser.email,
       rankedGames: currentUser.ranked_games,

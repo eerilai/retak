@@ -4,12 +4,14 @@ import LoginModal from "./AuthModals/LoginModal";
 import LogoutModal from "./AuthModals/LogoutModal";
 
 import { Dropdown, Icon, Image } from 'semantic-ui-react';
-import ProfileModal from "./UserModals/ProfileModal";
-import SettingsModal from "./UserModals/SettingsModal";
-import HelpModal from "./UserModals/HelpModal";
+import ProfileModal from './UserModals/ProfileModal';
+import SettingsModal from './UserModals/SettingsModal';
+import HelpModal from './UserModals/HelpModal';
 // import defaultAvatar from "./UserModals/defultAvatar.png";
+import Profile from './../Profile';
 
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 
 class AuthNav extends Component {
@@ -41,16 +43,14 @@ class AuthNav extends Component {
   handleChange = (e, { value }) => {
     console.log(e, value);
     // TODO: maybe fill in these values?
-    if( value === 'updateProfile'){
+    if( value === 'Profile'){
+
+    } else if(value === 'logout'){
+      this.setState({modalView: value});
+    } else {
       this.setState({selectModal: value})
     }
-    if( value === 'settings'){
-    }
-    if( value === 'help'){
-    }
-    if(value === 'logout'){
-      this.setState({modalView: value});
-    }
+    
   }
 
   render() {
@@ -72,6 +72,10 @@ class AuthNav extends Component {
             // icon={null}
           >
           <Dropdown.Menu>
+            <Dropdown.Item value="Profile" onClick={ this.handleChange }>
+              <Icon name='user circle outline' /> 
+              <Link to="/profile"> Profile </Link>
+            </Dropdown.Item>
             <Dropdown.Item value="updateProfile" onClick={ this.handleChange }><Icon name='user circle outline' /> Update Profile </Dropdown.Item>
             <Dropdown.Item value="settings" onClick={ this.handleChange }><Icon name='settings' />Settings</Dropdown.Item>
             <Dropdown.Item value="help" onClick={ this.handleChange }><Icon name='help' />Help</Dropdown.Item>

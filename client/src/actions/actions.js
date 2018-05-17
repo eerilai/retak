@@ -1,4 +1,4 @@
-import types, { SET_ANON_USERNAME, LOGGEDIN, TOGGLE_LOGIN_LOGOUT, SET_LOGGEDIN_PLAYERS } from './types';
+import types, { SET_ANON_USERNAME, LOGGEDIN, TOGGLE_LOGIN_LOGOUT, SET_LOGGEDIN_PLAYERS, UPDATE_USER_PROFILE } from './types';
 
 export const setAnonUsername = (username) => (
   {
@@ -29,4 +29,11 @@ export const setLoggedInPlayers = (player1, player2) => (
       player2
     }
   }
-)
+);
+
+export const updateUserProfile = (updateCurrentUserInfo) => (
+  {
+    type: UPDATE_USER_PROFILE,
+    payload:updateCurrentUserInfo
+  }
+);
