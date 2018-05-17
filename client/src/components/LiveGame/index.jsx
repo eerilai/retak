@@ -98,8 +98,21 @@ class LiveGame extends Component {
         roomId: match.params.roomId,
       });
     }
-    if (game.winType) {
+    if (game.winType && game.player1 !== game.player2) {
       socket.emit('closeGame', match.params.roomId);
+      if (game.victorUsername === this.props.username) {
+        const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
+        axios.post('/record', {
+          player1,
+          player2,
+          size,
+          winType,
+          victor: victorUsername,
+          ptn: ptnString,
+          tps,
+          ranked,
+        });
+      }
     }
   }
 
@@ -128,7 +141,7 @@ class LiveGame extends Component {
 
   winner() {
     let winner = this.state.game.victorUsername;
-    let loser = this.state.game.looserUsername;
+    let loser = this.state.game.loserUsername;
     if (this.state.game.winType === '1/2') {
       return <p>{`It's a Draw! ${winner} wins!`}</p>;
     }
@@ -209,6 +222,10 @@ class LiveGame extends Component {
       topPlayerNo = 2;
       bottomPlayerNo = 1;
       color = 'btn-player1-piece';
+    }
+
+    if (game.player1 === game.player2) {
+      topPlayerName = 'Waiting for Match...'
     }
 
     PlayerPieces = (

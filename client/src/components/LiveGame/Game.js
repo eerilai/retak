@@ -421,16 +421,6 @@ class Game {
   handleWin() {
     this.printPTN();
     this.parseTPS(this.board);
-    const { player1, player2, ptnString, victorUsername, size, winType, ranked } = this;
-    axios.post('/record', {
-      player1,
-      player2,
-      size,
-      winType,
-      victor: victorUsername,
-      ptn: ptnString,
-      ranked,
-    });
   }
 }
 
