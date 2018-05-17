@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import SignupModal from "./AuthModals/SignupModal";
 import LoginModal from "./AuthModals/LoginModal";
 import LogoutModal from "./AuthModals/LogoutModal";
@@ -11,8 +10,6 @@ import HelpModal from "./UserModals/HelpModal";
 // import defaultAvatar from "./UserModals/defultAvatar.png";
 
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { toggleLoginLogout, login } from "../../actions/actions";
 
 
 class AuthNav extends Component {
@@ -25,23 +22,6 @@ class AuthNav extends Component {
     };
     this.changeView = this.changeView.bind(this);
     this.changeModalView = this.changeModalView.bind(this);
-  }
-
-  componentDidMount() {
-    axios
-      .get("/auth/check")
-      .then(res => {
-        console.log(res)
-        let currentUser = res.data.username;
-        let currentUserInfo = res.data;
-        if (currentUserInfo[0] !== "<") {
-          this.props.toggleLoginLogout(true);
-          this.props.login(currentUserInfo);
-        }
-      })
-      .catch(err => {
-        console.error(err);
-      });
   }
 
   changeView(view) {
@@ -60,15 +40,13 @@ class AuthNav extends Component {
   
   handleChange = (e, { value }) => {
     console.log(e, value);
+    // TODO: maybe fill in these values?
     if( value === 'updateProfile'){
-      console.log('Profile', value)
       this.setState({selectModal: value})
     }
     if( value === 'settings'){
-      console.log('Settings')
     }
     if( value === 'help'){
-      console.log('Help')
     }
     if(value === 'logout'){
       this.setState({modalView: value});
@@ -76,9 +54,6 @@ class AuthNav extends Component {
   }
 
   render() {
-    // Conditionals need to be set in place for
-    // rendering either login/signup nav or logout nav
-    // - will need access to redux state once redux implemented
     const { modalView, selectModal } = this.state;
     const { isLoggedIn, currentUser } = this.props;
     const { value } = this.state;
@@ -136,8 +111,4 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ toggleLoginLogout, login }, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AuthNav);
+export default connect(mapStateToProps)(AuthNav);

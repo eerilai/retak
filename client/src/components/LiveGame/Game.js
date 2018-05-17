@@ -39,8 +39,8 @@ class Game {
     this.isBoardFull = false;
     this.p1FlatScore = 0;
     this.p2FlatScore = 0;
-    this.victorUsername = 'Nobody'; // Wining Player Username or 'Nobody'
-    this.loserUsername = 'Nobody'; // Loosing Player Username or 'Nobody'
+    this.victorUsername = null; // Wining Player Username or null
+    this.loserUsername = null; // Loosing Player Username or null
 
     if (gameState !== 'new') {
       const { tps, ptn } = gameState;
@@ -113,7 +113,7 @@ class Game {
         this.plyPtn = [];
       }
     }
-    if (this.victor !== 0) {
+    if (this.winType !== null) {
       this.ptn.push([this.winString]);
       this.handleWin();
     }
