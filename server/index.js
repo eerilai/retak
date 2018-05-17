@@ -155,9 +155,9 @@ io.on('connection', (socket) => {
 
   // Chat/Typing
   socket.on('chat', function(data) {
-    io.sockets.emit('chat', data);
+    socket.to(data.room).emit('chat', data);
   });
   socket.on('typing', function(data) {
-    socket.broadcast.emit('typing', data);
+    socket.to(data.room).broadcast.emit('typing', data);
   });
 });
