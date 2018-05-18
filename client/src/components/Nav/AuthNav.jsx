@@ -42,9 +42,8 @@ class AuthNav extends Component {
   
   handleChange = (e, { value }) => {
     console.log(e, value);
-    // TODO: maybe fill in these values?
     if( value === 'Profile'){
-
+        // TODO
     } else if(value === 'logout'){
       this.setState({modalView: value});
     } else {
@@ -55,9 +54,10 @@ class AuthNav extends Component {
 
   render() {
     const { modalView, selectModal } = this.state;
-    const { isLoggedIn, currentUser } = this.props;
+    const { isLoggedIn, currentUser, userID } = this.props;
     const { value } = this.state;
     // const avatarImg = defaultAvatar;
+    let userProfile = `/profile/${currentUser}`;
 
     const userNavLink = (
       <nav>
@@ -74,7 +74,7 @@ class AuthNav extends Component {
           <Dropdown.Menu>
             <Dropdown.Item value="Profile" onClick={ this.handleChange }>
               <Icon name='user circle outline' /> 
-              <Link to="/profile"> Profile </Link>
+              <Link to={userProfile}> Profile </Link>
             </Dropdown.Item>
             <Dropdown.Item value="updateProfile" onClick={ this.handleChange }><Icon name='user circle outline' /> Update Profile </Dropdown.Item>
             <Dropdown.Item value="settings" onClick={ this.handleChange }><Icon name='settings' />Settings</Dropdown.Item>
@@ -111,7 +111,8 @@ class AuthNav extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
+    userID: state.userID
   };
 }
 

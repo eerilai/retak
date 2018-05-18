@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+import { Route, withRouter } from 'react-router-dom';
+import { connect } from "react-redux";
 import axios from 'axios';
 import { Grid, Menu, Segment } from 'semantic-ui-react'
+import { userInfo } from 'os';
+import UserInfo from './UserInfo';
+import UserHistory from './UserHistory';
 
 class Profile extends Component{
   constructor(props) {
@@ -8,71 +13,34 @@ class Profile extends Component{
     this.state = {
       selectedFile: null,
       activeItem: 'stats',
+      userHistory: []
     }
+    this.getUserHistory();
   }
   
-  handleItemClick = (e, { name }) => {
-    console.log("Active tab", e, name)
-    this.setState({ activeItem: name })
-  }
-    
-    fileSelectorHandler = (event) => {
-      console.log(event.target.files[0]);
-      this.setState({
-        selectedFile: event.target.files[0]
-    })
-  } 
-  
-  fileUploadHandler = () => {
-    const fd = new FormData();
-    fd.append('image', this.state.selectedFile, this.state.selectedFile.name)
-    axios.post(url, fd, {
-      onUploadProgress: progressEvent => {
-        console.log('Upload progress', Math.round((progressEvent.loaded/ progressEvent.total) * 100));
-      }
-    })
-    .then(res => {
-      console.log(res);
-    })
-    .catch(err => {
-      console.error(err)
-    });
+  getUserHistory() {
+    const { userName } = this.props.match.params;
+    axios.get(`/users/${userName}/games`)
+      .then((userGameHistory) => {
+        console.log( userGameHistory.data)
+        this.setState({userHistory: userGameHistory.data})
+      })
+      .catch( err => console.error(err));
   }
   
   render() {
     const { activeItem } = this.state
+    const { isLoggedIn, currentUser, userID } = this.props;
+    const { userName } = this.props.match.params;
 
     return(
       <div className="takless">
         <div className="main">
-          <div className="profilePic">
-            <p>Profile placeholder</p>
-            <div>Image</div>
-            <input 
-              style={{display: 'none'}} 
-              type="file" 
-              accept="image/*"
-              onChange={this.fileSelectorHandler}
-              ref={fileInput => this.fileInput = fileInput }
-              />
-            <button onClick={() => this.fileInput.click()}>Pick an Image</button>
-            <button onClick={this.fileUploadHandler}>Upload</button>
-          </div>
-          <Grid>
-            <Grid.Column width={4}>
-              <Menu fluid vertical tabular>
-                <Menu.Item name='stats' active={activeItem === 'stats'} onClick={this.handleItemClick} />
-                <Menu.Item name='activity' active={activeItem === 'activity'} onClick={this.handleItemClick} />
-                <Menu.Item name='updateProfile' active={activeItem === 'updateProfile'} onClick={this.handleItemClick} />
-              </Menu>
-            </Grid.Column>
-
-            <Grid.Column stretched width={12}>
-              <Segment>
-                these are stats
-              </Segment>
-            </Grid.Column>
-          </Grid>
+            <h4>{userName} Profile</h4>
+            <div className="lobby">
+              <UserInfo/>
+            </div>
+            <UserHistory userHistory={this.state.userHistory} />
         </div>
       </div>
     );
@@ -81,5 +49,12 @@ class Profile extends Component{
 }
 
 
+function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.isLoggedIn,
+    currentUser: state.currentUser,
+    userID: state.userID
+  };
+}
 
-export default Profile;
+export default withRouter(connect(mapStateToProps)(Profile));

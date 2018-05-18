@@ -1,5 +1,6 @@
 const initialState = {
   isLoggedIn: false,
+  userID: null,
   currentUser: 'Tak-guest-' + Math.random().toString(36).slice(2,9),
   userEmail: null,
   rankedGames: null,

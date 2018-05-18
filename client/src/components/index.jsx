@@ -54,12 +54,18 @@ class App extends Component {
         <Switch>
           <Route path="/learn" component={Learn} />
           <Route path="/about" component={About} />
-          <Route path="/profile" component={Profile} />
+          <Route 
+            path="/profile/:userName" 
+            render={({ match }) => <Profile />} 
+          />
           <Route
             path="/game/:roomId"
             render={({ match }) => <Game socket={this.state.socket} />}
           />
-          <Route path="/" render={() => <Home socket={this.state.socket} />} />
+          <Route 
+            path="/" 
+            render={() => <Home socket={this.state.socket} />} 
+          />
         </Switch>
       </div>
     );

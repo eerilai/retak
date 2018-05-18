@@ -9,6 +9,7 @@ const rootReducer = (state = initialState, action) => {
       let currentUserInfo = action.payload;
       return {
         ...state, 
+        userID: currentUserInfo.userID,
         currentUser: currentUserInfo.currentUser,
         userEmail: currentUserInfo.userEmail,
         rankedGames: currentUserInfo.rankedGames,
