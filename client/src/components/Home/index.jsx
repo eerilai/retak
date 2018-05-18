@@ -40,7 +40,7 @@ class Home extends Component {
     });
   }
 
-  handleCreateGame(boardSize, isFriendly, isPrivate, roomName) {
+  handleCreateGame(boardSize, isFriendly, isPrivate, isLive, roomName) {
     if (!roomName) {
       roomName = generateRoomName();
     }
@@ -50,7 +50,8 @@ class Home extends Component {
       boardSize,
       isFriendly,
       isPrivate,
-      roomName
+      roomName,
+      isLive,
     });
     socket.on('gameInitiated', ({ roomId }) => {
       let url = `http://localhost:3000/game/${roomId}`;
