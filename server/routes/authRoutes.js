@@ -36,7 +36,6 @@ router.post('/signup', (req, res) => {
           res.status(500)
           res.send('Server Error');
         }
-        console.log("SignUp Res", user.dataValues)
         let currentUser = user.dataValues;
         let currentUserInfo = Object.assign({},
           {
@@ -72,7 +71,6 @@ const authCheck = ((req, res, next) => {
 });
 
 router.get('/check', authCheck, (req, res) => {
-  console.log("Server req.user", req.user.dataValues)
   let currentUser = req.user.dataValues;
   let currentUserInfo = Object.assign({},
     {

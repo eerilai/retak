@@ -122,6 +122,19 @@ nav:hover {
   background-color: #f7f7f7;
 }
 
+/* Profile Page */
+.userInfo {
+  border: 1px solid #ccc;
+  min-height: 200px;
+  background-color: #f7f7f7;
+}
+
+.userHistory{
+  border: 1px solid #ccc;
+  min-height: 400px;
+  background-color: #f7f7f7;
+}
+
 .eachGame{
   border: 1px solid #ccc;
   min-height: 200px;

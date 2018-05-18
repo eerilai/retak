@@ -1,21 +1,30 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import { Icons, Image } from 'semantic-ui-react';
 
 const UserHistory = ({ userHistory }) => {
-  console.log("userHistory", userHistory)
   const eachUserGame = userHistory.map((user) => {
     const losses = user.ranked_games - user.ranked_wins;
-    const time = moment(user.createdAt.slice(0, 19)).format('MMMM Do YYYY, h:mm:ss a');
+    const time = moment(user.createdAt).format('MMMM Do YYYY, h:mm:ss a');
+
     let typeOfWin = '';
-    if(user.win_type === 'R') {
+    if (user.win_type === 'R') {
       typeOfWin = 'Road Win';
+    } 
+    else if (user.win_type === 'F') {
+      typeOfWin = 'Flat Win'
     }
-    // if(){}
+    else if (user.win_type === '1') {
+      typeOfWin = 'Resegnation Win or Time Ran Out'
+    }
+    else if (user.win_type === '1/2') {
+      typeOfWin = 'Draw'
+    }
     
     return (
       <div key={user.id} className="eachGame">
         <div>Played On: {time}</div>
-        <div>{user.player1} vs {user.player2}</div>
+        <div>{user.player1} VS {user.player2}</div>
         <div>Victor: {user.victor}</div>
         <div>{typeOfWin}</div>
         <div>Board Size: {user.board_size}</div>
@@ -24,17 +33,19 @@ const UserHistory = ({ userHistory }) => {
     );
   });
 
+  const noHistory = (
+    <div>You haven't played a game yet...</div>
+  );
+
   return (
-    <div className="leaderboard"> 
+    <div className="userHistory"> 
       <table class="tg">
        <thead>
-          <tr>
-            <th colSpan="5" className="title">
-              <h3>Game History</h3>
-            </th>
-          </tr>
+          <th colSpan="5" className="title">
+            <h3>Game History</h3>
+          </th>
         </thead>
-        {eachUserGame}
+        {(userHistory.length) ? eachUserGame : noHistory}
       </table>
     </div>
   );

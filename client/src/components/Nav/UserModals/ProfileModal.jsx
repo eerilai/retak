@@ -20,6 +20,11 @@ class ProfileModal extends Component {
     // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  // TODO: 
+  // Save Images
+  // Set Avatar Image
+  // Update User Info on Save
+  
   handleOnSave(e){
     console.log('P.props', this.props)
     console.log(e)
