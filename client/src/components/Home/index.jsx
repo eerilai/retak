@@ -68,6 +68,9 @@ class Home extends Component {
     axios.get('/leaderboard')
       .then((board) => {
         this.setState({ leaderboard: board.data });
+      })
+      .catch(err => {
+        console.error(err);
       });
   }
 
