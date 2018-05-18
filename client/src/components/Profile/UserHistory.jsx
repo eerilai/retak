@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Icons, Image } from 'semantic-ui-react';
 
@@ -6,6 +7,9 @@ const UserHistory = ({ userHistory }) => {
   const eachUserGame = userHistory.map((user) => {
     const losses = user.ranked_games - user.ranked_wins;
     const time = moment(user.createdAt).format('MMMM Do YYYY, h:mm:ss a');
+    
+    const player1UserProfile = `/profile/${user.player1}`;
+    const player2UserProfile = `/profile/${user.player2}`;
 
     let typeOfWin = '';
     if (user.win_type === 'R') {
@@ -24,7 +28,9 @@ const UserHistory = ({ userHistory }) => {
     return (
       <div key={user.id} className="eachGame">
         <div>Played On: {time}</div>
-        <div>{user.player1} VS {user.player2}</div>
+        <div>
+          <Link to={player1UserProfile}> {user.player1}</Link>  VS  <Link to={player2UserProfile}> {user.player2} </Link>
+        </div>
         <div>Victor: {user.victor}</div>
         <div>{typeOfWin}</div>
         <div>Board Size: {user.board_size}</div>
