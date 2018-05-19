@@ -35,10 +35,12 @@ class SignupModal extends Component {
           password
         })
         .then(res => {
+          let currentUserInfo = res.data;
+          let currentUser = res.data.currentUser;
           if (res.status === 200) {
             this.props.toggleView("off");
             this.props.toggleLoginLogout(true);
-            this.props.login(username);
+            this.props.login(currentUserInfo);
           }
         })
         .catch(err => {

@@ -129,6 +129,9 @@ class LiveGame extends Component {
           ptn: ptnString,
           tps,
           ranked,
+        }) 
+        .catch(err => {
+          console.error(err);
         });
       }
     }

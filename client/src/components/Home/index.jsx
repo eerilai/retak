@@ -53,6 +53,7 @@ class Home extends Component {
       roomName
     });
     socket.on('gameInitiated', ({ roomId }) => {
+      // TODO: Change URL from localhost to takless for deployment
       let url = `http://localhost:3000/game/${roomId}`;
       let link = `game/${roomId}`;
       this.setState({
@@ -67,6 +68,9 @@ class Home extends Component {
     axios.get('/leaderboard')
       .then((board) => {
         this.setState({ leaderboard: board.data });
+      })
+      .catch(err => {
+        console.error(err);
       });
   }
 

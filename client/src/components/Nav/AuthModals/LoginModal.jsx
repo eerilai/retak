@@ -40,11 +40,12 @@ class LoginModal extends Component {
         password
       })
       .then(res => {
-        const { username } = res.data;
+        let currentUserInfo = res.data;
+        let currentUser = res.data.currentUser;
         this.props.toggleView("off");
         this.props.toggleLoginLogout(true);
-        this.props.login(username);
-        this.props.socket.emit('login', username);
+        this.props.login(currentUserInfo);
+        this.props.socket.emit('login', currentUser);        
       })
       .catch(err => {
         console.error(err);
