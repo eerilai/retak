@@ -40,20 +40,20 @@ class Home extends Component {
     });
   }
 
-  handleCreateGame(boardSize, isFriendly, isPrivate, isLive, roomName) {
-    if (!roomName) {
-      roomName = generateRoomName();
+  handleCreateGame(boardSize, isFriendGame, isPrivate, isLive, roomId) {
+    if (!roomId) {
+      roomId = generateRoomName();
     }
-    const { socket, username } = this.props;
+    const { socket } = this.props;
     socket.emit('createGame', {
-      username,
       boardSize,
-      isFriendly,
+      isFriendGame,
       isPrivate,
-      roomName,
       isLive,
+      roomId
     });
     socket.on('gameInitiated', ({ roomId }) => {
+      // TODO: Change URL from localhost to takless for deployment
       let url = `http://localhost:3000/game/${roomId}`;
       let link = `game/${roomId}`;
       this.setState({
@@ -68,6 +68,9 @@ class Home extends Component {
     axios.get('/leaderboard')
       .then((board) => {
         this.setState({ leaderboard: board.data });
+      })
+      .catch(err => {
+        console.error(err);
       });
   }
 
@@ -109,19 +112,17 @@ class Home extends Component {
           >
             Play with friend
           </button>
-
           <GameSetup
-              modalView={this.state.modalView}
-              gameType={this.state.gameType}
-              changeView={this.changeView}
-              handleCreateGame={this.handleCreateGame} />
+            modalView={this.state.modalView}
+            gameType={this.state.gameType}
+            changeView={this.changeView}
+            handleCreateGame={this.handleCreateGame} />
           <GameLink
             modalView={this.state.modalView}
             gameType={this.state.gameType}            
             changeView={this.changeView}
             url={this.state.url}
             link={this.state.link} />      
-
           <Leaderboard leaderboard={this.state.leaderboard} />
         </div>
       </div>
@@ -129,10 +130,10 @@ class Home extends Component {
   }
 }
 
-
 const mapStateToProps = (state) => {
   return {
-    username: state.currentUser
+    username: state.currentUser,
+    socket: state.socket
   };
 };
 

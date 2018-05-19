@@ -23,19 +23,18 @@ var sectionStyle = {
 class App extends Component {
   constructor(props) {
     super(props);
-    const socket = socketIOClient();
-    this.state = {
-      socket
-    };
+
+    const { socket } = props;
     axios
       .get('/auth/check')
       .then(res => {
-        let currentUser = res.data;
-        if (currentUser[0] !== '<') {
+        let currentUserInfo = res.data;
+        let currentUser = res.data.currentUser;
+        if (currentUserInfo[0] !== '<') {
           props.toggleLoginLogout(true);
-          props.login(currentUser);
+          props.login(currentUserInfo);
         } else {
-          socket.emit('anonLogin', props.username,);
+          socket.emit('AnonUserSession', props.username);
         }
       })
       .catch(err => {
@@ -53,12 +52,10 @@ class App extends Component {
         <Switch>
           <Route path="/learn" component={Learn} />
           <Route path="/about" component={About} />
+          <Route path="/profile/:userName" render={({ match }) => <Profile />} />
           <Route path="/profile" component={Profile} />
-          <Route
-            path="/game/:roomId"
-            render={({ match }) => <Game socket={this.state.socket} />}
-          />
-          <Route path="/" render={() => <Home socket={this.state.socket} />} />
+          <Route path="/game/:roomId" render={({ match }) => <Game />} />
+          <Route path="/" component={Home} />
         </Switch>
       </div>
     );
@@ -68,7 +65,8 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     username: state.currentUser,
-    isLoggedIn: state.isLoggedIn
+    isLoggedIn: state.isLoggedIn,
+    socket: state.socket
   };
 };
 

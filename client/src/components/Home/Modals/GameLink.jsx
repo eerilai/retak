@@ -33,6 +33,7 @@ const GameLink = ({ modalView, changeView, gameType, url, link }) => {
         closeIcon
         dimmer={false}
         onClose={() => changeView('')}
+        closeIcon
       >
         <Modal.Header>{header}</Modal.Header>
         <Modal.Content>
