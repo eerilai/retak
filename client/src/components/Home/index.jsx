@@ -30,18 +30,17 @@ class Home extends Component {
     });
   }
 
-  handleCreateGame(boardSize, timeControl, isFriendly, isPrivate, roomName) {
-    if (!roomName) {
-      roomName = generateRoomName();
+  handleCreateGame(boardSize, timeControl, isFriendGame, isPrivate, roomId) {
+    if (!roomId) {
+      roomId = generateRoomName();
     }
-    const { socket, username } = this.props;
+    const { socket } = this.props;
     socket.emit('createGame', {
-      username,
       boardSize,
       timeControl,
-      isFriendly,
+      isFriendGame,
       isPrivate,
-      roomName,
+      roomId
     });
     socket.on('gameInitiated', ({ roomId }) => {
       // TODO: Change URL from localhost to takless for deployment
@@ -103,7 +102,6 @@ class Home extends Component {
           >
             Play with friend
           </button>
-
           <GameSetup
             modalView={this.state.modalView}
             gameType={this.state.gameType}
@@ -127,6 +125,7 @@ class Home extends Component {
 const mapStateToProps = (state) => {
   return {
     username: state.currentUser,
+    socket: state.socket
   };
 };
 
