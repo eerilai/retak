@@ -20,15 +20,19 @@ import {
   Icon,
   Form,
   Select,
-  Transition
+  Transition,
+  Loader
 } from 'semantic-ui-react';
 
 class LiveGame extends Component {
   constructor(props) {
     super(props);
+<<<<<<< HEAD
     const newGame = new Game(8);
+=======
+>>>>>>> dev
     this.state = {
-      game: newGame,
+      game: null,
       timeControl: false,
       stone: "",
       isOpen: true,
@@ -46,24 +50,9 @@ class LiveGame extends Component {
     this.updateTime = this.updateTime.bind(this);
 
     const { socket, username } = props;
-    let { roomId } = props.match.params;
-    
-    // socket.emit('anonUsernameCheck', username);
-
-    // socket.on('setUsername', (username) => {
-    //   socket.emit('fetchGame', {
-    //     username,
-    //     roomId
-    //   });
-    // });
-
-    // socket.on('setAnonUsername', (username) => {
-    //   socket.emit('fetchGame', {
-    //     username,
-    //     roomId
-    //   });
-    // });
+    const { roomId } = props.match.params;
     const loadGame = this.props.location.state ? this.props.location.state.game : null;
+
     setTimeout(() => {
       console.log('fetchGame emitted')
       socket.emit('fetchGame', roomId, loadGame);
@@ -313,6 +302,10 @@ class LiveGame extends Component {
   render() {
     const { game, stone } = this.state;
     const { username, socket } = this.props;
+
+    if (!game) {
+      return <Loader active size="massive" />
+    }
 
     let PlayerPieces;
     let OpponentPieces;
