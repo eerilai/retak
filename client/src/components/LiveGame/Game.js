@@ -13,6 +13,7 @@ class Game {
     this.winString = '';
     this.ranked = ranked;
     this.size = size;
+    this.timeControl = '';
     this.board = [];
     this.squares = {};
     this.createBoard(size);
@@ -403,6 +404,8 @@ class Game {
   setWinString() {
     if (this.winType === '1/2') {
       this.winString = '1/2—1/2';
+    } else if (this.winType === 'T') {
+      this.winString = this.victor === 1 ? '1—0' : '0—1';
     } else {
       this.winString = this.victor === 1 ? `${this.winType}—0` : `0—${this.winType}`;
     }
@@ -421,6 +424,14 @@ class Game {
   handleWin() {
     this.printPTN();
     this.parseTPS(this.board);
+  }
+
+  timeOut(player) {
+    this.victor = player === this.player1 ? 2 : 1;
+    this.victorUsername = this.victor === 1 ? this.player1 : this.player2;
+    this.loserUsername = this.victor === 1 ? this.player2 : this.player1;
+    this.winType = 'T';
+    this.setWinString();
   }
 }
 

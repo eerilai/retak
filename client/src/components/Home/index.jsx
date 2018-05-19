@@ -1,21 +1,11 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import Lobby from './lobby';
 import InPlay from './InPlay';
 import Leaderboard from './Leaderboard';
 import LobbyTable from '../../containers/Home/lobby_table';
-import { connect } from 'react-redux';
-import {
-  Input,
-  Button,
-  Header,
-  Modal,
-  Icon,
-  Form,
-  Select,
-  Transition
-} from 'semantic-ui-react';
 import GameSetup from './Modals/GameSetup';
 import GameLink from './Modals/GameLink';
 import generateRoomName from './roomNames';
@@ -38,17 +28,18 @@ class Home extends Component {
 
   changeView(modalView) {
     this.setState({
-      modalView
+      modalView,
     });
   }
 
-  handleCreateGame(boardSize, isFriendGame, isPrivate, isLive, roomId) {
+  handleCreateGame(boardSize, timeControl, isFriendGame, isPrivate, isLive, roomId) {
     if (!roomId) {
       roomId = generateRoomName();
     }
     const { socket } = this.props;
     socket.emit('createGame', {
       boardSize,
+      timeControl,
       isFriendGame,
       isPrivate,
       isLive,
@@ -119,13 +110,15 @@ class Home extends Component {
             modalView={this.state.modalView}
             gameType={this.state.gameType}
             changeView={this.changeView}
-            handleCreateGame={this.handleCreateGame} />
+            handleCreateGame={this.handleCreateGame}
+          />
           <GameLink
             modalView={this.state.modalView}
-            gameType={this.state.gameType}            
+            gameType={this.state.gameType}
             changeView={this.changeView}
             url={this.state.url}
-            link={this.state.link} />      
+            link={this.state.link}
+          />
           <Leaderboard leaderboard={this.state.leaderboard} />
         </div>
       </div>
