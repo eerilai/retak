@@ -45,7 +45,7 @@ class LoginModal extends Component {
         this.props.toggleView("off");
         this.props.toggleLoginLogout(true);
         this.props.login(currentUserInfo);
-        this.props.socket.emit('login', currentUser);        
+        this.props.socket.emit('login', currentUser);
       })
       .catch(err => {
         console.error(err);

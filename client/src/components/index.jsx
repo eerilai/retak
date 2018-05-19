@@ -64,7 +64,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    username: state.currentUserInfo,
+    username: state.currentUser,
     isLoggedIn: state.isLoggedIn,
     socket: state.socket
   };

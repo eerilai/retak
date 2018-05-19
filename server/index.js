@@ -87,6 +87,7 @@ io.use(sharedSession(session, {
 }))
 
 io.on('connection', (socket) => {
+  socket.leave(socket.id);
 
   // Update username on socket session on login
   socket.on('login', (username) => {
@@ -108,15 +109,15 @@ io.on('connection', (socket) => {
   });
 
   // Create a new game and save game state to room
-  socket.on('createGame', async ({ username, boardSize, isFriendGame, isPrivate, roomName }) => {
-    let roomId = roomName;
-    if (io.sockets.adapter.rooms[roomId]) {
-      roomId = Math.random().toString(36).slice(2, 9);
-    }
+  socket.on('createGame', async ({ boardSize, isFriendGame, isPrivate, roomId }) => {
+    // if (io.sockets.adapter.rooms[roomId]) {
+    //   roomId = Math.random().toString(36).slice(2, 9);
+    // }
     await socket.join(roomId);
     const room = io.sockets.adapter.rooms[roomId];
-    room.player1 = username;
-    room.activePlayer = username;
+    console.log('socket handshake session username', socket.handshake.session);
+    room.player1 = socket.handshake.session.username;
+    room.activePlayer = socket.handshake.session.username;
     room.boardSize = boardSize
     room.isFriendGame = isFriendGame;
     room.isPrivate = isPrivate || isFriendGame;

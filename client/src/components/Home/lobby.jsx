@@ -13,6 +13,7 @@ class Lobby extends Component {
     const { socket } = props;
     socket.emit('fetchLobby');
     socket.on('updateLobby', (data) => {
+      console.log('games', data);
       this.setState({
         games: data,
       });
