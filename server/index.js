@@ -109,7 +109,7 @@ io.on('connection', (socket) => {
   });
 
   // Create a new game and save game state to room
-  socket.on('createGame', async ({ boardSize, isFriendGame, isPrivate, roomId }) => {
+  socket.on('createGame', async ({ boardSize, timeControl, isFriendGame, isPrivate, roomId }) => {
     // if (io.sockets.adapter.rooms[roomId]) {
     //   roomId = Math.random().toString(36).slice(2, 9);
     // }
@@ -119,6 +119,7 @@ io.on('connection', (socket) => {
     room.player1 = socket.handshake.session.username;
     room.activePlayer = socket.handshake.session.username;
     room.boardSize = boardSize
+    room.timeControl = timeControl;
     room.isFriendGame = isFriendGame;
     room.isPrivate = isPrivate || isFriendGame;
     room.spectators = {};
@@ -134,17 +135,19 @@ io.on('connection', (socket) => {
     }
     const { username } = socket.handshake.session;
     const room = io.sockets.adapter.rooms[roomId];
-    const { gameState, activePlayer, boardSize, isPrivate, spectators } = room;
+    const { gameState, activePlayer, boardSize, timeControl, isPrivate, spectators } = room;
     const { player1, player2 } = room;
     if (username === player1) {
       if (!player2) {
-        socket.emit('pendingGame', { boardSize, roomId } );
+        socket.emit('pendingGame', { boardSize, timeControl, roomId });
       } else {
-        io.in(roomId).emit('syncGame', { boardSize, gameState, roomId, player1, player2, activePlayer });
+        io.in(roomId).emit('syncGame', { boardSize, timeControl, gameState, roomId, player1, player2, activePlayer });
       }
     } else if (!player2) {
       room.player2 = username;
-      io.to(roomId).emit('syncGame', { boardSize, gameState: 'new', roomId, player1, player2: room.player2, activePlayer });
+      io.to(roomId).emit('syncGame', {
+        boardSize, gameState: 'new', timeControl, roomId, player1, player2: room.player2, activePlayer,
+      });
     } else if (username !== player2 && isPrivate) {
       socket.leave(roomId);
       socket.emit('gameAccessDenied');
@@ -152,7 +155,9 @@ io.on('connection', (socket) => {
       if (username !== player2) {
         room.spectators[username] = username;
       }
-      socket.emit('syncGame', { boardSize, gameState, roomId, player1, player2, activePlayer });
+      socket.emit('syncGame', {
+        boardSize, gameState, timeControl, roomId, player1, player2, activePlayer,
+      });
     }
 
     // Update lobby
@@ -165,9 +170,11 @@ io.on('connection', (socket) => {
     const room = io.sockets.adapter.rooms[roomId];
     room.gameState = gameState;
     room.activePlayer = activePlayer;
-    const { boardSize, player1, player2 } = room;
+    const { boardSize, timeControl, player1, player2 } = room;
 
-    socket.to(roomId).emit('syncGame', { boardSize, gameState, player1, player2, activePlayer, roomId });
+    socket.to(roomId).emit('syncGame', {
+      boardSize, gameState, timeControl, player1, player2, activePlayer, roomId,
+    });
   });
 
   // Add 'isClosed' property to finished game and update lobby
