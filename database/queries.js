@@ -150,6 +150,21 @@ const getUserGames = (username) => {
   });
 };
 
+const getCurrentUserGames = (userID) => {
+  return new Promise (async (res, rej) => {
+    const games =
+      await AsyncGame.findAll({
+        where: {
+          [Op.or]: [
+            { player1_id: userID },
+            { player2_id: userID },
+          ],
+        },
+      });
+    res(games);
+  });
+};
+
 const storeAsyncGame = (gameState, room, roomId) => {
   const {tps, ptn, ranked} = gameState;
   console.log(room);
@@ -194,5 +209,6 @@ module.exports = {
   getLeaderboard,
   getUserData,
   getUserGames,
+  getCurrentUserGames,
   storeAsyncGame,
 };
