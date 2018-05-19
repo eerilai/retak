@@ -14,7 +14,7 @@ class GameSetup extends Component {
       boardSize: 0,
       isPrivate: false,
       roomName: '',
-      time: false,
+      timeControl: false,
     };
 
     this.handleBoardSizeChange = this.handleBoardSizeChange.bind(this);
@@ -38,11 +38,11 @@ class GameSetup extends Component {
   handleTimeChange(e, { value }) {
     if (value === '0') {
       this.setState({
-        time: -1,
+        timeControl: -1,
       });
     } else {
       this.setState({
-        time: Number(value) * 60,
+        timeControl: Number(value) * 60,
       });
     }
   }
@@ -69,7 +69,7 @@ class GameSetup extends Component {
       { key: '5', text: '3', value: '3' },
     ];
     const isFriendly = this.props.gameType === 'friend';
-    const { boardSize, isPrivate, roomName, time } = this.state;
+    const { boardSize, isPrivate, roomName, timeControl } = this.state;
     return (
         <Modal
           open={this.props.modalView === 'GameSetup'}
@@ -117,7 +117,7 @@ class GameSetup extends Component {
               labelPosition="right"
               content="New Game"
               onClick={() => {
-                this.props.handleCreateGame(boardSize, time, isFriendly, isPrivate, roomName);
+                this.props.handleCreateGame(boardSize, timeControl, isFriendly, isPrivate, roomName);
               }}
             />
           </Modal.Actions>
