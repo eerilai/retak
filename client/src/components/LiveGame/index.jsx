@@ -39,13 +39,31 @@ class LiveGame extends Component {
     const { socket, username } = props;
     const { roomId } = props.match.params;
     
-    socket.emit('fetchGame', {
-      username,
-      roomId
-    });
+    // socket.emit('anonUsernameCheck', username);
+
+    // socket.on('setUsername', (username) => {
+    //   socket.emit('fetchGame', {
+    //     username,
+    //     roomId
+    //   });
+    // });
+
+    // socket.on('setAnonUsername', (username) => {
+    //   socket.emit('fetchGame', {
+    //     username,
+    //     roomId
+    //   });
+    // });
+
+    setTimeout(() => {
+      console.log('fetchGame emitted')
+      socket.emit('fetchGame', roomId);
+    }, 600);
     
     socket.on('syncGame', ({ boardSize, gameState, player1, player2, roomId, activePlayer }) => {
+      console.log('syncGame fired');
       if (roomId === props.match.params.roomId) {
+        console.log('rooms match');
         const game = new Game(boardSize, gameState, player1, player2);
         game.activePlayer = activePlayer;
         this.setState({
@@ -278,7 +296,7 @@ class LiveGame extends Component {
             </div>
           </div>
         </div>
-        <Chat socket={socket} />
+        <Chat />
       </div>
     );
   }
@@ -292,7 +310,8 @@ class LiveGame extends Component {
 
 const mapStateToProps = state => {
   return {
-    username: state.currentUser
+    username: state.currentUser,
+    socket: state.socket
   };
 };
 

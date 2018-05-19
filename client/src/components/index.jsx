@@ -23,10 +23,8 @@ var sectionStyle = {
 class App extends Component {
   constructor(props) {
     super(props);
-    const socket = socketIOClient();
-    this.state = {
-      socket
-    };
+
+    const { socket } = props;
     axios
       .get('/auth/check')
       .then(res => {
@@ -35,7 +33,7 @@ class App extends Component {
           props.toggleLoginLogout(true);
           props.login(currentUser);
         } else {
-          socket.emit('anonLogin', props.username,);
+          socket.emit('AnonUserSession', props.username);
         }
       })
       .catch(err => {
@@ -54,11 +52,8 @@ class App extends Component {
           <Route path="/learn" component={Learn} />
           <Route path="/about" component={About} />
           <Route path="/profile" component={Profile} />
-          <Route
-            path="/game/:roomId"
-            render={({ match }) => <Game socket={this.state.socket} />}
-          />
-          <Route path="/" render={() => <Home socket={this.state.socket} />} />
+          <Route path="/game/:roomId" render={({ match }) => <Game />} />
+          <Route path="/" render={() => <Home />} />
         </Switch>
       </div>
     );
@@ -68,7 +63,8 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     username: state.currentUser,
-    isLoggedIn: state.isLoggedIn
+    isLoggedIn: state.isLoggedIn,
+    socket: state.socket
   };
 };
 

@@ -13,7 +13,7 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
 });
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.send('Success');
+  res.send({ username: req.user.dataValues.username });
 });
 
 router.post('/signup', (req, res) => {

@@ -40,9 +40,11 @@ class LoginModal extends Component {
         password
       })
       .then(res => {
+        const { username } = res.data;
         this.props.toggleView("off");
         this.props.toggleLoginLogout(true);
-        this.props.login(usernameOrEmail);
+        this.props.login(username);
+        this.props.socket.emit('login', username);
       })
       .catch(err => {
         console.error(err);
@@ -184,7 +186,8 @@ class LoginModal extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
+    socket: state.socket
   };
 }
 
