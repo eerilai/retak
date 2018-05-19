@@ -89,7 +89,7 @@ const logGame = (gameInfo) => {
       if (ranked === true && player1 === victor) {
         User.increment(['ranked_games', 'ranked_wins'], { where: { id: player1_id } });
       } else if (ranked === true) {
-        User.increment('ranked_games', { where: { id: player1_id } });
+        User.increment(['ranked_games', 'ranked_losses'], { where: { id: player1_id } });
       }
     }
     if (player2_id !== null) {
@@ -97,7 +97,7 @@ const logGame = (gameInfo) => {
       if (ranked === true && player2 === victor) {
         User.increment(['ranked_games', 'ranked_wins'], { where: { id: player2_id } });
       } else if (ranked === true) {
-        User.increment('ranked_games', { where: { id: player2_id } });
+        User.increment(['ranked_games', 'ranked_losses'], { where: { id: player2_id } });
       }
     }
   });
