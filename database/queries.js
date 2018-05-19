@@ -168,7 +168,7 @@ const getCurrentUserGames = (userID) => {
 const storeAsyncGame = (gameState, room, roomId) => {
   const {tps, ptn, ranked} = gameState;
   console.log(room);
-  const {player1, player2, boardSize} = room;
+  const {player1, player2, boardSize, activePlayer} = room;
   return new Promise (async (res, rej) => {
     const p1 = await User.findAll({ where: { username: player1 } });
     const p2 = await User.findAll({ where: { username: player2 } });
@@ -184,6 +184,7 @@ const storeAsyncGame = (gameState, room, roomId) => {
         player1_id,
         player2,
         player2_id,
+        active_player: activePlayer,
         board_state: tps,
         ptn,
         board_size: boardSize,

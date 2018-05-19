@@ -93,6 +93,9 @@ const AsyncGame = sequelize.define('async_game', {
   player2: {
     type: Sequelize.STRING,
   },
+  active_player: {
+    type: Sequelize.STRING,
+  },
   board_state: {
     type: Sequelize.STRING,
   },
