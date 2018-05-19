@@ -67,6 +67,8 @@ class GameSetup extends Component {
       { key: '3', text: '10', value: '10' },
       { key: '4', text: '5', value: '5' },
       { key: '5', text: '3', value: '3' },
+      { key: '6', text: '1', value: '1' },
+      { key: '7', text: 'Test', value: '.15' },
     ];
     const isFriendly = this.props.gameType === 'friend';
     const { boardSize, isPrivate, roomName, timeControl } = this.state;
