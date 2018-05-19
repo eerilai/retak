@@ -1,43 +1,63 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
-  Input,
   Button,
-  Header,
   Modal,
   Icon,
   Form,
-  Select,
-  Transition
 } from 'semantic-ui-react';
 
-const GameLink = ({ modalView, changeView, gameType, url, link }) => {
-  let urlField;
-  let header;
-  if (gameType === 'friend') {
-    urlField = (
-      <Form.Field>
-        <label>{url}</label>
-      </Form.Field>
-    );
-    header = 'Click the Link Below';
-  } else {
-    urlField = null;
-    header = 'New Game Created'
+class GameLink extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      copied: false,
+    };
   }
 
-  return (
+  render() {
+    const { modalView, changeView, gameType, url, link } = this.props;
+    let urlField;
+    let header;
+    if (gameType === "friend") {
+      urlField = (
+        <div>
+          <div>
+            <Form.Field>
+              <label>{url}</label>
+              <CopyToClipboard
+                text={url}
+                onCopy={() => this.setState({ copied: true })}
+              >
+                <span>
+                  <Icon name="paste" size="large" />
+                </span>
+              </CopyToClipboard>
+            </Form.Field>
+          </div>
+          <div id="copied">
+            {this.state.copied ? 'Copied' : 'Click to copy'}
+          </div>
+        </div>
+      );
+      header = 'Send link to a friend then Enter!';
+    } else {
+      urlField = null;
+      header = 'New Game Created';
+    }
+
+    return (
       <Modal
         open={modalView === 'GameLink'}
-        size={"tiny"}
-        closeIcon
+        size="tiny"
         dimmer={false}
         onClose={() => changeView('')}
         closeIcon
       >
         <Modal.Header>{header}</Modal.Header>
         <Modal.Content>
-          <Form size={"tiny"} key={"small"} />
+          <Form size="tiny" key="small" />
           {urlField}
         </Modal.Content>
         <Modal.Actions>
@@ -52,7 +72,8 @@ const GameLink = ({ modalView, changeView, gameType, url, link }) => {
           </Link>
         </Modal.Actions>
       </Modal>
-  );
+    );
+  }
 }
 
 export default GameLink;
