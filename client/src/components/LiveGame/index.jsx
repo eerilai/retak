@@ -9,6 +9,7 @@ import Board from "./Board";
 import Stack from "./Stack";
 import Chat from "./chat"; // not in use currently
 import PTN from "./PTN"
+import Clock from "./Clock";
 import "../../styles/livegame.css";
 import { convertCoord } from "./gameUtil";
 import {
@@ -28,33 +29,96 @@ class LiveGame extends Component {
     const newGame = new Game(6);
     this.state = {
       game: newGame,
+      timeControl: false,
       stone: "",
       isOpen: true,
       user: props.currentUser,
+      opponentName: "",
+      myCounter: false,
+      opponentCounter: false,
+      myTimeLeft: 0,
+      opponentTimeLeft: 0
     };
     this.movePieces = this.movePieces.bind(this);
     this.handleSquareClick = this.handleSquareClick.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
+    this.timeOut = this.timeOut.bind(this);
+    this.updateTime = this.updateTime.bind(this);
 
     const { socket, username } = props;
     const { roomId } = props.match.params;
     
-    socket.emit('fetchGame', {
-      username,
-      roomId
-    });
+    // socket.emit('anonUsernameCheck', username);
+
+    // socket.on('setUsername', (username) => {
+    //   socket.emit('fetchGame', {
+    //     username,
+    //     roomId
+    //   });
+    // });
+
+    // socket.on('setAnonUsername', (username) => {
+    //   socket.emit('fetchGame', {
+    //     username,
+    //     roomId
+    //   });
+    // });
+
+    setTimeout(() => {
+      console.log('fetchGame emitted')
+      socket.emit('fetchGame', roomId);
+    }, 600);
     
-    socket.on('syncGame', ({ boardSize, gameState, player1, player2, roomId, activePlayer }) => {
+    socket.on('syncGame', ({ boardSize, gameState, timeControl, player1, player2, roomId, activePlayer }) => {
+      console.log('syncGame fired');
       if (roomId === props.match.params.roomId) {
+        console.log('rooms match');
         const game = new Game(boardSize, gameState, player1, player2);
         game.activePlayer = activePlayer;
+        game.timeControl = timeControl;
+        game.player1CurrentTime = timeControl;
+        game.player2CurrentTime = timeControl;
+
+        if (username === player1) {
+          this.setState({
+            mycurrentTime: game.player1CurrentTime,
+            opponentCurrentTime: game.player2CurrentTime
+          });
+        } else {
+          this.setState({
+            mycurrentTime: game.player2CurrentTime,
+            opponentCurrentTime: game.player2CurrentTime
+          });
+        }
+
+        let opponent;
+        if (this.props.username === player1) {
+          opponent = player2;
+        } else {
+          opponent = player1;
+        }
+
         this.setState({
-          game
+          game,
+          timeControl: game.timeControl,
+          opponentName: opponent,
         });
+
+        if (this.props.username === game.activePlayer) {
+          this.setState({
+            myCounter: true,
+            opponentCounter: false
+          });
+        } else {
+          this.setState({
+            myCounter: false,
+            opponentCounter: true
+          });
+        }
       }
     });
 
-    socket.on('pendingGame', ({ boardSize, roomId }) => {
+    socket.on('pendingGame', ({ boardSize, timeControl, roomId }) => {
       if (roomId === props.match.params.roomId) {
         const game = new Game(boardSize, 'new', username, username);
         game.activePlayer = username;
@@ -88,7 +152,12 @@ class LiveGame extends Component {
     this.setState({
       game
     });
-    if (this.state.username !== game.activePlayer) {
+    if (this.props.username !== game.activePlayer) {
+      this.setState({
+        myCounter: false,
+        opponentCounter: true
+      });
+
       socket.emit("updateGame", {
         gameState: {
           ptn: game.ptn,
@@ -97,7 +166,13 @@ class LiveGame extends Component {
         activePlayer: game.activePlayer,
         roomId: match.params.roomId,
       });
+    } else {
+      this.setState({
+        myCounter: true,
+        opponentCounter: false
+      });
     }
+
     if (game.winType && game.player1 !== game.player2) {
       socket.emit('closeGame', match.params.roomId);
       if (game.victorUsername === this.props.username || game.victorUsername === null) {
@@ -176,6 +251,13 @@ class LiveGame extends Component {
           <p>{`Player ${winner} wins! & Player ${loser} lost!`}</p>
         </div>
       );
+    } else if (this.state.game.winType === "T") {
+      return (
+        <div>
+          <p>{`Player ${loser} ran out of time`}<br /></p>
+          <p>{`Player ${winner} wins!`}</p>
+        </div>
+      );
     }
     else if (this.state.game.winType !== null) {
       return <p>{`Player ${winner} wins! & Player ${loser} lost!`}</p>;
@@ -204,6 +286,28 @@ class LiveGame extends Component {
       return <div className="to-play" />;
     }
     return <div className="to-play">{player1}'s turn</div>;
+  }
+
+  updateTime(player, currentTime) {
+    if (this.props.username === player) {
+      this.setState({
+        mycurrentTime: currentTime
+      });
+    } else {
+      this.setState({
+        opponentCurrentTime: currentTime
+      });
+    }
+  }
+
+  timeOut(player) {
+    let game = this.state.game;
+    game.timeOut(player);
+    this.setState({
+      game,
+      myCounter: false,
+      opponentCounter: false
+    });
   }
 
   render() {
@@ -255,6 +359,16 @@ class LiveGame extends Component {
       <div className="takless">
         <div className="game-info">
           <div>{this.winner()}</div>
+          <div>
+            <Clock
+              updateTime={this.updateTime}
+              player={this.state.opponentName}
+              time={this.state.timeControl}
+              currentTime={this.state.opponentCurrentTime}
+              shouldCount={this.state.opponentCounter}
+              timeOut={this.timeOut}
+            />
+          </div>
           {this.opponentTurn()}
           <table>
             {OpponentPieces}
@@ -264,6 +378,16 @@ class LiveGame extends Component {
             {PlayerPieces}
           </table>
           {this.userTurn()}
+          <div>
+            <Clock
+              updateTime={this.updateTime}
+              player={username}
+              time={this.state.timeControl}
+              currentTime={this.state.mycurrentTime}
+              shouldCount={this.state.myCounter}
+              timeOut={this.timeOut}
+            />
+          </div>
         </div>
         <div className="main">
           <div className="game">
@@ -281,7 +405,7 @@ class LiveGame extends Component {
             </div>
           </div>
         </div>
-        <Chat socket={socket} />
+        <Chat />
       </div>
     );
   }
@@ -295,7 +419,8 @@ class LiveGame extends Component {
 
 const mapStateToProps = state => {
   return {
-    username: state.currentUser
+    username: state.currentUser,
+    socket: state.socket
   };
 };
 
