@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 class InPlay extends Component {
@@ -12,14 +13,33 @@ class InPlay extends Component {
   }
 
   fetchGames() {
-    axios.get(`/users/${this.props.userID}/games/current`);
+    axios.get(`/users/${this.props.userID}/games/current`)
+      .then((games) => {
+        this.setState({
+          games: games.data
+        });
+        console.log(games);
+      });
   }
 
   render() {
     console.log(this.props.userID);
     return (
-      <div>
-      </div>
+      <table class="tg">
+        <tr>
+          <th>Room</th>
+          <th>Board</th>
+          <th>Turn</th>
+          <th>toPlay</th>
+        </tr>
+        {this.state.games.map(game => (
+          <tr className="room">
+            <td><Link to={`/game/${game.room_id}`}>{game.room_id}</Link></td>
+            <td>{game.board_size}</td>
+            <td>{game.board_state[game.board_state.length - 6]}</td>
+          </tr>
+        ))}
+      </table>
     );
   }
 }
