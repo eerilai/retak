@@ -137,12 +137,31 @@ io.on('connection', (socket) => {
   });
 
   // Serve game state on LiveGame component initialize
-  socket.on('fetchGame', async (roomId) => {
+  socket.on('fetchGame', async (roomId, loadGame) => {
+    if (!io.sockets.adapter.rooms[roomId]) {
+      socket.join(roomId);
+    }
     if (!io.sockets.adapter.rooms[roomId].sockets[socket.id]) {
       socket.join(roomId);
     }
     const { username } = socket.handshake.session;
     const room = io.sockets.adapter.rooms[roomId];
+    if (loadGame !== null) {
+      const {
+        player1, player2, active_player,
+        board_state, ptn, board_size,
+        ranked, isPrivate, spectators,
+      } = loadGame;
+      room.player1 = player1;
+      room.player2 = player2;
+      room.gameState = {
+        tps: board_state,
+        ptn,
+      };
+      room.activePlayer = active_player;
+      room.boardSize = board_size;
+      room.isLive = false;
+    }
     const { gameState, activePlayer, boardSize, timeControl, isPrivate, spectators } = room;
     const { player1, player2 } = room;
     if (username === player1) {
@@ -176,9 +195,9 @@ io.on('connection', (socket) => {
   // Update game for each piece move
   socket.on('updateGame', ({ gameState, activePlayer, roomId }) => {
     const room = io.sockets.adapter.rooms[roomId];
-    if (room.isLive === false) storeAsyncGame(gameState, room, roomId);
     room.gameState = gameState;
     room.activePlayer = activePlayer;
+    if (room.isLive === false) storeAsyncGame(gameState, room, roomId);
     const { boardSize, timeControl, player1, player2 } = room;
 
     socket.to(roomId).emit('syncGame', {

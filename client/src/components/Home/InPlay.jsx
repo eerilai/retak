@@ -18,7 +18,6 @@ class InPlay extends Component {
         this.setState({
           games: games.data
         });
-        console.log(games);
       });
   }
 
@@ -34,7 +33,11 @@ class InPlay extends Component {
         </tr>
         {this.state.games.map(game => (
           <tr className="room">
-            <td><Link to={`/game/${game.room_id}`}>{game.room_id}</Link></td>
+            <td><Link to={{
+              pathname: `/game/${game.room_id}`,
+              state: { game }
+            }}>{game.room_id}
+            </Link></td>
             <td>{game.board_size}</td>
             <td>{game.board_state[game.board_state.length - 6]}</td>
           </tr>

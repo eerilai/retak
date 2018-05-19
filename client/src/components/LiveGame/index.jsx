@@ -46,7 +46,7 @@ class LiveGame extends Component {
     this.updateTime = this.updateTime.bind(this);
 
     const { socket, username } = props;
-    const { roomId } = props.match.params;
+    let { roomId } = props.match.params;
     
     // socket.emit('anonUsernameCheck', username);
 
@@ -63,10 +63,10 @@ class LiveGame extends Component {
     //     roomId
     //   });
     // });
-
+    const loadGame = this.props.location.state ? this.props.location.state.game : null;
     setTimeout(() => {
       console.log('fetchGame emitted')
-      socket.emit('fetchGame', roomId);
+      socket.emit('fetchGame', roomId, loadGame);
     }, 600);
     
     socket.on('syncGame', ({ boardSize, gameState, timeControl, player1, player2, roomId, activePlayer }) => {
