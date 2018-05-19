@@ -57,6 +57,21 @@ i.icon.sign.in:before {
   float: right;
 }
 
+i.icon.paste {
+  float: right;
+}
+i.icon.paste:hover {
+  transform: scale(1.3);
+}
+
+#copied {
+  float: right;
+}
+
+#activeColor {
+  background: #ccc;
+}
+
 #page {
   background-color: #eeeeee;
   display: grid;
