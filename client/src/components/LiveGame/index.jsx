@@ -7,8 +7,8 @@ import sound_brick_drop from "./Sounds/brick_drop_concrete.wav";
 import Game from "./Game";
 import Board from "./Board";
 import Stack from "./Stack";
-import Chat from "./chat"; // not in use currently
-import PTN from "./PTN"
+import Chat from "./chat";
+import PTN from "./PTN";
 import Clock from "./Clock";
 import "../../styles/livegame.css";
 import { convertCoord } from "./gameUtil";
@@ -49,14 +49,11 @@ class LiveGame extends Component {
     const { roomId } = props.match.params;
 
     setTimeout(() => {
-      console.log('fetchGame emitted')
       socket.emit('fetchGame', roomId);
     }, 600);
     
     socket.on('syncGame', ({ boardSize, gameState, timeControl, player1, player2, roomId, activePlayer }) => {
-      console.log('syncGame fired');
       if (roomId === props.match.params.roomId) {
-        console.log('rooms match');
         const game = new Game(boardSize, gameState, player1, player2);
         game.activePlayer = activePlayer;
         game.timeControl = timeControl;
