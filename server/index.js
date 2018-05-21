@@ -5,6 +5,17 @@ const bodyParser = require('body-parser');
 const socket = require('socket.io');
 const sharedSession = require('express-socket.io-session');
 
+var fs = require('fs')
+
+var https = require('https')
+
+var certOptions = {
+  key: fs.readFileSync(path.join(__dirname, './server.key')),
+  cert: fs.readFileSync(path.join(__dirname, './server.crt'))
+}
+
+
+
 require('dotenv').config();
 
 const db = require('../database');
@@ -74,9 +85,17 @@ app.get('/*', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-const server = app.listen(PORT, () => {
+
+
+
+const server = https.createServer(certOptions, app).listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
+
+
+
+
+
 
 //Socket Setup
 let rooms = 0;
@@ -191,10 +210,10 @@ io.on('connection', (socket) => {
   });
 
   // Chat/Typing
-  socket.on('chat', function(data) {
+  socket.on('chat', function (data) {
     io.to(data.room).emit('chat', data);
   });
-  socket.on('typing', function(data) {
+  socket.on('typing', function (data) {
     socket.to(data.room).broadcast.emit('typing', data);
   });
 });

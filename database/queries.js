@@ -22,7 +22,7 @@ const findOrCreateUserByGoogleId = (id) => {
         googleID: id
       },
       defaults: {
-        username: 'Tak-user-' + Math.random().toString(36).slice(2,9)
+        username: 'Tak-user-' + Math.random().toString(36).slice(2, 9)
       }
     })
       .then(([user, created]) => {
@@ -34,26 +34,45 @@ const findOrCreateUserByGoogleId = (id) => {
   });
 }
 
-const createUser = (userInfo) => {
+
+const findOrCreateUserByFacebookId = (id) => {
   return new Promise((resolve, reject) => {
-  const { username, email, password } = userInfo;
-  hashPassword(password)
-    .then((hash) => {
-      User.create({
-        username,
-        email,
-        password: hash
-      })
-      .then((user) => {
+    User.findOrCreate({
+      where: {
+        facebookID: id
+      },
+      defaults: {
+        username: 'Tak-user-' + Math.random().toString(36).slice(2, 9)
+      }
+    })
+      .then(([user, created]) => {
         resolve(user);
       })
       .catch((err) => {
         reject(err);
+      });
+  });
+}
+const createUser = (userInfo) => {
+  return new Promise((resolve, reject) => {
+    const { username, email, password } = userInfo;
+    hashPassword(password)
+      .then((hash) => {
+        User.create({
+          username,
+          email,
+          password: hash
+        })
+          .then((user) => {
+            resolve(user);
+          })
+          .catch((err) => {
+            reject(err);
+          })
       })
-    })
-    .catch((err) => {
-      reject(err);
-    });
+      .catch((err) => {
+        reject(err);
+      });
   });
 }
 
@@ -115,7 +134,7 @@ const getLeaderboard = () => {
 };
 
 const getUserData = (username) => {
-  return new Promise (async (res, rej) => {
+  return new Promise(async (res, rej) => {
     const data =
       await User.find({
         attributes: [
@@ -136,7 +155,7 @@ const getUserData = (username) => {
 };
 
 const getUserGames = (username) => {
-  return new Promise (async (res, rej) => {
+  return new Promise(async (res, rej) => {
     const games =
       await Game.findAll({
         where: {
@@ -158,4 +177,5 @@ module.exports = {
   getLeaderboard,
   getUserData,
   getUserGames,
+  findOrCreateUserByFacebookId
 };

@@ -56,13 +56,22 @@ class LoginModal extends Component {
     return (
       <Modal isOpen={this.props.modalView === "login"}>
         <div className="log">
-        <Header icon='LogIn' content='Log-In to Your Account' />
+          <Header icon='LogIn' content='Log-In to Your Account' />
           <a href="/auth/google">
             <Button class="ui google plus button" role="button" color="red">
               <i aria-hidden="true" class="google plus icon"></i>
               |   Sign in with Google
             </Button>
           </a>
+
+
+          <a href="/auth/facebook">
+            <Button class="ui facebook button" role="button" color="blue">
+              <i aria-hidden="true" class="facebook icon"></i>
+              |   Sign in with Facebook
+            </Button>
+          </a>
+
           <form onSubmit={this.handleSubmit}>
             <div>
               <div>
@@ -75,7 +84,7 @@ class LoginModal extends Component {
                       placeholder="Username"
                       value={this.state.username}
                       onChange={this.handleUsernameChange}
-                      />
+                    />
                   </div>
                 </Input>
               </div>
@@ -89,12 +98,12 @@ class LoginModal extends Component {
                       placeholder="Password"
                       value={this.state.password}
                       onChange={this.handlePasswordChange}
-                      />
+                    />
                   </div>
                 </Input>
               </div>
             </div>
-            <Button id="loginButton" size="large">Log In  <Icon size="large" name="sign in" corner="true"/></Button>
+            <Button id="loginButton" size="large">Log In  <Icon size="large" name="sign in" corner="true" /></Button>
           </form>
           <p className="question">Here for the first time?</p>
           <Button

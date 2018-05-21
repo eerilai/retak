@@ -38,6 +38,10 @@ const User = sequelize.define('user', {
     type: Sequelize.STRING,
     unique: true,
   },
+  facebookID: {
+    type: Sequelize.STRING,
+    unique: true,
+  },
   total_games: {
     type: Sequelize.INTEGER,
     defaultValue: 0,
