@@ -24,7 +24,7 @@ class ProfileModal extends Component {
   // Save Images
   // Set Avatar Image
   // Update User Info on Save
-  
+
   handleOnSave(e){
     console.log('P.props', this.props)
     console.log(e)
@@ -96,13 +96,15 @@ class ProfileModal extends Component {
         <Modal.Content image>
           <Image wrapped size='small' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrQLg-Na2P4WcdWJjlCZG8YD6Q9DuYLl4w7uf08ibjiIZVQ66d' />
           <Header>{currentUser}</Header>
-          <div className="profilePic">
+          <div className="avatarPic">
             <p>Profile placeholder</p>
             <div>Image</div>
             <input 
+              className="fileInput"
+              id="avatar"
               style={{display: 'none'}} 
               type="file" 
-              accept="image/*"
+              accept=".gif, .jpg, .png"
               onChange={this.fileSelectorHandler}
               ref={fileInput => this.fileInput = fileInput }
               />
