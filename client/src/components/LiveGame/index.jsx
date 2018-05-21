@@ -47,8 +47,8 @@ class LiveGame extends Component {
 
     const { socket, username } = props;
     const { roomId } = props.match.params;
+    console.log(socket);
     const loadGame = this.props.location.state ? this.props.location.state.game : null;
-
     setTimeout(() => {
       console.log('fetchGame emitted')
       socket.emit('fetchGame', roomId, loadGame);
@@ -159,23 +159,9 @@ class LiveGame extends Component {
     }
 
     if (game.winType && game.player1 !== game.player2) {
-      socket.emit('closeGame', match.params.roomId);
-      if (game.victorUsername === this.props.username || game.victorUsername === null) {
-        const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
-        axios.post('/record', {
-          player1,
-          player2,
-          size,
-          winType,
-          victor: victorUsername,
-          ptn: ptnString,
-          tps,
-          ranked,
-        }) 
-        .catch(err => {
-          console.error(err);
-        });
-      }
+      const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
+      const endOfGameState = { player1, player2, ptn: ptnString, tps, victor: victorUsername, size, winType, ranked };
+      socket.emit('closeGame', match.params.roomId, endOfGameState);
     }
   }
 

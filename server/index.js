@@ -206,7 +206,8 @@ io.on('connection', (socket) => {
   });
 
   // Add 'isClosed' property to finished game and update lobby
-  socket.on('closeGame', (roomId) => {
+  socket.on('closeGame', (roomId, game) => {
+    logGame(game);
     io.sockets.adapter.rooms[roomId].isClosed = true;
     const lobbyList = filterLobbyList(io.sockets.adapter.rooms);
     socket.broadcast.emit('updateLobby', lobbyList);
