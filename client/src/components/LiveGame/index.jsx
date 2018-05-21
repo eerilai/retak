@@ -27,10 +27,6 @@ import {
 class LiveGame extends Component {
   constructor(props) {
     super(props);
-<<<<<<< HEAD
-    const newGame = new Game(8);
-=======
->>>>>>> dev
     this.state = {
       game: null,
       timeControl: false,
