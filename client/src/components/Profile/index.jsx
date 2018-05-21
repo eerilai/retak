@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import axios from 'axios';
 import { Grid, Menu, Segment } from 'semantic-ui-react'
 import { userInfo } from 'os';
-import UserInfo from './UserInfo';
 import UserHistory from './UserHistory';
 import PageNotFound from '../PageNotFound';
 
@@ -13,16 +12,17 @@ class Profile extends Component{
     super(props);
     this.state = {
       selectedFile: null,
-      activeItem: 'stats',
       userHistory: [],
       userInfo: {},
       isUser: false
     }
+    
     this.getUserHistory();
     this.getUserInfo();
   }
-
+  
   getUserHistory() {
+    console.log("Called getUserHistory");
     const { userName } = this.props.match.params;
     axios.get(`/users/${userName}/games`)
       .then((userGameHistory) => {
@@ -35,6 +35,7 @@ class Profile extends Component{
   }
 
   getUserInfo() {
+    console.log("Called getUserInfo");
     const { userName } = this.props.match.params;
     axios.get(`/users/${userName}/data`)
       .then((userInfo) => {
@@ -45,16 +46,14 @@ class Profile extends Component{
       })
       .catch( err => console.error(err));
   }
-  
+ 
   render() {
-    const { activeItem } = this.state;
     const { isLoggedIn, currentUser, userID } = this.props;
     const { userName } = this.props.match.params;
 
     const userProfile = (
       <div>
         <h4>{userName}'s Profile</h4>
-        <UserInfo userInfo={this.state.userInfo} />
         <UserHistory userHistory={this.state.userHistory} />
       </div>
     );
