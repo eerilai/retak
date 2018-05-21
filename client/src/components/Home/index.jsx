@@ -31,27 +31,31 @@ class Home extends Component {
   }
 
   handleCreateGame(boardSize, timeControl, isFriendGame, isPrivate, roomId) {
-    if (!roomId) {
-      roomId = generateRoomName();
-    }
-    const { socket } = this.props;
-    socket.emit('createGame', {
-      boardSize,
-      timeControl,
-      isFriendGame,
-      isPrivate,
-      roomId
-    });
-    socket.on('gameInitiated', ({ roomId }) => {
-      // TODO: Change URL from localhost to takless for deployment
-      let url = `http://localhost:3000/game/${roomId}`;
-      let link = `game/${roomId}`;
-      this.setState({
-        url,
-        link,
-        modalView: 'GameLink'
+    console.log('boardSize timeControl', boardSize, timeControl)
+    if (boardSize) {
+
+      if (!roomId) {
+        roomId = generateRoomName();
+      }
+      const { socket } = this.props;
+      socket.emit('createGame', {
+        boardSize,
+        timeControl,
+        isFriendGame,
+        isPrivate,
+        roomId
       });
-    });
+      socket.on('gameInitiated', ({ roomId }) => {
+        // TODO: Change URL from localhost to takless for deployment
+        let url = `http://localhost:3000/game/${roomId}`;
+        let link = `game/${roomId}`;
+        this.setState({
+          url,
+          link,
+          modalView: 'GameLink'
+        });
+      });
+    }
   }
 
   getLeaderboard() {
@@ -72,7 +76,7 @@ class Home extends Component {
       { key: '5', text: '5', value: '5' },
       { key: '4', text: '4', value: '4' },
       { key: '3', text: '3', value: '3' }
-    ];    
+    ];
     return (
       <div className="takless">
         <div className="main">
@@ -81,7 +85,7 @@ class Home extends Component {
           </div>
           <button className="createGame">Play with Bot</button>
           <button
-            className="createGame" 
+            className="createGame"
             onClick={() =>
               this.setState({
                 modalView: 'GameSetup',

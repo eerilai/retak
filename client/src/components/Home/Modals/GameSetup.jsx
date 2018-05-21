@@ -111,15 +111,16 @@ class GameSetup extends Component {
         </Modal.Content>
         <Modal.Actions>
           <Button
-            positive
-            content="New Game"
-            onClick={() => this.props.handleCreateGame(boardSize, timeControl, isFriendGame, isPrivate, roomId)}
-          />
-          <Button
             negative
             content="Close"
             onClick={() => this.props.changeView('')}
           />
+          <Button
+            positive
+            content="New Game"
+            onClick={() => this.props.handleCreateGame(boardSize, timeControl, isFriendGame, isPrivate, roomId)}
+          />
+
         </Modal.Actions>
       </Modal>
     );

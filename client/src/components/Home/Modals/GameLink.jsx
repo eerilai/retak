@@ -61,6 +61,11 @@ class GameLink extends Component {
           {urlField}
         </Modal.Content>
         <Modal.Actions>
+          <Button
+            negative
+            content="Close"
+            onClick={() => changeView('')}
+          />
           <Link to={link}>
             <Button
               positive
@@ -70,11 +75,7 @@ class GameLink extends Component {
               content="Enter my room"
             />
           </Link>
-          <Button
-            negative
-            content="Close"
-            onClick={() => changeView('')}
-          />
+
         </Modal.Actions>
       </Modal>
     );
