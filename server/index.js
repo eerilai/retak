@@ -5,8 +5,35 @@ const bodyParser = require('body-parser');
 const socket = require('socket.io');
 const sharedSession = require('express-socket.io-session');
 
-var fs = require('fs')
 
+var AWS = require('aws-sdk');
+
+AWS.config.update({
+  accessKeyId: process.env.AWSACCESSKEY,
+  secretAccessKey: process.env.AWSSECRETE,
+  region: "us-east-1"
+});
+
+
+
+var s3Bucket = new AWS.S3({ params: { Bucket: 'image-takless' } })
+console.log('s3Bucket', s3Bucket)
+var data = { Key: 'imageName', Body: 'hello' };
+s3Bucket.putObject(data, function (err, data) {
+  if (err) {
+    console.log('Error uploading data: ', data);
+  } else {
+    console.log('succesfully uploaded the image!');
+  }
+});
+
+
+
+
+
+
+
+var fs = require('fs')
 var https = require('https')
 
 var certOptions = {

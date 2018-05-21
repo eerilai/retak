@@ -5,7 +5,8 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const {
   findUserById,
-  findOrCreateUserByOauth
+  findOrCreateUserByOauth,
+
 } = require('../database/queries');
 const { User, Sequelize } = require('../database');
 
@@ -35,6 +36,8 @@ passport.use(new GoogleStrategy(
       googleID: profile.id,
       email: profile.emails[0].value
     }
+
+
     findOrCreateUserByOauth(options)
       .then((user) => {
         done(null, user);

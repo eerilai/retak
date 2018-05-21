@@ -54,6 +54,7 @@ const User = sequelize.define('user', {
     type: Sequelize.INTEGER,
     defaultValue: 0,
   },
+
 });
 
 const Game = sequelize.define('game', {

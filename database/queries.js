@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const { User, Game } = require('./index');
 const { hashPassword, comparePassword } = require('./encryptionHelpers');
 const Op = Sequelize.Op;
-
+var FS = require('fs');
 const findUserById = (id) => {
   return new Promise((resolve, reject) => {
     User.findById(id)
@@ -33,6 +33,8 @@ const findOrCreateUserByOauth = (options) => {
       });
   });
 }
+
+
 
 
 
@@ -159,5 +161,6 @@ module.exports = {
   getLeaderboard,
   getUserData,
   getUserGames,
-  findOrCreateUserByOauth
+  findOrCreateUserByOauth,
+
 };
