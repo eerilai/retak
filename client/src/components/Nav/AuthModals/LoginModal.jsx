@@ -58,17 +58,17 @@ class LoginModal extends Component {
         <div className="log">
           <Header icon='LogIn' content='Log-In to Your Account' />
           <a href="/auth/google">
-            <Button class="ui google plus button" role="button" color="google plus">
+            <Button circular class="ui google plus button" role="button" color="google plus">
               <i aria-hidden="true" class="google plus icon"></i>
-              |   Login with Google
+              | Google
             </Button>
           </a>
 
 
           <a href="/auth/facebook">
-            <Button class="ui facebook button" role="button" color="facebook">
+            <Button circular class="ui facebook button" role="button" color="facebook">
               <i aria-hidden="true" class="facebook icon"></i>
-              |   Login with Facebook
+              |  Facebook
             </Button>
           </a>
 
