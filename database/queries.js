@@ -15,12 +15,12 @@ const findUserById = (id) => {
   });
 };
 
-const findOrCreateUserByGoogleId = (id) => {
+
+
+const findOrCreateUserByOauth = (options) => {
   return new Promise((resolve, reject) => {
     User.findOrCreate({
-      where: {
-        googleID: id
-      },
+      where: options,
       defaults: {
         username: 'Tak-user-' + Math.random().toString(36).slice(2, 9)
       }
@@ -35,24 +35,7 @@ const findOrCreateUserByGoogleId = (id) => {
 }
 
 
-const findOrCreateUserByFacebookId = (id) => {
-  return new Promise((resolve, reject) => {
-    User.findOrCreate({
-      where: {
-        facebookID: id
-      },
-      defaults: {
-        username: 'Tak-user-' + Math.random().toString(36).slice(2, 9)
-      }
-    })
-      .then(([user, created]) => {
-        resolve(user);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-}
+
 const createUser = (userInfo) => {
   return new Promise((resolve, reject) => {
     const { username, email, password } = userInfo;
@@ -171,11 +154,10 @@ const getUserGames = (username) => {
 
 module.exports = {
   findUserById,
-  findOrCreateUserByGoogleId,
   createUser,
   logGame,
   getLeaderboard,
   getUserData,
   getUserGames,
-  findOrCreateUserByFacebookId
+  findOrCreateUserByOauth
 };

@@ -5,8 +5,7 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const {
   findUserById,
-  findOrCreateUserByGoogleId,
-  findOrCreateUserByFacebookId
+  findOrCreateUserByOauth
 } = require('../database/queries');
 const { User, Sequelize } = require('../database');
 
@@ -30,7 +29,13 @@ passport.use(new GoogleStrategy(
     clientSecret: process.env.GOOGLE_OAUTH_SECRET,
     callbackURL: '/auth/google/redirect'
   }, (accesToken, refreshToken, profile, done) => {
-    findOrCreateUserByGoogleId(profile.id)
+    console.log('google', profile.emails[0].value)
+
+    let options = {
+      googleID: profile.id,
+      email: profile.emails[0].value
+    }
+    findOrCreateUserByOauth(options)
       .then((user) => {
         done(null, user);
       })
@@ -48,7 +53,11 @@ passport.use(new FacebookStrategy(
     profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified'],
   }, (accesToken, refreshToken, profile, done) => {
     console.log('facebook', profile.emails[0].value)
-    findOrCreateUserByFacebookId(profile.id)
+    let options = {
+      facebookID: profile.id,
+      email: profile.emails[0].value
+    }
+    findOrCreateUserByOauth(options)
       .then((user) => {
         done(null, user);
       })
