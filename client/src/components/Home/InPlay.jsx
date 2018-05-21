@@ -23,13 +23,15 @@ class InPlay extends Component {
 
   render() {
     console.log(this.props.userID);
+    let versus = '';
     return (
       <table class="tg">
         <tr>
-          <th>Room</th>
+          <th>Game</th>
+          <th>Versus</th>
           <th>Board</th>
           <th>Turn</th>
-          <th>toPlay</th>
+          <th>To Play</th>
         </tr>
         {this.state.games.map(game => (
           <tr className="room">
@@ -38,8 +40,10 @@ class InPlay extends Component {
               state: { game }
             }}>{game.room_id}
             </Link></td>
-            <td>{game.board_size}</td>
-            <td>{game.board_state[game.board_state.length - 6]}</td>
+            <td>{versus = this.props.username === game.player1 ? game.player2 : game.player1}</td>
+            <td>{game.board_size} x {game.board_size}</td>
+            <td>{game.ptn.length}</td>
+            <td>{game.active_player}</td>
           </tr>
         ))}
       </table>
@@ -49,6 +53,7 @@ class InPlay extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    username: state.currentUser,
     userID: state.userID,
   };
 };
