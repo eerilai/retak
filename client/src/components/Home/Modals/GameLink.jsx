@@ -70,6 +70,11 @@ class GameLink extends Component {
               content="Enter my room"
             />
           </Link>
+          <Button
+            negative
+            content="Close"
+            onClick={() => changeView('')}
+          />
         </Modal.Actions>
       </Modal>
     );
