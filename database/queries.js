@@ -196,6 +196,7 @@ const storeAsyncGame = (gameState, room, roomId) => {
         game.update({
           board_state: tps,
           ptn,
+          active_player: activePlayer,
         });
       }
     });
