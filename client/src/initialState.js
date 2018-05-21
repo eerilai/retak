@@ -9,7 +9,7 @@ const initialState = {
   rankedWins: null,
   totalGames: null,
   avatar: null,
-  socket: socketIOClient()  
+  socket: socketIOClient( undefined, {forceNew: true})  
 };
 
 export default initialState;
