@@ -47,10 +47,8 @@ const Square = ({ game, row, col, handleSquareClick }) => {
         <div className="selected" style={stoneStyle}>
           {game.toMove.stack.map((x, i) =>
              (i === 0 ?
-               <div className={`p${x} ${game.toMove.stone} stone top`} style={{ ...stoneStyle, 'z-index': '10' }}>
-                 {/* <p className="non-flat">{game.toMove.stone}</p> */}
-               </div> :
-               <div
+               <div className={`p${x} ${game.toMove.stone} stone top`} style={{ ...stoneStyle, 'z-index': '10' }} />
+               : <div
                  className={`p${x} stone captive`}
                  style={
                   {
@@ -78,10 +76,8 @@ const Square = ({ game, row, col, handleSquareClick }) => {
           {renderSelected()}
           {stack.stack.map((x, i) =>
              (i === 0 ?
-               <div className={`p${x} ${stack.stone} stone ${top}`} style={topStackStyle}>
-                 {/* <p className="non-flat">{` ${stack.stone} `}</p> */}
-               </div> :
-               <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${10 - i}` }} />))
+               <div className={`p${x} ${stack.stone} stone ${top}`} style={topStackStyle} />
+               : <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${10 - i}` }} />))
           }
         </div>
       );
@@ -97,10 +93,8 @@ const Square = ({ game, row, col, handleSquareClick }) => {
           {renderSelected()}
           {topStack.map((x, i) =>
              (i === 0 ?
-               <div className={`p${x} ${stack.stone} stone ${top}`} style={topStackStyle}>
-                 {/* <p className="non-flat">{` ${stack.stone} `}</p> */}
-               </div> :
-               <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${10 - i}` }} />))
+               <div className={`p${x} ${stack.stone} stone ${top}`} style={topStackStyle} />
+               : <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${10 - i}` }} />))
           }
           <div className="stack-overflow" style={stackOverflowStyle}>
             {rest.map(x => <div className={`p${x} stone overflow-stone`} />)}
