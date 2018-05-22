@@ -44,10 +44,11 @@ class Game {
     this.loserUsername = null; // Loosing Player Username or null
 
     if (gameState !== 'new') {
-      const { tps, ptn } = gameState;
-      this.readTPS(tps);
+      const { tps, ptn, pieces } = gameState;
       this.tps = tps;
       this.ptn = ptn;
+      this.pieces = pieces;
+      this.readTPS(tps);
     }
   }
 
@@ -165,7 +166,7 @@ class Game {
     }
     this.checkRoads();
     this.checkFullBoardWins();
-    if (this.pieces[this.toPlay].total === 0) {
+    if (this.pieces[1].total === 0 || this.pieces[2].total === 0) {
       this.checkOutOfPiecesWins();
     }
   }
@@ -179,7 +180,17 @@ class Game {
       if (!this.isMoving) {
         // Place a Stone
         if (isEmpty) {
-          if (this.pieces[this.toPlay].total !== 0) {
+          if (this.turn === 0) {
+            if (this.toPlay === 1) {
+              stack.place(2);
+              this.pieces[2].F -= 1;
+              this.pieces[this.toPlay].total -= 1;
+            } else {
+              stack.place(1);
+              this.pieces[1].F -= 1;
+              this.pieces[this.toPlay].total -= 1;
+            }
+          } else if (this.pieces[this.toPlay].total !== 0) {
             if (stone === 'C' && this.pieces[this.toPlay].C !== 0) {
               stack.place(this.toPlay, stone);
               this.pieces[this.toPlay].C -= 1;
@@ -189,19 +200,18 @@ class Game {
               this.pieces[this.toPlay].F -= 1;
               this.pieces[this.toPlay].total -= 1;
             }
-            this.checkRoads();
-            this.checkFullBoardWins();
-            if (this.pieces[this.toPlay].total === 0) {
-              this.checkOutOfPiecesWins();
-            }
-            this.parsePTN(coord, stone);
-            this.toPlay = (this.toPlay === 1) ? 2 : 1;
-            if (this.toPlay === 1) this.turn += 1;
-            this.parseTPS(this.board);
-            this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
-          } else {
+          }
+          this.checkRoads();
+          this.checkFullBoardWins();
+          if (this.pieces[this.toPlay].total === 0) {
             this.checkOutOfPiecesWins();
           }
+          this.parsePTN(coord, stone);
+          this.toPlay = (this.toPlay === 1) ? 2 : 1;
+          if (this.toPlay === 1) this.turn += 1;
+          this.parseTPS(this.board);
+          this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
+
         // Start a move
         } else if (!isEmpty && (stack.owner === this.toPlay)) {
           this.moveStack = [...stack.stack];
