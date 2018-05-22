@@ -17,6 +17,9 @@ class GameLink extends Component {
   }
 
   render() {
+
+
+    console.log('hello', this.props)
     const { modalView, changeView, gameType, url, link } = this.props;
     let urlField;
     let header;
@@ -50,14 +53,14 @@ class GameLink extends Component {
     return (
       <Modal
         open={modalView === 'GameLink'}
-        size="tiny"
+        size="medium"
         dimmer={false}
         onClose={() => changeView('')}
         closeIcon
       >
         <Modal.Header>{header}</Modal.Header>
         <Modal.Content>
-          <Form size="tiny" key="small" />
+          <Form size="small" key="small" />
           {urlField}
         </Modal.Content>
         <Modal.Actions>

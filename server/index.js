@@ -10,10 +10,7 @@ const sharedSession = require('express-socket.io-session');
 var fs = require('fs')
 var https = require('https')
 
-var certOptions = {
-  key: fs.readFileSync(path.join(__dirname, './server.key')),
-  cert: fs.readFileSync(path.join(__dirname, './server.crt'))
-}
+
 
 
 
@@ -24,7 +21,9 @@ const GAME_STARTED = 1
 const GAME_FINISHED = 2
 
 const db = require('../database');
-const { logGame, getLeaderboard, getUserGames, getUserData } = require('../database/queries');
+const { logGame, getLeaderboard, getUserGames,
+  getUserData, storeAsyncGame, getCurrentUserGames,
+  endCorrespondence } = require('../database/queries');
 const authRoutes = require('./routes/authRoutes');
 const filterLobbyList = require('./lobbyHelper');
 
@@ -81,6 +80,11 @@ app.get('/users/:username/games', async (req, res) => {
   res.json(games);
 });
 
+app.get('/users/:userID/games/current', async (req, res) => {
+  const games = await getCurrentUserGames(req.params.userID);
+  res.json(games);
+});
+
 app.get('/bundle.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/bundle.js'));
 });
@@ -90,45 +94,6 @@ app.get('/*', (req, res) => {
 });
 
 
-//testing
-var AWS = require('aws-sdk');
-
-AWS.config.update({
-  accessKeyId: process.env.AWSACCESSKEY,
-  secretAccessKey: process.env.AWSSECRETE,
-  region: "us-east-1"
-});
-
-
-
-var s3Bucket = new AWS.S3({ params: { Bucket: 'image-takless' } })
-console.log('s3Bucket', s3Bucket)
-
-
-
-
-//testing post
-app.post('/users/:username/data', (req, res) => {
-  console.log('req', req.body)
-  var data = { Key: req.body.imageName, Body: req.body.imageFile };
-  s3Bucket.putObject(data, function (err, data) {
-    if (err) {
-      console.log('Error uploading data: ', data);
-    } else {
-      console.log('succesfully uploaded the image!');
-    }
-  });
-});
-
-app.get('/users/:username/data', (req, res) => {
-  s3Bucket.getObject({ Bucket: 'image-takless', key: 'cat' }, function (err, data) {
-    if (err) {
-      console.log('Error uploading data: ', data);
-    } else {
-      console.log('succesfully uploaded the image!');
-    }
-  });
-});
 
 const PORT = process.env.PORT || 3000;
 
@@ -138,9 +103,6 @@ const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
-
-
-
 
 
 
@@ -175,8 +137,9 @@ io.on('connection', (socket) => {
   });
 
   // Create a new game and save game state to room
-  socket.on('createGame', async ({ boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, roomId }) => {
+  socket.on('createGame', async ({ boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId }) => {
     console.log('createGame', timeIncrement)
+    if (!isLive) roomId += '_c';
     await socket.join(roomId);
     const room = io.sockets.adapter.rooms[roomId];
     console.log('socket handshake session username', socket.handshake.session);
@@ -194,15 +157,21 @@ io.on('connection', (socket) => {
     room.intervalID = null
     room.isFriendGame = isFriendGame;
     room.isPrivate = isPrivate || isFriendGame;
+    room.isLive = isLive;
     room.spectators = {};
 
+    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~', timeIncrement, timeControl)
     socket.emit('gameInitiated', {
+
       roomId
     });
   });
 
   // Serve game state on LiveGame component initialize
-  socket.on('fetchGame', async (roomId) => {
+  socket.on('fetchGame', async (roomId, loadGame) => {
+    if (!io.sockets.adapter.rooms[roomId]) {
+      socket.join(roomId);
+    }
     if (!io.sockets.adapter.rooms[roomId].sockets[socket.id]) {
       socket.join(roomId);
     }
@@ -213,7 +182,24 @@ io.on('connection', (socket) => {
     if (!room)
       return
 
-    const { gameState, activePlayer, boardSize, timeControl, player1Time, player2Time, isPrivate, spectators } = room;
+    let { gameState, activePlayer, boardSize, timeControl, player1Time, player2Time, isPrivate, spectators } = room;
+    if (loadGame !== null) {
+      const {
+        player1, player2, active_player,
+        board_state, ptn, board_size,
+        ranked, isPrivate, spectators,
+      } = loadGame;
+      room.player1 = player1;
+      room.player2 = player2;
+      room.gameState = {
+        tps: board_state,
+        ptn,
+      };
+      room.activePlayer = active_player;
+      room.boardSize = board_size;
+      room.isLive = false;
+    }
+
     const { player1, player2 } = room;
     let status = room.status;//when the player2 joined, game status will change
     if (username === player1) {
@@ -282,6 +268,8 @@ io.on('connection', (socket) => {
       }
     }
 
+    if (room.isLive === false) storeAsyncGame(gameState, room, roomId);
+
 
     socket.to(roomId).emit('syncGame', {
       boardSize, gameState, player1Time, player2Time, status, player1, player2, activePlayer, roomId,
@@ -289,7 +277,9 @@ io.on('connection', (socket) => {
   });
 
   // Add 'isClosed' property to finished game and update lobby
-  socket.on('closeGame', (roomId) => {
+  socket.on('closeGame', (roomId, game) => {
+    logGame(game);
+    endCorrespondence(roomId);
     io.sockets.adapter.rooms[roomId].isClosed = true;
     const lobbyList = filterLobbyList(io.sockets.adapter.rooms);
     socket.broadcast.emit('updateLobby', lobbyList);

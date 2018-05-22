@@ -48,6 +48,7 @@ class SignupModal extends Component {
         });
     } else {
       // TODO: Alert user passwords must match
+      alert('password doesn\'t match')
     }
   }
 

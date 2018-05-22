@@ -7,8 +7,8 @@ import sound_brick_drop from "./Sounds/brick_drop_concrete.wav";
 import Game from "./Game";
 import Board from "./Board";
 import Stack from "./Stack";
-import Chat from "./chat"; // not in use currently
-import PTN from "./PTN"
+import Chat from "./chat";
+import PTN from "./PTN";
 import Clock from "./Clock";
 import "../../styles/livegame.css";
 import { convertCoord } from "./gameUtil";
@@ -46,16 +46,15 @@ class LiveGame extends Component {
 
     const { socket } = props;
     const { roomId } = props.match.params;
-
+    console.log(socket);
+    const loadGame = this.props.location.state ? this.props.location.state.game : null;
     setTimeout(() => {
-      console.log('fetchGame emitted')
-      socket.emit('fetchGame', roomId);
+      socket.emit('fetchGame', roomId, loadGame);
     }, 600);
 
     socket.on('syncGame', ({ boardSize, gameState, player1Time, player2Time, status, player1, player2, roomId, activePlayer, isPlayer1 }) => {
       console.log('syncGame fired');
       if (roomId === props.match.params.roomId) {
-        console.log('rooms match');
         const game = new Game(boardSize, gameState, player1, player2);
         game.activePlayer = activePlayer;
 
@@ -147,22 +146,25 @@ class LiveGame extends Component {
 
     if (!game.winType) {
       if (this.myname !== game.activePlayer) {
+
         socket.emit("updateGame", {
           gameState: {
             ptn: game.ptn,
-            tps: game.tps
+            tps: game.tps,
+            pieces: game.pieces,
           },
           activePlayer: game.activePlayer,
           roomId: match.params.roomId,
         });
       }
-    } else if (game.player1 !== game.player2) {
-      const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
-      const endOfGameState = { player1, player2, ptn: ptnString, tps, victor: victorUsername, size, winType, ranked };
-      socket.emit('closeGame', match.params.roomId, endOfGameState);
+
+      if (game.winType && game.player1 !== game.player2) {
+        const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
+        const endOfGameState = { player1, player2, ptn: ptnString, tps, victor: victorUsername, size, winType, ranked };
+        socket.emit('closeGame', match.params.roomId, endOfGameState);
+      }
     }
   }
-
   handleSquareClick(col, row) {
     if (this.myname === this.state.game.activePlayer) {
       this.movePieces(col, row);

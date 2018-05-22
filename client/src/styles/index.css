@@ -41,8 +41,16 @@ button:hover {
   text-shadow: none;
 }
 
+.ui.modal > .content{
+ height: 200px;
+}
+
+.ui.modal > .actions {
+  text-align: center;
+}
+
 .ui.tiny.modal {
-  height: 50%;
+  height: 335px;
 }
 
 i.icon.sign.in:before {
@@ -155,6 +163,15 @@ nav:hover {
   min-height: 200px;
 }
 
+/* game setup  */
+.ui.modal>.actions {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.slider{
+  width:200px
+}
 /* Tables CSS */
 .tg {
   /* border-collapse:collapse; */
