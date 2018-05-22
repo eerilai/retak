@@ -134,28 +134,28 @@ class LiveGame extends Component {
     this.setState({
       game
     });
-    if (!game.winType) {
-      if (this.props.username !== game.activePlayer) {
-        this.setState({
-          myCounter: false,
-          opponentCounter: true
-        });
+    if (this.props.username !== game.activePlayer) {
+      this.setState({
+        myCounter: false,
+        opponentCounter: true
+      });
 
-        socket.emit("updateGame", {
-          gameState: {
-            ptn: game.ptn,
-            tps: game.tps
-          },
-          activePlayer: game.activePlayer,
-          roomId: match.params.roomId,
-        });
-      } else {
-        this.setState({
-          myCounter: true,
-          opponentCounter: false
-        });
-      }
-    } else if (game.player1 !== game.player2) {
+      socket.emit("updateGame", {
+        gameState: {
+          ptn: game.ptn,
+          tps: game.tps,
+          pieces: game.pieces,
+        },
+        activePlayer: game.activePlayer,
+        roomId: match.params.roomId,
+      });
+    } else {
+      this.setState({
+        myCounter: true,
+        opponentCounter: false
+      });
+    }
+    if (game.winType && game.player1 !== game.player2) {
       const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
       const endOfGameState = { player1, player2, ptn: ptnString, tps, victor: victorUsername, size, winType, ranked };
       socket.emit('closeGame', match.params.roomId, endOfGameState);
