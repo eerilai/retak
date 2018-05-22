@@ -139,14 +139,15 @@ class SignupModal extends Component {
               this.props.toggleView("login");
             }}
           >
-            Click here to login
+            Click here to Login
           </Button>
           <Button
-            color="blue"
+            color="red"
             onClick={() => {
               this.props.toggleView("off");
             }}
           >
+            <Icon size="large" name="ban" corner="true"/>
             Cancel
           </Button>
         </div>

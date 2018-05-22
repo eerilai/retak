@@ -19,7 +19,7 @@ class ProfileModal extends Component {
     };
     this.handleOnSave = this.handleOnSave.bind(this);
     this.handelImageChange = this.handelImageChange.bind(this);
-    // this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -57,6 +57,12 @@ class ProfileModal extends Component {
   //     // TODO: Alert user passwords must match
   //   }
   // }
+  handleInputChange(e, property) {
+    const newState = {};
+    newState[property] = e.target.value;
+    this.setState(newState);
+    console.log(this.state, 'target val', e.target.value)
+  }
 
   handelImageChange(e) {
     e.preventDefault();
@@ -151,7 +157,8 @@ class ProfileModal extends Component {
                       <input
                         type="text"
                         placeholder="Username"
-                        value={this.state.username}
+                        defaultValue={currentUser}
+                        // value={this.state.username}
                         onChange={e => {
                           this.handleInputChange(e, "username");
                         }}
@@ -167,7 +174,8 @@ class ProfileModal extends Component {
                       <input
                         type="email"
                         placeholder="Email"
-                        value={this.state.email}
+                        defaultValue={userEmail}
+                        // value={this.state.email}
                         onChange={e => {
                           this.handleInputChange(e, "email");
                         }}
