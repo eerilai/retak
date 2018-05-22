@@ -44,10 +44,11 @@ class Game {
     this.loserUsername = null; // Loosing Player Username or null
 
     if (gameState !== 'new') {
-      const { tps, ptn } = gameState;
-      this.readTPS(tps);
+      const { tps, ptn, pieces } = gameState;
       this.tps = tps;
       this.ptn = ptn;
+      this.pieces = pieces;
+      this.readTPS(tps);
     }
   }
 
@@ -165,7 +166,7 @@ class Game {
     }
     this.checkRoads();
     this.checkFullBoardWins();
-    if (this.pieces[this.toPlay].total === 0) {
+    if (this.pieces[1].total === 0 || this.pieces[2].total === 0) {
       this.checkOutOfPiecesWins();
     }
   }
@@ -183,9 +184,11 @@ class Game {
             if (this.toPlay === 1) {
               stack.place(2);
               this.pieces[2].F -= 1;
+              this.pieces[this.toPlay].total -= 1;
             } else {
               stack.place(1);
               this.pieces[1].F -= 1;
+              this.pieces[this.toPlay].total -= 1;
             }
           } else if (this.pieces[this.toPlay].total !== 0) {
             if (stone === 'C' && this.pieces[this.toPlay].C !== 0) {

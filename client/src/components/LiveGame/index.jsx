@@ -143,7 +143,8 @@ class LiveGame extends Component {
       socket.emit("updateGame", {
         gameState: {
           ptn: game.ptn,
-          tps: game.tps
+          tps: game.tps,
+          pieces: game.pieces,
         },
         activePlayer: game.activePlayer,
         roomId: match.params.roomId,
