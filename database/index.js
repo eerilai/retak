@@ -133,7 +133,7 @@ User.hasMany(AsyncGame, { foreignKey: 'player2_id' });
 //   });
 
 // syncs all tables, drop and rebuild all tables with { force: true }
-sequelize.sync({force: true})
+sequelize.sync()
   .then(() => {
     console.log('tables synced');
   });
