@@ -59,6 +59,64 @@
   color: #fff;
 }
 
+.stone-select {
+  height: 80px;
+  display: flex;
+  margin-top: 10px;
+  justify-content: right;
+}
+
+.active-stone {
+  /*box-shadow: 3px 3px rgb(70, 255, 238) !important*/
+  /*filter: drop-shadow(1px 3px 2px #04ff73) !important;*/
+}
+
+.flat-toggle {
+  display: flex;
+  justify-content: right;
+  min-width: 120px;
+  height: 90px;
+  border-radius: 15px;
+  background-color: #d9d9d9;
+}
+
+.flat-toggle>.flat-count {
+
+}
+
+.stone-select>.cap-select {
+  display:flex;
+  height: 90px;
+  border-radius: 15px;
+  background-color: #d9d9d9;
+  margin-right: 10px;
+}
+
+.piece-selected {
+  background-color: #bebebe !important;
+}
+
+.stone-select>.cap-select>.C,
+.stone-select>.flat-toggle>div{
+  width: 70px;
+  height: 70px;
+  margin: 10px 10px;
+}
+
+
+.flat-toggle>.inactive.S {
+  width: 20px !important;
+  height: 40px;
+  margin-top: 35%;
+  margin-left: -1px;
+}
+
+.flat-toggle>.inactive.flat {
+  height: 30px;
+  width: 30px;
+  margin-top: 50px;
+}
+
 .turn-number {
   background-color: #C6C6C6;
   width: 20%;
