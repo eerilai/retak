@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Lobby from './lobby';
+import InPlay from './InPlay';
 import Leaderboard from './Leaderboard';
 import LobbyTable from '../../containers/Home/lobby_table';
 import GameSetup from './Modals/GameSetup';
@@ -14,6 +15,7 @@ class Home extends Component {
     super(props);
     this.state = {
       modalView: '',
+      lobbyView: 'lobby',
       gameType: '',
       url: '',
       link: '',
@@ -30,7 +32,7 @@ class Home extends Component {
     });
   }
 
-  handleCreateGame(boardSize, timeControl, isFriendGame, isPrivate, roomId) {
+  handleCreateGame(boardSize, timeControl, isFriendGame, isPrivate, isLive, roomId) {
     if (!roomId) {
       roomId = generateRoomName();
     }
@@ -40,6 +42,7 @@ class Home extends Component {
       timeControl,
       isFriendGame,
       isPrivate,
+      isLive,
       roomId
     });
     socket.on('gameInitiated', ({ roomId }) => {
@@ -65,19 +68,20 @@ class Home extends Component {
   }
 
   render() {
-    const options = [
-      { key: '8', text: '8', value: '8' },
-      { key: '7', text: '7', value: '7' },
-      { key: '6', text: '6', value: '6' },
-      { key: '5', text: '5', value: '5' },
-      { key: '4', text: '4', value: '4' },
-      { key: '3', text: '3', value: '3' }
-    ];    
+    let lobbyDisplay = '';
+    if (this.state.lobbyView === 'lobby') {
+      lobbyDisplay = <Lobby socket={this.props.socket} />;
+    } else if (this.state.lobbyView === 'in_play') {
+      lobbyDisplay = <InPlay />;
+    }
+
     return (
       <div className="takless">
         <div className="main">
+          <span style={{ cursor: 'pointer' }} onClick={() => { this.setState({ lobbyView: 'lobby' }); }}>Lobby /</span>
+          <span style={{ cursor: 'pointer' }} onClick={() =>  { this.setState({ lobbyView: 'in_play' }); }}> In Play</span>
           <div className="lobby">
-            <Lobby socket={this.props.socket} />
+            { lobbyDisplay }
           </div>
           <button className="createGame">Play with Bot</button>
           <button

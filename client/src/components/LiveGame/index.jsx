@@ -47,9 +47,10 @@ class LiveGame extends Component {
 
     const { socket, username } = props;
     const { roomId } = props.match.params;
-
+    console.log(socket);
+    const loadGame = this.props.location.state ? this.props.location.state.game : null;
     setTimeout(() => {
-      socket.emit('fetchGame', roomId);
+      socket.emit('fetchGame', roomId, loadGame);
     }, 600);
     
     socket.on('syncGame', ({ boardSize, gameState, timeControl, player1, player2, roomId, activePlayer }) => {
@@ -133,45 +134,31 @@ class LiveGame extends Component {
     this.setState({
       game
     });
-    if (this.props.username !== game.activePlayer) {
-      this.setState({
-        myCounter: false,
-        opponentCounter: true
-      });
+    if (!game.winType) {
+      if (this.props.username !== game.activePlayer) {
+        this.setState({
+          myCounter: false,
+          opponentCounter: true
+        });
 
-      socket.emit("updateGame", {
-        gameState: {
-          ptn: game.ptn,
-          tps: game.tps
-        },
-        activePlayer: game.activePlayer,
-        roomId: match.params.roomId,
-      });
-    } else {
-      this.setState({
-        myCounter: true,
-        opponentCounter: false
-      });
-    }
-
-    if (game.winType && game.player1 !== game.player2) {
-      socket.emit('closeGame', match.params.roomId);
-      if (game.victorUsername === this.props.username || game.victorUsername === null) {
-        const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
-        axios.post('/record', {
-          player1,
-          player2,
-          size,
-          winType,
-          victor: victorUsername,
-          ptn: ptnString,
-          tps,
-          ranked,
-        }) 
-        .catch(err => {
-          console.error(err);
+        socket.emit("updateGame", {
+          gameState: {
+            ptn: game.ptn,
+            tps: game.tps
+          },
+          activePlayer: game.activePlayer,
+          roomId: match.params.roomId,
+        });
+      } else {
+        this.setState({
+          myCounter: true,
+          opponentCounter: false
         });
       }
+    } else if (game.player1 !== game.player2) {
+      const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
+      const endOfGameState = { player1, player2, ptn: ptnString, tps, victor: victorUsername, size, winType, ranked };
+      socket.emit('closeGame', match.params.roomId, endOfGameState);
     }
   }
 
