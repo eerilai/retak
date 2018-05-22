@@ -72,6 +72,7 @@ class UserHistory extends Component {
       const player2UserProfile = `/profile/${user.player2}`;
   
       let typeOfWin = '';
+      console.log('Win Type:', user.win_type)
       if (user.win_type === 'R') {
         typeOfWin = 'Road Win';
       } 
