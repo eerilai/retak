@@ -203,6 +203,17 @@ const storeAsyncGame = (gameState, room, roomId) => {
   });
 };
 
+const endCorrespondence = (roomId) => {
+  return new Promise ((res, rej) => {
+    AsyncGame.destroy({
+      where: {
+        room_id: roomId,
+      },
+    })
+      .then(result => res(result));
+  });
+};
+
 module.exports = {
   findUserById,
   findOrCreateUserByGoogleId,
@@ -213,4 +224,5 @@ module.exports = {
   getUserGames,
   getCurrentUserGames,
   storeAsyncGame,
+  endCorrespondence,
 };

@@ -9,7 +9,8 @@ require('dotenv').config();
 
 const db = require('../database');
 const { logGame, getLeaderboard, getUserGames,
-  getUserData, storeAsyncGame, getCurrentUserGames} = require('../database/queries');
+  getUserData, storeAsyncGame, getCurrentUserGames,
+  endCorrespondence } = require('../database/queries');
 const authRoutes = require('./routes/authRoutes');
 const filterLobbyList = require('./lobbyHelper');
 
@@ -208,6 +209,10 @@ io.on('connection', (socket) => {
   // Add 'isClosed' property to finished game and update lobby
   socket.on('closeGame', (roomId, game) => {
     logGame(game);
+    console.log(io.sockets.adapter.rooms[roomId]);
+    if (!io.sockets.adapter.rooms[roomId]['isLive']) {
+      endCorrespondence(roomId);
+    }
     io.sockets.adapter.rooms[roomId].isClosed = true;
     const lobbyList = filterLobbyList(io.sockets.adapter.rooms);
     socket.broadcast.emit('updateLobby', lobbyList);
