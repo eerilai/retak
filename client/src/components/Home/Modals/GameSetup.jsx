@@ -21,10 +21,10 @@ class GameSetup extends Component {
     this.handleBoardSizeChange = this.handleBoardSizeChange.bind(this);
     this.handlePrivacyChange = this.handlePrivacyChange.bind(this);
     this.handleRoomIdChange = this.handleRoomIdChange.bind(this);
-    this.handleTimeChange = this.handleTimeChange.bind(this);
+
   }
 
-  handleTimeControl = e => this.setState({ timeControl: e.target.value })
+  handleTimeControl = e => { this.setState({ timeControl: e.target.value }) }
   handleTimeIncrement = e => this.setState({ timeIncrement: Number(e.target.value) })
 
   handleBoardSizeChange(e, { value }) {
@@ -39,17 +39,7 @@ class GameSetup extends Component {
     });
   }
 
-  handleTimeChange(e, { value }) {
-    if (value === '0') {
-      this.setState({
-        timeControl: -1,
-      });
-    } else {
-      this.setState({
-        timeControl: Number(value) * 60,
-      });
-    }
-  }
+
 
   handleRoomIdChange(e, { value }) {
     this.setState({
@@ -90,9 +80,9 @@ class GameSetup extends Component {
             />
 
             <div><strong>Minutes per side</strong>: {this.state.timeControl} minute(s)</div>
-            <input type='range' min={0} max={120} value={this.state.timeControl} onChange={this.handleTimeControl} />
+            <input type='range' min={0} max={60} value={this.state.timeControl} onChange={this.handleTimeControl} />
             <div><strong>Increment in seconds</strong>: {this.state.timeIncrement} second(s)</div>
-            <input type='range' min={0} max={100} value={this.state.timeIncrement} onChange={this.handleTimeIncrement} />
+            <input type='range' min={0} max={20} value={this.state.timeIncrement} onChange={this.handleTimeIncrement} />
             <br />
             <Form.Field
               control={Checkbox}
