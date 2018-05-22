@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const { User, Game } = require('./index');
+const { User, Game, AsyncGame } = require('./index');
 const { hashPassword, comparePassword } = require('./encryptionHelpers');
 const Op = Sequelize.Op;
 
@@ -89,7 +89,7 @@ const logGame = (gameInfo) => {
       if (ranked === true && player1 === victor) {
         User.increment(['ranked_games', 'ranked_wins'], { where: { id: player1_id } });
       } else if (ranked === true) {
-        User.increment('ranked_games', { where: { id: player1_id } });
+        User.increment(['ranked_games', 'ranked_losses'], { where: { id: player1_id } });
       }
     }
     if (player2_id !== null) {
@@ -97,7 +97,7 @@ const logGame = (gameInfo) => {
       if (ranked === true && player2 === victor) {
         User.increment(['ranked_games', 'ranked_wins'], { where: { id: player2_id } });
       } else if (ranked === true) {
-        User.increment('ranked_games', { where: { id: player2_id } });
+        User.increment(['ranked_games', 'ranked_losses'], { where: { id: player2_id } });
       }
     }
   });
@@ -150,6 +150,70 @@ const getUserGames = (username) => {
   });
 };
 
+const getCurrentUserGames = (userID) => {
+  return new Promise (async (res, rej) => {
+    const games =
+      await AsyncGame.findAll({
+        where: {
+          [Op.or]: [
+            { player1_id: userID },
+            { player2_id: userID },
+          ],
+        },
+      });
+    res(games);
+  });
+};
+
+const storeAsyncGame = (gameState, room, roomId) => {
+  const {tps, ptn, ranked} = gameState;
+  console.log(room);
+  const {player1, player2, boardSize, activePlayer} = room;
+  return new Promise (async (res, rej) => {
+    const p1 = await User.findAll({ where: { username: player1 } });
+    const p2 = await User.findAll({ where: { username: player2 } });
+    player1_id = p1[0] ? p1[0].dataValues.id : null;
+    player2_id = p2[0] ? p2[0].dataValues.id : null;
+
+    AsyncGame.findOrCreate({
+      where: {
+        room_id: roomId,
+      },
+      defaults: {
+        player1,
+        player1_id,
+        player2,
+        player2_id,
+        active_player: activePlayer,
+        board_state: tps,
+        ptn,
+        board_size: boardSize,
+        ranked,
+        room_id: roomId,
+      },
+    }).spread((game, created) => {
+      if (!created) {
+        game.update({
+          board_state: tps,
+          ptn,
+          active_player: activePlayer,
+        });
+      }
+    });
+  });
+};
+
+const endCorrespondence = (roomId) => {
+  return new Promise ((res, rej) => {
+    AsyncGame.destroy({
+      where: {
+        room_id: roomId,
+      },
+    })
+      .then(result => res(result));
+  });
+};
+
 module.exports = {
   findUserById,
   findOrCreateUserByGoogleId,
@@ -158,4 +222,7 @@ module.exports = {
   getLeaderboard,
   getUserData,
   getUserGames,
+  getCurrentUserGames,
+  storeAsyncGame,
+  endCorrespondence,
 };

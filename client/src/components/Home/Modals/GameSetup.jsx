@@ -13,12 +13,14 @@ class GameSetup extends Component {
     this.state = {
       boardSize: 5,
       isPrivate: false,
+      isLive: true,
       roomId: '',
       timeControl: false,
     }
 
     this.handleBoardSizeChange = this.handleBoardSizeChange.bind(this);
     this.handlePrivacyChange = this.handlePrivacyChange.bind(this);
+    this.handleLiveChange = this.handleLiveChange.bind(this);
     this.handleRoomIdChange = this.handleRoomIdChange.bind(this);
     this.handleTimeChange = this.handleTimeChange.bind(this);
   }
@@ -53,6 +55,12 @@ class GameSetup extends Component {
     });
   }
 
+  handleLiveChange() {
+    this.setState({
+      isLive: !this.state.isLive,
+    });
+  }
+
   render() {
     const options = [
       { key: '8', text: '8', value: '8' },
@@ -71,7 +79,7 @@ class GameSetup extends Component {
       { key: '7', text: 'Test', value: '.15' },
     ];
     const isFriendGame = this.props.gameType === 'friend';
-    const { boardSize, isPrivate, roomId, timeControl } = this.state;
+    const { boardSize, isPrivate, roomId, isLive, timeControl } = this.state;
     return (
         <Modal
           open={this.props.modalView === 'GameSetup'}
@@ -82,15 +90,46 @@ class GameSetup extends Component {
         >
           <Modal.Header>GameSetup</Modal.Header>
           <Modal.Content>
-            <Form size="tiny" key="small">
-              <Form.Field
-                control={Select}
-                label="Board Size"
-                options={options}
-                defaultValue={this.state.boardSize}
-                placeholder="Board Size"
+            <Form size={"tiny"} key={"small"}>
+              <Form.Group inline label="Board Size">
+              <label>Board Size</label>
+              <Form.Radio
+                label="3x3"
+                value="3"
+                checked={this.state.boardSize === 3}
                 onChange={this.handleBoardSizeChange}
               />
+              <Form.Radio
+                label="4x4"
+                value="4"
+                checked={this.state.boardSize === 4}
+                onChange={this.handleBoardSizeChange}
+              />
+              <Form.Radio
+                label="5x5"
+                value="5"
+                checked={this.state.boardSize === 5}
+                onChange={this.handleBoardSizeChange}
+              />
+              <Form.Radio
+                label="6x6"
+                value="6"
+                checked={this.state.boardSize === 6}
+                onChange={this.handleBoardSizeChange}
+              />
+              <Form.Radio
+                label="7x7"
+                value="7"
+                checked={this.state.boardSize === 7}
+                onChange={this.handleBoardSizeChange}
+              />
+              <Form.Radio
+                label="8x8"
+                value="8"
+                checked={this.state.boardSize === 8}
+                onChange={this.handleBoardSizeChange}
+              />
+              </Form.Group>
               <Form.Field
                 control={Select}
                 placeholder="Time Control"
@@ -102,6 +141,11 @@ class GameSetup extends Component {
                 control={Checkbox}
                 label="Private"
                 onChange={this.handlePrivacyChange}
+              />
+              <Form.Field
+                control={Checkbox}
+                label="Correspondence"
+                onChange={this.handleLiveChange}
               />
               <Form.Input
                 type="text"
@@ -119,7 +163,7 @@ class GameSetup extends Component {
               size="large"
               labelPosition="right"
               content="New Game"
-              onClick={() => this.props.handleCreateGame(boardSize, timeControl, isFriendGame, isPrivate, roomId)}
+              onClick={() => this.props.handleCreateGame(boardSize, timeControl, isFriendGame, isPrivate, isLive, roomId)}
             />
           </Modal.Actions>
         </Modal>
