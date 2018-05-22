@@ -68,9 +68,6 @@ class LiveGame extends Component {
         localStorage.setItem('username', JSON.stringify(this.myname))
         console.log('local storage', this.myname)
 
-
-
-
         if (this.myname === player1) {
           this.setState({
             myTime: player1Time,
@@ -85,7 +82,7 @@ class LiveGame extends Component {
           });
         }
       }
-      console.log('client syncGame', this.state.myTime, this.state.opponentTime)
+
     });
 
     socket.on('pendingGame', ({ boardSize, timeControl, roomId }) => {
@@ -109,7 +106,6 @@ class LiveGame extends Component {
     socket.on('updateTime', ({ roomId, player1Time, player2Time }) => {
 
       if (roomId === props.match.params.roomId) {
-        console.log('username', this.myname, 'player1Time', player1Time, 'player2Time', player2Time)
         if (this.myname === this.state.game.player1) {
 
           this.setState({
@@ -126,7 +122,6 @@ class LiveGame extends Component {
     })
 
     socket.on('timeOut', ({ activePlayer, roomId }) => {
-      console.log('Time Out', activePlayer, roomId)
       if (roomId === props.match.params.roomId) {
         this.timeOut(activePlayer)
       }
@@ -149,45 +144,22 @@ class LiveGame extends Component {
     this.setState({
       game
     });
-    if (this.myname !== game.activePlayer) {
-      this.setState({
-        myCounter: false,
-        opponentCounter: true
-      });
 
-      socket.emit("updateGame", {
-        gameState: {
-          ptn: game.ptn,
-          tps: game.tps
-        },
-        activePlayer: game.activePlayer,
-        roomId: match.params.roomId,
-      });
-    } else {
-      this.setState({
-        myCounter: true,
-        opponentCounter: false
-      });
-    }
-
-    if (game.winType && game.player1 !== game.player2) {
-      socket.emit('closeGame', match.params.roomId);
-      if (game.victorUsername === tthis.myname || game.victorUsername === null) {
-        const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
-        axios.post('/record', {
-          player1,
-          player2,
-          size,
-          winType,
-          victor: victorUsername,
-          ptn: ptnString,
-          tps,
-          ranked,
-        })
-          .catch(err => {
-            console.error(err);
-          });
+    if (!game.winType) {
+      if (this.myname !== game.activePlayer) {
+        socket.emit("updateGame", {
+          gameState: {
+            ptn: game.ptn,
+            tps: game.tps
+          },
+          activePlayer: game.activePlayer,
+          roomId: match.params.roomId,
+        });
       }
+    } else if (game.player1 !== game.player2) {
+      const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
+      const endOfGameState = { player1, player2, ptn: ptnString, tps, victor: victorUsername, size, winType, ranked };
+      socket.emit('closeGame', match.params.roomId, endOfGameState);
     }
   }
 

@@ -30,8 +30,8 @@ class Home extends Component {
     });
   }
 
-  handleCreateGame(boardSize, timeControl, isFriendGame, isPrivate, roomId) {
-    console.log('handleCreateGame', timeControl)
+  handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, roomId) {
+    console.log('handleCreateGame', timeIncrement)
     if (boardSize) {
 
       if (!roomId) {
@@ -41,6 +41,7 @@ class Home extends Component {
       socket.emit('createGame', {
         boardSize,
         timeControl: timeControl * 60,
+        timeIncrement: Number(timeIncrement),
         isFriendGame,
         isPrivate,
         roomId

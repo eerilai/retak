@@ -24,8 +24,8 @@ class GameSetup extends Component {
 
   }
 
-  handleTimeControl = e => { this.setState({ timeControl: e.target.value }) }
-  handleTimeIncrement = e => this.setState({ timeIncrement: Number(e.target.value) })
+  handleTimeControl = e => this.setState({ timeControl: e.target.value })
+  handleTimeIncrement = e => this.setState({ timeIncrement: e.target.value })
 
   handleBoardSizeChange(e, { value }) {
     this.setState({
@@ -58,7 +58,7 @@ class GameSetup extends Component {
     ];
 
     const isFriendGame = this.props.gameType === 'friend';
-    const { boardSize, isPrivate, roomId, timeControl } = this.state;
+    const { boardSize, isPrivate, roomId, timeControl, timeIncrement } = this.state;
     return (
       <Modal
         open={this.props.modalView === 'GameSetup'}
@@ -108,7 +108,7 @@ class GameSetup extends Component {
           <Button
             positive
             content="New Game"
-            onClick={() => this.props.handleCreateGame(boardSize, timeControl, isFriendGame, isPrivate, roomId)}
+            onClick={() => this.props.handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, roomId)}
           />
 
         </Modal.Actions>

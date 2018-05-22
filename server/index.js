@@ -175,10 +175,8 @@ io.on('connection', (socket) => {
   });
 
   // Create a new game and save game state to room
-  socket.on('createGame', async ({ boardSize, timeControl, isFriendGame, isPrivate, roomId }) => {
-    // if (io.sockets.adapter.rooms[roomId]) {
-    //   roomId = Math.random().toString(36).slice(2, 9);
-    // }
+  socket.on('createGame', async ({ boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, roomId }) => {
+    console.log('createGame', timeIncrement)
     await socket.join(roomId);
     const room = io.sockets.adapter.rooms[roomId];
     console.log('socket handshake session username', socket.handshake.session);
@@ -189,6 +187,7 @@ io.on('connection', (socket) => {
     room.timeControl = timeControl;
     room.player1Time = timeControl
     room.player2Time = timeControl
+    room.timeIncrement = timeIncrement
     //setting the status of the room: not started yet
     room.status = GAME_NOT_STARTED;
     //uninitialized the interival ID
@@ -265,7 +264,24 @@ io.on('connection', (socket) => {
       return
     room.gameState = gameState;
     room.activePlayer = activePlayer;
-    const { boardSize, timeControl, player1, player2, player1Time, player2Time, status } = room;
+    let { boardSize, timeControl, player1, player2, player1Time, player2Time, status, timeIncrement } = room;
+
+    if (room.status === GAME_STARTED) {
+      if (player1 !== activePlayer) {
+        player1Time += timeIncrement
+        if (player1Time > timeControl) {
+          player1Time = timeControl
+        }
+        room.player1Time = player1Time
+      } else {
+        player2Time += timeIncrement
+        if (player2Time > timeControl) {
+          player2Time = timeControl
+        }
+        room.player2Time = player2Time
+      }
+    }
+
 
     socket.to(roomId).emit('syncGame', {
       boardSize, gameState, player1Time, player2Time, status, player1, player2, activePlayer, roomId,
