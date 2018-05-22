@@ -50,6 +50,11 @@ const User = sequelize.define('user', {
     type: Sequelize.INTEGER,
     defaultValue: 0,
   },
+  avatar_img: {
+    type: Sequelize.BLOB,
+    defaultValue: null,
+
+  }
 });
 
 const Game = sequelize.define('game', {

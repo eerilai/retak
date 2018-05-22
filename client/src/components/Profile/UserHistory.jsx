@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import moment from 'moment';
-import { Icons, Image } from 'semantic-ui-react';
+import { Icon, Image } from 'semantic-ui-react';
 import axios from 'axios';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 class UserHistory extends Component {
   constructor(props){
@@ -10,6 +11,7 @@ class UserHistory extends Component {
     this.state= {
       userHistory: [],
       userInfo: {},
+      copied: false,
     }
   }
 
@@ -94,7 +96,18 @@ class UserHistory extends Component {
             <div>Victor: {user.victor}</div>
             <div>{typeOfWin}</div>
             <div>Board Size: {user.board_size}</div>
-            <div>PTN: {user.ptn}</div>
+            <div><strong>PTN: </strong> {user.ptn}</div>
+            <CopyToClipboard
+                text={user.ptn}
+                onCopy={() => this.setState({ copied: true })}
+              >
+              <span>
+                <Icon name="copy" size="large" />
+              </span>
+            </CopyToClipboard>
+            <div id="copied">
+              {this.state.copied ? 'PTN Copied' : ''}
+            </div>
           </div>
         </div>
       );
