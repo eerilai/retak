@@ -6,8 +6,7 @@ import { Grid, Menu, Segment } from 'semantic-ui-react'
 import { userInfo } from 'os';
 import UserHistory from './UserHistory';
 import PageNotFound from '../PageNotFound';
-
-class Profile extends Component{
+class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,35 +15,60 @@ class Profile extends Component{
       userInfo: {},
       isUser: false
     }
-    
+
     this.getUserHistory();
     this.getUserInfo();
+
+    // axios.post('/users/:username/data', {
+    //   imageName: 'cat',
+    //   imageFile: cat
+    // })
+    //   .then(function (response) {
+    //     console.log(response);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   })
+
+    axios.get('/users/:username/data',
+
+    )
+      .then(function (response) {
+        console.log('hellp', response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
   }
-  
+
   getUserHistory() {
     const { userName } = this.props.match.params;
     axios.get(`/users/${userName}/games`)
       .then((userGameHistory) => {
-        if( userGameHistory.data !== null) {
-          this.setState({isUser: true});
-          this.setState({userHistory: userGameHistory.data});
+        if (userGameHistory.data !== null) {
+          this.setState({ isUser: true });
+          this.setState({ userHistory: userGameHistory.data });
         }
       })
-      .catch( err => console.error(err));
+      .catch(err => console.error(err));
   }
 
   getUserInfo() {
     const { userName } = this.props.match.params;
     axios.get(`/users/${userName}/data`)
       .then((userInfo) => {
-        if( userInfo.data !== null) {
-          this.setState({isUser: true});
-          this.setState({userInfo: userInfo.data});
+        if (userInfo.data !== null) {
+          this.setState({ isUser: true });
+          this.setState({ userInfo: userInfo.data });
         }
       })
-      .catch( err => console.error(err));
+      .catch(err => console.error(err));
   }
- 
+
+
+
+
+
   render() {
     const { isLoggedIn, currentUser, userID } = this.props;
     const { userName } = this.props.match.params;
@@ -59,7 +83,7 @@ class Profile extends Component{
       <PageNotFound />
     );
 
-    return(
+    return (
       <div className="takless">
         <div className="main">
           {this.state.isUser ? userProfile : notFoundPage}

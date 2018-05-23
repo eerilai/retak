@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const { User, Game, AsyncGame } = require('./index');
 const { hashPassword, comparePassword } = require('./encryptionHelpers');
 const Op = Sequelize.Op;
-
+var FS = require('fs');
 const findUserById = (id) => {
   return new Promise((resolve, reject) => {
     User.findById(id)
@@ -15,14 +15,12 @@ const findUserById = (id) => {
   });
 };
 
-const findOrCreateUserByGoogleId = (id) => {
+const findOrCreateUserByOauth = (options) => {
   return new Promise((resolve, reject) => {
     User.findOrCreate({
-      where: {
-        googleID: id
-      },
+      where: options,
       defaults: {
-        username: 'Tak-user-' + Math.random().toString(36).slice(2,9)
+        username: 'Tak-user-' + Math.random().toString(36).slice(2, 9)
       }
     })
       .then(([user, created]) => {
@@ -34,26 +32,31 @@ const findOrCreateUserByGoogleId = (id) => {
   });
 }
 
+
+
+
+
 const createUser = (userInfo) => {
+
   return new Promise((resolve, reject) => {
-  const { username, email, password } = userInfo;
-  hashPassword(password)
-    .then((hash) => {
-      User.create({
-        username,
-        email,
-        password: hash
-      })
-      .then((user) => {
-        resolve(user);
+    const { username, email, password } = userInfo;
+    hashPassword(password)
+      .then((hash) => {
+        User.create({
+          username,
+          email,
+          password: hash
+        })
+          .then((user) => {
+            resolve(user);
+          })
+          .catch((err) => {
+            reject(err);
+          })
       })
       .catch((err) => {
         reject(err);
-      })
-    })
-    .catch((err) => {
-      reject(err);
-    });
+      });
   });
 }
 
@@ -115,7 +118,7 @@ const getLeaderboard = () => {
 };
 
 const getUserData = (username) => {
-  return new Promise (async (res, rej) => {
+  return new Promise(async (res, rej) => {
     const data =
       await User.find({
         attributes: [
@@ -137,7 +140,7 @@ const getUserData = (username) => {
 };
 
 const getUserGames = (username) => {
-  return new Promise (async (res, rej) => {
+  return new Promise(async (res, rej) => {
     const games =
       await Game.findAll({
         where: {
@@ -152,7 +155,7 @@ const getUserGames = (username) => {
 };
 
 const getCurrentUserGames = (userID) => {
-  return new Promise (async (res, rej) => {
+  return new Promise(async (res, rej) => {
     const games =
       await AsyncGame.findAll({
         where: {
@@ -167,10 +170,10 @@ const getCurrentUserGames = (userID) => {
 };
 
 const storeAsyncGame = (gameState, room, roomId) => {
-  const {tps, ptn, ranked} = gameState;
+  const { tps, ptn, ranked } = gameState;
   console.log(room);
-  const {player1, player2, boardSize, activePlayer} = room;
-  return new Promise (async (res, rej) => {
+  const { player1, player2, boardSize, activePlayer } = room;
+  return new Promise(async (res, rej) => {
     const p1 = await User.findAll({ where: { username: player1 } });
     const p2 = await User.findAll({ where: { username: player2 } });
     player1_id = p1[0] ? p1[0].dataValues.id : null;
@@ -205,7 +208,7 @@ const storeAsyncGame = (gameState, room, roomId) => {
 };
 
 const endCorrespondence = (roomId) => {
-  return new Promise ((res, rej) => {
+  return new Promise((res, rej) => {
     AsyncGame.destroy({
       where: {
         room_id: roomId,
@@ -217,12 +220,13 @@ const endCorrespondence = (roomId) => {
 
 module.exports = {
   findUserById,
-  findOrCreateUserByGoogleId,
   createUser,
   logGame,
   getLeaderboard,
   getUserData,
   getUserGames,
+  findOrCreateUserByOauth,
+
   getCurrentUserGames,
   storeAsyncGame,
   endCorrespondence,

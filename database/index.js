@@ -38,6 +38,10 @@ const User = sequelize.define('user', {
     type: Sequelize.STRING,
     unique: true,
   },
+  facebookID: {
+    type: Sequelize.STRING,
+    unique: true,
+  },
   total_games: {
     type: Sequelize.INTEGER,
     defaultValue: 0,
@@ -117,17 +121,17 @@ User.hasMany(AsyncGame, { foreignKey: 'player1_id' });
 User.hasMany(AsyncGame, { foreignKey: 'player2_id' });
 
 // pass { force: true} into these if you'd like to only reset one table
-// User.sync()
+// User.sync({ force: true })
 //   .then(() => {
 //     console.log('user table created');
 //   });
 
-// Game.sync()
+// Game.sync({ force: true })
 //   .then(() => {
 //     console.log('game table created');
 //   });
 
-// AsyncGame.sync()
+// AsyncGame.sync({ force: true })
 //   .then(() => {
 //     console.log('async game table created');
 //   });
