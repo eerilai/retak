@@ -42,11 +42,11 @@ class LoginModal extends Component {
       })
       .then(res => {
         let currentUserInfo = res.data;
-        let currentUser = res.data.currentUser;
+        let currentUsername = res.data.currentUsername;
         this.props.toggleView("off");
         this.props.toggleLoginLogout(true);
         this.props.login(currentUserInfo);
-        this.props.socket.emit('login', currentUser);
+        this.props.socket.emit('login', currentUsername);
       })
       .catch(err => {
         console.error(err);
@@ -198,7 +198,7 @@ class LoginModal extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
-    currentUser: state.currentUser,
+    currentUsername: state.currentUsername,
     socket: state.socket
   };
 }

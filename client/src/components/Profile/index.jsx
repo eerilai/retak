@@ -6,7 +6,6 @@ import { Grid, Menu, Segment } from 'semantic-ui-react'
 import { userInfo } from 'os';
 import UserHistory from './UserHistory';
 import PageNotFound from '../PageNotFound';
-import cat from './cat.jpg'
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -71,7 +70,7 @@ class Profile extends Component {
 
 
   render() {
-    const { isLoggedIn, currentUser, userID } = this.props;
+    const { isLoggedIn, currentUsername, userID } = this.props;
     const { userName } = this.props.match.params;
 
     const userProfile = (
@@ -97,7 +96,7 @@ class Profile extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
-    currentUser: state.currentUser,
+    currentUsername: state.currentUsername,
     userID: state.userID
   };
 }

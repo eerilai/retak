@@ -54,19 +54,19 @@ class AuthNav extends Component {
 
   render() {
     const { modalView, selectModal } = this.state;
-    const { isLoggedIn, currentUser, userID } = this.props;
+    const { isLoggedIn, currentUsername, userID } = this.props;
     const { value } = this.state;
     // const avatarImg = defaultAvatar;
-    let userProfile = `/profile/${currentUser}`;
+    let userProfile = `/profile/${currentUsername}`;
 
     const userNavLink = (
       <nav>
         <div id="user-nav">
           <Dropdown
             text={<span>
-              {/* <Image avatar src={avatarImg} /> Hello, {currentUser} */}
-              <Icon name='user circle outline' /> Hello, {currentUser}
-              {/* <Image avatar src={faker.internet.avatar()} /> Hello, {currentUser} */}              
+              {/* <Image avatar src={avatarImg} /> Hello, {currentUsername} */}
+              <Icon name='user circle outline' /> Hello, {currentUsername}
+              {/* <Image avatar src={faker.internet.avatar()} /> Hello, {currentUsername} */}              
             </span>} 
             pointing='top left' 
             // icon={null}
@@ -113,7 +113,7 @@ class AuthNav extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
-    currentUser: state.currentUser,
+    currentUsername: state.currentUsername,
     userID: state.userID
   };
 }

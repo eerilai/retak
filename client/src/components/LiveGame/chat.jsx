@@ -66,7 +66,7 @@ class Chat extends Component {
     };
   }
   // make chatbox scroll effect
-  scrollToBottom() {
+  scrollToBottom = () => {
     this.messagesEnd.scrollIntoView({ block: 'end' });
   };
 
@@ -125,7 +125,7 @@ class Chat extends Component {
 }
 const mapStateToProps = state => {
   return {
-    username: state.currentUser,
+    username: state.currentUsername,
     socket: state.socket
   };
 };

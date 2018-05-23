@@ -12,6 +12,7 @@ import PTN from "./PTN";
 import Clock from "./Clock";
 import "../../styles/livegame.css";
 import { convertCoord } from "./gameUtil";
+import PageNotFound from '../PageNotFound';
 import {
   Input,
   Button,
@@ -31,8 +32,9 @@ class LiveGame extends Component {
       game: null,
       stone: "",
       isOpen: true,
-      user: props.currentUser,
+      user: props.currentUsername,
       opponentName: "",
+      noRoom: false,
       myTime: 0,
       opponentTime: 0
     };
@@ -90,9 +92,11 @@ class LiveGame extends Component {
       }
     });
 
+    socket.on('closedRoom', () => {
+      this.setState({ noRoom: true })
+    });
     socket.on('updateTime', ({ roomId, player1Time, player2Time }) => {
       if (roomId === props.match.params.roomId) {
-        console.log('player1', this.state.game)
         if (this.props.username === this.state.game.player1) {
 
           this.setState({
@@ -248,7 +252,11 @@ class LiveGame extends Component {
 
 
   formatSeconds = (totalSeconds) => {
-    if (!totalSeconds) {
+    if (totalSeconds === undefined || totalSeconds === null) {
+      return ''
+    }
+
+    if (totalSeconds === 0) {
       return <div> 00:00 </div>;
     }
     let seconds = totalSeconds % 60;
@@ -263,6 +271,7 @@ class LiveGame extends Component {
     }
 
     return <div>{minutes}:{seconds}</div>;
+
   };
 
   timeOut(player) {
@@ -360,6 +369,14 @@ class LiveGame extends Component {
       )
     }
 
+    if (this.state.noRoom) {
+      return (
+        <div className="takless">
+          <div className="main">
+            <PageNotFound />
+          </div>
+        </div>);
+    }
     if (!game) {
       return <div></div>
     }
@@ -408,7 +425,7 @@ class LiveGame extends Component {
 
 const mapStateToProps = state => {
   return {
-    username: state.currentUser,
+    username: state.currentUsername,
     socket: state.socket
   };
 };
