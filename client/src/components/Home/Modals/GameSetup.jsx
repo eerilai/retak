@@ -16,13 +16,15 @@ class GameSetup extends Component {
       isLive: true,
       roomId: '',
       timeControl: 0,
-      timeIncrement: 0
+      timeIncrement: 0,
+      color: 'random',
     }
 
     this.handleBoardSizeChange = this.handleBoardSizeChange.bind(this);
     this.handlePrivacyChange = this.handlePrivacyChange.bind(this);
     this.handleLiveChange = this.handleLiveChange.bind(this);
     this.handleRoomIdChange = this.handleRoomIdChange.bind(this);
+    this.handleColorChange = this.handleColorChange.bind(this);
 
   }
 
@@ -41,7 +43,11 @@ class GameSetup extends Component {
     });
   }
 
-
+  handleColorChange(e, { value }) {
+    this.setState({
+      color: value,
+    });
+  }
 
   handleRoomIdChange(e, { value }) {
     this.setState({
@@ -59,7 +65,7 @@ class GameSetup extends Component {
 
 
     const isFriendGame = this.props.gameType === 'friend';
-    const { boardSize, isPrivate, roomId, timeControl, isLive, timeIncrement } = this.state;
+    const { boardSize, isPrivate, roomId, timeControl, isLive, timeIncrement, color} = this.state;
     return (
       <Modal
         open={this.props.modalView === 'GameSetup'}
@@ -125,9 +131,26 @@ class GameSetup extends Component {
               label="Correspondence"
               onChange={this.handleLiveChange}
             />
-
-
-
+            <Form.Group inline label="Board Size">
+              <Form.Radio
+                label="White"
+                value="white"
+                checked={this.state.color === 'white'}
+                onChange={this.handleColorChange}
+              />
+              <Form.Radio
+                label="Random"
+                value="random"
+                checked={this.state.color === 'random'}
+                onChange={this.handleColorChange}
+              />
+              <Form.Radio
+                label="Black"
+                value="black"
+                checked={this.state.color === 'black'}
+                onChange={this.handleColorChange}
+              />
+            </Form.Group>
             <Form.Input
               type="text"
               label="Room Name"
@@ -147,7 +170,7 @@ class GameSetup extends Component {
           <Button
             positive
             content="New Game"
-            onClick={() => this.props.handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId)}
+            onClick={() => this.props.handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId, color)}
           />
 
         </Modal.Actions>

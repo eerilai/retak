@@ -32,7 +32,7 @@ class Home extends Component {
     });
   }
 
-  handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId) {
+  handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId, color) {
     if (boardSize) {
 
       if (!roomId) {
@@ -53,6 +53,7 @@ class Home extends Component {
         isFriendGame,
         isPrivate,
         isLive,
+        color,
         roomId
       });
       socket.on('gameInitiated', ({ roomId }) => {
