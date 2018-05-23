@@ -12,6 +12,7 @@ import PTN from "./PTN";
 import Clock from "./Clock";
 import "../../styles/livegame.css";
 import { convertCoord } from "./gameUtil";
+import PageNotFound from '../PageNotFound';
 import {
   Input,
   Button,
@@ -33,6 +34,7 @@ class LiveGame extends Component {
       isOpen: true,
       user: props.currentUser,
       opponentName: "",
+      noRoom: false,
       myTime: 0,
       opponentTime: 0
     };
@@ -92,6 +94,9 @@ class LiveGame extends Component {
       }
     });
 
+    socket.on('closedRoom', () => {
+      this.setState({ noRoom: true })
+    });
     socket.on('updateTime', ({ roomId, player1Time, player2Time }) => {
 
       if (roomId === props.match.params.roomId) {
@@ -368,6 +373,14 @@ class LiveGame extends Component {
       )
     }
 
+    if (this.state.noRoom) {
+      return (
+        <div className="takless">
+          <div className="main">
+            <PageNotFound />
+          </div>
+        </div>);
+    }
     if (!game) {
       return <div></div>
     }

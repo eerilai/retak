@@ -6,7 +6,6 @@ import { Grid, Menu, Segment } from 'semantic-ui-react'
 import { userInfo } from 'os';
 import UserHistory from './UserHistory';
 import PageNotFound from '../PageNotFound';
-
 class Profile extends Component {
   constructor(props) {
     super(props);

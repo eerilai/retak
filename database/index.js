@@ -121,20 +121,20 @@ User.hasMany(AsyncGame, { foreignKey: 'player1_id' });
 User.hasMany(AsyncGame, { foreignKey: 'player2_id' });
 
 // pass { force: true} into these if you'd like to only reset one table
-User.sync()
-  .then(() => {
-    console.log('user table created');
-  });
+// User.sync({ force: true })
+//   .then(() => {
+//     console.log('user table created');
+//   });
 
-Game.sync()
-  .then(() => {
-    console.log('game table created');
-  });
+// Game.sync({ force: true })
+//   .then(() => {
+//     console.log('game table created');
+//   });
 
-AsyncGame.sync()
-  .then(() => {
-    console.log('async game table created');
-  });
+// AsyncGame.sync({ force: true })
+//   .then(() => {
+//     console.log('async game table created');
+//   });
 
 // syncs all tables, drop and rebuild all tables with { force: true }
 sequelize.sync()
