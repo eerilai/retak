@@ -33,9 +33,10 @@ const Learn = props => (
 
 
     </div>
+
     <div>
       <div className='boardPicture'><img src={boardPicture} /></div>
-      <div className='boardPicture'><img src={pieces} /></div>
+      <div className='piecesPicture'><img src={pieces} /></div>
     </div>
 
     <div className='table'>
@@ -46,6 +47,11 @@ const Learn = props => (
           <th>Board Size</th>
           <th>Stones</th>
           <th>Capstones</th>
+        </tr>
+        <tr>
+          <td>3 x 3</td>
+          <td>10</td>
+          <td>0</td>
         </tr>
         <tr>
           <td>4 x 4</td>
@@ -61,6 +67,11 @@ const Learn = props => (
           <td>6 x 6</td>
           <td>30</td>
           <td>1</td>
+        </tr>
+        <tr>
+          <td>7 x 7</td>
+          <td>40</td>
+          <td>1-2</td>
         </tr>
         <tr>
           <td>8 x 8</td>
