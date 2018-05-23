@@ -4,15 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const socket = require('socket.io');
 const sharedSession = require('express-socket.io-session');
-
-
-
-var fs = require('fs')
-var https = require('https')
-
-
-
-
+const https = require('https')
 
 require('dotenv').config();
 
@@ -72,7 +64,6 @@ app.get('/users/:username/data', async (req, res) => {
   const data = await getUserData(req.params.username);
   res.json(data);
 });
-
 
 app.get('/users/:username/games', async (req, res) => {
   const games = await getUserGames(req.params.username);
@@ -163,21 +154,17 @@ io.on('connection', (socket) => {
   });
 
   // Serve game state on LiveGame component initialize
-  socket.on('fetchGame', async (roomId, loadGame) => {
-    if (!io.sockets.adapter.rooms[roomId]) {
+  socket.on('fetchGame', async (username, roomId, loadGame) => {
+    const { session } = socket.handshake;
+    username = session.username ? session.username : username;
+    const room = io.sockets.adapter.rooms[roomId];
+    if (!room) {
       socket.emit('closedRoom');
       socket.join(roomId);
     }
-    if (!io.sockets.adapter.rooms[roomId].sockets[socket.id]) {
+    if (!room.sockets[socket.id]) {
       socket.join(roomId);
     }
-    const { username } = socket.handshake.session;
-    const room = io.sockets.adapter.rooms[roomId];
-
-    //sanity check
-    if (!room)
-      return
-
     let { gameState, activePlayer, boardSize, timeControl, player1Time, player2Time, isPrivate, spectators } = room;
     if (loadGame !== null) {
       const {
@@ -240,10 +227,6 @@ io.on('connection', (socket) => {
   // Update game for each piece move
   socket.on('updateGame', ({ gameState, activePlayer, roomId }) => {
     const room = io.sockets.adapter.rooms[roomId];
-
-    //sanity check
-    if (!room)
-      return
     room.gameState = gameState;
     room.activePlayer = activePlayer;
     let { boardSize, timeControl, player1, player2, player1Time, player2Time, status, timeIncrement } = room;
