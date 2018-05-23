@@ -168,6 +168,7 @@ io.on('connection', (socket) => {
   // Serve game state on LiveGame component initialize
   socket.on('fetchGame', async (roomId, loadGame) => {
     if (!io.sockets.adapter.rooms[roomId]) {
+      socket.emit('closedRoom');
       socket.join(roomId);
     }
     if (!io.sockets.adapter.rooms[roomId].sockets[socket.id]) {
