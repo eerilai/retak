@@ -54,7 +54,7 @@ class LogoutModal extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
-    currentUser: state.currentUser
+    currentUsername: state.currentUsername
   };
 }
 

@@ -69,7 +69,7 @@ function mapStateToProps(state) {
   return;
   // return { 
   //   isLoggedIn: state.isLoggedIn,
-  //   currentUser: state.currentUser
+  //   currentUsername: state.currentUsername
   // }
 }
 

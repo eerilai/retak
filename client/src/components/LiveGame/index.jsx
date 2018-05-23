@@ -32,7 +32,7 @@ class LiveGame extends Component {
       game: null,
       stone: "",
       isOpen: true,
-      user: props.currentUser,
+      user: props.currentUsername,
       opponentName: "",
       noRoom: false,
       myTime: 0,
@@ -429,7 +429,7 @@ class LiveGame extends Component {
 
 const mapStateToProps = state => {
   return {
-    username: state.currentUser,
+    username: state.currentUsername,
     socket: state.socket
   };
 };

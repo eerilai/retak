@@ -60,7 +60,7 @@ class InPlay extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    username: state.currentUser,
+    username: state.currentUsername,
     userID: state.userID,
   };
 };
