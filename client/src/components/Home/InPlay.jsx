@@ -26,13 +26,20 @@ class InPlay extends Component {
     let versus = '';
     return (
       <table class="tg">
-        <tr>
-          <th>Game</th>
-          <th>Versus</th>
-          <th>Board</th>
-          <th>Turn</th>
-          <th>To Play</th>
-        </tr>
+        <thead>
+          <tr>
+            <th colSpan="5" className="title">
+              <h3>Correspondence</h3>
+            </th>
+          </tr>
+          <tr>
+            <th>Game</th>
+            <th>Versus</th>
+            <th>Board</th>
+            <th>Turn</th>
+            <th>To Play</th>
+          </tr>
+        </thead>
         {this.state.games.map(game => (
           <tr className="room">
             <td><Link to={{

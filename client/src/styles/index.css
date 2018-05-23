@@ -10,6 +10,28 @@ body {
   font-family: helvetica;
 }
 
+.imgPreview {
+  text-align: center;
+  margin: 5px 15px;
+  height: 200px;
+  width: 500px;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  border-top: 5px solid gray;
+  border-bottom: 5px solid gray;
+  /* border: solid gray;
+  border-radius: 200px; */
+}
+img {
+width: 100%;
+height: 100%;
+}
+
+.previewText {
+  width: 100%;
+  margin-top: 20px;
+}
+
 button {
   height: 50px;
   font-weight: bold;
@@ -80,6 +102,16 @@ i.icon.paste:hover {
   grid-template-areas:
     "l nav r"
     "l takless r";
+}
+
+a{
+  cursor: pointer;
+  color: #000 !important;
+}
+a:hover{
+  cursor: pointer !important;
+  color: #000;
+  text-decoration: none !important;
 }
 
 #nav {
@@ -163,6 +195,21 @@ nav:hover {
   min-height: 200px;
 }
 
+/* game setup  */
+.ui.modal>.actions {
+  text-align: center;
+  margin-top: 100px;
+}
+.ui.modal.transition.visible.active{
+
+  margin-top: -401px;
+  height: 450px;
+  width: 60%;
+
+}
+.slider{
+  width:200px
+}
 /* Tables CSS */
 .tg {
   /* border-collapse:collapse; */
@@ -323,16 +370,19 @@ p:first-child {
 p.question {
   margin-top: 10px;
   margin-bottom: 1rem;
+
 }
 
-#loginButton {
-  padding-left: 0px;
-  margin: 10px 0px;
+.ui.input{
+  font-size: 1em;
+  width: 400px;
 }
+#loginButton ,
 #signupButton {
   padding-left: 0px;
   display: block;
   margin: 10px 0px;
+  width: 400px;
 }
 .logout {
   margin: 30px 30px 60px 50px;

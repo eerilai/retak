@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Modal } from "reactstrap";
+import { Link } from 'react-router-dom'
 import axios from "axios";
 import { Button, Icon, Input, Header } from "semantic-ui-react";
 // import { Button, Icon, Input, Header, Modal } from "semantic-ui-react";
@@ -56,13 +57,22 @@ class LoginModal extends Component {
     return (
       <Modal isOpen={this.props.modalView === "login"}>
         <div className="log">
-        <Header icon='LogIn' content='Log-In to Your Account' />
+          <Header icon='LogIn' content='Log-In to Your Account' />
           <a href="/auth/google">
-            <Button class="ui google plus button" role="button" color="red">
+            <Button circular class="ui google plus button" role="button" color="google plus">
               <i aria-hidden="true" class="google plus icon"></i>
-              |   Sign in with Google
+              | Google
             </Button>
           </a>
+
+
+          <a href="/auth/facebook">
+            <Button circular class="ui facebook button" role="button" color="facebook">
+              <i aria-hidden="true" class="facebook icon"></i>
+              |  Facebook
+            </Button>
+          </a>
+
           <form onSubmit={this.handleSubmit}>
             <div>
               <div>
@@ -75,26 +85,26 @@ class LoginModal extends Component {
                       placeholder="Username"
                       value={this.state.username}
                       onChange={this.handleUsernameChange}
-                      />
+                    />
                   </div>
                 </Input>
               </div>
               <div>
                 <p className="logTag">Password:</p>
                 <Input className="hvr-shadow-radial" required>
-                  <div class="ui left icon input">
+                  <div className="ui left icon input">
                     <i class="lock icon"></i>
                     <input
                       type="password"
                       placeholder="Password"
                       value={this.state.password}
                       onChange={this.handlePasswordChange}
-                      />
+                    />
                   </div>
                 </Input>
               </div>
             </div>
-            <Button id="loginButton" size="large">Log In  <Icon size="large" name="sign in" corner="true"/></Button>
+            <Button id="loginButton" size="large">Log In  <Icon size="large" name="sign in" corner="true" /></Button>
           </form>
           <p className="question">Here for the first time?</p>
           <Button
@@ -104,14 +114,15 @@ class LoginModal extends Component {
             }}
             link
           >
-            Click here to signup
+            Click here to Signup
           </Button>
           <Button
-            color="blue"
+            color="red"
             onClick={() => {
               this.props.toggleView("off");
             }}
           >
+            <Icon size="large" name="ban" corner="true"/>
             Cancel
           </Button>
         </div>

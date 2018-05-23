@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import moment from 'moment';
-import { Icons, Image } from 'semantic-ui-react';
+import { Icon, Image } from 'semantic-ui-react';
 import axios from 'axios';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 class UserHistory extends Component {
   constructor(props){
@@ -10,6 +11,7 @@ class UserHistory extends Component {
     this.state= {
       userHistory: [],
       userInfo: {},
+      copied: false,
     }
   }
 
@@ -76,8 +78,11 @@ class UserHistory extends Component {
       else if (user.win_type === 'F') {
         typeOfWin = 'Flat Win'
       }
+      else if (user.win_type === 'T') {
+        typeOfWin = 'Time Ran Out Win'
+      }
       else if (user.win_type === '1') {
-        typeOfWin = 'Resegnation Win or Time Ran Out'
+        typeOfWin = 'Rsignation Win'
       }
       else if (user.win_type === '1/2') {
         typeOfWin = 'Draw'
@@ -94,7 +99,18 @@ class UserHistory extends Component {
             <div>Victor: {user.victor}</div>
             <div>{typeOfWin}</div>
             <div>Board Size: {user.board_size}</div>
-            <div>PTN: {user.ptn}</div>
+            <div><strong>PTN: </strong> {user.ptn}</div>
+            {/* <CopyToClipboard
+                text={user.ptn}
+                onCopy={() => this.setState({ copied: true })}
+              >
+              <span>
+                <Icon name="copy" size="large" />
+              </span>
+            </CopyToClipboard> */}
+            <div id="copied">
+              {this.state.copied ? 'PTN Copied' : ''}
+            </div>
           </div>
         </div>
       );
@@ -106,13 +122,35 @@ class UserHistory extends Component {
   
     return (
       <div className="userHistory"> 
-        <div className="userInfo"> Info
+        <div className="userInfo">
+        <table class="tg">
+         <thead>
+            <th colSpan="5" className="title">
+              <h3>{userInfo.username}'s Profile</h3>
+            </th>
+          </thead>
             {/* <img /> */}
-            <div> Username: {userInfo.username} </div>
-            <div> Total Games: {userInfo.total_games} </div>
-            <div> Total Ranked Games: {userInfo.ranked_games} </div>
-            <div> Ranked Wins: {userInfo.ranked_wins} </div>
-            <div> Ranked Losses: ???? </div>
+            {/* <div> 
+              <span> Username: </span> 
+              <span>{userInfo.username}</span> 
+            </div> */}
+            <div>
+              <span> Total Games: </span>
+              <span> {userInfo.total_games} </span>
+            </div>
+            <div> 
+              <span> Total Ranked Games: </span>
+              <span>{userInfo.ranked_games}</span>
+            </div>
+            <div>
+              <span> Ranked Wins: </span>
+              <span>{userInfo.ranked_wins}</span>
+            </div>
+            <div>
+              <span> Ranked Losses: </span>
+              <span>{userInfo.ranked_losses}</span>
+            </div>
+          </table>
           </div>
         <table class="tg">
          <thead>

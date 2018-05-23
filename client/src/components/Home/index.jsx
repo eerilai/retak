@@ -32,29 +32,34 @@ class Home extends Component {
     });
   }
 
-  handleCreateGame(boardSize, timeControl, isFriendGame, isPrivate, isLive, roomId) {
-    if (!roomId) {
-      roomId = generateRoomName();
-    }
-    const { socket } = this.props;
-    socket.emit('createGame', {
-      boardSize,
-      timeControl,
-      isFriendGame,
-      isPrivate,
-      isLive,
-      roomId
-    });
-    socket.on('gameInitiated', ({ roomId }) => {
-      // TODO: Change URL from localhost to takless for deployment
-      let url = `http://localhost:3000/game/${roomId}`;
-      let link = `game/${roomId}`;
-      this.setState({
-        url,
-        link,
-        modalView: 'GameLink'
+  handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId) {
+    console.log('handleCreateGame', timeIncrement)
+    if (boardSize) {
+
+      if (!roomId) {
+        roomId = generateRoomName();
+      }
+      const { socket } = this.props;
+      socket.emit('createGame', {
+        boardSize,
+        timeControl: timeControl * 60,
+        timeIncrement: Number(timeIncrement),
+        isFriendGame,
+        isPrivate,
+        isLive,
+        roomId
       });
-    });
+      socket.on('gameInitiated', ({ roomId }) => {
+        // TODO: Change URL from localhost to takless for deployment
+        let url = `http://localhost:3000/game/${roomId}`;
+        let link = `game/${roomId}`;
+        this.setState({
+          url,
+          link,
+          modalView: 'GameLink'
+        });
+      });
+    }
   }
 
   getLeaderboard() {
@@ -79,13 +84,13 @@ class Home extends Component {
       <div className="takless">
         <div className="main">
           <span style={{ cursor: 'pointer' }} onClick={() => { this.setState({ lobbyView: 'lobby' }); }}>Lobby /</span>
-          <span style={{ cursor: 'pointer' }} onClick={() =>  { this.setState({ lobbyView: 'in_play' }); }}> In Play</span>
+          <span style={{ cursor: 'pointer' }} onClick={() => { this.setState({ lobbyView: 'in_play' }); }}> In Play</span>
           <div className="lobby">
-            { lobbyDisplay }
+            {lobbyDisplay}
           </div>
           <button className="createGame">Play with Bot</button>
           <button
-            className="createGame" 
+            className="createGame"
             onClick={() =>
               this.setState({
                 modalView: 'GameSetup',

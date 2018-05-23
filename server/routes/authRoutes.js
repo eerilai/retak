@@ -5,12 +5,21 @@ const { createUser } = require('../../database/queries');
 require('../passportConfig');
 
 router.get('/google', passport.authenticate('google', {
-  scope: ['profile']
+  scope: ['profile', 'email']
 }));
 
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
   res.redirect('/');
 });
+
+router.get('/facebook', passport.authenticate('facebook', {
+  scope: ['email']
+}));
+
+router.get('/facebook/redirect', passport.authenticate('facebook', {
+  successRedirect: '/',
+  failureRedirect: '/'
+}));
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
   let currentUser = req.user.dataValues;
@@ -21,9 +30,11 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
       userEmail: currentUser.email,
       rankedGames: currentUser.ranked_games,
       rankedWins: currentUser.ranked_wins,
+      rankedLosses: currentUser.ranked_losses,
       totalGames: currentUser.total_games
-    } 
+    }
   )
+  console.log('/login', currentUserInfo)
   res.send(currentUserInfo);
 });
 
@@ -39,14 +50,16 @@ router.post('/signup', (req, res) => {
         let currentUser = user.dataValues;
         let currentUserInfo = Object.assign({},
           {
-            userID: currentUser.id,          
+            userID: currentUser.id,
             currentUser: currentUser.username,
             userEmail: currentUser.email,
             rankedGames: currentUser.ranked_games,
             rankedWins: currentUser.ranked_wins,
+            rankedLosses: currentUser.ranked_losses,
             totalGames: currentUser.total_games
-          } 
+          }
         )
+        console.log('/signup', currentUser)
         res.send(currentUserInfo);
       });
     })
@@ -63,7 +76,8 @@ router.post('/logout', (req, res) => {
 });
 
 const authCheck = ((req, res, next) => {
-  if(!req.user) {
+  console.log(req.user, 'authCheck in authRoutes.js')
+  if (!req.user) {
     res.redirect('/');
   } else {
     next();
@@ -79,9 +93,11 @@ router.get('/check', authCheck, (req, res) => {
       userEmail: currentUser.email,
       rankedGames: currentUser.ranked_games,
       rankedWins: currentUser.ranked_wins,
+      rankedLosses: currentUser.ranked_losses,
       totalGames: currentUser.total_games
-    } 
+    }
   )
+  console.log('/check', currentUser)
   res.send(currentUserInfo);
 });
 
