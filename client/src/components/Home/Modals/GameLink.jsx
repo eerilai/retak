@@ -50,17 +50,23 @@ class GameLink extends Component {
     return (
       <Modal
         open={modalView === 'GameLink'}
-        size="tiny"
+        size="medium"
         dimmer={false}
         onClose={() => changeView('')}
         closeIcon
       >
         <Modal.Header>{header}</Modal.Header>
         <Modal.Content>
-          <Form size="tiny" key="small" />
+          <Form />
+
           {urlField}
         </Modal.Content>
         <Modal.Actions>
+          <Button
+            negative
+            content="Close"
+            onClick={() => changeView('')}
+          />
           <Link to={link}>
             <Button
               positive
@@ -70,6 +76,7 @@ class GameLink extends Component {
               content="Enter my room"
             />
           </Link>
+
         </Modal.Actions>
       </Modal>
     );

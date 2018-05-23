@@ -15,15 +15,19 @@ class GameSetup extends Component {
       isPrivate: false,
       isLive: true,
       roomId: '',
-      timeControl: false,
+      timeControl: 0,
+      timeIncrement: 0
     }
 
     this.handleBoardSizeChange = this.handleBoardSizeChange.bind(this);
     this.handlePrivacyChange = this.handlePrivacyChange.bind(this);
     this.handleLiveChange = this.handleLiveChange.bind(this);
     this.handleRoomIdChange = this.handleRoomIdChange.bind(this);
-    this.handleTimeChange = this.handleTimeChange.bind(this);
+
   }
+
+  handleTimeControl = e => this.setState({ timeControl: e.target.value })
+  handleTimeIncrement = e => this.setState({ timeIncrement: e.target.value })
 
   handleBoardSizeChange(e, { value }) {
     this.setState({
@@ -37,17 +41,7 @@ class GameSetup extends Component {
     });
   }
 
-  handleTimeChange(e, { value }) {
-    if (value === '0') {
-      this.setState({
-        timeControl: -1,
-      });
-    } else {
-      this.setState({
-        timeControl: Number(value) * 60,
-      });
-    }
-  }
+
 
   handleRoomIdChange(e, { value }) {
     this.setState({
@@ -62,36 +56,21 @@ class GameSetup extends Component {
   }
 
   render() {
-    const options = [
-      { key: '8', text: '8', value: '8' },
-      { key: '7', text: '7', value: '7' },
-      { key: '6', text: '6', value: '6' },
-      { key: '5', text: '5', value: '5' },
-      { key: '4', text: '4', value: '4' },
-      { key: '3', text: '3', value: '3' },
-    ];
-    const times = [
-      { key: '2', text: '15', value: '15' },
-      { key: '3', text: '10', value: '10' },
-      { key: '4', text: '5', value: '5' },
-      { key: '5', text: '3', value: '3' },
-      { key: '6', text: '1', value: '1' },
-      { key: '7', text: 'Test', value: '.15' },
-    ];
+
+
     const isFriendGame = this.props.gameType === 'friend';
-    const { boardSize, isPrivate, roomId, isLive, timeControl } = this.state;
+    const { boardSize, isPrivate, roomId, timeControl, isLive, timeIncrement } = this.state;
     return (
-        <Modal
-          open={this.props.modalView === 'GameSetup'}
-          size="tiny"
-          onClose={() => this.props.changeView('')}
-          dimmer={false}
-          closeIcon
-        >
-          <Modal.Header>GameSetup</Modal.Header>
-          <Modal.Content>
-            <Form size={"tiny"} key={"small"}>
-              <Form.Group inline label="Board Size">
+      <Modal
+        open={this.props.modalView === 'GameSetup'}
+        //size="small"
+        dimmer={false}
+
+      >
+        <Modal.Header>GameSetup</Modal.Header>
+        <Modal.Content>
+          <Form >
+            <Form.Group inline label="Board Size">
               <label>Board Size</label>
               <Form.Radio
                 label="3x3"
@@ -129,44 +108,50 @@ class GameSetup extends Component {
                 checked={this.state.boardSize === 8}
                 onChange={this.handleBoardSizeChange}
               />
-              </Form.Group>
-              <Form.Field
-                control={Select}
-                placeholder="Time Control"
-                label="Time Control"
-                options={times}
-                onChange={this.handleTimeChange}
-              />
-              <Form.Field
-                control={Checkbox}
-                label="Private"
-                onChange={this.handlePrivacyChange}
-              />
-              <Form.Field
-                control={Checkbox}
-                label="Correspondence"
-                onChange={this.handleLiveChange}
-              />
-              <Form.Input
-                type="text"
-                label="Room Name"
-                placeholder="optional"
-                value={this.state.roomId}
-                onChange={this.handleRoomIdChange}
-              />
-            </Form>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button
-              positive
-              icon="gamepad"
-              size="large"
-              labelPosition="right"
-              content="New Game"
-              onClick={() => this.props.handleCreateGame(boardSize, timeControl, isFriendGame, isPrivate, isLive, roomId)}
+            </Form.Group>
+
+            <div><strong>Minutes per side</strong>: {this.state.timeControl} minute(s)</div>
+            <input className='slider' type='range' min={0} max={60} value={this.state.timeControl} onChange={this.handleTimeControl} />
+            <div><strong>Increment in seconds</strong>: {this.state.timeIncrement} second(s)</div>
+            <input className='slider' type='range' min={0} max={20} value={this.state.timeIncrement} onChange={this.handleTimeIncrement} />
+            <br />
+            <Form.Field
+              control={Checkbox}
+              label="Private"
+              onChange={this.handlePrivacyChange}
             />
-          </Modal.Actions>
-        </Modal>
+            <Form.Field
+              control={Checkbox}
+              label="Correspondence"
+              onChange={this.handleLiveChange}
+            />
+
+
+
+            <Form.Input
+              type="text"
+              label="Room Name"
+              placeholder="optional"
+              value={this.state.roomId}
+              onChange={this.handleRoomIdChange}
+            />
+
+          </Form>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button
+            negative
+            content="Close"
+            onClick={() => this.props.changeView('')}
+          />
+          <Button
+            positive
+            content="New Game"
+            onClick={() => this.props.handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId)}
+          />
+
+        </Modal.Actions>
+      </Modal>
     );
   }
 }

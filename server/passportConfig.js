@@ -1,9 +1,12 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
+
 const LocalStrategy = require('passport-local').Strategy;
 const {
   findUserById,
-  findOrCreateUserByGoogleId
+  findOrCreateUserByOauth,
+
 } = require('../database/queries');
 const { User, Sequelize } = require('../database');
 
@@ -27,7 +30,15 @@ passport.use(new GoogleStrategy(
     clientSecret: process.env.GOOGLE_OAUTH_SECRET,
     callbackURL: '/auth/google/redirect'
   }, (accesToken, refreshToken, profile, done) => {
-    findOrCreateUserByGoogleId(profile.id)
+    console.log('google', profile.emails[0].value)
+
+    let options = {
+      googleID: profile.id,
+      email: profile.emails[0].value
+    }
+
+
+    findOrCreateUserByOauth(options)
       .then((user) => {
         done(null, user);
       })
@@ -36,6 +47,30 @@ passport.use(new GoogleStrategy(
       });
   })
 );
+
+passport.use(new FacebookStrategy(
+  {
+    clientID: process.env.FACEBOOK_OAUTH_ID,
+    clientSecret: process.env.FACEBOOK_OAUTH_SECRET,
+    callbackURL: '/auth/facebook/redirect',
+    profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified'],
+  }, (accesToken, refreshToken, profile, done) => {
+    console.log('facebook', profile.emails[0].value)
+    let options = {
+      facebookID: profile.id,
+      email: profile.emails[0].value
+    }
+    findOrCreateUserByOauth(options)
+      .then((user) => {
+        done(null, user);
+      })
+      .catch((err) => {
+        done(err);
+      });
+  })
+);
+
+
 
 passport.use(new LocalStrategy(
   (usernameOrEmail, password, done) => {
@@ -54,4 +89,4 @@ passport.use(new LocalStrategy(
       .catch((err) => {
         done(err);
       })
-}));
+  }));

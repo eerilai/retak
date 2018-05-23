@@ -195,6 +195,21 @@ nav:hover {
   min-height: 200px;
 }
 
+/* game setup  */
+.ui.modal>.actions {
+  text-align: center;
+  margin-top: 100px;
+}
+.ui.modal.transition.visible.active{
+
+  margin-top: -401px;
+  height: 450px;
+  width: 60%;
+
+}
+.slider{
+  width:200px
+}
 /* Tables CSS */
 .tg {
   /* border-collapse:collapse; */
