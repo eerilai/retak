@@ -4,8 +4,7 @@ import generateCharacterName from './components/characterName';
 const initialState = {
   isLoggedIn: false,
   userID: null,
-  // currentUser: 'Guest-' + Math.random().toString(36).slice(2,6),
-  currentUser: generateCharacterName(),
+  currentUsername: generateCharacterName(),
   userEmail: null,
   rankedGames: null,
   rankedWins: null,
