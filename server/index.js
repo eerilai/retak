@@ -136,7 +136,7 @@ io.on('connection', (socket) => {
 
   // Create a new game and save game state to room
   socket.on('createGame', async ({ boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId }) => {
-    console.log('createGame', timeIncrement)
+
     if (!isLive) roomId += '_c';
     await socket.join(roomId);
     const room = io.sockets.adapter.rooms[roomId];
@@ -158,7 +158,7 @@ io.on('connection', (socket) => {
     room.isLive = isLive;
     room.spectators = {};
 
-    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~', timeIncrement, timeControl)
+
     socket.emit('gameInitiated', {
 
       roomId
@@ -250,7 +250,7 @@ io.on('connection', (socket) => {
     room.activePlayer = activePlayer;
     let { boardSize, timeControl, player1, player2, player1Time, player2Time, status, timeIncrement } = room;
 
-    if (room.status === GAME_STARTED) {
+    if (room.status === GAME_STARTED && timeControl !== undefined) {
       if (player1 !== activePlayer) {
         player1Time += timeIncrement
         if (player1Time > timeControl) {

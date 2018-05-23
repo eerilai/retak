@@ -33,16 +33,23 @@ class Home extends Component {
   }
 
   handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId) {
-    console.log('handleCreateGame', timeIncrement)
+    console.log('handleCreateGame', timeControl)
     if (boardSize) {
 
       if (!roomId) {
         roomId = generateRoomName();
       }
       const { socket } = this.props;
+      var timer
+      if (timeControl !== 0) {
+        timer = timeControl * 60
+      } else {
+        console.log('timer = null situation')
+        timer = undefined
+      }
       socket.emit('createGame', {
         boardSize,
-        timeControl: timeControl * 60,
+        timeControl: timer,
         timeIncrement: Number(timeIncrement),
         isFriendGame,
         isPrivate,

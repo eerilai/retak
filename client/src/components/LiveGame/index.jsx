@@ -53,11 +53,10 @@ class LiveGame extends Component {
     }, 600);
 
     socket.on('syncGame', ({ boardSize, gameState, player1Time, player2Time, status, player1, player2, roomId, activePlayer, isPlayer1 }) => {
-      console.log('syncGame fired');
+
       if (roomId === props.match.params.roomId) {
         const game = new Game(boardSize, gameState, player1, player2);
         game.activePlayer = activePlayer;
-
 
         if (this.props.username === player1) {
           this.setState({
@@ -73,6 +72,8 @@ class LiveGame extends Component {
           });
         }
       }
+      console.log('sync game', this.state.myTime, this.state.opponentTime)
+
 
     });
 
@@ -97,7 +98,6 @@ class LiveGame extends Component {
     socket.on('updateTime', ({ roomId, player1Time, player2Time }) => {
 
       if (roomId === props.match.params.roomId) {
-        console.log('player1', this.state.game)
         if (this.props.username === this.state.game.player1) {
 
           this.setState({
@@ -254,7 +254,11 @@ class LiveGame extends Component {
 
 
   formatSeconds = (totalSeconds) => {
-    if (!totalSeconds) {
+    if (totalSeconds === undefined || totalSeconds === null) {
+      return ''
+    }
+
+    if (totalSeconds === 0) {
       return <div> 00:00 </div>;
     }
     let seconds = totalSeconds % 60;
@@ -269,6 +273,7 @@ class LiveGame extends Component {
     }
 
     return <div>{minutes}:{seconds}</div>;
+
   };
 
   timeOut(player) {

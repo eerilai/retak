@@ -66,7 +66,7 @@ class Chat extends Component {
     };
   }
   // make chatbox scroll effect
-  scrollToBottom() {
+  scrollToBottom = () => {
     this.messagesEnd.scrollIntoView({ block: 'end' });
   };
 
