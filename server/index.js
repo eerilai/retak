@@ -132,13 +132,23 @@ io.on('connection', (socket) => {
   });
 
   // Create a new game and save game state to room
-  socket.on('createGame', async ({ boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId }) => {
-
+  socket.on('createGame', async ({ boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId, color }) => {
     if (!isLive) roomId += '_c';
     await socket.join(roomId);
     const room = io.sockets.adapter.rooms[roomId];
     console.log('socket handshake session username', socket.handshake.session);
-    room.player1 = socket.handshake.session.username;
+
+    if (color === 'white') {
+      room.player1 = socket.handshake.session.username;
+    } else if (color === 'black') {
+      room.player2 = socket.handshake.session.username;
+    } else if (Math.floor(Math.random() * 2) === 0) {
+      room.player1 = socket.handshake.session.username;
+    } else {
+      room.player2 = socket.handshake.session.username;
+    }
+    room.players = 1;
+
     room.activePlayer = socket.handshake.session.username;
     room.boardSize = boardSize
     //setting the time of the room
@@ -198,38 +208,33 @@ io.on('connection', (socket) => {
 
     const { player1, player2 } = room;
     let status = room.status;//when the player2 joined, game status will change
-    if (username === player1) {
-      if (!player2) {
+
+    if (room.players === 1) {
+      if (username === player1 || username === player2) {
         socket.emit('pendingGame', { boardSize, timeControl, roomId });
-      } else {//player1 reconnect, sync game
+      } else {
+        const emptySeat = !player1 ? 1 : 2;
+        room[`player${emptySeat}`] = username;
+        room.players = 2;
 
-        io.in(roomId).emit('syncGame', { boardSize, player1Time, player2Time, status, gameState, roomId, player1, player2, activePlayer });
+        room.status = GAME_STARTED;
+        status = room.status;
+        room.intervalID = setInterval(UpdateTime, 1000, roomId);
+
+        io.to(roomId).emit('syncGame', {
+          boardSize, gameState: 'new', roomId, player1: room.player1, player2: room.player2, activePlayer: room.player1, player1Time, player2Time, status,
+        });
       }
-    } else if (!player2) {//player2 joined, game starts, timer starts, setinterval here
-      room.player2 = username;
-
-      room.status = GAME_STARTED;
-      status = room.status
-      room.intervalID = setInterval(UpdateTime, 1000, roomId)
-
-
-      io.to(roomId).emit('syncGame', {
-        boardSize, gameState: 'new', roomId, player1, player2: room.player2, activePlayer, player1Time, player2Time, status
+    } else if ((username === player1 || username === player2) || !isPrivate) {
+      io.in(roomId).emit('syncGame', {
+        boardSize, player1Time, player2Time, status, gameState, roomId, player1, player2, activePlayer,
       });
-    } else if (username !== player2 && isPrivate) {
+      if (username !== player1 || username !== player2) {
+        room.spectators[username] = username;
+      }
+    } else {
       socket.leave(roomId);
       socket.emit('gameAccessDenied');
-    } else {
-      if (username !== player2) { //specatator
-        room.spectators[username] = username;
-        socket.emit('syncGame', {
-          boardSize, gameState, roomId, player1, player2, activePlayer, player1Time, player2Time, status,
-        });
-      } else { //player2 reconnect 
-        socket.emit('syncGame', {
-          boardSize, gameState, roomId, player1, player2, activePlayer, player1Time, player2Time, status
-        });
-      }
     }
 
     // Update lobby
