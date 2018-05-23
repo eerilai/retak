@@ -12,13 +12,14 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
   res.redirect('/');
 });
 
+router.get('/facebook', passport.authenticate('facebook', {
+  scope: ['email']
+}));
 
-router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));
 router.get('/facebook/redirect', passport.authenticate('facebook', {
   successRedirect: '/',
   failureRedirect: '/'
-}))
-
+}));
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
   let currentUsername = req.user.dataValues;
