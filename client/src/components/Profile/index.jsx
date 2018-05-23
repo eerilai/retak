@@ -70,7 +70,7 @@ class Profile extends Component {
 
 
   render() {
-    const { isLoggedIn, currentUser, userID } = this.props;
+    const { isLoggedIn, currentUsername, userID } = this.props;
     const { userName } = this.props.match.params;
 
     const userProfile = (
@@ -96,7 +96,7 @@ class Profile extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
-    currentUser: state.currentUser,
+    currentUsername: state.currentUsername,
     userID: state.userID
   };
 }

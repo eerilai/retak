@@ -174,7 +174,7 @@ const charName = [
 
 const generateCharacterName = () => {
   const personCharName = charName[Math.floor(Math.random() * charName.length)];
-  return `${personCharName}_${Math.random().toString(36).slice(2,6)}`;
+  return `${personCharName}_${Math.random().toString(36).slice(2,6)}_(Guest)`;
 };
 
 export default generateCharacterName;

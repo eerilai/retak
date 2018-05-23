@@ -106,7 +106,7 @@ class ProfileModal extends Component {
   }
 
   render() {
-    const { isLoggedIn, currentUser, userEmail } = this.props;
+    const { isLoggedIn, currentUsername, userEmail } = this.props;
     let { imagePreviewUrl } = this.state;
     let $imagePreview = null;
     if(imagePreviewUrl) {
@@ -129,7 +129,7 @@ class ProfileModal extends Component {
           <div className="imgPreview">
             {$imagePreview}
           </div>
-          <Header>{currentUser}</Header>
+          <Header>{currentUsername}</Header>
           <div className="avatarPic">
             <p>Profile placeholder</p>
             <div>Image</div>
@@ -157,7 +157,7 @@ class ProfileModal extends Component {
                       <input
                         type="text"
                         placeholder="Username"
-                        defaultValue={currentUser}
+                        defaultValue={currentUsername}
                         // value={this.state.username}
                         onChange={e => {
                           this.handleInputChange(e, "username");
@@ -252,7 +252,7 @@ class ProfileModal extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
-    currentUser: state.currentUser,
+    currentUsername: state.currentUsername,
     userEmail: state.userEmail
   };
 }

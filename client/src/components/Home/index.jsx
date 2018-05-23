@@ -133,7 +133,7 @@ class Home extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    username: state.currentUser,
+    username: state.currentUsername,
     socket: state.socket
   };
 };

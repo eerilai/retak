@@ -10,7 +10,7 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state, 
         userID: currentUserInfo.userID,
-        currentUser: currentUserInfo.currentUser,
+        currentUsername: currentUserInfo.currentUsername,
         userEmail: currentUserInfo.userEmail,
         rankedGames: currentUserInfo.rankedGames,
         rankedWins: currentUserInfo.rankedWins,
@@ -26,13 +26,13 @@ const rootReducer = (state = initialState, action) => {
       let username = action.payload;
       return {
         ...state,
-        currentUser: username
+        currentUsername: username
       };
     case UPDATE_USER_PROFILE:
       let newUserInfo = action.payload;
       return {
         ...state,
-        currentUser: newUserInfo
+        currentUsername: newUserInfo
       };
     default:
       return state;
