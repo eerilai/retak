@@ -69,12 +69,13 @@
 .active-stone {
   /*box-shadow: 3px 3px rgb(70, 255, 238) !important*/
   /*filter: drop-shadow(1px 3px 2px #04ff73) !important;*/
+  /*border: solid 5px #8BBA62;*/
 }
 
 .flat-toggle {
   display: flex;
   justify-content: right;
-  min-width: 120px;
+  min-width: 125px;
   height: 90px;
   border-radius: 15px;
   background-color: #d9d9d9;
@@ -115,7 +116,7 @@
   width: 20px !important;
   height: 40px;
   margin-top: 35%;
-  margin-left: -1px;
+  margin-left: 2px;
 }
 
 .flat-toggle>.inactive.flat {
