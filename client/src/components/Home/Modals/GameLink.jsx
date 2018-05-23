@@ -57,7 +57,8 @@ class GameLink extends Component {
       >
         <Modal.Header>{header}</Modal.Header>
         <Modal.Content>
-          <Form size="small" key="small" />
+          <Form />
+
           {urlField}
         </Modal.Content>
         <Modal.Actions>

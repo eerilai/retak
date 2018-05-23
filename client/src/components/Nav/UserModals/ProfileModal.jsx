@@ -9,6 +9,8 @@ class ProfileModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      avatarImg: '',
+      imagePreviewUrl: '',
       username: "",
       email: "",
       currentPassword: "",
@@ -16,7 +18,8 @@ class ProfileModal extends Component {
       newPasswordRetype: ""
     };
     this.handleOnSave = this.handleOnSave.bind(this);
-    // this.handleInputChange = this.handleInputChange.bind(this);
+    this.handelImageChange = this.handelImageChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -24,7 +27,7 @@ class ProfileModal extends Component {
   // Save Images
   // Set Avatar Image
   // Update User Info on Save
-  
+
   handleOnSave(e){
     console.log('P.props', this.props)
     console.log(e)
@@ -54,20 +57,41 @@ class ProfileModal extends Component {
   //     // TODO: Alert user passwords must match
   //   }
   // }
+  handleInputChange(e, property) {
+    const newState = {};
+    newState[property] = e.target.value;
+    this.setState(newState);
+    console.log(this.state, 'target val', e.target.value)
+  }
 
-  fileSelectorHandler = (event) => {
+  handelImageChange(e) {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        avatarImg: file,
+        imagePreviewUrl: reader.result
+      });
+    }
+    reader.readAsDataURL(file);
+  }
+
+  fileSelectedHandler = (event) => {
     console.log(event.target.files[0]);
     this.setState({
-      selectedFile: event.target.files[0]
+      avatarImg: event.target.files[0]
     })
   } 
 
   fileUploadHandler = () => {
     const fd = new FormData();
-    fd.append('image', this.state.selectedFile, this.state.selectedFile.name)
-    axios.post(url, fd, {
+    fd.append('image', this.state.avatarImg, this.state.avatarImg.name);
+    axios.post('url???', fd, {
       onUploadProgress: progressEvent => {
-        console.log('Upload progress', Math.round((progressEvent.loaded/ progressEvent.total) * 100));
+        console.log('Upload progress', Math.round((progressEvent.loaded/ progressEvent.total) * 100) + '%');
       }
     })
     .then(res => {
@@ -83,6 +107,13 @@ class ProfileModal extends Component {
 
   render() {
     const { isLoggedIn, currentUser, userEmail } = this.props;
+    let { imagePreviewUrl } = this.state;
+    let $imagePreview = null;
+    if(imagePreviewUrl) {
+      $imagePreview = (<img src={imagePreviewUrl} />);
+    } else {
+      $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
+    }
 
       return (
         <Modal
@@ -94,16 +125,22 @@ class ProfileModal extends Component {
         >
         <Modal.Header>Profile</Modal.Header>
         <Modal.Content image>
-          <Image wrapped size='small' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrQLg-Na2P4WcdWJjlCZG8YD6Q9DuYLl4w7uf08ibjiIZVQ66d' />
+          {/* <Image wrapped size='small' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrQLg-Na2P4WcdWJjlCZG8YD6Q9DuYLl4w7uf08ibjiIZVQ66d' /> */}
+          <div className="imgPreview">
+            {$imagePreview}
+          </div>
           <Header>{currentUser}</Header>
-          <div className="profilePic">
+          <div className="avatarPic">
             <p>Profile placeholder</p>
             <div>Image</div>
             <input 
+              className="fileInput"
+              id="avatar"
               style={{display: 'none'}} 
               type="file" 
-              accept="image/*"
-              onChange={this.fileSelectorHandler}
+              accept=".gif, .jpg, .png"
+              onChange={this.handelImageChange}
+              // onChange={this.fileSelectedHandler}
               ref={fileInput => this.fileInput = fileInput }
               />
             <button onClick={() => this.fileInput.click()}>Pick an Image</button>
@@ -120,7 +157,8 @@ class ProfileModal extends Component {
                       <input
                         type="text"
                         placeholder="Username"
-                        value={this.state.username}
+                        defaultValue={currentUser}
+                        // value={this.state.username}
                         onChange={e => {
                           this.handleInputChange(e, "username");
                         }}
@@ -136,7 +174,8 @@ class ProfileModal extends Component {
                       <input
                         type="email"
                         placeholder="Email"
-                        value={this.state.email}
+                        defaultValue={userEmail}
+                        // value={this.state.email}
                         onChange={e => {
                           this.handleInputChange(e, "email");
                         }}
@@ -144,7 +183,7 @@ class ProfileModal extends Component {
                     </div>
                   </Input>
                 </div>
-                <div>
+                {/* <div>
                   <p className="logTag">Current Password:</p>
                   <Input className="hvr-shadow-radial" required>
                     <div class="ui left icon input">
@@ -175,8 +214,8 @@ class ProfileModal extends Component {
                       />
                     </div>
                   </Input>
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <p className="logTag">Retype New Password:</p>
                   <Input className="hvr-shadow-radial" required>
                     <div class="ui left icon input">
@@ -191,7 +230,7 @@ class ProfileModal extends Component {
                       />
                     </div>
                   </Input>
-                </div>
+                </div> */}
               </div>
             </form>
           </Modal.Description>

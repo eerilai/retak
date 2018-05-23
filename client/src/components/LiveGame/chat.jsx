@@ -16,7 +16,7 @@ class Chat extends Component {
     const { socket } = props;
     socket.on('typing', (data) => {
       self.setState({ typing: data.author + ' is typing...' });
-      setTimeout(()=>{self.setState({ typing: '' })}, 1000);
+      setTimeout(() => { self.setState({ typing: '' }) }, 1000);
     });
 
     socket.on('chat', (data) => {
@@ -88,7 +88,7 @@ class Chat extends Component {
       <div id="chat">
         <button onClick={this.handleTak} id="tak">
           Tak
-          <Icon size="large" name="road" corner="true"/>
+          <Icon size="large" name="road" corner="true" />
         </button>
         <div id="chat-window">
           <div id="output">
@@ -117,7 +117,7 @@ class Chat extends Component {
             onChange={ev => this.setState({ message: ev.target.value })}
           />
 
-          <button id="send" >Send <Icon size="large" name="talk" corner="true"/></button>
+          <button id="send" >Send <Icon size="large" name="talk" corner="true" /></button>
         </form>
       </div>
     );
@@ -129,5 +129,7 @@ const mapStateToProps = state => {
     socket: state.socket
   };
 };
+
+
 
 export default withRouter(connect(mapStateToProps)(Chat));

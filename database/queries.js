@@ -110,7 +110,7 @@ const getLeaderboard = () => {
   return new Promise(async (res, rej) => {
     const board =
       await User.findAll({
-        attributes: ['username', 'total_games', 'ranked_games', 'ranked_wins'],
+        attributes: ['username', 'total_games', 'ranked_games', 'ranked_wins', 'ranked_losses'],
         order: [['ranked_wins', 'DESC']],
       });
     res(board);
@@ -128,6 +128,7 @@ const getUserData = (username) => {
           'total_games',
           'ranked_games',
           'ranked_wins',
+          'ranked_losses',
           'createdAt',
         ],
         where: {

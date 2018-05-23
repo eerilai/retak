@@ -63,13 +63,13 @@ class GameSetup extends Component {
     return (
       <Modal
         open={this.props.modalView === 'GameSetup'}
-        size="small"
+        //size="small"
         dimmer={false}
 
       >
         <Modal.Header>GameSetup</Modal.Header>
         <Modal.Content>
-          <Form size="small" key="small">
+          <Form >
             <Form.Group inline label="Board Size">
               <label>Board Size</label>
               <Form.Radio

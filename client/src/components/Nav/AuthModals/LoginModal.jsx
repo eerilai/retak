@@ -92,7 +92,7 @@ class LoginModal extends Component {
               <div>
                 <p className="logTag">Password:</p>
                 <Input className="hvr-shadow-radial" required>
-                  <div class="ui left icon input">
+                  <div className="ui left icon input">
                     <i class="lock icon"></i>
                     <input
                       type="password"
@@ -114,14 +114,15 @@ class LoginModal extends Component {
             }}
             link
           >
-            Click here to signup
+            Click here to Signup
           </Button>
           <Button
-            color="blue"
+            color="red"
             onClick={() => {
               this.props.toggleView("off");
             }}
           >
+            <Icon size="large" name="ban" corner="true"/>
             Cancel
           </Button>
         </div>
