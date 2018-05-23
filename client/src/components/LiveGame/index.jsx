@@ -12,6 +12,7 @@ import PTN from "./PTN";
 import Clock from "./Clock";
 import "../../styles/livegame.css";
 import { convertCoord } from "./gameUtil";
+import PageNotFound from '../PageNotFound';
 import {
   Input,
   Button,
@@ -37,7 +38,8 @@ class LiveGame extends Component {
       myCounter: false,
       opponentCounter: false,
       myTimeLeft: 0,
-      opponentTimeLeft: 0
+      opponentTimeLeft: 0,
+      noRoom: false,
     };
     this.movePieces = this.movePieces.bind(this);
     this.handleSquareClick = this.handleSquareClick.bind(this);
@@ -52,7 +54,7 @@ class LiveGame extends Component {
     setTimeout(() => {
       socket.emit('fetchGame', roomId, loadGame);
     }, 600);
-    
+
     socket.on('syncGame', ({ boardSize, gameState, timeControl, player1, player2, roomId, activePlayer }) => {
       if (roomId === props.match.params.roomId) {
         const game = new Game(boardSize, gameState, player1, player2);
@@ -116,6 +118,10 @@ class LiveGame extends Component {
           accessDenied: true
         });
       }
+    });
+
+    socket.on('closedRoom', () => {
+      this.setState({ noRoom: true })
     });
 
     //Sound Effect
@@ -364,6 +370,14 @@ class LiveGame extends Component {
       )
     }
 
+    if (this.state.noRoom) {
+      return (
+        <div className="takless">
+          <div className="main">
+            <PageNotFound />
+          </div>
+        </div>);
+    }
     if (!game) {
       return <div></div>
     }
