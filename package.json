@@ -49,7 +49,8 @@
     "semantic-ui-react": "^0.80.0",
     "sequelize": "^4.37.6",
     "socket.io": "^2.1.0",
-    "socket.io-client": "^2.1.0"
+    "socket.io-client": "^2.1.0",
+    "url-loader": "^1.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
