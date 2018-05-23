@@ -93,12 +93,7 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
-
-
 const PORT = process.env.PORT || 3000;
-
-
-
 
 const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
@@ -119,8 +114,11 @@ io.on('connection', (socket) => {
 
   // Update username on socket session on login
   socket.on('login', (username) => {
+    console.log('login!!!!!!!', username)
     const { session } = socket.handshake;
+    console.log('session!!!!!!', session)
     session.username = username;
+    console.log('session.username!!!!!!', session.username)
     session.save();
   });
 
@@ -279,6 +277,12 @@ io.on('connection', (socket) => {
   // Add 'isClosed' property to finished game and update lobby
   socket.on('closeGame', (roomId, game) => {
     logGame(game);
+    let room = io.sockets.adapter.rooms[roomId]
+    room.status = GAME_FINISHED
+    clearInterval(room.intervalID)
+
+
+
     endCorrespondence(roomId);
     io.sockets.adapter.rooms[roomId].isClosed = true;
     const lobbyList = filterLobbyList(io.sockets.adapter.rooms);

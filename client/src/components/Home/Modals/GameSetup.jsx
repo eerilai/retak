@@ -64,7 +64,6 @@ class GameSetup extends Component {
       <Modal
         open={this.props.modalView === 'GameSetup'}
         size="small"
-
         dimmer={false}
 
       >

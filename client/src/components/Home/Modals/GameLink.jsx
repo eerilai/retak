@@ -17,9 +17,6 @@ class GameLink extends Component {
   }
 
   render() {
-
-
-    console.log('hello', this.props)
     const { modalView, changeView, gameType, url, link } = this.props;
     let urlField;
     let header;
