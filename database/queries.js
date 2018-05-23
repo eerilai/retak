@@ -21,6 +21,9 @@ const findUserLocal = (usernameOrEmail, password) => {
           .catch((err) => {
             reject(err);
           });
+      })
+      .catch((err) => {
+        reject(err);
       });
   });
 }

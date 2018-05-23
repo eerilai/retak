@@ -155,6 +155,8 @@ io.on('connection', (socket) => {
 
   // Serve game state on LiveGame component initialize
   socket.on('fetchGame', async (username, roomId, loadGame) => {
+    const { session } = socket.handshake;
+    username = session.username ? session.username : username;
     const room = io.sockets.adapter.rooms[roomId];
     if (!room) {
       socket.emit('closedRoom');
@@ -163,8 +165,6 @@ io.on('connection', (socket) => {
     if (!room.sockets[socket.id]) {
       socket.join(roomId);
     }
-    const { session } = socket.handshake;
-    username = session.username ? session.username : username;
     let { gameState, activePlayer, boardSize, timeControl, player1Time, player2Time, isPrivate, spectators } = room;
     if (loadGame !== null) {
       const {
