@@ -25,7 +25,7 @@ const Leaderboard = ({ leaderboard }) => {
             return bWR - aWR;
           }) */
           .map((user, no) => {
-          const losses = user.ranked_games - user.ranked_wins;
+          const losses = user.ranked_losses;
           const userProfile = `/profile/${user.username}`;
           return (
             <tr>

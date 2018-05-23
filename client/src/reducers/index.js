@@ -14,6 +14,7 @@ const rootReducer = (state = initialState, action) => {
         userEmail: currentUserInfo.userEmail,
         rankedGames: currentUserInfo.rankedGames,
         rankedWins: currentUserInfo.rankedWins,
+        rankedLosses: currentUserInfo.rankedLosses,
         totalGames: currentUserInfo.totalGames
       };
     case TOGGLE_LOGIN_LOGOUT:

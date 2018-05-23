@@ -78,7 +78,7 @@ class AuthNav extends Component {
                 Profile 
               </Link>
             </Dropdown.Item>
-            <Dropdown.Item value="updateProfile" onClick={ this.handleChange }><Icon name='user circle outline' /> Edit Profile </Dropdown.Item>
+            {/* <Dropdown.Item value="updateProfile" onClick={ this.handleChange }><Icon name='user circle outline' /> Edit Profile </Dropdown.Item> */}
             <Dropdown.Item value="settings" onClick={ this.handleChange }><Icon name='settings' />Settings</Dropdown.Item>
             <Dropdown.Item value="help" onClick={ this.handleChange }><Icon name='help' />Help</Dropdown.Item>
             <Dropdown.Item value="logout" onClick={ this.handleChange }>Log Out <Icon name='sign out' /></Dropdown.Item>
