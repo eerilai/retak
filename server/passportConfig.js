@@ -3,7 +3,8 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const {
   findUserById,
-  findOrCreateUserByGoogleId
+  findOrCreateUserByGoogleId,
+  findUserLocal
 } = require('../database/queries');
 const { User, Sequelize } = require('../database');
 
@@ -40,14 +41,7 @@ passport.use(new GoogleStrategy(
 passport.use(new LocalStrategy(
   (usernameOrEmail, password, done) => {
     const Op = Sequelize.Op;
-    User.findOne({
-      where: {
-        [Op.or]: [
-          { username: usernameOrEmail },
-          { email: usernameOrEmail }
-        ]
-      }
-    })
+    findUserLocal(usernameOrEmail, password)
       .then((user) => {
         done(null, user);
       })

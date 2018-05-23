@@ -49,10 +49,8 @@ class LiveGame extends Component {
     const { roomId } = props.match.params;
     console.log(socket);
     const loadGame = this.props.location.state ? this.props.location.state.game : null;
-    setTimeout(() => {
-      socket.emit('fetchGame', roomId, loadGame);
-    }, 600);
-    
+    socket.emit('fetchGame', username, roomId, loadGame);
+
     socket.on('syncGame', ({ boardSize, gameState, timeControl, player1, player2, roomId, activePlayer }) => {
       if (roomId === props.match.params.roomId) {
         const game = new Game(boardSize, gameState, player1, player2);

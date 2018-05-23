@@ -138,15 +138,16 @@ io.on('connection', (socket) => {
   });
 
   // Serve game state on LiveGame component initialize
-  socket.on('fetchGame', async (roomId, loadGame) => {
-    if (!io.sockets.adapter.rooms[roomId]) {
-      socket.join(roomId);
-    }
-    if (!io.sockets.adapter.rooms[roomId].sockets[socket.id]) {
-      socket.join(roomId);
-    }
-    const { username } = socket.handshake.session;
+  socket.on('fetchGame', async (username, roomId, loadGame) => {
     const room = io.sockets.adapter.rooms[roomId];
+    if (!room) {
+      socket.join(roomId);
+    }
+    if (!room.sockets[socket.id]) {
+      socket.join(roomId);
+    }
+    const { session } = socket.handshake;
+    username = session.username ? session.username : username;
     if (loadGame !== null) {
       const {
         player1, player2, active_player,

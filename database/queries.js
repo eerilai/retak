@@ -3,6 +3,28 @@ const { User, Game, AsyncGame } = require('./index');
 const { hashPassword, comparePassword } = require('./encryptionHelpers');
 const Op = Sequelize.Op;
 
+const findUserLocal = (usernameOrEmail, password) => {
+  return new Promise((resolve, reject) => {
+    User.findOne({
+      where: {
+        [Op.or]: [
+          { username: usernameOrEmail },
+          { email: usernameOrEmail }
+        ]
+      }
+    })
+      .then((user) => {
+        comparePassword(password, user.password)
+          .then(() => {
+            resolve(user);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+  });
+}
+
 const findUserById = (id) => {
   return new Promise((resolve, reject) => {
     User.findById(id)
@@ -215,6 +237,7 @@ const endCorrespondence = (roomId) => {
 };
 
 module.exports = {
+  findUserLocal,
   findUserById,
   findOrCreateUserByGoogleId,
   createUser,
