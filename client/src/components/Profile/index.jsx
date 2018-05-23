@@ -22,7 +22,6 @@ class Profile extends Component{
   }
   
   getUserHistory() {
-    console.log("Called getUserHistory");
     const { userName } = this.props.match.params;
     axios.get(`/users/${userName}/games`)
       .then((userGameHistory) => {
@@ -35,7 +34,6 @@ class Profile extends Component{
   }
 
   getUserInfo() {
-    console.log("Called getUserInfo");
     const { userName } = this.props.match.params;
     axios.get(`/users/${userName}/data`)
       .then((userInfo) => {
@@ -53,7 +51,6 @@ class Profile extends Component{
 
     const userProfile = (
       <div>
-        <h4>{userName}'s Profile</h4>
         <UserHistory userHistory={this.state.userHistory} />
       </div>
     );

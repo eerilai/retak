@@ -13,7 +13,6 @@ class Lobby extends Component {
     const { socket } = props;
     socket.emit('fetchLobby');
     socket.on('updateLobby', (data) => {
-      console.log('games', data);
       this.setState({
         games: data,
       });
@@ -23,12 +22,19 @@ class Lobby extends Component {
   render() {
     return (
       <table class="tg">
+        <thead>
         <tr>
-          <th>Room</th>
-          <th>Mode</th>
-          <th>Board</th>
-          <th>Status</th>
-        </tr>
+            <th colSpan="4" className="title">
+              <h3>Lobby</h3>
+            </th>
+          </tr>
+          <tr>
+            <th>Room</th>
+            <th>Mode</th>
+            <th>Board</th>
+            <th>Status</th>
+          </tr>
+        </thead>
         {this.state.games.map(game => (
           <tr className="room">
             <td><Link to={`/game/${game.name}`}>{game.name}</Link></td>

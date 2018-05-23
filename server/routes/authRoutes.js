@@ -21,9 +21,11 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
       userEmail: currentUser.email,
       rankedGames: currentUser.ranked_games,
       rankedWins: currentUser.ranked_wins,
+      rankedLosses: currentUser.ranked_losses,
       totalGames: currentUser.total_games
     } 
   )
+  console.log('/login', currentUserInfo)
   res.send(currentUserInfo);
 });
 
@@ -44,9 +46,11 @@ router.post('/signup', (req, res) => {
             userEmail: currentUser.email,
             rankedGames: currentUser.ranked_games,
             rankedWins: currentUser.ranked_wins,
+            rankedLosses: currentUser.ranked_losses,
             totalGames: currentUser.total_games
           } 
         )
+        console.log('/signup', currentUser)
         res.send(currentUserInfo);
       });
     })
@@ -63,6 +67,7 @@ router.post('/logout', (req, res) => {
 });
 
 const authCheck = ((req, res, next) => {
+  console.log(req.user, 'authCheck in authRoutes.js')
   if(!req.user) {
     res.redirect('/');
   } else {
@@ -79,9 +84,11 @@ router.get('/check', authCheck, (req, res) => {
       userEmail: currentUser.email,
       rankedGames: currentUser.ranked_games,
       rankedWins: currentUser.ranked_wins,
+      rankedLosses: currentUser.ranked_losses,
       totalGames: currentUser.total_games
     } 
   )
+  console.log('/check', currentUser)
   res.send(currentUserInfo);
 });
 
