@@ -334,6 +334,7 @@ class LiveGame extends Component {
         <div className={`flat-toggle ${flatSide}`} onClick={() => { this.toggleStanding(); }}>
           <div className={`p1 ${flatActive} stone ${color}`}/>
           <div className={`p1 inactive stone S ${color}`}/>
+          <div className="flat-count">{game.pieces[bottomPlayerNo].F}</div>
         </div>
       );
     } else if (stone === 'S') {
@@ -342,6 +343,7 @@ class LiveGame extends Component {
         <div className={`flat-toggle ${flatSide}`} onClick={() => { this.toggleStanding(); }}>
           <div className={`p1 active-stone stone S ${color}`}/>
           <div className={`p1 inactive stone flat ${color}`}/>
+          <div className="flat-count">{game.pieces[bottomPlayerNo].F}</div>
         </div>
       );
     }
