@@ -21,6 +21,8 @@ class Chat extends Component {
 
     socket.on('chat', (data) => {
       addMessage(data);
+
+
       this.scrollToBottom();
     });
 

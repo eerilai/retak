@@ -6,14 +6,6 @@ const socket = require('socket.io');
 const sharedSession = require('express-socket.io-session');
 
 
-
-var fs = require('fs')
-var https = require('https')
-
-
-
-
-
 require('dotenv').config();
 
 const GAME_NOT_STARTED = 0
