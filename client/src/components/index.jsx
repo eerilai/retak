@@ -11,6 +11,7 @@ import About from './About';
 import Profile from './Profile';
 import Game from './LiveGame';
 import Chat from './LiveGame/chat';
+import RedirectCreateUsernameModal from './RedirectChangeUsernameModal';
 import { setAnonUsername, toggleLoginLogout, login } from '../actions/actions';
 
 var sectionStyle = {
@@ -23,6 +24,10 @@ var sectionStyle = {
 class App extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      open: false,
+      selectModal: ''
+    };
 
     const { socket } = props;
     axios
@@ -34,7 +39,10 @@ class App extends Component {
           props.toggleLoginLogout(true);
           props.login(currentUserInfo);
         } else {
-          socket.emit('AnonUserSession', props.username);
+            socket.emit('AnonUserSession', props.username);
+          }
+        if (currentUsername !== undefined && currentUsername.includes('Tak-user-')){
+          console.log('NEED TO CHANGE', currentUsername)
         }
       })
       .catch(err => {
@@ -44,6 +52,12 @@ class App extends Component {
       props.setAnonUsername(username);
     });
   }
+
+  onClose = () => { this.setState({open: false}) }
+
+  handleChange = (e, { value }) => {
+    this.setState({selectModal: value})
+  }  
 
   render() {
     return (
