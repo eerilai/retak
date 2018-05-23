@@ -33,7 +33,6 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
       totalGames: currentUsername.total_games
     }
   )
-  console.log('/login', currentUserInfo)
   res.send(currentUserInfo);
 });
 
