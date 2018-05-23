@@ -33,7 +33,6 @@ class Home extends Component {
   }
 
   handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId) {
-    console.log('handleCreateGame', timeControl)
     if (boardSize) {
 
       if (!roomId) {

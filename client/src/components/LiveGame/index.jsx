@@ -72,9 +72,6 @@ class LiveGame extends Component {
           });
         }
       }
-      console.log('sync game', this.state.myTime, this.state.opponentTime)
-
-
     });
 
     socket.on('pendingGame', ({ boardSize, timeControl, roomId }) => {

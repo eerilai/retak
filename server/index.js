@@ -114,11 +114,8 @@ io.on('connection', (socket) => {
 
   // Update username on socket session on login
   socket.on('login', (username) => {
-    console.log('login!!!!!!!', username)
     const { session } = socket.handshake;
-    console.log('session!!!!!!', session)
     session.username = username;
-    console.log('session.username!!!!!!', session.username)
     session.save();
   });
 
