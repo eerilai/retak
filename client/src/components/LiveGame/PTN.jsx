@@ -10,7 +10,7 @@ class PTN extends Component {
   }
 
   render() {
-    const { ptn, victor, winType } = this.props;
+    const { ptn, victor, winType, full } = this.props;
     const victorColor = victor === 1 ? 'White' : 'Black';
     const loserColor = victor === 1 ? 'Black' : 'White';
     let gameStats = <div/>;
