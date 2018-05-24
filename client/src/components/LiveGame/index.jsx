@@ -286,6 +286,9 @@ class LiveGame extends Component {
       return <Loader active size="massive" />
     }
 
+    let pToPlay = game.toPlay === 1 ? 'to-play' : '';
+    let oppToPlay = game.toPlay === 2 ? 'to-play' : '';
+
     let PlayerPieces;
     let OpponentPieces;
     let topPlayerName, bottomPlayerName, topPlayerNo, bottomPlayerNo, color;
@@ -379,10 +382,10 @@ class LiveGame extends Component {
       <div className="takless">
         <div className="game-info">
           <div>{this.winner()}</div>
-          <div>
+          {/*this.opponentTurn()*/}
+          <div className={`timer ${oppToPlay}`} style={{ 'border-bottom':'0' }}>
             {this.formatSeconds(this.state.opponentTime)}
           </div>
-          {this.opponentTurn()}
           <table>
             {OpponentPieces}
             <tr>{topPlayerName}</tr>
@@ -390,10 +393,10 @@ class LiveGame extends Component {
             <tr>{bottomPlayerName}</tr>
             {PlayerPieces}
           </table>
-          {this.userTurn()}
-          <div>
+          <div className={`timer ${pToPlay}`}style={{ 'border-top':'0' }}>
             {this.formatSeconds(this.state.myTime)}
           </div>
+          {/*this.userTurn()*/}
         </div>
         <div className="main">
           <div className="game">
