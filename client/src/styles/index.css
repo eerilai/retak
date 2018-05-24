@@ -388,6 +388,10 @@ p.question {
   margin: 30px 30px 60px 50px;
 }
 
+.gamelinkpage{
+  width:200px;
+  height: 200px;
+}
 /* Animations*/
 .hvr-shadow-radial {
   display: inline-block;

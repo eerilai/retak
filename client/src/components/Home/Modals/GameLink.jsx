@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { CopyToClipboard } from "react-copy-to-clipboard";
+
 import {
   Button,
   Modal,
@@ -23,18 +24,17 @@ class GameLink extends Component {
     if (gameType === "friend") {
       urlField = (
         <div>
-          <div>
-            <Form.Field>
-              <label>{url}</label>
-              <CopyToClipboard
-                text={url}
-                onCopy={() => this.setState({ copied: true })}
-              >
-                <span>
-                  <Icon name="paste" size="large" />
-                </span>
-              </CopyToClipboard>
-            </Form.Field>
+          <div className='gamelink'>
+            <label>{url}</label>
+            <CopyToClipboard
+              text={url}
+              onCopy={() => this.setState({ copied: true })}
+            >
+              <span>
+                <Icon name="paste" size="large" />
+              </span>
+            </CopyToClipboard>
+
           </div>
           <div id="copied">
             {this.state.copied ? 'Copied' : 'Click to copy'}
@@ -58,7 +58,6 @@ class GameLink extends Component {
         <Modal.Header>{header}</Modal.Header>
         <Modal.Content>
           <Form />
-
           {urlField}
         </Modal.Content>
         <Modal.Actions>
