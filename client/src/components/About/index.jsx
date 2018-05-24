@@ -3,6 +3,7 @@ import { Header, Icon, Image, Container, } from "semantic-ui-react";
 import shu from './Shu.jpeg'
 import joz from './joz.jpeg'
 import evan from './evan.jpeg'
+import ale from './ale.jpeg'
 import './about.css'
 const About = props => (
   <div className="takless">
@@ -18,9 +19,11 @@ const About = props => (
         <p>Hope everyone can enjoy our site and if you are interested in contributing to our site, please get on our github  <a className='github' href="https://github.com/s-a-j-e"><Icon name='github' size='large' /></a></p>
 
         <div className='imageGroup'>
-          <img className='us' src={joz} />
-          <img className='us' src={evan} />
-          <img className='us' src={shu} />
+          <a className='github' href="https://github.com/eerilai"><img className='us' src={joz} /></a>
+          <a className='github' href="https://github.com/evansaurus"><img className='us' src={evan} /></a>
+          <a className='github' href="https://github.com/shuchen2017"><img className='us' src={shu} /></a>
+          <a className='github' href="https://github.com/ALB24"><img className='us' src={ale} /></a>
+          <div>(Joz, Evan, Shu, Alessandra)</div>
         </div>
       </div>
     </div>

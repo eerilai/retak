@@ -22,7 +22,6 @@ class InPlay extends Component {
   }
 
   render() {
-    console.log(this.props.userID);
     let versus = '';
     return (
       <table class="tg">
