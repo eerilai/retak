@@ -21,18 +21,16 @@ module.exports = {
         loader: "file-loader"
       },
       {
-        test: /\.(gif|png|jpe?g|svg)$/i,
-        use: [
-          "file-loader",
-          {
-            loader: "image-webpack-loader",
-            options: {
-              bypassOnDebug: true
-            }
-          }
-        ]
-      }
-    ]
+        test: /\.(png|jp(e*)g|svg)$/,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 8000, // Convert images < 8kb to base64 strings
+            name: 'img/[hash]-[name].[ext]',
+          },
+        }],
+      },
+    ],
   },
 
   resolve: {

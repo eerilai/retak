@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
@@ -139,7 +138,6 @@ class LiveGame extends Component {
         gameState: {
           ptn: game.ptn,
           tps: game.tps,
-          pieces: game.pieces,
         },
         activePlayer: game.activePlayer,
         roomId: match.params.roomId,
@@ -305,6 +303,16 @@ class LiveGame extends Component {
       color = 'p1';
     }
 
+    let pToPlay, oppToPlay;
+    if((game.toPlay === 1 && bottomPlayerNo === 1) || 
+       (game.toPlay === 2 && bottomPlayerNo === 2)) {
+      pToPlay = 'to-play';
+      oppToPlay = '';
+    } else {
+      oppToPlay = 'to-play';
+      pToPlay =  '';
+    }
+
     if (game.player1 === game.player2) {
       topPlayerName = 'Waiting for Match...'
     }
@@ -381,10 +389,10 @@ class LiveGame extends Component {
       <div className="takless">
         <div className="game-info">
           <div>{this.winner()}</div>
-          <div>
+          {/*this.opponentTurn()*/}
+          <div className={`timer ${oppToPlay}`} style={{ 'border-bottom':'0' }}>
             {this.formatSeconds(this.state.opponentTime)}
           </div>
-          {this.opponentTurn()}
           <table>
             {OpponentPieces}
             <tr>{topPlayerName}</tr>
@@ -392,10 +400,10 @@ class LiveGame extends Component {
             <tr>{bottomPlayerName}</tr>
             {PlayerPieces}
           </table>
-          {this.userTurn()}
-          <div>
+          <div className={`timer ${pToPlay}`}style={{ 'border-top':'0' }}>
             {this.formatSeconds(this.state.myTime)}
           </div>
+          {/*this.userTurn()*/}
         </div>
         <div className="main">
           <div className="game">

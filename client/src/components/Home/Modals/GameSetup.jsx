@@ -15,14 +15,16 @@ class GameSetup extends Component {
       isPrivate: false,
       isLive: true,
       roomId: '',
-      timeControl: 0,
-      timeIncrement: 0
+      timeControl: 15,
+      timeIncrement: 0,
+      color: 'random',
     }
 
     this.handleBoardSizeChange = this.handleBoardSizeChange.bind(this);
     this.handlePrivacyChange = this.handlePrivacyChange.bind(this);
     this.handleLiveChange = this.handleLiveChange.bind(this);
     this.handleRoomIdChange = this.handleRoomIdChange.bind(this);
+    this.handleColorChange = this.handleColorChange.bind(this);
 
   }
 
@@ -41,7 +43,11 @@ class GameSetup extends Component {
     });
   }
 
-
+  handleColorChange(e, { value }) {
+    this.setState({
+      color: value,
+    });
+  }
 
   handleRoomIdChange(e, { value }) {
     this.setState({
@@ -49,15 +55,36 @@ class GameSetup extends Component {
     });
   }
 
-  handleLiveChange() {
-    this.setState({
-      isLive: !this.state.isLive,
-    });
+  handleLiveChange(e, { value }) {
+    if (!value) {
+      this.setState({
+        isLive: false,
+        timeControl: 0,
+      });
+    } else {
+      this.setState({
+        isLive: true,
+        timeControl: 15,
+      })
+    }
   }
 
   render() {
     const isFriendGame = this.props.gameType === 'friend';
-    const { boardSize, isPrivate, roomId, timeControl, isLive, timeIncrement } = this.state;
+    const { boardSize, isPrivate, roomId, timeControl, isLive, timeIncrement, color} = this.state;
+    
+    const timeOptions = [
+      { text: 'Real Time', value: true },
+      { text: 'Correspondence', value: false},
+    ]
+    const timeSliders = this.state.isLive ? 
+    ( <div>
+      <div><strong>Minutes per side</strong>: {this.state.timeControl} minute(s)</div>
+      <input className='slider' type='range' min={0} max={90} value={this.state.timeControl} onChange={this.handleTimeControl} />
+      <div><strong>Increment in seconds</strong>: {this.state.timeIncrement} second(s)</div>
+      <input className='slider' type='range' min={0} max={30} value={this.state.timeIncrement} onChange={this.handleTimeIncrement} />
+      </div>
+    ) : <div></div>
 
     return (
       <Modal
@@ -66,7 +93,16 @@ class GameSetup extends Component {
         dimmer={false}
 
       >
-        <Modal.Header>GameSetup</Modal.Header>
+        <Modal.Header style={{ display: 'flex'}}>
+          GameSetup
+          <Form.Input
+            style={{ height: '30px', 'margin-left': '50%', width: '65%'}}
+            type="text"
+            placeholder="Name Room?"
+            value={this.state.roomId}
+            onChange={this.handleRoomIdChange}
+          />
+        </Modal.Header>
         <Modal.Content>
           <Form >
             <Form.Group inline label="Board Size">
@@ -108,33 +144,41 @@ class GameSetup extends Component {
                 onChange={this.handleBoardSizeChange}
               />
             </Form.Group>
-
-            <div><strong>Minutes per side</strong>: {this.state.timeControl} minute(s)</div>
-            <input className='slider' type='range' min={0} max={60} value={this.state.timeControl} onChange={this.handleTimeControl} />
-            <div><strong>Increment in seconds</strong>: {this.state.timeIncrement} second(s)</div>
-            <input className='slider' type='range' min={0} max={20} value={this.state.timeIncrement} onChange={this.handleTimeIncrement} />
+            <Form.Dropdown
+              selection
+              style={{ width: '10%' }}
+              label="Time Control"
+              value={this.state.isLive}
+              options={timeOptions}
+              onChange={this.handleLiveChange}
+            />
+            {timeSliders}
             <br />
             <Form.Field
               control={Checkbox}
               label="Private"
               onChange={this.handlePrivacyChange}
             />
-            <Form.Field
-              control={Checkbox}
-              label="Correspondence"
-              onChange={this.handleLiveChange}
-            />
-
-
-
-            <Form.Input
-              type="text"
-              label="Room Name"
-              placeholder="optional"
-              value={this.state.roomId}
-              onChange={this.handleRoomIdChange}
-            />
-
+            <Form.Group inline label="Board Size" style={{ 'justify-content': 'center'}}>
+              <Form.Radio
+                label="White"
+                value="white"
+                checked={this.state.color === 'white'}
+                onChange={this.handleColorChange}
+              />
+              <Form.Radio
+                label="Random"
+                value="random"
+                checked={this.state.color === 'random'}
+                onChange={this.handleColorChange}
+              />
+              <Form.Radio
+                label="Black"
+                value="black"
+                checked={this.state.color === 'black'}
+                onChange={this.handleColorChange}
+              />
+            </Form.Group>
           </Form>
         </Modal.Content>
         <Modal.Actions>
@@ -146,7 +190,7 @@ class GameSetup extends Component {
           <Button
             positive
             content="New Game"
-            onClick={() => this.props.handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId)}
+            onClick={() => this.props.handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId, color)}
           />
 
         </Modal.Actions>

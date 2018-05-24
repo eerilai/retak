@@ -22,8 +22,18 @@
   height: 30px;
 }
 
+.timer {
+  font-weight: bold;
+  height: 35px;
+  padding-top: 5px;
+  width: 85px;
+  margin: auto;
+  border: solid 1px #d2d2d2;
+  background-color: #e5e5e5;
+}
+
 .to-play {
-  min-height: 21px;
+  background-color: #95db59;
 }
 
 .score > table {

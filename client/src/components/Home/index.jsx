@@ -32,20 +32,20 @@ class Home extends Component {
     });
   }
 
-  handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId) {
+  handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId, color) {
+    console.log('time', timeControl);
     if (boardSize) {
-
       if (!roomId) {
         roomId = generateRoomName();
       }
       const { socket } = this.props;
       var timer
-      if (timeControl !== 0) {
+      if (+timeControl !== 0) {
         timer = timeControl * 60
       } else {
-        console.log('timer = null situation')
         timer = undefined
       }
+      console.log(timer);
       socket.emit('createGame', {
         boardSize,
         timeControl: timer,
@@ -53,6 +53,7 @@ class Home extends Component {
         isFriendGame,
         isPrivate,
         isLive,
+        color,
         roomId
       });
       socket.on('gameInitiated', ({ roomId }) => {

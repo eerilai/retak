@@ -4,6 +4,7 @@ package-lock.json
 
 ## Build Files ##
 client/dist/bundle.js
+client/dist/img
 
 ## NPM ##
 node_modules
@@ -11,5 +12,5 @@ node_modules
 ## Mac OSX ##
 .DS_Store
 
-
-
+## Built images ##
+client/dist/img
