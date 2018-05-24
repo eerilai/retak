@@ -145,7 +145,6 @@ class LiveGame extends Component {
         gameState: {
           ptn: game.ptn,
           tps: game.tps,
-          pieces: game.pieces,
         },
         activePlayer: game.activePlayer,
         roomId: match.params.roomId,

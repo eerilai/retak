@@ -203,10 +203,6 @@ io.on('connection', (socket) => {
       room.gameState = {
         tps: board_state,
         ptn,
-        pieces: {
-          1: {F: 21, C: 1, total: 22},
-          2: {F: 21, C: 1, total: 22}
-        }
       };
       room.activePlayer = active_player;
       room.boardSize = board_size;
