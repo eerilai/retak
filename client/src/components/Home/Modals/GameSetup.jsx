@@ -71,32 +71,32 @@ class GameSetup extends Component {
 
   render() {
     const isFriendGame = this.props.gameType === 'friend';
-    const { boardSize, isPrivate, roomId, timeControl, isLive, timeIncrement, color} = this.state;
-    
+    const { boardSize, isPrivate, roomId, timeControl, isLive, timeIncrement, color } = this.state;
+
     const timeOptions = [
       { text: 'Real Time', value: true },
-      { text: 'Correspondence', value: false},
+      { text: 'Correspondence', value: false },
     ]
-    const timeSliders = this.state.isLive ? 
-    ( <div>
-      <div><strong>Minutes per side</strong>: {this.state.timeControl} minute(s)</div>
-      <input className='slider' type='range' min={0} max={90} value={this.state.timeControl} onChange={this.handleTimeControl} />
-      <div><strong>Increment in seconds</strong>: {this.state.timeIncrement} second(s)</div>
-      <input className='slider' type='range' min={0} max={30} value={this.state.timeIncrement} onChange={this.handleTimeIncrement} />
+    const timeSliders = this.state.isLive ?
+      (<div>
+        <div><strong>Minutes per side</strong>: {this.state.timeControl} minute(s)</div>
+        <input className='slider' type='range' min={0} max={90} value={this.state.timeControl} onChange={this.handleTimeControl} />
+        <div><strong>Increment in seconds</strong>: {this.state.timeIncrement} second(s)</div>
+        <input className='slider' type='range' min={0} max={30} value={this.state.timeIncrement} onChange={this.handleTimeIncrement} />
       </div>
-    ) : <div></div>
+      ) : <div></div>
 
     return (
       <Modal
         open={this.props.modalView === 'GameSetup'}
-        //size="small"
+        // size="small"
         dimmer={false}
 
       >
-        <Modal.Header style={{ display: 'flex'}}>
+        <Modal.Header style={{ display: 'flex' }}>
           GameSetup
           <Form.Input
-            style={{ height: '30px', 'margin-left': '50%', width: '65%'}}
+            style={{ height: '30px', 'margin-left': '50%', width: '65%' }}
             type="text"
             placeholder="Name Room?"
             value={this.state.roomId}
@@ -105,7 +105,7 @@ class GameSetup extends Component {
         </Modal.Header>
         <Modal.Content>
           <Form >
-            <Form.Group inline label="Board Size">
+            <Form.Group inline label="Board Size" style={{ 'justify-content': 'center' }}>
               <label>Board Size</label>
               <Form.Radio
                 label="3x3"
@@ -159,7 +159,7 @@ class GameSetup extends Component {
               label="Private"
               onChange={this.handlePrivacyChange}
             />
-            <Form.Group inline label="Board Size" style={{ 'justify-content': 'center'}}>
+            <Form.Group inline label="Board Size" style={{ 'justify-content': 'center' }}>
               <Form.Radio
                 label="White"
                 value="white"
