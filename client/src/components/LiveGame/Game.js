@@ -47,7 +47,7 @@ class Game {
       const { tps, ptn, pieces } = gameState;
       this.tps = tps;
       this.ptn = ptn;
-      this.pieces = pieces;
+      // this.pieces = pieces;
       this.readTPS(tps);
     }
   }
@@ -156,8 +156,20 @@ class Game {
           if (stone === 'C' || stone === 'S') {
             stack.stone = square.split('').pop();
             square = square.slice(0, square.length - 1);
+            if (stone === 'C') {
+              this.pieces[square[square.length - 1]].C -= 1;
+            }
           }
-          let s = square.split('').reverse().map(x=>+x);
+          let s = square.split('').reverse().map((x) => {
+            if (+x === 1) {
+              this.pieces[1].F -= 1;
+              this.pieces[1].Total -= 1;
+            } else if (+x === 2) {
+              this.pieces[2].F -= 1;
+              this.pieces[2].Total -= 1;
+            }
+            return +x;
+          });
           stack.stack = s;
           stack.isEmpty = false;
           stack.owner = s[0];
