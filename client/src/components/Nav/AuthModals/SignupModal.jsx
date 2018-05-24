@@ -36,7 +36,7 @@ class SignupModal extends Component {
         })
         .then(res => {
           let currentUserInfo = res.data;
-          let currentUser = res.data.currentUser;
+          let currentUsername = res.data.currentUsername;
           if (res.status === 200) {
             this.props.toggleView("off");
             this.props.toggleLoginLogout(true);
@@ -166,7 +166,7 @@ class SignupModal extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
-    currentUser: state.currentUser
+    currentUsername: state.currentUsername
   };
 }
 

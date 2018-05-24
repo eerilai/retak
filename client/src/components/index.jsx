@@ -29,7 +29,7 @@ class App extends Component {
       .get('/auth/check')
       .then(res => {
         let currentUserInfo = res.data;
-        let currentUser = res.data.currentUser;
+        let currentUsername = res.data.currentUsername;
         if (currentUserInfo[0] !== '<') {
           props.toggleLoginLogout(true);
           props.login(currentUserInfo);
@@ -64,7 +64,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    username: state.currentUser,
+    username: state.currentUsername,
     isLoggedIn: state.isLoggedIn,
     socket: state.socket
   };

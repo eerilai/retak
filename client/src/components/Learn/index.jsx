@@ -78,7 +78,7 @@ const Learn = props => (
         </tr>
       </table>
     </div>
-  </div >
+  </div>
 );
 
 export default Learn;
