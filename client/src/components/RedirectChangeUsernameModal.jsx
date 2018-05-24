@@ -10,64 +10,49 @@ class RedirectCreateUsername extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
+      username: '',
     };
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleInputChange(e, property) {
-    const newState = {};
-    newState[property] = e.target.value;
-    this.setState(newState);
-    console.log(this.state, 'target val', e.target.value)
+  handleInputChange(e, { value }) {
+    this.setState({
+      username: value
+    });
   }
 
   render() {
     const { isLoggedIn, currentUsername, userEmail } = this.props;
+    const { username } = this.state;
 
     return (
       <Modal
         open={this.props.selectModal === 'createUsername'}
-        size={"fullscreen"}
+        size={"tiny"}
         dimmer={true}
-        onClose={() => this.props.changeModalView('')}
-        closeIcon
         >
-        <Modal.Header>Choose Username</Modal.Header>
+        <Modal.Header>Create a Username:</Modal.Header>
         <Modal.Content>
-          <div>
-
-          </div>
           <Modal.Description>
-            <form onSubmit={this.handleSubmit} className="signupForm">
-              <div>
-                <div>
-                  <p className="logTag">Username:</p>
-                  <Input className="hvr-shadow-radial" required>
-                    <div className="ui left icon input">
-                      <i class="user icon"></i>
-                      <input
-                        type="text"
-                        placeholder="Username"
-                        defaultValue={currentUsername}
-                        // value={this.state.username}
-                        onChange={e => {
-                          this.handleInputChange(e, "username");
-                        }}
-                      />
-                    </div>
-                  </Input>
-                </div>
+            <Form>
+            <div className="ui left icon input">
+              <Form.Input
+                required
+                type="text"
+                className="hvr-shadow-radial"
+                placeholder="username"
+                value={this.state.username}
+                onChange={this.handleInputChange}
+              />
               </div>
-            </form>
+            </Form>
           </Modal.Description>
         </Modal.Content>
         <Modal.Actions>
           <Button 
             primary 
             icon='right chevron' 
-            onClick={(e) => this.handleOnSave(e)}
+            onClick={() => this.props.handleSubmit(username) }
           >
             Save <Icon name='right chevron' />
           </Button>

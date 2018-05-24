@@ -56,10 +56,9 @@ class GameSetup extends Component {
   }
 
   render() {
-
-
     const isFriendGame = this.props.gameType === 'friend';
     const { boardSize, isPrivate, roomId, timeControl, isLive, timeIncrement } = this.state;
+
     return (
       <Modal
         open={this.props.modalView === 'GameSetup'}

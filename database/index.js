@@ -121,10 +121,10 @@ User.hasMany(AsyncGame, { foreignKey: 'player1_id' });
 User.hasMany(AsyncGame, { foreignKey: 'player2_id' });
 
 // pass { force: true} into these if you'd like to only reset one table
-User.sync({ force: true })
-  .then(() => {
-    console.log('user table created');
-  });
+// User.sync({ force: true })
+//   .then(() => {
+//     console.log('user table created');
+//   });
 
 // Game.sync({ force: true })
 //   .then(() => {
