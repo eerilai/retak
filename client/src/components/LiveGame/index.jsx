@@ -286,9 +286,6 @@ class LiveGame extends Component {
       return <Loader active size="massive" />
     }
 
-    let pToPlay = game.toPlay === 1 ? 'to-play' : '';
-    let oppToPlay = game.toPlay === 2 ? 'to-play' : '';
-
     let PlayerPieces;
     let OpponentPieces;
     let topPlayerName, bottomPlayerName, topPlayerNo, bottomPlayerNo, color;
@@ -304,6 +301,16 @@ class LiveGame extends Component {
       topPlayerNo = 2;
       bottomPlayerNo = 1;
       color = 'p1';
+    }
+
+    let pToPlay, oppToPlay;
+    if((game.toPlay === 1 && bottomPlayerNo === 1) || 
+       (game.toPlay === 2 && bottomPlayerNo === 2)) {
+      pToPlay = 'to-play';
+      oppToPlay = '';
+    } else {
+      oppToPlay = 'to-play';
+      pToPlay =  '';
     }
 
     if (game.player1 === game.player2) {
