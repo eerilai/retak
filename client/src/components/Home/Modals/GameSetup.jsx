@@ -159,7 +159,7 @@ class GameSetup extends Component {
               label="Private"
               onChange={this.handlePrivacyChange}
             />
-            <Form.Group inline label="Board Size">
+            <Form.Group inline label="Board Size" style={{ 'justify-content': 'center'}}>
               <Form.Radio
                 label="White"
                 value="white"
