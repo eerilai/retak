@@ -20,22 +20,23 @@ class Lobby extends Component {
   }
 
   render() {
+    const games = this.state.games.sort((a, b) => { return a.players - b.players; });
     return (
       <table class="tg">
         <thead>
-        <tr>
+          <tr>
             <th colSpan="4" className="title">
               <h3>Lobby</h3>
             </th>
           </tr>
           <tr>
-            <th>Room</th>
-            <th>Players</th>
-            <th>Mode</th>
-            <th>Board</th>
+            <th className="col-room">Room</th>
+            <th className="col-players">Player</th>
+            <th className="col-time">Time</th>
+            <th className="col-board">Board</th>
           </tr>
         </thead>
-        {this.state.games.map((game) => {
+        {games.map((game) => {
           let players = <div />;
           if (game.players < 2) {
             if (game.player1) {

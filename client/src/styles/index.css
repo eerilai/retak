@@ -165,6 +165,7 @@ nav:hover {
 .leaderboard {
   border: 1px solid #ccc;
   min-height: 400px;
+  max-height: 400px;
   background-color: #f7f7f7;
 }
 
@@ -240,6 +241,27 @@ th.title > h3 {
   color: #333;
   background-color: #f7f7f7;
   cursor: pointer;
+}
+
+.col-time,
+.col-board {
+  width: 15%;
+}
+
+.col-room {
+  width: 25%;
+}
+
+.col-players {
+  width: 35%;
+}
+
+tr.room {
+  border: solid 1px #CCCCCC;
+}
+
+tr.room > td {
+  padding: 5px 0;
 }
 
 tr.room:hover > td {
