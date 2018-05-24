@@ -1,43 +1,37 @@
 import React from "react";
-import { Header, Icon, Image, Container } from "semantic-ui-react";
+import { Header, Icon, Image, Container, } from "semantic-ui-react";
+import shu from './Shu.jpeg'
+import joz from './joz.jpeg'
+import evan from './evan.jpeg'
+import './about.css'
 const About = props => (
   <div className="takless">
     <div className="main">
-      <Container text>
-        <Header as="h1">Header</Header>
-        <p>
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-          commodo ligula eget dolor. Aenean massa strong. Cum sociis natoque
-          penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-          Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
-          Nulla consequat massa quis enim. Donec pede justo, fringilla vel,
-          aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
-          imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede link
-          mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum
-          semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,
-          porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante,
-          dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla
-          ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam
-          ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-          commodo ligula eget dolor. Aenean massa strong. Cum sociis natoque
-          penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-          Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
-          Nulla consequat massa quis enim. Donec pede justo, fringilla vel,
-          aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
-          imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede link
-          mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum
-          semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,
-          porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante,
-          dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla
-          ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam
-          ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.
-        </p>
-      </Container>
+      <div className='backGround'>
+        <h2 className='aboutheader1'>WE LOVE TAK</h2>
+
+        <h3 className='aboutheader'>What is Tak?</h3>
+        <p>Tak is an abstract strategy game in a similar style to Chess or Go (Baduk). The game is simple to play and enjoyable at all levels, but complex in strategy.</p>
+        <h3 className='aboutheader'> Who we are? </h3>
+        <p>We are four software engineers who love playing tak in our spare time. Although playing with friends in person is a great experience, sometimes it is hard to find an opponent. </p>
+        <p>With that in mind along with the growing tak community, we decided to build this website to support and promote the game worldwide. </p>
+        <p>Hope everyone can enjoy our site and if you are interested in contributing to our site, please get on our github  <a className='github' href="https://github.com/s-a-j-e"><Icon name='github' size='large' /></a></p>
+
+        <div className='imageGroup'>
+          <img className='us' src={joz} />
+          <img className='us' src={evan} />
+          <img className='us' src={shu} />
+        </div>
+      </div>
+    </div >
+
+    <div className='table'>
+
+
+
+
     </div>
-  </div>
+  </div >
 );
 
 export default About;
