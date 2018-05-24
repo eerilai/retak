@@ -32,6 +32,20 @@
   background-color: #e5e5e5;
 }
 
+.game-stats {
+  background-color: #e5e5e5;
+  border: solid 1px #d2d2d2;
+  border-bottom: 0;
+}
+
+.game-stats>p,
+.game-state>strong {
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+
 .to-play {
   background-color: #95db59;
 }
