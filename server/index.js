@@ -174,9 +174,12 @@ io.on('connection', (socket) => {
 
   // Serve game state on LiveGame component initialize
   socket.on('fetchGame', async (roomId, loadGame) => {
-    if (!io.sockets.adapter.rooms[roomId]) {
-      socket.emit('closedRoom');
+    if (!io.sockets.adapter.rooms[roomId] && loadGame) {
       socket.join(roomId);
+    } else if (!io.sockets.adapter.rooms[roomId] && !loadGame) {
+      socket.emit('closedRoom');
+    } else if (io.sockets.adapter.rooms[roomId] && loadGame) {
+      loadGame = null;
     }
     if (!io.sockets.adapter.rooms[roomId].sockets[socket.id]) {
       socket.join(roomId);
@@ -188,7 +191,6 @@ io.on('connection', (socket) => {
     if (!room)
       return
 
-    let { gameState, activePlayer, boardSize, timeControl, player1Time, player2Time, isPrivate, spectators } = room;
     if (loadGame !== null) {
       const {
         player1, player2, active_player,
@@ -197,14 +199,21 @@ io.on('connection', (socket) => {
       } = loadGame;
       room.player1 = player1;
       room.player2 = player2;
+      room.spectators = [];
       room.gameState = {
         tps: board_state,
         ptn,
+        pieces: {
+          1: {F: 21, C: 1, total: 22},
+          2: {F: 21, C: 1, total: 22}
+        }
       };
       room.activePlayer = active_player;
       room.boardSize = board_size;
       room.isLive = false;
+      room.players = 2;
     }
+    let { gameState, activePlayer, boardSize, timeControl, player1Time, player2Time, isPrivate, spectators } = room;
 
     const { player1, player2 } = room;
     let status = room.status;//when the player2 joined, game status will change
