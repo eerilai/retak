@@ -89,6 +89,9 @@ class Home extends Component {
 
     return (
       <div className="takless">
+        <div className="left">
+          <h1 id="logo">Tak<span id="sub-logo">less</span></h1>
+        </div>
         <div className="main">
           <span style={{ cursor: 'pointer' }} onClick={() => { this.setState({ lobbyView: 'lobby' }); }}>Lobby /</span>
           <span style={{ cursor: 'pointer' }} onClick={() => { this.setState({ lobbyView: 'in_play' }); }}> In Play</span>

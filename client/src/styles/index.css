@@ -127,7 +127,8 @@ a:hover{
 #user-nav > nav > a {
   cursor: pointer;
   padding: 5px 10px;
-  color: black;
+  color: #767676 !important;
+  font-weight: bold;
 }
 
 #main-nav > nav > a:hover,
@@ -161,16 +162,32 @@ nav:hover {
   grid-area: main;
 }
 
+.left {
+  grid-area: left;
+}
+
+#logo {
+ color: #767676;
+}
+
+#sub-logo {
+  color: #aaa;
+}
+
 .lobby,
 .leaderboard {
   border: 1px solid #ccc;
   min-height: 400px;
   max-height: 400px;
+  color: #767676;
   background-color: #f7f7f7;
 }
 
+th.title,
 th.title > h3 {
   margin: 0;
+  padding: 0;
+  font-weight: bold;
 }
 
 /* Profile Page */
@@ -219,15 +236,15 @@ th.title > h3 {
 }
 .tg th {
   font-size: 14px;
-  font-weight: normal;
+  font-weight: bold;
   padding: 10px 5px;
   border-style: solid;
   border-width: 0;
   overflow: hidden;
   word-break: normal;
   border-color: #ccc;
-  color: #333;
-  background-color: #f7f7f7;
+  color: #767676 !important;
+  background-color: #e5e5e5;
 }
 .tg td {
   font-size: 12px;
@@ -241,6 +258,10 @@ th.title > h3 {
   color: #333;
   background-color: #f7f7f7;
   cursor: pointer;
+}
+
+.tg > thead {
+  border-bottom: solid 2px #ccc;
 }
 
 .col-time,
