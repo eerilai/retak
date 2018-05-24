@@ -10,17 +10,21 @@ class Chat extends Component {
       message: '',
       messages: [],
       typing: '',
+
     };
     const self = this;
     const { socket } = props;
     socket.on('typing', (data) => {
       self.setState({ typing: data.author + ' is typing...' });
-      setTimeout(() => { self.setState({ typing: '' }) }, 1000);
+      setTimeout(() => { self.setState({ typing: '' }) }, 2000);
     });
 
     socket.on('chat', (data) => {
       addMessage(data);
-      setTimeout(this.scrollToBottom(), 1000)
+      if (this.state.messages.length > 0) {
+        console.log(this.state.messages)
+        this.scrollToBottom()
+      }
     });
 
     const addMessage = data => {
@@ -64,6 +68,9 @@ class Chat extends Component {
       this.setState({ message: '' });
     };
   }
+
+
+
 
   // make chatbox scroll effect
   scrollToBottom = () => {
