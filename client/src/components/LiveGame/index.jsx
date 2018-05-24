@@ -38,23 +38,18 @@ class LiveGame extends Component {
       opponentTime: 0
     };
 
-
     this.movePieces = this.movePieces.bind(this);
     this.handleSquareClick = this.handleSquareClick.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
     this.timeOut = this.timeOut.bind(this);
 
-
-    const { socket } = props;
+    const { socket, username } = props;
     const { roomId } = props.match.params;
-
     const loadGame = this.props.location.state ? this.props.location.state.game : null;
-    setTimeout(() => {
-      socket.emit('fetchGame', roomId, loadGame);
-    }, 600);
-
+    
+    socket.emit('fetchGame', username, roomId, loadGame);
+    
     socket.on('syncGame', ({ boardSize, gameState, player1Time, player2Time, status, player1, player2, roomId, activePlayer, isPlayer1 }) => {
-
       if (roomId === props.match.params.roomId) {
         const game = new Game(boardSize, gameState, player1, player2);
         game.activePlayer = activePlayer;
@@ -97,7 +92,6 @@ class LiveGame extends Component {
       this.setState({ noRoom: true })
     });
     socket.on('updateTime', ({ roomId, player1Time, player2Time }) => {
-
       if (roomId === props.match.params.roomId) {
         if (this.props.username === this.state.game.player1) {
 
@@ -112,14 +106,13 @@ class LiveGame extends Component {
           })
         }
       }
-    })
+    });
 
     socket.on('timeOut', ({ activePlayer, roomId }) => {
       if (roomId === props.match.params.roomId) {
         this.timeOut(activePlayer)
       }
-    })
-
+    });
 
     //Sound Effect
     // this.sounds = { brick: sound_brick_drop };

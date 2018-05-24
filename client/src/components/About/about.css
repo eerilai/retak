@@ -1,0 +1,67 @@
+
+@import url('https://fonts.googleapis.com/css?family=Anton|Gloria+Hallelujah');
+@import url('https://fonts.googleapis.com/css?family=Black+Han+Sans');
+h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child {
+  margin-top: 30px;
+}
+.aboutheader1{
+  color:#065D46;
+  font-family: 'Black Han Sans', sans-serif;
+  letter-spacing: 15px;
+  font-size: 40px;
+
+}
+
+.aboutheader{
+  margin-top: 25px;
+  margin-bottom: 25px;
+  color:#065D46;
+  font-family: 'Anton', sans-serif;
+  font-family: 'Gloria Hallelujah', cursive;  
+}
+
+
+
+h4 {
+  text-align: left;
+}
+
+.header{
+  color: #328874 ;
+ 
+  
+}
+.us{
+  width: 150px;
+  height: 150px;
+}
+p {
+  font-size: 1.3em;
+  text-align: left;
+  color:#393B3B  ;
+}
+
+h5 {
+  text-align: left;
+}
+
+.header2{
+  color: #65B1A2  ;
+}
+
+.imageGroup{
+  margin-top: 40px;
+}
+
+.backGround{
+ 
+  
+  margin-top: 20px;
+  padding: 50px;
+  display:absolute;
+  transform: rotate(5deg);
+  box-shadow: 2px 2px rgba(50, 50, 50, 0.3), -2px 2px rgba(50, 50, 50, 0.1);
+}
+.github:hover{
+   transform: scaleY(1.5) scaleX(1.5);
+}
