@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import chess from './chess.jpeg'
+
 import {
   Button,
   Modal,
@@ -20,7 +20,7 @@ class GameLink extends Component {
   }
 
   render() {
-    const { modalView, changeView, gameType, url, link, boardSize,
+    const { modalView, changeView, gameType, url, link, boardSize, color,
       timeControl,
       timeIncrement,
       isPrivate,
@@ -43,6 +43,7 @@ class GameLink extends Component {
       <div> <Icon name='check square' /><strong>BoardSize</strong>: {boardSize} x {boardSize}</div>
       <div> <Icon name='check square' /><strong>Minutes per side</strong>: {timeControl} minute(s)</div>
       <div> <Icon name='check square' /><strong>Increment in seconds</strong>: {timeIncrement} second(s)</div>
+      <div> <Icon name='check square' /><strong>Color</strong>: {color}</div>
       <div> <Icon name='check square' /><strong>Private</strong>: {privateStatus}</div>
       <div> <Icon name='check square' /><strong>Correspondence</strong>: {liveStatus}</div>
     </div>;

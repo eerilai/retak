@@ -63,14 +63,6 @@ button:hover {
   text-shadow: none;
 }
 
-.ui.modal > .content{
- height: 200px;
-}
-
-.ui.modal > .actions {
-  text-align: center;
-}
-
 .ui.tiny.modal {
   height: 335px;
 }
@@ -196,19 +188,38 @@ nav:hover {
 }
 
 /* game setup  */
-.ui.modal>.actions {
+.ui.modal>.actions,
+.ui.modal>.content {
   text-align: center;
-  margin-top: 100px;
+  margin-top: auto;
+}
+
+.ui.modal>.content {
+  height: 300px;
 }
 .ui.modal.transition.visible.active{
-
-  margin-top: -401px;
-  height: 450px;
-  width: 60%;
-
+  height: 440px;
+  width: 500px;
 }
 .slider{
-  width:200px
+  width:100%
+}
+
+#gameMenu{
+  margin: 30px;
+  font-size: 16px;
+  line-height: 2;
+
+}
+.gamelink{
+  justify-content: space-around;
+  display: flex;
+  margin-top: 20px;
+
+}
+
+#linkurl{
+  color: #1D560F
 }
 /* Tables CSS */
 .tg {
@@ -388,27 +399,8 @@ p.question {
   margin: 30px 30px 60px 50px;
 }
 
-/* game setup */
 
-.gamelink{
-    margin-top: 30px;
-     display: flex;
-    justify-content: space-around;
-}
 
-#gameMenu{
-    margin-left: 30%;
-    margin-top: 5%;
-    font-size: 15px;
-    line-height: 1.6;
-
-}
-
-#linkurl{
-  color:#1A1A1B ;
-  font-size: 16px;
-
-}
 
 #clip{
   display: flex;

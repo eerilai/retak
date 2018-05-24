@@ -8,7 +8,7 @@ const PageNotFound = ({ userInfo }) => {
       <h5> 404 </h5>
       <h4>PAGE NOT FOUND!</h4>
       <div>
-        Click here to return <Link to="/">home.</Link>
+        <Link to="/">Click here to return home.</Link>
       </div>
       {/* <img /> */}
     </div>

@@ -39,14 +39,15 @@ class Home extends Component {
     });
   }
 
-  handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId) {
+  handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId, color) {
+    console.log('time', timeControl);
     if (boardSize) {
       if (!roomId) {
         roomId = generateRoomName();
       }
       const { socket } = this.props;
       var timer
-      if (timeControl !== 0) {
+      if (+timeControl !== 0) {
         timer = timeControl * 60
       } else {
         timer = undefined
@@ -58,7 +59,8 @@ class Home extends Component {
         timeIncrement,
         isFriendGame,
         isPrivate,
-        isLive
+        isLive,
+        color
       })
       socket.emit('createGame', {
         boardSize,
@@ -67,6 +69,7 @@ class Home extends Component {
         isFriendGame,
         isPrivate,
         isLive,
+        color,
         roomId
       });
       socket.on('gameInitiated', ({ roomId }) => {
@@ -97,7 +100,7 @@ class Home extends Component {
       timeControl,
       timeIncrement,
       isPrivate,
-      isLive } = this.state
+      isLive, color } = this.state
 
     let lobbyDisplay = '';
     if (this.state.lobbyView === 'lobby') {
@@ -147,7 +150,7 @@ class Home extends Component {
             boardSize={boardSize}
             timeControl={timeControl}
             timeIncrement={timeIncrement}
-
+            color={color}
             isPrivate={isPrivate}
             isLive={isLive}
             modalView={this.state.modalView}
