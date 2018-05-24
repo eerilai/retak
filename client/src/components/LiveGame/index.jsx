@@ -348,7 +348,7 @@ class LiveGame extends Component {
           <table>
             {OpponentPieces}
             <tr>{topPlayerName}</tr>
-            <PTN ptn={game.ptn} victor={game.victor} winType={game.winType}/>
+            <PTN ptn={game.ptn} victor={game.victor} winType={game.winType} full={game.isBoardFull}/>
             <tr>{bottomPlayerName}</tr>
             {PlayerPieces}
           </table>

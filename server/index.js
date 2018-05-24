@@ -104,6 +104,7 @@ io.on('connection', (socket) => {
 
   // Update username on socket session on login
   socket.on('login', (username) => {
+    console.log('socket handshake session username on login', username)
     const { session } = socket.handshake;
     session.username = username;
     session.save();
@@ -111,6 +112,7 @@ io.on('connection', (socket) => {
 
   // Maintain session for anon users on App initialize if not logged in
   socket.on('AnonUserSession', (username) => {
+    console.log('socket handshake session username Not logged in', username)
     const { session } = socket.handshake;
     if (!session.username) {
       session.username = username;
@@ -119,6 +121,14 @@ io.on('connection', (socket) => {
     } else {
       socket.emit('setAnonUsername', session.username);
     }
+  });
+
+  // Maintain session for anon users on App after logging out
+  socket.on('ResetAnonUserSession', (username) => {
+    console.log('socket handshake session username on logout =>', username)
+    const { session } = socket.handshake;
+    session.username = username;
+    session.save();
   });
 
   // Create a new game and save game state to room
