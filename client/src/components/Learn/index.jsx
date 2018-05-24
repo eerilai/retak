@@ -31,9 +31,7 @@ const Learn = props => (
       <p><strong>Double Win</strong>: If a player makes a move that creates a winning road for both players, the active player is the winner. This situation arises rarely, but it’s not impossible.</p>
       <p><strong>Flat Win</strong>: If either player runs out of pieces, or if the board is covered, then the player with the most flatstones wins.</p>
 
-
     </div>
-
     <div>
       <div className='boardPicture'><img src={boardPicture} /></div>
       <div className='piecesPicture'><img src={pieces} /></div>
@@ -80,7 +78,6 @@ const Learn = props => (
         </tr>
       </table>
     </div>
-
   </div>
 );
 
