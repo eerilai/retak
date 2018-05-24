@@ -146,6 +146,7 @@ class GameSetup extends Component {
             </Form.Group>
             <Form.Dropdown
               selection
+              style={{ width: '10%' }}
               label="Time Control"
               value={this.state.isLive}
               options={timeOptions}
