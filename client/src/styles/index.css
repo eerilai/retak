@@ -230,7 +230,6 @@ th.title > h3 {
 }
 .tg td {
   font-size: 12px;
-  padding: 10px 5px;
   border-style: solid;
   border-width: 0px;
   overflow: hidden;
@@ -242,6 +241,33 @@ th.title > h3 {
   background-color: #f7f7f7;
   cursor: pointer;
 }
+
+tr.room:hover > td {
+  background-color: #eeeeee !important;
+}
+
+.room-players,
+.room-players > p,
+.room-players > p:first-child {
+  margin: 0;
+  font-size: 12px;
+  text-align: center;
+}
+
+.white-icon,
+.black-icon {
+  width: 10px;
+  height: 10px;
+  border-radius: 30%;
+  display: inline-block;
+  border: solid 1px gray;
+  background-color: white;
+}
+
+.black-icon {
+  background-color: black;
+}
+
 .tg .tg-yw4l {
   vertical-align: top;
 }

@@ -5,7 +5,21 @@ const filterLobbyList = (roomsObj) => {
     console.log('currentRoom in filterLobbyList', currentRoom);
     if (currentRoom.players && !currentRoom.isFriendGame && !(currentRoom.isPrivate && currentRoom.player2) && !currentRoom.isClosed) {
       const pending = currentRoom.players < 2;
-      availableRooms.push({ name: roomId, boardSize: currentRoom.boardSize, isPending: pending });
+      let timeCon;
+      if (!currentRoom.isLive) {
+        timeCon = 'Correspondence';
+      } else {
+        timeCon = `${currentRoom.timeControl / 60}+${currentRoom.timeIncrement}`
+      }
+      availableRooms.push({
+        name: roomId,
+        boardSize: currentRoom.boardSize,
+        isPending: pending,
+        timeControl: timeCon,
+        player1: currentRoom.player1,
+        player2: currentRoom.player2,
+        players: currentRoom.players,
+      });
     }
   }
   return availableRooms;

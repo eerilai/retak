@@ -30,19 +30,49 @@ class Lobby extends Component {
           </tr>
           <tr>
             <th>Room</th>
+            <th>Players</th>
             <th>Mode</th>
             <th>Board</th>
-            <th>Status</th>
           </tr>
         </thead>
-        {this.state.games.map(game => (
-          <tr className="room">
-            <td><Link to={`/game/${game.name}`}>{game.name}</Link></td>
-            <td>-</td>
-            <td>{game.boardSize}</td>
-            <td>{game.isPending ? 'pending...' : 'active'}</td>
-          </tr>
-        ))}
+        {this.state.games.map((game) => {
+          let players = <div />;
+          if (game.players < 2) {
+            if (game.player1) {
+              players = (
+                <div className="room-players">
+                  <p><div className="white-icon" /> {`${game.player1}`}</p>
+                </div>
+              );
+            } else if (game.player2) {
+              players = (
+                <div className="room-players">
+                  <p><div className="black-icon" /> {`${game.player2}`}</p>
+                </div>
+              );
+            }
+          } else {
+            players = (
+              <div className="room-players">
+                <p><div className="white-icon" /> {`${game.player1}`}</p>
+                <p><div className="black-icon" /> {`${game.player2}`}</p>
+              </div>
+            );
+          }
+          const pending = game.isPending ? '(Open)' : '';
+          return (
+            <tr className="room">
+              <td><Link to={`/game/${game.name}`}>{game.name} {pending}</Link></td>
+              <td>
+                <Link to={`/game/${game.name}`}>
+                  {players}
+                </Link>
+              </td>
+              <td><Link to={`/game/${game.name}`}>{game.timeControl}</Link></td>
+              <td><Link to={`/game/${game.name}`}>{game.boardSize}</Link></td>
+            </tr>
+          )
+        })}
       </table>
     );
   }
