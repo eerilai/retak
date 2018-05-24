@@ -62,13 +62,15 @@ class App extends Component {
   }
 
   handleSubmit(newUsername) {
-    const { username, userID } = this.props;
+    const { username, userID, socket } = this.props;
     const currentUsername = username;
     if(newUsername.length > 0){
       axios.post('/auth/changeUsername', { userID, currentUsername, newUsername })
-        .then((updatedUsername) => {
-          this.props.changeCurrentUsername(updatedUsername.data);
+        .then((res) => {
+          const updatedUsername = res.data;
+          this.props.changeCurrentUsername(updatedUsername);
           this.setState({selectModal: ''})
+          socket.emit('login', updatedUsername)
         })
         .catch((err) => {
           console.error(err)

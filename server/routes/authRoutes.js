@@ -72,8 +72,9 @@ router.post('/logout', (req, res) => {
 router.post('/changeUsername', (req, res) => {
   const { userID, currentUsername, newUsername } = req.body;
   updateUserName(userID, currentUsername, newUsername)
-  .then((user) => {
-    let username = user.dataValues.username
+  .then((newUser) => {
+    let username = newUser.dataValues.username
+    req.user = newUser;
     res.send(username);
   });
 });
