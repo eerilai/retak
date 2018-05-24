@@ -15,7 +15,7 @@ class GameSetup extends Component {
       isPrivate: false,
       isLive: true,
       roomId: '',
-      timeControl: 0,
+      timeControl: 15,
       timeIncrement: 0,
       color: 'random',
     }
@@ -55,17 +55,37 @@ class GameSetup extends Component {
     });
   }
 
-  handleLiveChange() {
-    this.setState({
-      isLive: !this.state.isLive,
-    });
+  handleLiveChange(e, { value }) {
+    if (!value) {
+      this.setState({
+        isLive: false,
+        timeControl: 0,
+      });
+    } else {
+      this.setState({
+        isLive: true,
+        timeControl: 15,
+      })
+    }
   }
 
   render() {
-
-
     const isFriendGame = this.props.gameType === 'friend';
     const { boardSize, isPrivate, roomId, timeControl, isLive, timeIncrement, color} = this.state;
+    
+    const timeOptions = [
+      { text: 'Real Time', value: true },
+      { text: 'Correspondence', value: false},
+    ]
+    const timeSliders = this.state.isLive ? 
+    ( <div>
+      <div><strong>Minutes per side</strong>: {this.state.timeControl} minute(s)</div>
+      <input className='slider' type='range' min={0} max={90} value={this.state.timeControl} onChange={this.handleTimeControl} />
+      <div><strong>Increment in seconds</strong>: {this.state.timeIncrement} second(s)</div>
+      <input className='slider' type='range' min={0} max={30} value={this.state.timeIncrement} onChange={this.handleTimeIncrement} />
+      </div>
+    ) : <div></div>
+
     return (
       <Modal
         open={this.props.modalView === 'GameSetup'}
@@ -115,21 +135,18 @@ class GameSetup extends Component {
                 onChange={this.handleBoardSizeChange}
               />
             </Form.Group>
-
-            <div><strong>Minutes per side</strong>: {this.state.timeControl} minute(s)</div>
-            <input className='slider' type='range' min={0} max={60} value={this.state.timeControl} onChange={this.handleTimeControl} />
-            <div><strong>Increment in seconds</strong>: {this.state.timeIncrement} second(s)</div>
-            <input className='slider' type='range' min={0} max={20} value={this.state.timeIncrement} onChange={this.handleTimeIncrement} />
+            <Form.Dropdown
+              selection
+              value={this.state.isLive}
+              options={timeOptions}
+              onChange={this.handleLiveChange}
+            />
+            {timeSliders}
             <br />
             <Form.Field
               control={Checkbox}
               label="Private"
               onChange={this.handlePrivacyChange}
-            />
-            <Form.Field
-              control={Checkbox}
-              label="Correspondence"
-              onChange={this.handleLiveChange}
             />
             <Form.Group inline label="Board Size">
               <Form.Radio
