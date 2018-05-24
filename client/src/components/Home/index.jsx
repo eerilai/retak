@@ -91,14 +91,6 @@ class Home extends Component {
       <div className="takless">
         <div className="left">
           <h1 id="logo">Tak<span id="sub-logo">less</span></h1>
-        </div>
-        <div className="main">
-          <span style={{ cursor: 'pointer' }} onClick={() => { this.setState({ lobbyView: 'lobby' }); }}>Lobby /</span>
-          <span style={{ cursor: 'pointer' }} onClick={() => { this.setState({ lobbyView: 'in_play' }); }}> In Play</span>
-          <div className="lobby">
-            {lobbyDisplay}
-          </div>
-          <button className="createGame">Play with Bot</button>
           <button
             className="createGame"
             onClick={() =>
@@ -121,6 +113,13 @@ class Home extends Component {
           >
             Play with friend
           </button>
+        </div>
+        <div className="main">
+          <span style={{ cursor: 'pointer' }} onClick={() => { this.setState({ lobbyView: 'lobby' }); }}>Lobby /</span>
+          <span style={{ cursor: 'pointer' }} onClick={() => { this.setState({ lobbyView: 'in_play' }); }}> In Play</span>
+          <div className="lobby">
+            {lobbyDisplay}
+          </div>
           <GameSetup
             modalView={this.state.modalView}
             gameType={this.state.gameType}

@@ -38,15 +38,24 @@ button {
   color: #848484;
   width: 200px;
   box-shadow: none;
-  border: 1px solid #ccc;
-  border-top: 0;
-  border-bottom: 0;
+  border: 0;
 }
 
 button:hover {
   background-color: #f7f7f7;
 }
 
+.left button:first-of-type {
+  border: 2px solid #ccc;
+  border-bottom: 0;
+  border-right: 0;
+}
+
+.left button:last-of-type {
+  border: 2px solid #ccc;
+  border-top: 0;
+  border-right: 0;
+}
 .ui.button {
   background: #28a745 none;
   color: rgb(255, 255, 255);
@@ -168,6 +177,7 @@ nav:hover {
 
 #logo {
  color: #767676;
+ margin-bottom: 40px;
 }
 
 #sub-logo {
@@ -244,7 +254,7 @@ th.title > h3 {
   word-break: normal;
   border-color: #ccc;
   color: #767676 !important;
-  background-color: #e5e5e5;
+  background-color: #eee;
 }
 .tg td {
   font-size: 12px;
