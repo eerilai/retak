@@ -93,7 +93,16 @@ class GameSetup extends Component {
         dimmer={false}
 
       >
-        <Modal.Header>GameSetup</Modal.Header>
+        <Modal.Header style={{ display: 'flex'}}>
+          GameSetup
+          <Form.Input
+            style={{ height: '30px', 'margin-left': '50%', width: '65%'}}
+            type="text"
+            placeholder="Name Room?"
+            value={this.state.roomId}
+            onChange={this.handleRoomIdChange}
+          />
+        </Modal.Header>
         <Modal.Content>
           <Form >
             <Form.Group inline label="Board Size">
@@ -137,6 +146,7 @@ class GameSetup extends Component {
             </Form.Group>
             <Form.Dropdown
               selection
+              label="Time Control"
               value={this.state.isLive}
               options={timeOptions}
               onChange={this.handleLiveChange}
@@ -168,14 +178,6 @@ class GameSetup extends Component {
                 onChange={this.handleColorChange}
               />
             </Form.Group>
-            <Form.Input
-              type="text"
-              label="Room Name"
-              placeholder="optional"
-              value={this.state.roomId}
-              onChange={this.handleRoomIdChange}
-            />
-
           </Form>
         </Modal.Content>
         <Modal.Actions>
