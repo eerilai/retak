@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
@@ -139,7 +138,6 @@ class LiveGame extends Component {
         gameState: {
           ptn: game.ptn,
           tps: game.tps,
-          pieces: game.pieces,
         },
         activePlayer: game.activePlayer,
         roomId: match.params.roomId,
