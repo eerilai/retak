@@ -23,7 +23,7 @@ const About = props => (
           <img className='us' src={shu} />
         </div>
       </div>
-    </div >
+    </div>
 
     <div className='table'>
 
@@ -31,7 +31,7 @@ const About = props => (
 
 
     </div>
-  </div >
+  </div>
 );
 
 export default About;
