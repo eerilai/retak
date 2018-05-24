@@ -34,7 +34,6 @@ class Home extends Component {
 
   handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId) {
     if (boardSize) {
-
       if (!roomId) {
         roomId = generateRoomName();
       }
@@ -43,7 +42,6 @@ class Home extends Component {
       if (timeControl !== 0) {
         timer = timeControl * 60
       } else {
-        console.log('timer = null situation')
         timer = undefined
       }
       socket.emit('createGame', {
