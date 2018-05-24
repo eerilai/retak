@@ -126,8 +126,6 @@ class GameSetup extends Component {
               onChange={this.handleLiveChange}
             />
 
-
-
             <Form.Input
               type="text"
               label="Room Name"

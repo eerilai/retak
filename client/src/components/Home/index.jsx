@@ -20,6 +20,13 @@ class Home extends Component {
       url: '',
       link: '',
       leaderboard: [],
+      boardSize: '',
+      timeControl: '',
+      timeIncrement: '',
+      isFriendGame: '',
+      isPrivate: '',
+      isLive: ''
+
     };
     this.handleCreateGame = this.handleCreateGame.bind(this);
     this.changeView = this.changeView.bind(this);
@@ -44,6 +51,15 @@ class Home extends Component {
       } else {
         timer = undefined
       }
+
+      this.setState({
+        boardSize,
+        timeControl,
+        timeIncrement,
+        isFriendGame,
+        isPrivate,
+        isLive
+      })
       socket.emit('createGame', {
         boardSize,
         timeControl: timer,
@@ -77,6 +93,12 @@ class Home extends Component {
   }
 
   render() {
+    var { boardSize,
+      timeControl,
+      timeIncrement,
+      isPrivate,
+      isLive } = this.state
+
     let lobbyDisplay = '';
     if (this.state.lobbyView === 'lobby') {
       lobbyDisplay = <Lobby socket={this.props.socket} />;
@@ -122,6 +144,12 @@ class Home extends Component {
             handleCreateGame={this.handleCreateGame}
           />
           <GameLink
+            boardSize={boardSize}
+            timeControl={timeControl}
+            timeIncrement={timeIncrement}
+
+            isPrivate={isPrivate}
+            isLive={isLive}
             modalView={this.state.modalView}
             gameType={this.state.gameType}
             changeView={this.changeView}
