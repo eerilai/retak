@@ -168,6 +168,10 @@ nav:hover {
   background-color: #f7f7f7;
 }
 
+th.title > h3 {
+  margin: 0;
+}
+
 /* Profile Page */
 .userInfo {
   border: 1px solid #ccc;
