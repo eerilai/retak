@@ -67,7 +67,6 @@ app.get('/users/:username/data', async (req, res) => {
 
 app.get('/users/:username/games', async (req, res) => {
   const games = await getUserGames(req.params.username);
-  console.log(games[0].dataValues);
   res.json(games);
 });
 

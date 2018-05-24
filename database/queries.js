@@ -57,12 +57,7 @@ const findOrCreateUserByOauth = (options) => {
   });
 }
 
-
-
-
-
 const createUser = (userInfo) => {
-
   return new Promise((resolve, reject) => {
     const { username, email, password } = userInfo;
     hashPassword(password)
@@ -243,6 +238,23 @@ const endCorrespondence = (roomId) => {
   });
 };
 
+const updateUserName = (userID, currentUsername, newUsername) => {
+  return new Promise((res, rej) => {
+    User.findById(userID)
+      .then((person) => {
+        if(person.dataValues.username === currentUsername){
+          person.update({
+            username: newUsername
+          });
+          res(person);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  })
+}
+
 module.exports = {
   findUserLocal,
   findUserById,
@@ -256,4 +268,5 @@ module.exports = {
   getCurrentUserGames,
   storeAsyncGame,
   endCorrespondence,
+  updateUserName,
 };
