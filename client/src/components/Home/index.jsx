@@ -73,7 +73,7 @@ class Home extends Component {
       });
       socket.on('gameInitiated', ({ roomId }) => {
         // TODO: Change URL from localhost to takless for deployment
-        let url = `http://localhost:3000/game/${roomId}`;
+        let url = `http://www.takless.org/game/${roomId}`;
         let link = `game/${roomId}`;
         this.setState({
           url,
