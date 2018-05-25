@@ -5,9 +5,9 @@ const PageNotFound = ({ userInfo }) => {
 
   return (
     <div className="pageNotFound">
-      <h5> 404 </h5>
-      <h4>PAGE NOT FOUND!</h4>
-      <div>
+      <h5 className="FourOFour"> 404 </h5>
+      <h4 className="NotFound">PAGE NOT FOUND!</h4>
+      <div className="ClickReturnHome">
         <Link to="/">Click here to return home.</Link>
       </div>
       {/* <img /> */}
