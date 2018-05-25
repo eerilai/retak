@@ -30,6 +30,7 @@ class App extends Component {
     };
 
     const { socket } = props;
+
     axios
       .get('/auth/check')
       .then(res => {
@@ -41,6 +42,7 @@ class App extends Component {
         if (currentUserInfo[0] !== '<') {
           props.toggleLoginLogout(true);
           props.login(currentUserInfo);
+          socket.emit('login', currentUsername);
         } else {
             socket.emit('AnonUserSession', props.username);
           }
@@ -48,6 +50,7 @@ class App extends Component {
       .catch(err => {
         console.error(err);
       });
+      
     socket.on('setAnonUsername', (username) => {
       props.setAnonUsername(username);
     });
@@ -69,15 +72,15 @@ class App extends Component {
         .then((res) => {
           const updatedUsername = res.data;
           this.props.changeCurrentUsername(updatedUsername);
-          this.setState({selectModal: ''})
-          socket.emit('login', updatedUsername)
+          this.setState({selectModal: ''});
+          socket.emit('login', updatedUsername);
         })
         .catch((err) => {
-          console.error(err)
+          console.error(err);
         })
     } else {
       // If an Empty string don't close modal
-      this.setState({selectModal: 'createUsername'})
+      this.setState({selectModal: 'createUsername'});
     }
   }
 

@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { CopyToClipboard } from "react-copy-to-clipboard";
+
 import {
   Button,
   Modal,
   Icon,
   Form,
+  Image
+
 } from 'semantic-ui-react';
 
 class GameLink extends Component {
@@ -17,33 +20,61 @@ class GameLink extends Component {
   }
 
   render() {
-    const { modalView, changeView, gameType, url, link } = this.props;
+    const { modalView, changeView, gameType, url, link, boardSize, color,
+      timeControl,
+      timeIncrement,
+      isPrivate,
+      isLive } = this.props;
+    let urlLink;
     let urlField;
     let header;
+    let privateStatus, liveStatus
+    if (isPrivate === true) {
+      privateStatus = 'Yes'
+    } else {
+      privateStatus = 'No'
+    }
+    if (isLive === true) {
+      liveStatus = 'No'
+    } else {
+      liveStatus = 'Yes'
+    }
+    urlField = <div id='gameMenu'>
+      <div> <Icon name='check square' /><strong>BoardSize</strong>: {boardSize} x {boardSize}</div>
+      <div> <Icon name='check square' /><strong>Minutes per side</strong>: {timeControl} minute(s)</div>
+      <div> <Icon name='check square' /><strong>Increment in seconds</strong>: {timeIncrement} second(s)</div>
+      <div> <Icon name='check square' /><strong>Color</strong>: {color}</div>
+      <div> <Icon name='check square' /><strong>Private</strong>: {privateStatus}</div>
+      <div> <Icon name='check square' /><strong>Correspondence</strong>: {liveStatus}</div>
+    </div>;
     if (gameType === "friend") {
-      urlField = (
+      urlLink = (
         <div>
-          <div>
-            <Form.Field>
-              <label>{url}</label>
-              <CopyToClipboard
-                text={url}
-                onCopy={() => this.setState({ copied: true })}
-              >
-                <span>
-                  <Icon name="paste" size="large" />
-                </span>
-              </CopyToClipboard>
-            </Form.Field>
+          <div className='gamelink'>
+            <div id='linkurl'>{url}</div>
+            <div id='clip'>
+              <div >
+                <CopyToClipboard
+                  text={url}
+                  onCopy={() => this.setState({ copied: true })}
+                >
+                  <span>
+                    <Icon name="paste" size="large" />
+                  </span>
+                </CopyToClipboard>
+
+              </div>
+              <div id="copied">
+                {this.state.copied ? 'Copied' : 'Click to copy'}
+              </div>
+            </div>
           </div>
-          <div id="copied">
-            {this.state.copied ? 'Copied' : 'Click to copy'}
-          </div>
+          {urlField}
         </div>
       );
       header = 'Send link to a friend then Enter!';
     } else {
-      urlField = null;
+      urlLink = urlField
       header = 'New Game Created';
     }
 
@@ -56,11 +87,9 @@ class GameLink extends Component {
         closeIcon
       >
         <Modal.Header>{header}</Modal.Header>
-        <Modal.Content>
-          <Form />
 
-          {urlField}
-        </Modal.Content>
+        {urlLink}
+
         <Modal.Actions>
           <Button
             negative

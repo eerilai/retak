@@ -287,6 +287,23 @@ th.title > h3 {
 .slider{
   width:100%
 }
+
+#gameMenu{
+  margin: 30px;
+  font-size: 16px;
+  line-height: 2;
+
+}
+.gamelink{
+  justify-content: space-around;
+  display: flex;
+  margin-top: 20px;
+
+}
+
+#linkurl{
+  color: #1D560F
+}
 /* Tables CSS */
 .tg {
   /* border-collapse:collapse; */
@@ -513,6 +530,12 @@ p.question {
   margin: 30px 30px 60px 50px;
 }
 
+
+
+
+#clip{
+  display: flex;
+}
 /* Animations*/
 .hvr-shadow-radial {
   display: inline-block;

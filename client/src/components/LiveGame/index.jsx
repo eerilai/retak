@@ -174,53 +174,6 @@ class LiveGame extends Component {
     }
   }
 
-  winner() {
-    let winner = this.state.game.victorUsername;
-    let loser = this.state.game.loserUsername;
-    if (this.state.game.winType === '1/2') {
-      return <p>{`It's a Draw!`}</p>;
-    }
-    else if (this.state.game.winType === '1/2' && this.state.game.isBoardFull) {
-      return (
-        <div>
-          <p>Board is Full <br /></p>
-          <p>{`It's a Draw! ${winner} wins!`}</p>
-        </div>
-      );
-    } else if (this.state.game.winType === "R") {
-      return (
-        <div>
-          <p>Road Completed <br /></p>
-          <p>{`Player ${winner} wins! & Player ${loser} lost!`}</p>
-        </div>
-      );
-    } else if (this.state.game.winType === "F" && this.state.game.isBoardFull) {
-      return (
-        <div>
-          <p>Board is Full <br /></p>
-          <p>{`Player ${winner} wins! & Player ${loser} lost!`}</p>
-        </div>
-      );
-    } else if (this.state.game.winType === "F") {
-      return (
-        <div>
-          <p>A Player Ran Out of Pieces <br /></p>
-          <p>{`Player ${winner} wins! & Player ${loser} lost!`}</p>
-        </div>
-      );
-    } else if (this.state.game.winType === "T") {
-      return (
-        <div>
-          <p>{`Player ${loser} ran out of time`}<br /></p>
-          <p>{`Player ${winner} wins!`}</p>
-        </div>
-      );
-    }
-    else if (this.state.game.winType !== null) {
-      return <p>{`Player ${winner} wins! & Player ${loser} lost!`}</p>;
-    }
-  }
-
   opponentTurn() {
     const { activePlayer, player1, player2 } = this.state.game;
 
@@ -388,7 +341,6 @@ class LiveGame extends Component {
     return (
       <div className="takless">
         <div className="game-info">
-          <div>{this.winner()}</div>
           {/*this.opponentTurn()*/}
           <div className={`timer ${oppToPlay}`} style={{ 'border-bottom':'0' }}>
             {this.formatSeconds(this.state.opponentTime)}
@@ -396,7 +348,7 @@ class LiveGame extends Component {
           <table>
             {OpponentPieces}
             <tr>{topPlayerName}</tr>
-            <PTN ptn={game.ptn} />
+            <PTN ptn={game.ptn} victor={game.victor} winType={game.winType} full={game.isBoardFull}/>
             <tr>{bottomPlayerName}</tr>
             {PlayerPieces}
           </table>

@@ -4,7 +4,8 @@ import axios from "axios";
 import { Button, Icon, Input, Header } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { toggleLoginLogout, login } from "../../../actions/actions";
+import { toggleLoginLogout, logout } from "../../../actions/actions";
+import generateCharacterName from '../../characterName';
 
 class LogoutModal extends Component {
   constructor(props) {
@@ -14,12 +15,25 @@ class LogoutModal extends Component {
   }
 
   handleLogout() {
+    const { toggleView, toggleLoginLogout, logout, socket } = this.props;
+    const guestUsername = generateCharacterName();
+    
+    let resetUserInfo = {
+      userID: null,
+      currentUsername: guestUsername,
+      userEmail: null,
+      rankedGames: null,
+      rankedWins: null,
+      rankedLosses: null,
+      totalGames: null,
+    }
     axios
       .post("/auth/logout")
       .then(() => {
-        this.props.toggleView("off");
-        this.props.toggleLoginLogout(false);
-        this.props.login("guest");
+        toggleView("off");
+        toggleLoginLogout(false);
+        logout(resetUserInfo);
+        socket.emit('ResetAnonUserSession', guestUsername);
       })
       .catch(err => {
         console.error(err);
@@ -54,12 +68,13 @@ class LogoutModal extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
-    currentUsername: state.currentUsername
+    currentUsername: state.currentUsername,
+    socket: state.socket,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ toggleLoginLogout, login }, dispatch);
+  return bindActionCreators({ toggleLoginLogout, logout }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogoutModal);

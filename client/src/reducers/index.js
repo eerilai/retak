@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import initialState from '../initialState';
 import action from '../actions/actions';
-import { LOGGEDIN, TOGGLE_LOGIN_LOGOUT, SET_ANON_USERNAME, UPDATE_USER_PROFILE, SET_UPDATED_USERNAME } from '../actions/types';
+import { LOGGEDIN, LOGGEDOUT, TOGGLE_LOGIN_LOGOUT, SET_ANON_USERNAME, UPDATE_USER_PROFILE, SET_UPDATED_USERNAME } from '../actions/types';
 
 const rootReducer = (state = initialState, action) => {
    switch (action.type) {
@@ -16,6 +16,18 @@ const rootReducer = (state = initialState, action) => {
         rankedWins: currentUserInfo.rankedWins,
         rankedLosses: currentUserInfo.rankedLosses,
         totalGames: currentUserInfo.totalGames
+      };
+    case LOGGEDOUT:
+      let resetUserInfo = action.payload;
+      return {
+        ...state,
+        userID: resetUserInfo.userID,
+        currentUsername: resetUserInfo.currentUsername,
+        userEmail: resetUserInfo.userEmail,
+        rankedGames: resetUserInfo.rankedGames,
+        rankedWins: resetUserInfo.rankedWins,
+        rankedLosses: resetUserInfo.rankedLosses,
+        totalGames: resetUserInfo.totalGames
       };
     case TOGGLE_LOGIN_LOGOUT:
       return { 
