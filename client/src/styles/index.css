@@ -33,6 +33,7 @@ height: 100%;
 }
 
 button {
+  background-color: #eee;
   height: 50px;
   font-weight: bold;
   color: #848484;
@@ -119,12 +120,12 @@ a:hover{
   font-size: 14px;
   grid-area: nav;
   display: grid;
-  grid-template-columns: 200px 560px 240px;
+  grid-template-columns: 200px 600px 200px;
   grid-template-areas: "navl main-nav user-nav navr";
 }
 
 #main-nav {
-  grid-area: main-nav;
+  grid-area: navl;
   display: flex;
 }
 
@@ -250,6 +251,9 @@ th.title,
 th.title > h3 {
   margin: 0;
   padding: 0;
+}
+
+th.title {
   font-weight: bold;
 }
 
