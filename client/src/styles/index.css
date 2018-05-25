@@ -33,6 +33,7 @@ height: 100%;
 }
 
 button {
+  background-color: #eee;
   height: 50px;
   font-weight: bold;
   color: #848484;
@@ -250,6 +251,9 @@ th.title,
 th.title > h3 {
   margin: 0;
   padding: 0;
+}
+
+th.title {
   font-weight: bold;
 }
 
