@@ -446,15 +446,15 @@ th.title {
   width: 35%;
 }
 
-tr {
+tr.room {
   border: solid 1px #CCCCCC;
 }
 
-tr > td {
+tr.room > td {
   padding: 5px 0;
 }
 
-tr:hover > td {
+tr.room:hover > td {
   background-color: #eeeeee !important;
 }
 
