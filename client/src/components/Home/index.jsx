@@ -40,7 +40,6 @@ class Home extends Component {
   }
 
   handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId, color) {
-    console.log('time', timeControl);
     if (boardSize) {
       if (!roomId) {
         roomId = generateRoomName();
