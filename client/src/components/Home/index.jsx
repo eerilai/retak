@@ -102,22 +102,10 @@ class Home extends Component {
       isPrivate,
       isLive, color } = this.state
 
-    let lobbyDisplay = '';
-    if (this.state.lobbyView === 'lobby') {
-      lobbyDisplay = <Lobby socket={this.props.socket} />;
-    } else if (this.state.lobbyView === 'in_play') {
-      lobbyDisplay = <InPlay />;
-    }
-
     return (
       <div className="takless">
-        <div className="main">
-          <span style={{ cursor: 'pointer' }} onClick={() => { this.setState({ lobbyView: 'lobby' }); }}>Lobby /</span>
-          <span style={{ cursor: 'pointer' }} onClick={() => { this.setState({ lobbyView: 'in_play' }); }}> In Play</span>
-          <div className="lobby">
-            {lobbyDisplay}
-          </div>
-          <button className="createGame">Play with Bot</button>
+        <div className="left">
+          <h1 id="logo">Tak<span id="sub-logo">less</span></h1>
           <button
             className="createGame"
             onClick={() =>
@@ -138,8 +126,14 @@ class Home extends Component {
               });
             }}
           >
-            Play with friend
+            Play with Friend
           </button>
+          <InPlay />
+        </div>
+        <div className="main">
+          <div className="lobby">
+            <Lobby socket={this.props.socket} />
+          </div>
           <GameSetup
             modalView={this.state.modalView}
             gameType={this.state.gameType}

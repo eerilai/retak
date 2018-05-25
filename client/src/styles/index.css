@@ -4,10 +4,10 @@ html {
 
 body {
   background-color: #eeeeee !important;
+  font-family: noto sans, helvetica !important;
   overflow-x: hidden;
   margin: 0;
   padding: 0;
-  font-family: helvetica;
 }
 
 .imgPreview {
@@ -33,20 +33,30 @@ height: 100%;
 }
 
 button {
+  background-color: #eee;
   height: 50px;
   font-weight: bold;
   color: #848484;
   width: 200px;
   box-shadow: none;
-  border: 1px solid #ccc;
-  border-top: 0;
-  border-bottom: 0;
+  border: 0;
 }
 
 button:hover {
   background-color: #f7f7f7;
 }
 
+.left button:first-of-type {
+  border: 2px solid #ccc;
+  border-bottom: 0;
+  border-right: 0;
+}
+
+.left button:last-of-type {
+  border: 2px solid #ccc;
+  border-top: 0;
+  border-right: 0;
+}
 .ui.button {
   background: #28a745 none;
   color: rgb(255, 255, 255);
@@ -107,16 +117,15 @@ a:hover{
 }
 
 #nav {
-  font-family: helvetica;
   font-size: 14px;
   grid-area: nav;
   display: grid;
-  grid-template-columns: 200px 560px 240px;
+  grid-template-columns: 200px 600px 200px;
   grid-template-areas: "navl main-nav user-nav navr";
 }
 
 #main-nav {
-  grid-area: main-nav;
+  grid-area: navl;
   display: flex;
 }
 
@@ -128,7 +137,8 @@ a:hover{
 #user-nav > nav > a {
   cursor: pointer;
   padding: 5px 10px;
-  color: black;
+  color: #767676 !important;
+  font-weight: bold;
 }
 
 #main-nav > nav > a:hover,
@@ -162,11 +172,89 @@ nav:hover {
   grid-area: main;
 }
 
+.left {
+  grid-area: left;
+}
+
+#logo {
+ color: #308db5;
+ margin-bottom: 40px;
+}
+
+#sub-logo {
+  color: #aaa;
+}
+
+.tg.correspondence {
+  margin-top: 30px;
+  width: 100%;
+  border: 2px solid #ccc;
+  border-right: 0;
+}
+
+.tg.correspondence tbody{
+}
+
+.tg.correspondence th {
+  padding: 2px;
+  height: 30px;
+}
+
+.tg.correspondence thead {
+  border: 2px solid #ccc;
+  border-right: 0;
+}
+
+.tg.correspondence tr:hover > td {
+  background-color: #eeeeee !important;
+}
+
+.tg.correspondence tr.corr-th th {
+  font-weight: normal;
+}
+
+.tg.correspondence > tr.async-room td {
+  padding: 4px;
+}
+
+.corr-col-versus {
+}
+
+.corr-col-board {
+}
+
+.player-turn,
+.opponent-turn {
+  height: 10px;
+  width: 10px;
+  border-radius: 100%;
+  margin-right: 5px;
+  background-color: #308db5;
+}
+
+.opponent-turn {
+  background-color: white;
+  border: 1px solid #308db5;
+}
+
 .lobby,
 .leaderboard {
   border: 1px solid #ccc;
+  margin-top: 21px;
   min-height: 400px;
+  max-height: 400px;
+  color: #767676;
   background-color: #f7f7f7;
+}
+
+th.title,
+th.title > h3 {
+  margin: 0;
+  padding: 0;
+}
+
+th.title {
+  font-weight: bold;
 }
 
 /* Profile Page */
@@ -231,22 +319,19 @@ nav:hover {
   margin: auto;
 }
 .tg th {
-  font-family: "Lucida Console", Monaco, monospace !important;
   font-size: 14px;
-  font-weight: normal;
+  font-weight: bold;
   padding: 10px 5px;
   border-style: solid;
   border-width: 0;
   overflow: hidden;
   word-break: normal;
   border-color: #ccc;
-  color: #333;
-  background-color: #f7f7f7;
+  color: #767676 !important;
+  background-color: #eee;
 }
 .tg td {
-  font-family: "Lucida Console", Monaco, monospace !important;
   font-size: 12px;
-  padding: 10px 5px;
   border-style: solid;
   border-width: 0px;
   overflow: hidden;
@@ -258,6 +343,58 @@ nav:hover {
   background-color: #f7f7f7;
   cursor: pointer;
 }
+
+.tg > thead {
+  border-bottom: solid 2px #ccc;
+}
+
+.col-time,
+.col-board {
+  width: 15%;
+}
+
+.col-room {
+  width: 25%;
+}
+
+.col-players {
+  width: 35%;
+}
+
+tr.room {
+  border: solid 1px #CCCCCC;
+}
+
+tr.room > td {
+  padding: 5px 0;
+}
+
+tr.room:hover > td {
+  background-color: #eeeeee !important;
+}
+
+.room-players,
+.room-players > p,
+.room-players > p:first-child {
+  margin: 0;
+  font-size: 12px;
+  text-align: center;
+}
+
+.white-icon,
+.black-icon {
+  width: 10px;
+  height: 10px;
+  border-radius: 30%;
+  display: inline-block;
+  border: solid 1px gray;
+  background-color: white;
+}
+
+.black-icon {
+  background-color: black;
+}
+
 .tg .tg-yw4l {
   vertical-align: top;
 }
@@ -267,7 +404,6 @@ nav:hover {
 }
 .tg .tg-colNames {
   font-size: 14px;
-  font-family: "Lucida Console", Monaco, monospace !important;
   border-color: inherit;
   vertical-align: top;
 }
