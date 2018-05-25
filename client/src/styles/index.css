@@ -482,6 +482,7 @@ textarea {
   border-bottom: 1px solid #e9e9e9;
   color: #555;
   overflow-wrap: break-word;
+  font-size: 12px;
 }
 
 #feedback p {
