@@ -1,4 +1,4 @@
-import types, { SET_ANON_USERNAME, LOGGEDIN, TOGGLE_LOGIN_LOGOUT, SET_LOGGEDIN_PLAYERS } from './types';
+import types, { SET_ANON_USERNAME, LOGGEDIN, LOGGEDOUT, TOGGLE_LOGIN_LOGOUT, SET_UPDATED_USERNAME, UPDATE_USER_PROFILE } from './types';
 
 export const setAnonUsername = (username) => (
   {
@@ -7,10 +7,17 @@ export const setAnonUsername = (username) => (
   }
 );
 
-export const login = (usernameOrEmail) => (
+export const login = (currentUserInfo) => (
   {
     type: LOGGEDIN,
-    payload: usernameOrEmail
+    payload: currentUserInfo
+  }
+);
+
+export const logout = (resetUserInfo) => (
+  {
+    type: LOGGEDOUT,
+    payload: resetUserInfo
   }
 );
 
@@ -21,12 +28,16 @@ export const toggleLoginLogout = (status) => (
   }
 );
 
-export const setLoggedInPlayers = (player1, player2) => (
+export const changeCurrentUsername = (updatedUsername) => (
   {
-    type: SET_LOGGEDIN_PLAYERS,
-    payload:{
-      player1,
-      player2
-    }
+    type: SET_UPDATED_USERNAME,
+    payload: updatedUsername
   }
-)
+);
+
+export const updateUserProfile = (updateCurrentUserInfo) => (
+  {
+    type: UPDATE_USER_PROFILE,
+    payload:updateCurrentUserInfo
+  }
+);

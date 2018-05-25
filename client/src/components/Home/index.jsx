@@ -1,20 +1,11 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import Lobby from './lobby';
+import InPlay from './InPlay';
 import Leaderboard from './Leaderboard';
 import LobbyTable from '../../containers/Home/lobby_table';
-import { connect } from 'react-redux';
-import {
-  Input,
-  Button,
-  Header,
-  Modal,
-  Icon,
-  Form,
-  Select,
-  Transition
-} from 'semantic-ui-react';
 import GameSetup from './Modals/GameSetup';
 import GameLink from './Modals/GameLink';
 import generateRoomName from './roomNames';
@@ -24,10 +15,18 @@ class Home extends Component {
     super(props);
     this.state = {
       modalView: '',
+      lobbyView: 'lobby',
       gameType: '',
       url: '',
       link: '',
       leaderboard: [],
+      boardSize: '',
+      timeControl: '',
+      timeIncrement: '',
+      isFriendGame: '',
+      isPrivate: '',
+      isLive: ''
+
     };
     this.handleCreateGame = this.handleCreateGame.bind(this);
     this.changeView = this.changeView.bind(this);
@@ -36,58 +35,79 @@ class Home extends Component {
 
   changeView(modalView) {
     this.setState({
-      modalView
+      modalView,
     });
   }
 
-  handleCreateGame(boardSize, isFriendly, isPrivate, roomName) {
-    if (!roomName) {
-      roomName = generateRoomName();
-    }
-    const { socket, username } = this.props;
-    socket.emit('createGame', {
-      username,
-      boardSize,
-      isFriendly,
-      isPrivate,
-      roomName
-    });
-    socket.on('gameInitiated', ({ roomId }) => {
-      let url = `http://localhost:3000/game/${roomId}`;
-      let link = `game/${roomId}`;
+  handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId, color) {
+    console.log('time', timeControl);
+    if (boardSize) {
+      if (!roomId) {
+        roomId = generateRoomName();
+      }
+      const { socket } = this.props;
+      var timer
+      if (+timeControl !== 0) {
+        timer = timeControl * 60
+      } else {
+        timer = undefined
+      }
+
       this.setState({
-        url,
-        link,
-        modalView: 'GameLink'
+        boardSize,
+        timeControl,
+        timeIncrement,
+        isFriendGame,
+        isPrivate,
+        isLive,
+        color
+      })
+      socket.emit('createGame', {
+        boardSize,
+        timeControl: timer,
+        timeIncrement: Number(timeIncrement),
+        isFriendGame,
+        isPrivate,
+        isLive,
+        color,
+        roomId
       });
-    });
+      socket.on('gameInitiated', ({ roomId }) => {
+        // TODO: Change URL from localhost to takless for deployment
+        let url = `http://localhost:3000/game/${roomId}`;
+        let link = `game/${roomId}`;
+        this.setState({
+          url,
+          link,
+          modalView: 'GameLink'
+        });
+      });
+    }
   }
 
   getLeaderboard() {
     axios.get('/leaderboard')
       .then((board) => {
         this.setState({ leaderboard: board.data });
+      })
+      .catch(err => {
+        console.error(err);
       });
   }
 
   render() {
-    const options = [
-      { key: '8', text: '8', value: '8' },
-      { key: '7', text: '7', value: '7' },
-      { key: '6', text: '6', value: '6' },
-      { key: '5', text: '5', value: '5' },
-      { key: '4', text: '4', value: '4' },
-      { key: '3', text: '3', value: '3' }
-    ];    
+    var { boardSize,
+      timeControl,
+      timeIncrement,
+      isPrivate,
+      isLive, color } = this.state
+
     return (
       <div className="takless">
-        <div className="main">
-          <div className="lobby">
-            <Lobby socket={this.props.socket} />
-          </div>
-          <button className="createGame">Play with Bot</button>
+        <div className="left">
+          <h1 id="logo">Tak<span id="sub-logo">less</span></h1>
           <button
-            className="createGame" 
+            className="createGame"
             onClick={() =>
               this.setState({
                 modalView: 'GameSetup',
@@ -106,21 +126,33 @@ class Home extends Component {
               });
             }}
           >
-            Play with friend
+            Play with Friend
           </button>
-
+          <InPlay />
+        </div>
+        <div className="main">
+          <div className="lobby">
+            <Lobby socket={this.props.socket} />
+          </div>
           <GameSetup
-              modalView={this.state.modalView}
-              gameType={this.state.gameType}
-              changeView={this.changeView}
-              handleCreateGame={this.handleCreateGame} />
-          <GameLink
             modalView={this.state.modalView}
-            gameType={this.state.gameType}            
+            gameType={this.state.gameType}
+            changeView={this.changeView}
+            handleCreateGame={this.handleCreateGame}
+          />
+          <GameLink
+            boardSize={boardSize}
+            timeControl={timeControl}
+            timeIncrement={timeIncrement}
+            color={color}
+            isPrivate={isPrivate}
+            isLive={isLive}
+            modalView={this.state.modalView}
+            gameType={this.state.gameType}
             changeView={this.changeView}
             url={this.state.url}
-            link={this.state.link} />      
-
+            link={this.state.link}
+          />
           <Leaderboard leaderboard={this.state.leaderboard} />
         </div>
       </div>
@@ -128,10 +160,10 @@ class Home extends Component {
   }
 }
 
-
 const mapStateToProps = (state) => {
   return {
-    username: state.currentUser
+    username: state.currentUsername,
+    socket: state.socket
   };
 };
 

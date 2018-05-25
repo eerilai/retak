@@ -35,10 +35,13 @@ class SignupModal extends Component {
           password
         })
         .then(res => {
+          let currentUserInfo = res.data;
+          let currentUsername = res.data.currentUsername;
           if (res.status === 200) {
             this.props.toggleView("off");
             this.props.toggleLoginLogout(true);
-            this.props.login(username);
+            this.props.login(currentUserInfo);
+            this.props.socket.emit('login', currentUsername);
           }
         })
         .catch(err => {
@@ -46,6 +49,7 @@ class SignupModal extends Component {
         });
     } else {
       // TODO: Alert user passwords must match
+      alert('password doesn\'t match')
     }
   }
 
@@ -55,9 +59,15 @@ class SignupModal extends Component {
         <div className="log">
           <Header icon='SignUp' content='Sign Up' />
           <a href="/auth/google">
-            <Button class="ui google plus button" role="button" color="red">
+            <Button circular class="ui google plus button" role="button" color="google plus">
               <i aria-hidden="true" class="google plus icon"></i>
-              |   Sign up with Google
+              |   Google
+            </Button>
+          </a>
+          <a href="/auth/facebook">
+            <Button circular class="ui facebook button" role="button" color="facebook">
+              <i aria-hidden="true" class="facebook icon"></i>
+              |  Facebook
             </Button>
           </a>
 
@@ -128,7 +138,7 @@ class SignupModal extends Component {
                 </Input>
               </div>
             </div>
-            <Button id="signupButton" size="large" color="#4cc560">Sign Up  <Icon size="large" name="add user" corner="true"/></Button>
+            <Button id="signupButton" size="large" color="#4cc560">Sign Up  <Icon size="large" name="add user" corner="true" /></Button>
           </form>
           <p className="question">Already have an account?</p>
           <Button
@@ -137,14 +147,15 @@ class SignupModal extends Component {
               this.props.toggleView("login");
             }}
           >
-            Click here to login
+            Click here to Login
           </Button>
           <Button
-            color="blue"
+            color="red"
             onClick={() => {
               this.props.toggleView("off");
             }}
           >
+            <Icon size="large" name="ban" corner="true"/>
             Cancel
           </Button>
         </div>
@@ -156,7 +167,7 @@ class SignupModal extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
-    currentUser: state.currentUser
+    currentUsername: state.currentUsername
   };
 }
 

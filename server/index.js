@@ -4,11 +4,18 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const socket = require('socket.io');
 const sharedSession = require('express-socket.io-session');
+const https = require('https')
 
 require('dotenv').config();
 
+const GAME_NOT_STARTED = 0
+const GAME_STARTED = 1
+const GAME_FINISHED = 2
+
 const db = require('../database');
-const { logGame, getLeaderboard, getUserGames, getUserData } = require('../database/queries');
+const { logGame, getLeaderboard, getUserGames,
+  getUserData, storeAsyncGame, getCurrentUserGames,
+  endCorrespondence } = require('../database/queries');
 const authRoutes = require('./routes/authRoutes');
 const filterLobbyList = require('./lobbyHelper');
 
@@ -60,13 +67,18 @@ app.get('/users/:username/data', async (req, res) => {
 
 app.get('/users/:username/games', async (req, res) => {
   const games = await getUserGames(req.params.username);
-  console.log(games[0].games);
+  res.json(games);
+});
+
+app.get('/users/:userID/games/current', async (req, res) => {
+  const games = await getCurrentUserGames(req.params.userID);
   res.json(games);
 });
 
 app.get('/bundle.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/bundle.js'));
 });
+
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
@@ -77,6 +89,8 @@ const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 
+
+
 //Socket Setup
 let rooms = 0;
 const io = socket(server);
@@ -86,59 +100,142 @@ io.use(sharedSession(session, {
 }))
 
 io.on('connection', (socket) => {
+  socket.leave(socket.id);
 
-  // Maintain session for anon users on App initialize
-  socket.on('anonLogin', (username) => {
-    if (!socket.handshake.session.username) {
-      socket.handshake.session.username = username;
-      socket.handshake.session.save();
+  // Update username on socket session on login
+  socket.on('login', (username) => {
+    console.log('socket handshake session username on login', username)
+    const { session } = socket.handshake;
+    session.username = username;
+    session.save();
+  });
+
+  // Maintain session for anon users on App initialize if not logged in
+  socket.on('AnonUserSession', (username) => {
+    console.log('socket handshake session username Not logged in', username)
+    const { session } = socket.handshake;
+    if (!session.username) {
+      session.username = username;
+      session.save();
+      socket.emit('setAnonUsername', username);
     } else {
-      socket.emit('setAnonUsername', socket.handshake.session.username);
+      socket.emit('setAnonUsername', session.username);
     }
   });
 
+  // Maintain session for anon users on App after logging out
+  socket.on('ResetAnonUserSession', (username) => {
+    console.log('socket handshake session username on logout =>', username)
+    const { session } = socket.handshake;
+    session.username = username;
+    session.save();
+  });
+
   // Create a new game and save game state to room
-  socket.on('createGame', async ({ username, boardSize, isFriendGame, isPrivate, roomName }) => {
-    let roomId = roomName;
-    if (io.sockets.adapter.rooms[roomId]) {
-      roomId = Math.random().toString(36).slice(2, 9);
-    }
+  socket.on('createGame', async ({ boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId, color }) => {
+    if (!isLive) roomId += '_c';
     await socket.join(roomId);
     const room = io.sockets.adapter.rooms[roomId];
-    room.player1 = username;
-    room.activePlayer = username;
+    console.log('socket handshake session username', socket.handshake.session);
+
+    if (color === 'white') {
+      room.player1 = socket.handshake.session.username;
+    } else if (color === 'black') {
+      room.player2 = socket.handshake.session.username;
+    } else if (Math.floor(Math.random() * 2) === 0) {
+      room.player1 = socket.handshake.session.username;
+    } else {
+      room.player2 = socket.handshake.session.username;
+    }
+    room.players = 1;
+
+    room.activePlayer = socket.handshake.session.username;
     room.boardSize = boardSize
+    //setting the time of the room
+    room.timeControl = timeControl;
+    room.player1Time = timeControl
+    room.player2Time = timeControl
+    room.timeIncrement = timeIncrement
+    //setting the status of the room: not started yet
+    room.status = GAME_NOT_STARTED;
+    //uninitialized the interival ID
+    room.intervalID = null
     room.isFriendGame = isFriendGame;
-    room.isPrivate = isPrivate;
+    room.isPrivate = isPrivate || isFriendGame;
+    room.isLive = isLive;
     room.spectators = {};
+
+
     socket.emit('gameInitiated', {
+
       roomId
     });
   });
 
   // Serve game state on LiveGame component initialize
-  socket.on('fetchGame', async ({ username, roomId }) => {
+  socket.on('fetchGame', async (username, roomId, loadGame) => {
+    const { session } = socket.handshake;
+    username = session.username ? session.username : username;
+    if (!io.sockets.adapter.rooms[roomId] && loadGame) {
+      socket.join(roomId);
+    } else if (!io.sockets.adapter.rooms[roomId] && !loadGame) {
+      socket.emit('closedRoom');
+    } else if (io.sockets.adapter.rooms[roomId] && loadGame) {
+      loadGame = null;
+    }
     const room = io.sockets.adapter.rooms[roomId];
-    const { gameState, activePlayer, boardSize, isPrivate, spectators } = room;
+    if (!room.sockets[socket.id]) {
+      socket.join(roomId);
+    }
+    if (loadGame !== null) {
+      const {
+        player1, player2, active_player,
+        board_state, ptn, board_size,
+        ranked, isPrivate, spectators,
+      } = loadGame;
+      room.player1 = player1;
+      room.player2 = player2;
+      room.spectators = [];
+      room.gameState = {
+        tps: board_state,
+        ptn,
+      };
+      room.activePlayer = active_player;
+      room.boardSize = board_size;
+      room.isLive = false;
+      room.players = 2;
+    }
+    let { gameState, activePlayer, boardSize, timeControl, player1Time, player2Time, isPrivate, spectators } = room;
+
     const { player1, player2 } = room;
-    if (username === player1) {
-      if (!player2) {
-        socket.emit('pendingGame', { boardSize, roomId } );
+    let status = room.status;//when the player2 joined, game status will change
+
+    if (room.players === 1) {
+      if (username === player1 || username === player2) {
+        socket.emit('pendingGame', { boardSize, timeControl, roomId });
       } else {
-        io.to(roomId).emit('syncGame', { boardSize, gameState, roomId, player1, player2, activePlayer });
+        const emptySeat = !player1 ? 1 : 2;
+        room[`player${emptySeat}`] = username;
+        room.players = 2;
+
+        room.status = GAME_STARTED;
+        status = room.status;
+        room.intervalID = setInterval(UpdateTime, 1000, roomId);
+
+        io.to(roomId).emit('syncGame', {
+          boardSize, gameState: 'new', roomId, player1: room.player1, player2: room.player2, activePlayer: room.player1, player1Time, player2Time, status,
+        });
       }
-    } else if (!player2) {
-      await socket.join(roomId);
-      room.player2 = username;
-      io.to(roomId).emit('syncGame', { boardSize, gameState: 'new', roomId, player1, player2: room.player2, activePlayer });
-    } else if (username !== player2 && isPrivate) {
-      socket.emit('gameAccessDenied');
-    } else {
-      if (username !== player2) {
-        await socket.join(roomId);
+    } else if ((username === player1 || username === player2) || !isPrivate) {
+      io.in(roomId).emit('syncGame', {
+        boardSize, player1Time, player2Time, status, gameState, roomId, player1, player2, activePlayer,
+      });
+      if (username !== player1 || username !== player2) {
         room.spectators[username] = username;
       }
-      socket.emit('syncGame', { boardSize, gameState, roomId, player1, player2, activePlayer });
+    } else {
+      socket.leave(roomId);
+      socket.emit('gameAccessDenied');
     }
 
     // Update lobby
@@ -151,13 +248,42 @@ io.on('connection', (socket) => {
     const room = io.sockets.adapter.rooms[roomId];
     room.gameState = gameState;
     room.activePlayer = activePlayer;
-    const { boardSize, player1, player2 } = room;
+    let { boardSize, timeControl, player1, player2, player1Time, player2Time, status, timeIncrement } = room;
 
-    socket.to(roomId).emit('syncGame', { boardSize, gameState, player1, player2, activePlayer, roomId });
+    if (room.status === GAME_STARTED && timeControl !== undefined) {
+      if (player1 !== activePlayer) {
+        player1Time += timeIncrement
+        if (player1Time > timeControl) {
+          player1Time = timeControl
+        }
+        room.player1Time = player1Time
+      } else {
+        player2Time += timeIncrement
+        if (player2Time > timeControl) {
+          player2Time = timeControl
+        }
+        room.player2Time = player2Time
+      }
+    }
+
+    if (room.isLive === false) storeAsyncGame(gameState, room, roomId);
+
+
+    socket.to(roomId).emit('syncGame', {
+      boardSize, gameState, player1Time, player2Time, status, player1, player2, activePlayer, roomId,
+    });
   });
 
   // Add 'isClosed' property to finished game and update lobby
-  socket.on('closeGame', (roomId) => {
+  socket.on('closeGame', (roomId, game) => {
+    logGame(game);
+    let room = io.sockets.adapter.rooms[roomId]
+    room.status = GAME_FINISHED
+    clearInterval(room.intervalID)
+
+
+
+    endCorrespondence(roomId);
     io.sockets.adapter.rooms[roomId].isClosed = true;
     const lobbyList = filterLobbyList(io.sockets.adapter.rooms);
     socket.broadcast.emit('updateLobby', lobbyList);
@@ -170,10 +296,45 @@ io.on('connection', (socket) => {
   });
 
   // Chat/Typing
-  socket.on('chat', function(data) {
+  socket.on('chat', function (data) {
     io.to(data.room).emit('chat', data);
   });
-  socket.on('typing', function(data) {
-    socket.to(data.room).broadcast.emit('typing', data);
+  socket.on('typing', function (data) {
+    socket.to(data.room).emit('typing', data);
   });
 });
+
+function UpdateTime(roomId) {
+
+  let room = io.sockets.adapter.rooms[roomId];
+
+
+  //sanity check
+  if (!room || room.status !== GAME_STARTED)
+    return
+
+
+  let { player1, player2, player1Time, player2Time, activePlayer, status, intervalID } = room;
+
+  if (player1Time === 0 || player2Time === 0) {
+
+    clearInterval(intervalID)
+    //tell both players time out happened, emit timeout person
+    room.status = GAME_FINISHED
+    status = room.status
+    // sending to all clients in the room, including sender
+    io.to(roomId).emit('timeOut', { activePlayer, roomId });
+    return
+  }
+
+  if (player1 === activePlayer) {
+    player1Time -= 1
+  } else {
+    player2Time -= 1
+  }
+  room.player1Time = player1Time
+  room.player2Time = player2Time
+
+  io.to(roomId).emit('updateTime', { roomId, player1Time, player2Time });
+}
+

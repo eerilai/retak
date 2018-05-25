@@ -2,8 +2,24 @@ const filterLobbyList = (roomsObj) => {
   let availableRooms = [];
   for (let roomId in roomsObj) {
     const currentRoom = roomsObj[roomId];
-    if (currentRoom.player1 && !currentRoom.isFriendly && !(currentRoom.isPrivate && currentRoom.player2) && !currentRoom.isClosed) {
-      availableRooms.push({ name: roomId, boardSize: currentRoom.boardSize, isPending: !currentRoom.player2 });
+    console.log('currentRoom in filterLobbyList', currentRoom);
+    if (currentRoom.players && !currentRoom.isFriendGame && !(currentRoom.isPrivate && currentRoom.player2) && !currentRoom.isClosed) {
+      const pending = currentRoom.players < 2;
+      let timeCon;
+      if (!currentRoom.isLive) {
+        timeCon = 'Correspondence';
+      } else {
+        timeCon = `${currentRoom.timeControl / 60}+${currentRoom.timeIncrement}`
+      }
+      availableRooms.push({
+        name: roomId,
+        boardSize: currentRoom.boardSize,
+        isPending: pending,
+        timeControl: timeCon,
+        player1: currentRoom.player1,
+        player2: currentRoom.player2,
+        players: currentRoom.players,
+      });
     }
   }
   return availableRooms;

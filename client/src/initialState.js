@@ -1,7 +1,17 @@
+import socketIOClient from 'socket.io-client';
+import generateCharacterName from './components/characterName';
+
 const initialState = {
-  users:{},
-  currentUser: 'Tak-guest-' + Math.random().toString(36).slice(2,9),
-  isLoggedIn: false
+  isLoggedIn: false,
+  userID: null,
+  currentUsername: generateCharacterName(),
+  userEmail: null,
+  rankedGames: null,
+  rankedWins: null,
+  rankedLosses: null,
+  totalGames: null,
+  avatar: null,
+  socket: socketIOClient(undefined, {forceNew: true})
 };
 
 export default initialState;

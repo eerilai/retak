@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import {
-  Input,
   Button,
-  Header,
   Modal,
-  Icon,
   Form,
   Select,
-  Transition,
-  Checkbox
+  Checkbox,
 } from 'semantic-ui-react';
 
 class GameSetup extends Component {
@@ -17,13 +13,23 @@ class GameSetup extends Component {
     this.state = {
       boardSize: 5,
       isPrivate: false,
-      roomName: ''
+      isLive: true,
+      roomId: '',
+      timeControl: 15,
+      timeIncrement: 0,
+      color: 'random',
     }
 
     this.handleBoardSizeChange = this.handleBoardSizeChange.bind(this);
     this.handlePrivacyChange = this.handlePrivacyChange.bind(this);
-    this.handleRoomNameChange = this.handleRoomNameChange.bind(this);
+    this.handleLiveChange = this.handleLiveChange.bind(this);
+    this.handleRoomIdChange = this.handleRoomIdChange.bind(this);
+    this.handleColorChange = this.handleColorChange.bind(this);
+
   }
+
+  handleTimeControl = e => this.setState({ timeControl: e.target.value })
+  handleTimeIncrement = e => this.setState({ timeIncrement: e.target.value })
 
   handleBoardSizeChange(e, { value }) {
     this.setState({
@@ -37,35 +43,69 @@ class GameSetup extends Component {
     });
   }
 
-  handleRoomNameChange(e, { value }) {
+  handleColorChange(e, { value }) {
     this.setState({
-      roomName: value
+      color: value,
     });
   }
 
+  handleRoomIdChange(e, { value }) {
+    this.setState({
+      roomId: value
+    });
+  }
+
+  handleLiveChange(e, { value }) {
+    if (!value) {
+      this.setState({
+        isLive: false,
+        timeControl: 0,
+      });
+    } else {
+      this.setState({
+        isLive: true,
+        timeControl: 15,
+      })
+    }
+  }
+
   render() {
-    const options = [
-      { key: '8', text: '8', value: '8' },
-      { key: '7', text: '7', value: '7' },
-      { key: '6', text: '6', value: '6' },
-      { key: '5', text: '5', value: '5' },
-      { key: '4', text: '4', value: '4' },
-      { key: '3', text: '3', value: '3' }
-    ];
-    const isFriendly = this.props.gameType === 'friend';
-    const { boardSize, isPrivate, roomName } = this.state;
+    const isFriendGame = this.props.gameType === 'friend';
+    const { boardSize, isPrivate, roomId, timeControl, isLive, timeIncrement, color } = this.state;
+
+    const timeOptions = [
+      { text: 'Real Time', value: true },
+      { text: 'Correspondence', value: false },
+    ]
+    const timeSliders = this.state.isLive ?
+      (<div>
+        <div><strong>Minutes per side</strong>: {this.state.timeControl} minute(s)</div>
+        <input className='slider' type='range' min={0} max={90} value={this.state.timeControl} onChange={this.handleTimeControl} />
+        <div><strong>Increment in seconds</strong>: {this.state.timeIncrement} second(s)</div>
+        <input className='slider' type='range' min={0} max={30} value={this.state.timeIncrement} onChange={this.handleTimeIncrement} />
+      </div>
+      ) : <div></div>
+
     return (
-        <Modal
-          open={this.props.modalView === 'GameSetup'}
-          size={"tiny"}
-          onClose={() => this.props.changeView('')}
-          dimmer={false}
-          closeIcon
-        >
-          <Modal.Header>GameSetup</Modal.Header>
-          <Modal.Content>
-            <Form size={"tiny"} key={"small"}>
-              <Form.Group inline label="Board Size">
+      <Modal
+        open={this.props.modalView === 'GameSetup'}
+        // size="small"
+        dimmer={false}
+
+      >
+        <Modal.Header style={{ display: 'flex' }}>
+          GameSetup
+          <Form.Input
+            style={{ height: '30px', 'margin-left': '50%', width: '65%' }}
+            type="text"
+            placeholder="Name Room?"
+            value={this.state.roomId}
+            onChange={this.handleRoomIdChange}
+          />
+        </Modal.Header>
+        <Modal.Content>
+          <Form >
+            <Form.Group inline label="Board Size" style={{ 'justify-content': 'center' }}>
               <label>Board Size</label>
               <Form.Radio
                 label="3x3"
@@ -103,32 +143,58 @@ class GameSetup extends Component {
                 checked={this.state.boardSize === 8}
                 onChange={this.handleBoardSizeChange}
               />
-              </Form.Group>
-              <Form.Field
-                control={Checkbox}
-                label="Private"
-                onChange={this.handlePrivacyChange}
-              />
-              <Form.Input
-                type="text"
-                label="Room Name"
-                placeholder="optional"
-                value={this.state.roomName}
-                onChange={this.handleRoomNameChange}
-              />
-            </Form>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button
-              positive
-              icon="gamepad"
-              size="large"
-              labelPosition="right"
-              content="New Game"
-              onClick={() => this.props.handleCreateGame(boardSize, isFriendly, isPrivate, roomName)}
+            </Form.Group>
+            <Form.Dropdown
+              selection
+              style={{ width: '10%' }}
+              label="Time Control"
+              value={this.state.isLive}
+              options={timeOptions}
+              onChange={this.handleLiveChange}
             />
-          </Modal.Actions>
-        </Modal>
+            {timeSliders}
+            <br />
+            <Form.Field
+              control={Checkbox}
+              label="Private"
+              onChange={this.handlePrivacyChange}
+            />
+            <Form.Group inline label="Board Size" style={{ 'justify-content': 'center' }}>
+              <Form.Radio
+                label="White"
+                value="white"
+                checked={this.state.color === 'white'}
+                onChange={this.handleColorChange}
+              />
+              <Form.Radio
+                label="Random"
+                value="random"
+                checked={this.state.color === 'random'}
+                onChange={this.handleColorChange}
+              />
+              <Form.Radio
+                label="Black"
+                value="black"
+                checked={this.state.color === 'black'}
+                onChange={this.handleColorChange}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button
+            negative
+            content="Close"
+            onClick={() => this.props.changeView('')}
+          />
+          <Button
+            positive
+            content="New Game"
+            onClick={() => this.props.handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId, color)}
+          />
+
+        </Modal.Actions>
+      </Modal>
     );
   }
 }

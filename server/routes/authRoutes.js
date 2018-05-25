@@ -1,19 +1,38 @@
 const router = require('express').Router();
 const passport = require('passport');
-const { createUser } = require('../../database/queries');
+const { createUser, updateUserName, getUserData } = require('../../database/queries');
 
 require('../passportConfig');
 
 router.get('/google', passport.authenticate('google', {
-  scope: ['profile']
+  scope: ['profile', 'email']
 }));
 
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
   res.redirect('/');
 });
 
+router.get('/facebook', passport.authenticate('facebook', {
+  scope: ['email']
+}));
+
+router.get('/facebook/redirect', passport.authenticate('facebook', {
+  successRedirect: '/',
+  failureRedirect: '/'
+}));
+
 router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.send('Success');
+  let currentUsername = req.user.dataValues;
+  let currentUserInfo = {
+    userID: currentUsername.id,
+    currentUsername: currentUsername.username,
+    userEmail: currentUsername.email,
+    rankedGames: currentUsername.ranked_games,
+    rankedWins: currentUsername.ranked_wins,
+    rankedLosses: currentUsername.ranked_losses,
+    totalGames: currentUsername.total_games
+  }
+  res.send(currentUserInfo);
 });
 
 router.post('/signup', (req, res) => {
@@ -25,7 +44,17 @@ router.post('/signup', (req, res) => {
           res.status(500)
           res.send('Server Error');
         }
-        res.send('Success');
+        let currentUsername = user.dataValues;
+        let currentUserInfo = {
+          userID: currentUsername.id,
+          currentUsername: currentUsername.username,
+          userEmail: currentUsername.email,
+          rankedGames: currentUsername.ranked_games,
+          rankedWins: currentUsername.ranked_wins,
+          rankedLosses: currentUsername.ranked_losses,
+          totalGames: currentUsername.total_games
+        }
+        res.send(currentUserInfo);
       });
     })
     .catch((err) => {
@@ -40,8 +69,18 @@ router.post('/logout', (req, res) => {
   });
 });
 
+router.post('/changeUsername', (req, res) => {
+  const { userID, currentUsername, newUsername } = req.body;
+  updateUserName(userID, currentUsername, newUsername)
+  .then((newUser) => {
+    let username = newUser.dataValues.username
+    req.user = newUser;
+    res.send(username);
+  });
+});
+
 const authCheck = ((req, res, next) => {
-  if(!req.user) {
+  if (!req.user) {
     res.redirect('/');
   } else {
     next();
@@ -49,7 +88,18 @@ const authCheck = ((req, res, next) => {
 });
 
 router.get('/check', authCheck, (req, res) => {
-  res.send(req.user.username);
+  let currentUsername = req.user.dataValues;
+  let currentUserInfo = {
+    userID: currentUsername.id,
+    currentUsername: currentUsername.username,
+    userEmail: currentUsername.email,
+    rankedGames: currentUsername.ranked_games,
+    rankedWins: currentUsername.ranked_wins,
+    rankedLosses: currentUsername.ranked_losses,
+    totalGames: currentUsername.total_games
+  }
+  // console.log('/check', currentUsername)
+  res.send(currentUserInfo);
 });
 
 router.get('/test', authCheck, (req, res) => {

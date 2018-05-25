@@ -13,6 +13,7 @@ class Game {
     this.winString = '';
     this.ranked = ranked;
     this.size = size;
+    this.timeControl = '';
     this.board = [];
     this.squares = {};
     this.createBoard(size);
@@ -44,9 +45,9 @@ class Game {
 
     if (gameState !== 'new') {
       const { tps, ptn } = gameState;
-      this.readTPS(tps);
       this.tps = tps;
       this.ptn = ptn;
+      this.readTPS(tps);
     }
   }
 
@@ -154,8 +155,20 @@ class Game {
           if (stone === 'C' || stone === 'S') {
             stack.stone = square.split('').pop();
             square = square.slice(0, square.length - 1);
+            if (stone === 'C') {
+              this.pieces[square[square.length - 1]].C -= 1;
+            }
           }
-          let s = square.split('').reverse().map(x=>+x);
+          let s = square.split('').reverse().map((x) => {
+            if (+x === 1) {
+              this.pieces[1].F -= 1;
+              this.pieces[1].Total -= 1;
+            } else if (+x === 2) {
+              this.pieces[2].F -= 1;
+              this.pieces[2].Total -= 1;
+            }
+            return +x;
+          });
           stack.stack = s;
           stack.isEmpty = false;
           stack.owner = s[0];
@@ -164,7 +177,7 @@ class Game {
     }
     this.checkRoads();
     this.checkFullBoardWins();
-    if (this.pieces[this.toPlay].total === 0) {
+    if (this.pieces[1].total === 0 || this.pieces[2].total === 0) {
       this.checkOutOfPiecesWins();
     }
   }
@@ -178,7 +191,17 @@ class Game {
       if (!this.isMoving) {
         // Place a Stone
         if (isEmpty) {
-          if (this.pieces[this.toPlay].total !== 0) {
+          if (this.turn === 0) {
+            if (this.toPlay === 1) {
+              stack.place(2);
+              this.pieces[2].F -= 1;
+              this.pieces[this.toPlay].total -= 1;
+            } else {
+              stack.place(1);
+              this.pieces[1].F -= 1;
+              this.pieces[this.toPlay].total -= 1;
+            }
+          } else if (this.pieces[this.toPlay].total !== 0) {
             if (stone === 'C' && this.pieces[this.toPlay].C !== 0) {
               stack.place(this.toPlay, stone);
               this.pieces[this.toPlay].C -= 1;
@@ -188,19 +211,18 @@ class Game {
               this.pieces[this.toPlay].F -= 1;
               this.pieces[this.toPlay].total -= 1;
             }
-            this.checkRoads();
-            this.checkFullBoardWins();
-            if (this.pieces[this.toPlay].total === 0) {
-              this.checkOutOfPiecesWins();
-            }
-            this.parsePTN(coord, stone);
-            this.toPlay = (this.toPlay === 1) ? 2 : 1;
-            if (this.toPlay === 1) this.turn += 1;
-            this.parseTPS(this.board);
-            this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
-          } else {
+          }
+          this.checkRoads();
+          this.checkFullBoardWins();
+          if (this.pieces[this.toPlay].total === 0) {
             this.checkOutOfPiecesWins();
           }
+          this.parsePTN(coord, stone);
+          this.toPlay = (this.toPlay === 1) ? 2 : 1;
+          if (this.toPlay === 1) this.turn += 1;
+          this.parseTPS(this.board);
+          this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
+
         // Start a move
         } else if (!isEmpty && (stack.owner === this.toPlay)) {
           this.moveStack = [...stack.stack];
@@ -403,6 +425,8 @@ class Game {
   setWinString() {
     if (this.winType === '1/2') {
       this.winString = '1/2—1/2';
+    } else if (this.winType === 'T') {
+      this.winString = this.victor === 1 ? '1—0' : '0—1';
     } else {
       this.winString = this.victor === 1 ? `${this.winType}—0` : `0—${this.winType}`;
     }
@@ -421,6 +445,14 @@ class Game {
   handleWin() {
     this.printPTN();
     this.parseTPS(this.board);
+  }
+
+  timeOut(player) {
+    this.victor = player === this.player1 ? 2 : 1;
+    this.victorUsername = this.victor === 1 ? this.player1 : this.player2;
+    this.loserUsername = this.victor === 1 ? this.player2 : this.player1;
+    this.winType = 'T';
+    this.setWinString();
   }
 }
 

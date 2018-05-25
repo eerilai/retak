@@ -22,8 +22,32 @@
   height: 30px;
 }
 
+.timer {
+  font-weight: bold;
+  height: 35px;
+  padding-top: 5px;
+  width: 85px;
+  margin: auto;
+  border: solid 1px #d2d2d2;
+  background-color: #e5e5e5;
+}
+
+.game-stats {
+  background-color: #e5e5e5;
+  border: solid 1px #d2d2d2;
+  border-bottom: 0;
+}
+
+.game-stats>p,
+.game-state>strong {
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+
 .to-play {
-  min-height: 21px;
+  background-color: #95db59;
 }
 
 .score > table {
@@ -57,6 +81,79 @@
 .btn-player2-piece {
   background-color: #608292;
   color: #fff;
+}
+
+.stone-select {
+  height: 80px;
+  display: flex;
+  margin-top: 10px;
+  /*justify-content: right;*/
+  float: right;
+}
+
+.active-stone {
+  /*box-shadow: 3px 3px rgb(70, 255, 238) !important*/
+  /*filter: drop-shadow(1px 3px 2px #04ff73) !important;*/
+  /*border: solid 5px #8BBA62;*/
+}
+
+.flat-toggle {
+  display: flex;
+  justify-content: right;
+  min-width: 125px;
+  height: 90px;
+  border-radius: 15px;
+  background-color: #d9d9d9;
+  position: relative;
+}
+
+.flat-toggle>.flat-count {
+  width: 24px !important;
+  height: 24px !important;
+  position: absolute;
+  border-radius: 100%;
+  background: #757575;
+  color: #FFF;
+  font-weight: bold;
+  margin: 10px 5px 0 0 !important;
+  right: 5px;
+}
+
+.stone-select>.cap-select {
+  display:flex;
+  height: 90px;
+  border-radius: 15px;
+  background-color: #d9d9d9;
+  margin-right: 10px;
+}
+
+.piece-selected {
+  background-color: #bebebe !important;
+}
+
+.stone-select>.cap-select>.C,
+.stone-select>.flat-toggle>div{
+  width: 70px;
+  height: 70px;
+  margin: 10px 10px;
+}
+
+.stone-select>.flat-toggle > .active-stone.S {
+  margin-left: 25px;
+}
+
+
+.flat-toggle>.inactive.S {
+  width: 20px !important;
+  height: 40px;
+  margin-top: 35%;
+  margin-left: 2px;
+}
+
+.flat-toggle>.inactive.flat {
+  height: 30px;
+  width: 30px;
+  margin-top: 50px;
 }
 
 .turn-number {
@@ -111,20 +208,25 @@
 }
 
 div.S {
-  background-image: url(https://puu.sh/Al0no/fd801ad23a.png);
-  background-size: cover;
+  transform: rotate(45deg);
+  width: 35px !important;
 }
+
 div.C {
-  /*background-image: url(https://puu.sh/Al1Zg/caae853ce3.png);*/
-  background-size: cover;
   border-radius: 100%;
 }
+
+.top.C,
+.top.S {
+  margin-bottom: 0;
+}
+
 .top {
-  z-index: 999;
+  z-index: 10;
 }
 
 .captive {
-  border-radius: 30px 30px 5px 5px;
+  border-radius: 5px 5px;
   margin-top: -55%;
   box-shadow: 0 2px rgba(50, 50, 50, 0.3)
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Leaderboard = ({ leaderboard }) => {
   return (
@@ -24,11 +25,12 @@ const Leaderboard = ({ leaderboard }) => {
             return bWR - aWR;
           }) */
           .map((user, no) => {
-          const losses = user.ranked_games - user.ranked_wins;
+          const losses = user.ranked_losses;
+          const userProfile = `/profile/${user.username}`;
           return (
             <tr>
               <td>{no + 1}</td>
-              <td>{user.username}</td>
+              <td><Link to={userProfile}>{user.username}</Link></td>
               <td>{user.total_games}</td>
               <td>{`${user.ranked_wins}W—${losses}L`}</td>
             </tr>

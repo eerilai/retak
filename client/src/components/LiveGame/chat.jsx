@@ -6,22 +6,25 @@ import { Icon } from 'semantic-ui-react';
 class Chat extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       message: '',
       messages: [],
       typing: '',
+
     };
     const self = this;
     const { socket } = props;
     socket.on('typing', (data) => {
       self.setState({ typing: data.author + ' is typing...' });
-      setTimeout(()=>{self.setState({ typing: '' })}, 1000);
+      setTimeout(() => { self.setState({ typing: '' }) }, 2000);
     });
 
     socket.on('chat', (data) => {
       addMessage(data);
-      this.scrollToBottom();
+      if (this.state.messages.length > 0) {
+        console.log(this.state.messages)
+        this.scrollToBottom()
+      }
     });
 
     const addMessage = data => {
@@ -65,8 +68,12 @@ class Chat extends Component {
       this.setState({ message: '' });
     };
   }
+
+
+
+
   // make chatbox scroll effect
-  scrollToBottom() {
+  scrollToBottom = () => {
     this.messagesEnd.scrollIntoView({ block: 'end' });
   };
 
@@ -88,7 +95,7 @@ class Chat extends Component {
       <div id="chat">
         <button onClick={this.handleTak} id="tak">
           Tak
-          <Icon size="large" name="road" corner="true"/>
+          <Icon size="large" name="road" corner="true" />
         </button>
         <div id="chat-window">
           <div id="output">
@@ -116,8 +123,7 @@ class Chat extends Component {
             onKeyPress={this.handleTyping}
             onChange={ev => this.setState({ message: ev.target.value })}
           />
-
-          <button id="send" >Send <Icon size="large" name="talk" corner="true"/></button>
+          <button id="send" >Send <Icon size="large" name="talk" corner="true" /></button>
         </form>
       </div>
     );
@@ -125,8 +131,10 @@ class Chat extends Component {
 }
 const mapStateToProps = state => {
   return {
-    username: state.currentUser
+    username: state.currentUsername,
+    socket: state.socket
   };
 };
+
 
 export default withRouter(connect(mapStateToProps)(Chat));
