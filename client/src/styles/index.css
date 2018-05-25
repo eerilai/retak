@@ -108,11 +108,11 @@ i.icon.paste:hover {
 
 a{
   cursor: pointer;
-  color: #000 !important;
+  color: #000!important;
 }
 a:hover{
   cursor: pointer !important;
-  color: #000;
+  color: #000!important;
   text-decoration: none !important;
 }
 
@@ -256,6 +256,29 @@ th.title > h3 {
 th.title {
   font-weight: bold;
 }
+/* 404 Page Not Found */
+.FourOFour{
+  font-size: 100px;
+  text-align: center;
+  padding: 20px;
+  color: #767676!important;
+}
+.NotFound{
+  font-size: 40px;
+  text-align: center;
+  padding-bottom: 20px;
+  color: #767676!important;
+}
+.ClickReturnHome{
+  font-size: 20px;
+  text-align: center;
+  color: #767676!important;
+}
+.ClickReturnHome:hover{
+  color: #606060!important;
+  text-decoration: underline!important;
+}
+
 
 /* Profile Page */
 .userInfo {
@@ -265,14 +288,75 @@ th.title {
 }
 
 .userHistory{
-  border: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   min-height: 400px;
   background-color: #f7f7f7;
 }
 
+/* User History */
 .eachGame{
   border: 1px solid #ccc;
   min-height: 200px;
+}
+.playedOnHist{
+  padding-top: 14px;
+  padding-bottom: 10px;
+}
+.vsHist{
+  padding: 10px;
+  font-size: 18px;
+}
+.labelPlayer1{
+  padding-right: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.labelPlayer1:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+.labelPlayer2{
+  padding-left: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.labelPlayer2:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+.victorHist{
+  padding-top: 10px;
+}
+.winTypeHist{
+  padding-top: 10px;
+}
+.boardSizeHist{
+  padding-top: 10px;
+}
+.ptnHist{
+  padding: 14px;
+}
+
+/* UserInfo */
+.totalGames{
+  text-align: left;
+  padding-top: 10px;
+  padding-left: 220px;
+}
+.totalRGames{
+  text-align: left;
+  padding-top: 10px;
+  padding-left: 220px;
+}
+.rankedWins{
+  text-align: left;
+  padding-top: 10px;
+  padding-left: 220px;
+}
+.rankedLosses{
+  text-align: left;
+  padding-top: 10px;
+  padding-left: 220px;
 }
 
 /* game setup  */
