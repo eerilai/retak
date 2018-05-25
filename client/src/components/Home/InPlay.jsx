@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Popup } from 'semantic-ui-react';
+import moment from 'moment';
 import axios from 'axios';
 
 class InPlay extends Component {
@@ -22,37 +24,57 @@ class InPlay extends Component {
   }
 
   render() {
-    console.log(this.props.userID);
-    let versus = '';
     return (
-      <table class="tg">
+      <table className="tg correspondence">
         <thead>
           <tr>
             <th colSpan="5" className="title">
-              <h3>Correspondence</h3>
+              <div>Correspondence Games</div>
             </th>
           </tr>
-          <tr>
-            <th>Game</th>
-            <th>Versus</th>
-            <th>Board</th>
-            <th>Turn</th>
-            <th>To Play</th>
+          <tr className="corr-th">
+            <th className="corr-col-versus">Versus</th>
+            <th className="corr-col-board">Board</th>
           </tr>
         </thead>
-        {this.state.games.map(game => (
-          <tr className="room">
-            <td><Link to={{
-              pathname: `/game/${game.room_id}`,
-              state: { game }
-            }}>{game.room_id}
-            </Link></td>
-            <td>{versus = this.props.username === game.player1 ? game.player2 : game.player1}</td>
-            <td>{game.board_size} x {game.board_size}</td>
-            <td>{game.ptn.length}</td>
-            <td>{game.active_player}</td>
-          </tr>
-        ))}
+        <tbody>
+        {this.state.games.map((game) => {
+          const timeAgo = moment(game.updatedAt).fromNow();
+          const versus = this.props.username === game.player1 ? game.player2 : game.player1;
+          let playerTurn = game.active_player === this.props.username ? 'player-turn' : 'opponent-turn';
+
+          return (
+            <Popup
+              content={`Last move: ${timeAgo}`}
+              position="top center"
+              trigger={
+                <tr className="async-room">
+                  <td>
+                    <Link to={{
+                      pathname: `/game/${game.room_id}`,
+                      state: { game },
+                    }}
+                    >
+                      {versus}
+                    </Link>
+                  </td>
+                  <td>
+                    <Link to={{
+                      pathname: `/game/${game.room_id}`,
+                      state: { game },
+                    }}
+                    >
+                      {game.board_size} x {game.board_size}
+                    </Link>
+                  </td>
+                  <td>
+                    <div className={`${playerTurn}`} />
+                  </td>
+                </tr>
+          } />
+          );
+        })}
+        </tbody>
       </table>
     );
   }

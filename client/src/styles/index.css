@@ -176,7 +176,7 @@ nav:hover {
 }
 
 #logo {
- color: #767676;
+ color: #308db5;
  margin-bottom: 40px;
 }
 
@@ -184,9 +184,61 @@ nav:hover {
   color: #aaa;
 }
 
+.tg.correspondence {
+  margin-top: 30px;
+  width: 100%;
+  border: 2px solid #ccc;
+}
+
+.tg.correspondence tbody{
+}
+
+.tg.correspondence th {
+  padding: 2px;
+  height: 30px;
+}
+
+.tg.correspondence thead {
+  border: 2px solid #ccc;
+  border-right: 0;
+}
+
+.tg.correspondence tr:hover > td {
+  background-color: #eeeeee !important;
+}
+
+.tg.correspondence tr.corr-th th {
+  font-weight: normal;
+}
+
+.tg.correspondence > tr.async-room td {
+  padding: 4px;
+}
+
+.corr-col-versus {
+}
+
+.corr-col-board {
+}
+
+.player-turn,
+.opponent-turn {
+  height: 10px;
+  width: 10px;
+  border-radius: 100%;
+  margin-right: 5px;
+  background-color: #308db5;
+}
+
+.opponent-turn {
+  background-color: white;
+  border: 1px solid #308db5;
+}
+
 .lobby,
 .leaderboard {
   border: 1px solid #ccc;
+  margin-top: 21px;
   min-height: 400px;
   max-height: 400px;
   color: #767676;
