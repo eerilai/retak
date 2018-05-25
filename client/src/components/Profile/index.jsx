@@ -29,16 +29,6 @@ class Profile extends Component {
     //   .catch(function (error) {
     //     console.log(error);
     //   })
-
-    axios.get('/users/:username/data',
-
-    )
-      .then(function (response) {
-        console.log('hellp', response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
   }
 
   getUserHistory() {

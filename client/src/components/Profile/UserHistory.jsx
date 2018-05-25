@@ -13,9 +13,6 @@ class UserHistory extends Component {
       userInfo: {},
       copied: false,
     }
-  }
-
-  componentWillMount(){
     this.getUserHistory();
     this.getUserInfo();
   }
