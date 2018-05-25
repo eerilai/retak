@@ -38,6 +38,8 @@ class Profile extends Component {
         if (userGameHistory.data !== null) {
           this.setState({ isUser: true });
           this.setState({ userHistory: userGameHistory.data });
+        } else {
+          this.setState({ isUser: false });
         }
       })
       .catch(err => console.error(err));
@@ -50,6 +52,8 @@ class Profile extends Component {
         if (userInfo.data !== null) {
           this.setState({ isUser: true });
           this.setState({ userInfo: userInfo.data });
+        } else {
+          this.setState({ isUser: false });
         }
       })
       .catch(err => console.error(err));

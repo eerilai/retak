@@ -22,7 +22,6 @@ class Chat extends Component {
     socket.on('chat', (data) => {
       addMessage(data);
       if (this.state.messages.length > 0) {
-        console.log(this.state.messages)
         this.scrollToBottom()
       }
     });
