@@ -178,7 +178,8 @@ nav:hover {
 
 #logo {
  color: #308db5;
- margin-bottom: 40px;
+ margin-bottom: 27px;
+ margin-top: 45px;
 }
 
 #sub-logo {
@@ -445,15 +446,15 @@ th.title {
   width: 35%;
 }
 
-tr.room {
+tr {
   border: solid 1px #CCCCCC;
 }
 
-tr.room > td {
+tr > td {
   padding: 5px 0;
 }
 
-tr.room:hover > td {
+tr:hover > td {
   background-color: #eeeeee !important;
 }
 
@@ -566,6 +567,7 @@ textarea {
   border-bottom: 1px solid #e9e9e9;
   color: #555;
   overflow-wrap: break-word;
+  font-size: 12px;
 }
 
 #feedback p {

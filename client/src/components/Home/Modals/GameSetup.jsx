@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   Button,
   Modal,
@@ -72,10 +73,9 @@ class GameSetup extends Component {
   render() {
     const isFriendGame = this.props.gameType === 'friend';
     const { boardSize, isPrivate, roomId, timeControl, isLive, timeIncrement, color } = this.state;
-
     const timeOptions = [
       { text: 'Real Time', value: true },
-      { text: 'Correspondence', value: false },
+      { text: 'Correspondence', value: false, disabled: !this.props.isLoggedIn },
     ]
     const timeSliders = this.state.isLive ?
       (<div>
@@ -199,4 +199,10 @@ class GameSetup extends Component {
   }
 }
 
-export default GameSetup;
+const mapStateToProps = (state) => {
+  return {
+    isLoggedIn: state.isLoggedIn
+  };
+};
+
+export default connect(mapStateToProps)(GameSetup);

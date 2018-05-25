@@ -14,6 +14,7 @@ class InPlay extends Component {
 
   render() {
     const { games } = this.props;
+    if (!this.props.userID) return <div></div>;
     return (
       <table className="tg correspondence">
         <thead>
