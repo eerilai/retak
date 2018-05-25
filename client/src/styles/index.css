@@ -188,6 +188,7 @@ nav:hover {
   margin-top: 30px;
   width: 100%;
   border: 2px solid #ccc;
+  border-right: 0;
 }
 
 .tg.correspondence tbody{
