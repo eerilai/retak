@@ -34,16 +34,21 @@ class App extends Component {
     axios
       .get('/auth/check')
       .then(res => {
+        console.log("REFRESH", res.data)
         let currentUserInfo = res.data;
         let currentUsername = res.data.currentUsername;
         if (currentUsername !== undefined && currentUsername.includes('Tak-user-')){
           this.setState({selectModal: 'createUsername'});
         }
         if (currentUserInfo[0] !== '<') {
+        console.log("Check", res.data)
+          
           props.toggleLoginLogout(true);
           props.login(currentUserInfo);
           socket.emit('login', currentUsername);
         } else {
+        console.log("else", res.data)
+          
             socket.emit('AnonUserSession', props.username);
           }
       })

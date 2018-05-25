@@ -80,6 +80,7 @@ router.post('/changeUsername', (req, res) => {
 });
 
 const authCheck = ((req, res, next) => {
+  console.log('USER', req.user)
   if (!req.user) {
     res.redirect('/');
   } else {
@@ -89,6 +90,7 @@ const authCheck = ((req, res, next) => {
 
 router.get('/check', authCheck, (req, res) => {
   let currentUsername = req.user.dataValues;
+  console.log('@@@@', currentUsername)
   let currentUserInfo = {
     userID: currentUsername.id,
     currentUsername: currentUsername.username,
@@ -98,7 +100,7 @@ router.get('/check', authCheck, (req, res) => {
     rankedLosses: currentUsername.ranked_losses,
     totalGames: currentUsername.total_games
   }
-  // console.log('/check', currentUsername)
+  console.log('/check', currentUserInfo)
   res.send(currentUserInfo);
 });
 
