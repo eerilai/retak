@@ -176,16 +176,20 @@ const getUserGames = (username) => {
 
 const getCurrentUserGames = (userID) => {
   return new Promise(async (res, rej) => {
-    const games =
-      await AsyncGame.findAll({
-        where: {
-          [Op.or]: [
-            { player1_id: userID },
-            { player2_id: userID },
-          ],
-        },
-      });
-    res(games);
+    if (userID) {
+      const games =
+        await AsyncGame.findAll({
+          where: {
+            [Op.or]: [
+              { player1_id: userID },
+              { player2_id: userID },
+            ],
+          },
+        });
+      res(games);
+    } else {
+      rej(userID);
+    }
   });
 };
 
