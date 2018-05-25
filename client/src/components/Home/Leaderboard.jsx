@@ -28,7 +28,7 @@ const Leaderboard = ({ leaderboard }) => {
           const losses = user.ranked_losses;
           const userProfile = `/profile/${user.username}`;
           return (
-            <tr>
+            <tr className="room">
               <td><Link to={userProfile}>{no + 1}</Link></td>
               <td><Link to={userProfile}>{user.username}</Link></td>
               <td><Link to={userProfile}>{user.total_games}</Link></td>
