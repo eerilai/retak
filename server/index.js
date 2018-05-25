@@ -104,15 +104,14 @@ io.on('connection', (socket) => {
 
   // Update username on socket session on login
   socket.on('login', (username) => {
-    console.log('socket handshake session username on login', username)
+    // console.log('socket handshake session username on login', username)
     const { session } = socket.handshake;
     session.username = username;
-    session.save();
   });
 
   // Maintain session for anon users on App initialize if not logged in
   socket.on('AnonUserSession', (username) => {
-    console.log('socket handshake session username Not logged in', username)
+    // console.log('socket handshake session username Not logged in', username)
     const { session } = socket.handshake;
     if (!session.username) {
       session.username = username;
@@ -125,7 +124,7 @@ io.on('connection', (socket) => {
 
   // Maintain session for anon users on App after logging out
   socket.on('ResetAnonUserSession', (username) => {
-    console.log('socket handshake session username on logout =>', username)
+    // console.log('socket handshake session username on logout =>', username)
     const { session } = socket.handshake;
     session.username = username;
     session.save();
@@ -136,7 +135,7 @@ io.on('connection', (socket) => {
     if (!isLive) roomId += '_c';
     await socket.join(roomId);
     const room = io.sockets.adapter.rooms[roomId];
-    console.log('socket handshake session username', socket.handshake.session);
+    // console.log('socket handshake session username', socket.handshake.session);
 
     if (color === 'white') {
       room.player1 = socket.handshake.session.username;

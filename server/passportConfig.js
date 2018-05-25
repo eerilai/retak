@@ -30,7 +30,7 @@ passport.use(new GoogleStrategy(
     clientSecret: process.env.GOOGLE_OAUTH_SECRET,
     callbackURL: '/auth/google/redirect'
   }, (accesToken, refreshToken, profile, done) => {
-    console.log('google', profile.emails[0].value)
+    // console.log('google', profile.emails[0].value)
 
     let options = {
       googleID: profile.id,
@@ -55,7 +55,7 @@ passport.use(new FacebookStrategy(
     callbackURL: '/auth/facebook/redirect',
     profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified'],
   }, (accesToken, refreshToken, profile, done) => {
-    console.log('facebook', profile.emails[0].value)
+    // console.log('facebook', profile.emails[0].value)
     let options = {
       facebookID: profile.id,
       email: profile.emails[0].value

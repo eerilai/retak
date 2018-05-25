@@ -41,7 +41,7 @@ class AuthNav extends Component {
   onClose = () => { this.setState({open: false}) }
   
   handleChange = (e, { value }) => {
-    console.log(e, value);
+    // console.log(e, value);
     if( value === 'Profile'){
         // TODO
     } else if(value === 'logout'){
