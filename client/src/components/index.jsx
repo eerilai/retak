@@ -12,7 +12,7 @@ import Profile from './Profile';
 import Game from './LiveGame';
 import Chat from './LiveGame/chat';
 import RedirectCreateUsernameModal from './RedirectChangeUsernameModal';
-import { setAnonUsername, toggleLoginLogout, login, changeCurrentUsername } from '../actions/actions';
+import { setAnonUsername, toggleLoginLogout, login, changeCurrentUsername, setCorrGames } from '../actions/actions';
 
 var sectionStyle = {
   width: '100%',
@@ -26,7 +26,7 @@ class App extends Component {
     super(props);
     this.state = {
       open: false,
-      selectModal: ''
+      selectModal: '',
     };
 
     const { socket } = props;
@@ -46,9 +46,9 @@ class App extends Component {
           props.toggleLoginLogout(true);
           props.login(currentUserInfo);
           socket.emit('login', currentUsername);
+          this.fetchGames();
         } else {
         console.log("else", res.data)
-          
             socket.emit('AnonUserSession', props.username);
           }
       })
@@ -61,6 +61,14 @@ class App extends Component {
     });
 
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  fetchGames() {
+    let { userID } = this.props;
+    axios.get(`/users/${userID}/games/current`)
+      .then((games) => {
+        this.props.setCorrGames(games.data);
+      });
   }
 
   onClose = () => { this.setState({open: false}) }
@@ -116,12 +124,13 @@ const mapStateToProps = (state) => {
     username: state.currentUsername,
     userID: state.userID,
     isLoggedIn: state.isLoggedIn,
-    socket: state.socket
+    socket: state.socket,
+    games: state.games,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ setAnonUsername, toggleLoginLogout, login, changeCurrentUsername }, dispatch);
+  return bindActionCreators({ setAnonUsername, toggleLoginLogout, login, changeCurrentUsername, setCorrGames }, dispatch);
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

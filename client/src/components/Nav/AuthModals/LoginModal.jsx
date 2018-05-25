@@ -6,7 +6,7 @@ import { Button, Icon, Input, Header } from "semantic-ui-react";
 // import { Button, Icon, Input, Header, Modal } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { toggleLoginLogout, login } from "../../../actions/actions";
+import { toggleLoginLogout, login, setCorrGames } from "../../../actions/actions";
 
 class LoginModal extends Component {
   constructor(props) {
@@ -46,10 +46,19 @@ class LoginModal extends Component {
         this.props.toggleView("off");
         this.props.toggleLoginLogout(true);
         this.props.login(currentUserInfo);
+        this.fetchGames();
         this.props.socket.emit('login', currentUsername);
       })
       .catch(err => {
         console.error(err);
+      });
+  }
+
+  fetchGames() {
+    let { userID } = this.props;
+    axios.get(`/users/${userID}/games/current`)
+      .then((games) => {
+        this.props.setCorrGames(games.data);
       });
   }
 
@@ -198,13 +207,15 @@ class LoginModal extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
+    userID: state.userID,
     currentUsername: state.currentUsername,
-    socket: state.socket
+    socket: state.socket,
+    games: state.games,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ toggleLoginLogout, login }, dispatch);
+  return bindActionCreators({ toggleLoginLogout, login, setCorrGames }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginModal);

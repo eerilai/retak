@@ -29,10 +29,10 @@ const Leaderboard = ({ leaderboard }) => {
           const userProfile = `/profile/${user.username}`;
           return (
             <tr>
-              <td>{no + 1}</td>
+              <td><Link to={userProfile}>{no + 1}</Link></td>
               <td><Link to={userProfile}>{user.username}</Link></td>
-              <td>{user.total_games}</td>
-              <td>{`${user.ranked_wins}W—${losses}L`}</td>
+              <td><Link to={userProfile}>{user.total_games}</Link></td>
+              <td><Link to={userProfile}>{`${user.ranked_wins}W—${losses}L`}</Link></td>
             </tr>
           );
         })}
