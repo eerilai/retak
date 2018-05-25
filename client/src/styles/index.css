@@ -120,12 +120,12 @@ a:hover{
   font-size: 14px;
   grid-area: nav;
   display: grid;
-  grid-template-columns: 200px 560px 240px;
+  grid-template-columns: 200px 600px 200px;
   grid-template-areas: "navl main-nav user-nav navr";
 }
 
 #main-nav {
-  grid-area: main-nav;
+  grid-area: navl;
   display: flex;
 }
 
