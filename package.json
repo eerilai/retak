@@ -1,5 +1,5 @@
 {
-  "name": "takless",
+  "name": "taktile",
   "version": "1.0.0",
   "description": "web-based app for Tak the board game",
   "main": "./server/index.js",
