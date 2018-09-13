@@ -106,14 +106,19 @@ i.icon.paste:hover {
     "l takless r";
 }
 
-a{
+a {
   cursor: pointer;
   color: #000;
 }
-a:hover{
+
+a:hover {
   cursor: pointer !important;
   color: #000;
   text-decoration: none !important;
+}
+
+tr td a {
+  color: #000;
 }
 
 #nav {
