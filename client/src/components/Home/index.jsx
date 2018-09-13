@@ -5,7 +5,6 @@ import axios from 'axios';
 import Lobby from './lobby';
 import InPlay from './InPlay';
 import Leaderboard from './Leaderboard';
-import LobbyTable from '../../containers/Home/lobby_table';
 import GameSetup from './Modals/GameSetup';
 import GameLink from './Modals/GameLink';
 import generateRoomName from './roomNames';
