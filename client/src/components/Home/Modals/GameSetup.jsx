@@ -29,8 +29,13 @@ class GameSetup extends Component {
 
   }
 
-  handleTimeControl = e => this.setState({ timeControl: e.target.value })
-  handleTimeIncrement = e => this.setState({ timeIncrement: e.target.value })
+  handleTimeControl(e) {
+    this.setState({ timeControl: e.target.value });
+  }
+
+  handleTimeIncrement(e) {
+    this.setState({ timeIncrement: e.target.value });
+  }
 
   handleBoardSizeChange(e, { value }) {
     this.setState({

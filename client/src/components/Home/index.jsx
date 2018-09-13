@@ -25,7 +25,7 @@ class Home extends Component {
       timeIncrement: '',
       isFriendGame: '',
       isPrivate: '',
-      isLive: ''
+      isLive: '',
 
     };
     this.handleCreateGame = this.handleCreateGame.bind(this);
@@ -33,23 +33,36 @@ class Home extends Component {
     this.getLeaderboard();
   }
 
-  changeView(modalView) {
-    this.setState({
-      modalView,
-    });
+  getLeaderboard() {
+    axios.get('/leaderboard')
+      .then((board) => {
+        this.setState({ leaderboard: board.data });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
-  handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId, color) {
+  handleCreateGame(
+    boardSize,
+    timeControl,
+    timeIncrement,
+    isFriendGame,
+    isPrivate,
+    isLive,
+    roomId,
+    color,
+  ) {
     if (boardSize) {
       if (!roomId) {
         roomId = generateRoomName();
       }
       const { socket } = this.props;
-      var timer
+      let timer;
       if (+timeControl !== 0) {
-        timer = timeControl * 60
+        timer = timeControl * 60;
       } else {
-        timer = undefined
+        timer = undefined;
       }
 
       this.setState({
@@ -59,8 +72,8 @@ class Home extends Component {
         isFriendGame,
         isPrivate,
         isLive,
-        color
-      })
+        color,
+      });
       socket.emit('createGame', {
         boardSize,
         timeControl: timer,
@@ -69,37 +82,36 @@ class Home extends Component {
         isPrivate,
         isLive,
         color,
-        roomId
+        roomId,
       });
       socket.on('gameInitiated', ({ roomId }) => {
         // TODO: Change URL from localhost to takless for deployment
-        let url = `${SITE_URL}/game/${roomId}`;
-        let link = `game/${roomId}`;
+        const url = `${SITE_URL}/game/${roomId}`;
+        const link = `game/${roomId}`;
         this.setState({
           url,
           link,
-          modalView: 'GameLink'
+          modalView: 'GameLink',
         });
       });
     }
   }
 
-  getLeaderboard() {
-    axios.get('/leaderboard')
-      .then((board) => {
-        this.setState({ leaderboard: board.data });
-      })
-      .catch(err => {
-        console.error(err);
-      });
+  changeView(modalView) {
+    this.setState({
+      modalView,
+    });
   }
 
   render() {
-    var { boardSize,
+    const {
+      boardSize,
       timeControl,
       timeIncrement,
       isPrivate,
-      isLive, color } = this.state
+      isLive,
+      color,
+    } = this.state;
 
     return (
       <div className="takless">
@@ -110,7 +122,7 @@ class Home extends Component {
             onClick={() =>
               this.setState({
                 modalView: 'GameSetup',
-                gameType: 'general'
+                gameType: 'general',
               })
             }
           >
@@ -121,7 +133,7 @@ class Home extends Component {
             onClick={() => {
               this.setState({
                 modalView: 'GameSetup',
-                gameType: 'friend'
+                gameType: 'friend',
               });
             }}
           >
@@ -159,11 +171,11 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
+const mapStateToProps = state => (
+  {
     username: state.currentUsername,
-    socket: state.socket
-  };
-};
+    socket: state.socket,
+  }
+);
 
 export default withRouter(connect(mapStateToProps)(Home));
