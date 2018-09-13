@@ -10,7 +10,7 @@ const About = props => (
         <h1>About { SITE_TITLE }</h1>
         <p className="about-text">
           { SITE_TITLE } is a unofficial, free, open source Tak server and interface.
-          The project can be accessed <a className="github" href={SITE_GITHUB}>here<Icon name="github" size="large" style={{ color: 'black' }} /></a>
+          The live project can be accessed <a className="github" href={SITE_GITHUB}>here<Icon name="github" size="large" style={{ color: 'black' }} /></a>
           and is open to contributors.
         </p>
         <p>
