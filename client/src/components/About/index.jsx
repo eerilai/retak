@@ -1,14 +1,14 @@
-import React from "react";
-import { Header, Icon, Image, Container, } from "semantic-ui-react";
-import { SITE_TITLE, SITE_GITHUB, SITE_LEGACY_GITHUB, EERILAI_GITHUB, TAK_CHEAPASS_SITE } from "../../copy.js";
+import React from 'react';
+import { Header, Icon, Image, Container, } from 'semantic-ui-react';
+import { SITE_TITLE, SITE_GITHUB, SITE_LEGACY_GITHUB, EERILAI_GITHUB, TAK_CHEAPASS_SITE } from '../../copy.js';
 import './about.css';
 
 const About = props => (
   <div className="takless">
     <div className="main">
-      <div className='about'>
+      <div className="about">
         <h1>About { SITE_TITLE }</h1>
-        <p className='about-text'>
+        <p className="about-text">
           { SITE_TITLE } is a unofficial, free, open source Tak server and interface.
           The project can be accessed <a className="github" href={SITE_GITHUB}>here<Icon name="github" size="large" style={{ color: 'black' }} /></a>
           and is open to contributors.
