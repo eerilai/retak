@@ -1,38 +1,31 @@
 import React from "react";
 import { Header, Icon, Image, Container, } from "semantic-ui-react";
-import shu from './Shu.jpeg'
-import joz from './joz.jpeg'
-import evan from './evan.jpeg'
-import ale from './ale.jpeg'
-import './about.css'
+import { SITE_TITLE, SITE_GITHUB, SITE_LEGACY_GITHUB, EERILAI_GITHUB, TAK_CHEAPASS_SITE } from "../../copy.js";
+import './about.css';
+
 const About = props => (
   <div className="takless">
     <div className="main">
-      <div className='backGround'>
-        <h2 className='aboutheader1'>WE LOVE TAK</h2>
-
-        <h3 className='aboutheader'>What is Tak?</h3>
-        <p>Tak is an abstract strategy game in a similar style to Chess or Go (Baduk). The game is simple to play and enjoyable at all levels, but complex in strategy.</p>
-        <h3 className='aboutheader'> Who we are? </h3>
-        <p>We are four software engineers who love playing tak in our spare time. Although playing with friends in person is a great experience, sometimes it is hard to find an opponent. </p>
-        <p>With that in mind along with the growing tak community, we decided to build this website to support and promote the game worldwide. </p>
-        <p>Hope everyone can enjoy our site and if you are interested in contributing to our site, please get on our github  <a className='github' href="https://github.com/s-a-j-e"><Icon name='github' size='large' /></a></p>
-
-        <div className='imageGroup'>
-          <a className='github' href="https://github.com/eerilai"><img className='us' src={joz} /></a>
-          <a className='github' href="https://github.com/evansaurus"><img className='us' src={evan} /></a>
-          <a className='github' href="https://github.com/shuchen2017"><img className='us' src={shu} /></a>
-          <a className='github' href="https://github.com/ALB24"><img className='us' src={ale} /></a>
-          <div>(Joz, Evan, Shu, Alessandra)</div>
-        </div>
+      <div className='about'>
+        <h1>About { SITE_TITLE }</h1>
+        <p className='about-text'>
+          { SITE_TITLE } is a unofficial, free, open source Tak server and interface.
+          The project can be accessed <a className="github" href={SITE_GITHUB}>here<Icon name="github" size="large" style={{ color: 'black' }} /></a>
+          and is open to contributors.
+        </p>
+        <p>
+          <a href={TAK_CHEAPASS_SITE}>Tak</a> is a board game created by <a href="https://en.wikipedia.org/wiki/James_Ernest">James Ernest</a> and <a href="https://en.wikipedia.org/wiki/Patrick_Rothfuss">Patrick Rothfuss</a>.
+          Tak itself is inspired by the fantasy series <em><a href="https://en.wikipedia.org/wiki/The_Kingkiller_Chronicle">The Kingkiller Chronicle</a></em> by Patrick Rothfuss.
+          { ` ${SITE_TITLE}` } implements the rules publiclly available <a href="https://cheapass.com/wp-content/uploads/2018/04/UniversityRulesSM.pdf">here.</a>
+        </p>
+        <p>
+          { SITE_TITLE } is currently being ran and updated erratically by <a href={EERILAI_GITHUB}>eerilai</a> in her spare time.
+        </p>
+        <p>
+          The site began as a student project at <a href="https://www.hackreactor.com/">Hack Reactor</a>, a software engineering immersive program, by a team of 4.
+          The legacy code at the end of the course is available on the original groups <a href={SITE_LEGACY_GITHUB}>github organization</a>.
+        </p>
       </div>
-    </div>
-
-    <div className='table'>
-
-
-
-
     </div>
   </div>
 );
