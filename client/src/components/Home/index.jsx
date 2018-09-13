@@ -7,6 +7,7 @@ import InPlay from './InPlay';
 import Leaderboard from './Leaderboard';
 import GameSetup from './Modals/GameSetup';
 import GameLink from './Modals/GameLink';
+import { SITE_URL } from '../../copy';
 import generateRoomName from './roomNames';
 
 class Home extends Component {
@@ -72,7 +73,7 @@ class Home extends Component {
       });
       socket.on('gameInitiated', ({ roomId }) => {
         // TODO: Change URL from localhost to takless for deployment
-        let url = `http://www.takless.org/game/${roomId}`;
+        let url = `${SITE_URL}/game/${roomId}`;
         let link = `game/${roomId}`;
         this.setState({
           url,
