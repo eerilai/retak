@@ -78,7 +78,7 @@ class Profile extends Component {
     );
 
     return (
-      <div className="takless">
+      <div className="retak">
         <div className="main">
           {this.state.isUser ? userProfile : notFoundPage}
         </div>

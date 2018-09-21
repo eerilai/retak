@@ -103,7 +103,7 @@ i.icon.paste:hover {
   grid-template-columns: auto 1000px auto;
   grid-template-areas:
     "l nav r"
-    "l takless r";
+    "l retak r";
 }
 
 a {
@@ -165,8 +165,8 @@ nav:hover {
   background-color: #fff;
 }
 
-.takless {
-  grid-area: takless;
+.retak {
+  grid-area: retak;
   display: grid;
   grid-template-columns: 200px 600px 280px;
   grid-template-areas: "left main right";

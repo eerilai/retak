@@ -4,7 +4,7 @@ import { SITE_TITLE, SITE_GITHUB, SITE_LEGACY_GITHUB, EERILAI_GITHUB, TAK_CHEAPA
 import './about.css';
 
 const About = props => (
-  <div className="takless">
+  <div className="retak">
     <div className="main">
       <div className="about">
         <h1>About { SITE_TITLE }</h1>

@@ -5,7 +5,7 @@ import pieces from './pieces.jpg'
 
 
 const Learn = props => (
-  <div className="takless">
+  <div className="retak">
     <div className="main">
       <h2 className='mainheader'>How To Play The Beautiful Game of Tak</h2>
       <h4 className='header'>Setup </h4>

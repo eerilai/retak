@@ -329,7 +329,7 @@ class LiveGame extends Component {
 
     if (this.state.noRoom) {
       return (
-        <div className="takless">
+        <div className="retak">
           <div className="main">
             <PageNotFound />
           </div>
@@ -339,7 +339,7 @@ class LiveGame extends Component {
       return <div></div>
     }
     return (
-      <div className="takless">
+      <div className="retak">
         <div className="game-info">
           {/*this.opponentTurn()*/}
           <div className={`timer ${oppToPlay}`} style={{ 'border-bottom':'0' }}>

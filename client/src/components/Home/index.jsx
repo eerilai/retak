@@ -85,7 +85,7 @@ class Home extends Component {
         roomId,
       });
       socket.on('gameInitiated', ({ roomId }) => {
-        // TODO: Change URL from localhost to takless for deployment
+        // TODO: Change URL from localhost to retak for deployment
         const url = `${SITE_URL}/game/${roomId}`;
         const link = `game/${roomId}`;
         this.setState({
@@ -114,7 +114,7 @@ class Home extends Component {
     } = this.state;
 
     return (
-      <div className="takless">
+      <div className="retak">
         <div className="left">
           <h1 id="logo">Tak<span id="sub-logo">less</span></h1>
           <button
