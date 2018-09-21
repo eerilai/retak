@@ -1,4 +1,4 @@
-# Takless
+# retak
 Multiplayer web app for Tak the board game
 
 # Setup

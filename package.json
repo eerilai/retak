@@ -1,5 +1,5 @@
 {
-  "name": "taktile",
+  "name": "retak",
   "version": "1.0.0",
   "description": "web-based app for Tak the board game",
   "main": "./server/index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/s-a-j-e/takless.git"
+    "url": "git+https://github.com/eerilai/retak.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/s-a-j-e/takless/issues"
+    "url": "https://github.com/eerilai/retak/issues"
   },
-  "homepage": "https://github.com/s-a-j-e/takless#readme",
+  "homepage": "https://github.com/eerilai/retak#readme",
   "dependencies": {
     "aws-sdk": "^2.244.1",
     "axios": "^0.18.0",
