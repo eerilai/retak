@@ -516,28 +516,12 @@ tr.room:hover > td {
   width: 100%;
   height: 40px;
   color: black;
-  background-color: yellowgreen;
+  background-color: #8ca2ad;
 }
 #tak:hover {
-  color: black;
-  background-color: #9acd32d1;
-  font-size: 110%;
+  background-color: #5198bc;
 }
 
-#send {
-  width: 100%;
-  height: 40px;
-  background: #575ed8;
-  color: #fff;
-  font-size: 15px;
-  border: 0;
-}
-
-#send:hover {
-  background: #575ed8de;
-  color: #fff;
-  font-size: 110%;
-}
 #chat {
   width: 240px;
   text-align: left;
@@ -569,12 +553,19 @@ textarea {
 
 #output p {
   padding-top: 1px;
-  padding-bottom: 12px;
+  padding-bottom: 8px;
   margin: 0 10px 0 20px;
   border-bottom: 1px solid #e9e9e9;
   color: #555;
   overflow-wrap: break-word;
   font-size: 12px;
+}
+
+.systemMessage,
+.systemMessage p {
+  font-weight: bold;
+  background-color: #dedede;
+  padding: 3px 0 !important;
 }
 
 #feedback p {

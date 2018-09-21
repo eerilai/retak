@@ -60,11 +60,10 @@ class Chat extends Component {
       const roomID = this.props.location.pathname.split('/').pop();
       ev.preventDefault();
       socket.emit('chat', {
-        author: this.props.username,
-        message: 'Tak!',
+        author: '',
+        message: `${this.props.username} has called tak`,
         room: roomID
       });
-      this.setState({ message: '' });
     };
   }
 
@@ -78,24 +77,27 @@ class Chat extends Component {
 
   renderMessages() {
     return this.state.messages.map(message => {
-      return (
-        <div>
+      if (message.author) {
+        return (
           <div>
-            <strong id="username">{message.author}</strong>:
+            <div>
+              <strong id="username">{message.author}</strong>:
+            </div>
+            <p className="outputMessage">{message.message}</p>
           </div>
+        );
+      }
+      return (
+        <div className="systemMessage">
           <p className="outputMessage">{message.message}</p>
         </div>
-      );
+      )
     });
   }
 
   render() {
     return (
       <div id="chat">
-        <button onClick={this.handleTak} id="tak">
-          Tak
-          <Icon size="large" name="road" corner="true" />
-        </button>
         <div id="chat-window">
           <div id="output">
             <div className="MessageContainer">
@@ -122,7 +124,7 @@ class Chat extends Component {
             onKeyPress={this.handleTyping}
             onChange={ev => this.setState({ message: ev.target.value })}
           />
-          <button id="send" >Send <Icon size="large" name="talk" corner="true" /></button>
+          <button id="tak" onClick={this.handleTak}>Tak </button>
         </form>
       </div>
     );
