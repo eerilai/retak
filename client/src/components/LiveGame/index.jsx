@@ -159,18 +159,22 @@ class LiveGame extends Component {
   }
 
   selectCapstone(stone) {
-    if (this.state.game.pieces[this.state.game.toPlay].C > 0) {
-      this.setState({
-        stone
-      });
+    if (this.state.game.turn !== 0) {
+      if (this.state.game.pieces[this.state.game.toPlay].C > 0) {
+        this.setState({
+          stone
+        });
+      }
     }
   }
 
   toggleStanding() {
-    if (this.state.stone === "") {
-      this.setState({ stone: "S" });
-    } else {
-      this.setState({ stone: "" });
+    if (this.state.game.turn !== 0) {
+      if (this.state.stone === "") {
+        this.setState({ stone: "S" });
+      } else {
+        this.setState({ stone: "" });
+      }
     }
   }
 
@@ -241,19 +245,21 @@ class LiveGame extends Component {
 
     let PlayerPieces;
     let OpponentPieces;
-    let topPlayerName, bottomPlayerName, topPlayerNo, bottomPlayerNo, color;
+    let topPlayerName, bottomPlayerName, topPlayerNo, bottomPlayerNo, color, oppColor;
     if (this.props.username === game.player2) {
       topPlayerName = game.player1;
       bottomPlayerName = this.props.username;
       topPlayerNo = 1;
       bottomPlayerNo = 2;
       color = 'p2';
+      oppColor = 'p1';
     } else {
       topPlayerName = game.player2;
       bottomPlayerName = game.player1;
       topPlayerNo = 2;
       bottomPlayerNo = 1;
       color = 'p1';
+      oppColor = 'p2';
     }
 
     let pToPlay, oppToPlay;
@@ -290,7 +296,20 @@ class LiveGame extends Component {
     let capActive = '', flatActive = '';
     let capSide = '', flatSide = '';
     let PieceSelect, CapSelect;
-    if (stone === '' || stone === 'C') {
+    console.log(bottomPlayerNo, !!this.state.game.ptn[0]);
+    if ((bottomPlayerNo === 1 && this.state.game.ptn.length === 0) || (bottomPlayerNo === 2 && (!this.state.game.ptn[0] || this.state.game.ptn[0].length <= 1))) {
+      PieceSelect = (
+        <div className={`flat-toggle ${flatSide}`} onClick={() => { this.toggleStanding(); }}>
+          <div className={`${flatActive} stone ${color}`} >
+            <div className={`${flatActive} stone ${oppColor} ui-overlay first-move-indicator`}>
+            !
+            </div>
+          </div>
+          <div className={`inactive stone S ${color}`} />
+          <div className="flat-count">{game.pieces[bottomPlayerNo].F}</div>
+        </div>
+      );
+    } else if (stone === '' || stone === 'C') {
       if (stone === '') flatActive = 'active-stone', flatSide = 'piece-selected';
       if (stone === 'C') capActive = 'active-stone', capSide = 'piece-selected';
       PieceSelect = (
