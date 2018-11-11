@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import { Link, withRouter } from 'react-router-dom';
-import sound_brick_drop from "./Sounds/brick_drop_concrete.wav";
 import Game from "./Game";
 import Board from "./Board";
 import Stack from "./Stack";
@@ -114,7 +113,6 @@ class LiveGame extends Component {
       }
     });
 
-    //Sound Effect
     // this.sounds = { brick: sound_brick_drop };
   }
 
@@ -154,7 +152,6 @@ class LiveGame extends Component {
   handleSquareClick(col, row) {
     if (this.props.username === this.state.game.activePlayer) {
       this.movePieces(col, row);
-      // this.play("brick");
     }
   }
 
@@ -360,7 +357,6 @@ class LiveGame extends Component {
     return (
       <div className="retak">
         <div className="game-info">
-          {/*this.opponentTurn()*/}
           <div className={`timer ${oppToPlay}`} style={{ 'border-bottom':'0' }}>
             {this.formatSeconds(this.state.opponentTime)}
           </div>
@@ -374,7 +370,6 @@ class LiveGame extends Component {
           <div className={`timer ${pToPlay}`}style={{ 'border-top':'0' }}>
             {this.formatSeconds(this.state.myTime)}
           </div>
-          {/*this.userTurn()*/}
         </div>
         <div className="main">
           <div className="game">
@@ -390,12 +385,6 @@ class LiveGame extends Component {
         <Chat />
       </div>
     );
-  }
-
-  //play sounds function
-  play(src) {
-    var sound = new Audio(this.sounds[src]);
-    sound.play();
   }
 }
 
