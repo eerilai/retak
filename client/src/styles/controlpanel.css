@@ -1,0 +1,13 @@
+.control-panel>tr {
+  width: 100%;
+  display: flex;
+}
+
+.control-panel>tr>td {
+  margin: auto;
+  width: 100%;
+}
+
+.control-panel>tr>td:hover {
+  background-color: #c6c6c6
+}

@@ -9,6 +9,7 @@ import Chat from "./chat";
 import PTN from "./PTN";
 import Clock from "./Clock";
 import "../../styles/livegame.css";
+import "../../styles/controlpanel.css";
 import { convertCoord } from "./gameUtil";
 import PageNotFound from '../PageNotFound';
 import {
@@ -112,8 +113,6 @@ class LiveGame extends Component {
         this.timeOut(activePlayer)
       }
     });
-
-    // this.sounds = { brick: sound_brick_drop };
   }
 
   movePieces(col, row) {
@@ -364,6 +363,12 @@ class LiveGame extends Component {
             {OpponentPieces}
             <tr>{topPlayerName}</tr>
             <PTN ptn={game.ptn} victor={game.victor} winType={game.winType} full={game.isBoardFull}/>
+            <div className="control-panel">
+              <tr>
+                <td><Icon name='handshake'/></td>
+                <td><Icon name='ban'/></td>
+              </tr>
+            </div>
             <tr>{bottomPlayerName}</tr>
             {PlayerPieces}
           </table>
