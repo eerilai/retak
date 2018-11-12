@@ -239,6 +239,10 @@ class LiveGame extends Component {
     const hasBeganResigning = this.state.resigning;
     if (hasBeganResigning && resigning) {
       game.resign(this.props.username);
+      this.setState({
+        resigning: false,
+        game,
+      });
     } else if (hasBeganResigning && !resigning) {
       this.setState({
         resigning: false,
@@ -315,7 +319,6 @@ class LiveGame extends Component {
     let capActive = '', flatActive = '';
     let capSide = '', flatSide = '';
     let PieceSelect, CapSelect;
-    console.log(bottomPlayerNo, !!this.state.game.ptn[0]);
     if ((bottomPlayerNo === 1 && this.state.game.ptn.length === 0) || (bottomPlayerNo === 2 && (!this.state.game.ptn[0] || this.state.game.ptn[0].length <= 1))) {
       PieceSelect = (
         <div className={`flat-toggle ${flatSide}`} onClick={() => { this.toggleStanding(); }}>
