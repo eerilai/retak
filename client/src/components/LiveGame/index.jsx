@@ -21,7 +21,8 @@ import {
   Form,
   Select,
   Transition,
-  Loader
+  Loader,
+  Popup
 } from 'semantic-ui-react';
 
 class LiveGame extends Component {
@@ -371,24 +372,45 @@ class LiveGame extends Component {
     if (this.state.resigning) {
       resign =
       <td className="resigning">
-        <div
-          className="resign-button"
-          onClick={() => {this.handleResign(true)}}>
-          <Icon name='flag'/>
-        </div>
-        <div
-          className="cancel-resign-button"
-          onClick={() => {this.handleResign(false)}}>
-          <Icon name='ban'/>
-        </div>
+        <Popup
+          content="Resign"
+          position="top left"
+          size="tiny"
+          trigger={
+          <div
+            className="resign-button"
+            onClick={() => {this.handleResign(true)}}>
+            <Icon name='flag'/>
+          </div>
+          }
+        />
+        <Popup
+          content="Cancel"
+          position="top right"
+          size="tiny"
+          trigger={
+            <div
+              className="cancel-resign-button"
+              onClick={() => {this.handleResign(false)}}>
+              <Icon name='ban'/>
+            </div>
+          }
+        />
       </td>
     } else {
       resign =
-      <td
-        className="resign-button"
-        onClick={() => {this.handleResign(true)}}>
-        <Icon name='flag'/>
-      </td>
+      <Popup
+        content="Resign"
+        position="top left"
+        size="tiny"
+        trigger={
+          <td
+            className="resign-button"
+            onClick={() => {this.handleResign(true)}}>
+            <Icon name='flag'/>
+          </td>
+        }
+      />
     }
 
     if (this.state.noRoom) {
