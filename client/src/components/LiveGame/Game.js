@@ -9,7 +9,7 @@ class Game {
     this.player1 = player1;
     this.player2 = player2;
     this.victor = 0; // 0, 1, or 2
-    this.winType = null; // null, R, F, 1 or 1/2
+    this.winType = null; // null, R, F, T, 1 or 1/2
     this.winString = '';
     this.ranked = ranked;
     this.size = size;
@@ -452,6 +452,14 @@ class Game {
     this.victorUsername = this.victor === 1 ? this.player1 : this.player2;
     this.loserUsername = this.victor === 1 ? this.player2 : this.player1;
     this.winType = 'T';
+    this.setWinString();
+  }
+
+  resign(player) {
+    this.victor = player === this.player1 ? 2 : 1;
+    this.victorUsername = this.victor === 1 ? this.player1 : this.player2;
+    this.loserUsername = this.victor === 1 ? this.player2 : this.player1;
+    this.winType = '1';
     this.setWinString();
   }
 }

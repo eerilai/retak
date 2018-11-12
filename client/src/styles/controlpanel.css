@@ -1,0 +1,34 @@
+.control-panel>tr {
+  width: 100%;
+  display: flex;
+}
+
+.control-panel>tr>td {
+  margin: auto;
+  width: 100%;
+}
+
+.control-panel>tr>td:hover {
+  background-color: #c6c6c6
+}
+
+.resigning {
+  display: flex;
+}
+
+.resigning>.resign-button {
+  width: 66%;
+  background-color: red;
+}
+
+.resigning>.cancel-resign-button {
+  width: 33%;
+}
+
+.resigning>.resign-button:hover {
+  background-color: darkred;
+}
+
+.resigning>.cancel-resign-button:hover {
+  background-color: #c6c6c6
+}

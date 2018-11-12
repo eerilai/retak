@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import { Link, withRouter } from 'react-router-dom';
-import sound_brick_drop from "./Sounds/brick_drop_concrete.wav";
 import Game from "./Game";
 import Board from "./Board";
 import Stack from "./Stack";
@@ -10,6 +9,7 @@ import Chat from "./chat";
 import PTN from "./PTN";
 import Clock from "./Clock";
 import "../../styles/livegame.css";
+import "../../styles/controlpanel.css";
 import { convertCoord } from "./gameUtil";
 import PageNotFound from '../PageNotFound';
 import {
@@ -21,7 +21,8 @@ import {
   Form,
   Select,
   Transition,
-  Loader
+  Loader,
+  Popup
 } from 'semantic-ui-react';
 
 class LiveGame extends Component {
@@ -35,13 +36,16 @@ class LiveGame extends Component {
       opponentName: "",
       noRoom: false,
       myTime: 0,
-      opponentTime: 0
+      opponentTime: 0,
+      resigning: false,
     };
 
     this.movePieces = this.movePieces.bind(this);
     this.handleSquareClick = this.handleSquareClick.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
     this.timeOut = this.timeOut.bind(this);
+    this.handleResign = this.handleResign.bind(this);
+    this.offerDraw = this.offerDraw.bind(this);
 
     const { socket, username } = props;
     const { roomId } = props.match.params;
@@ -113,9 +117,6 @@ class LiveGame extends Component {
         this.timeOut(activePlayer)
       }
     });
-
-    //Sound Effect
-    // this.sounds = { brick: sound_brick_drop };
   }
 
   movePieces(col, row) {
@@ -154,7 +155,6 @@ class LiveGame extends Component {
   handleSquareClick(col, row) {
     if (this.props.username === this.state.game.activePlayer) {
       this.movePieces(col, row);
-      // this.play("brick");
     }
   }
 
@@ -235,6 +235,30 @@ class LiveGame extends Component {
     });
   }
 
+  handleResign(resigning) {
+    const { game } = this.state;
+    const hasBeganResigning = this.state.resigning;
+    if (hasBeganResigning && resigning) {
+      game.resign(this.props.username);
+      this.setState({
+        resigning: false,
+        game,
+      });
+    } else if (hasBeganResigning && !resigning) {
+      this.setState({
+        resigning: false,
+      });
+    } else {
+      this.setState({
+        resigning: true,
+      })
+    }
+  }
+
+  offerDraw() {
+
+  }
+
   render() {
     const { game, stone } = this.state;
     const { socket } = this.props;
@@ -296,7 +320,6 @@ class LiveGame extends Component {
     let capActive = '', flatActive = '';
     let capSide = '', flatSide = '';
     let PieceSelect, CapSelect;
-    console.log(bottomPlayerNo, !!this.state.game.ptn[0]);
     if ((bottomPlayerNo === 1 && this.state.game.ptn.length === 0) || (bottomPlayerNo === 2 && (!this.state.game.ptn[0] || this.state.game.ptn[0].length <= 1))) {
       PieceSelect = (
         <div className={`flat-toggle ${flatSide}`} onClick={() => { this.toggleStanding(); }}>
@@ -345,6 +368,50 @@ class LiveGame extends Component {
         </div>
       )
     }
+    let resign = '';
+    if (this.state.resigning) {
+      resign =
+      <td className="resigning">
+        <Popup
+          content="Resign"
+          position="top left"
+          size="tiny"
+          trigger={
+          <div
+            className="resign-button"
+            onClick={() => {this.handleResign(true)}}>
+            <Icon name='flag'/>
+          </div>
+          }
+        />
+        <Popup
+          content="Cancel"
+          position="top right"
+          size="tiny"
+          trigger={
+            <div
+              className="cancel-resign-button"
+              onClick={() => {this.handleResign(false)}}>
+              <Icon name='ban'/>
+            </div>
+          }
+        />
+      </td>
+    } else {
+      resign =
+      <Popup
+        content="Resign"
+        position="top left"
+        size="tiny"
+        trigger={
+          <td
+            className="resign-button"
+            onClick={() => {this.handleResign(true)}}>
+            <Icon name='flag'/>
+          </td>
+        }
+      />
+    }
 
     if (this.state.noRoom) {
       return (
@@ -360,7 +427,6 @@ class LiveGame extends Component {
     return (
       <div className="retak">
         <div className="game-info">
-          {/*this.opponentTurn()*/}
           <div className={`timer ${oppToPlay}`} style={{ 'border-bottom':'0' }}>
             {this.formatSeconds(this.state.opponentTime)}
           </div>
@@ -368,13 +434,18 @@ class LiveGame extends Component {
             {OpponentPieces}
             <tr>{topPlayerName}</tr>
             <PTN ptn={game.ptn} victor={game.victor} winType={game.winType} full={game.isBoardFull}/>
+            <div className="control-panel">
+              <tr>
+                <td onClick={this.offerDraw}><Icon name='handshake'/></td>
+                {resign}
+              </tr>
+            </div>
             <tr>{bottomPlayerName}</tr>
             {PlayerPieces}
           </table>
           <div className={`timer ${pToPlay}`}style={{ 'border-top':'0' }}>
             {this.formatSeconds(this.state.myTime)}
           </div>
-          {/*this.userTurn()*/}
         </div>
         <div className="main">
           <div className="game">
@@ -390,12 +461,6 @@ class LiveGame extends Component {
         <Chat />
       </div>
     );
-  }
-
-  //play sounds function
-  play(src) {
-    var sound = new Audio(this.sounds[src]);
-    sound.play();
   }
 }
 
