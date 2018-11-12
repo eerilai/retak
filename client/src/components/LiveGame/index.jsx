@@ -35,13 +35,16 @@ class LiveGame extends Component {
       opponentName: "",
       noRoom: false,
       myTime: 0,
-      opponentTime: 0
+      opponentTime: 0,
+      resigning: false,
     };
 
     this.movePieces = this.movePieces.bind(this);
     this.handleSquareClick = this.handleSquareClick.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
     this.timeOut = this.timeOut.bind(this);
+    this.handleResign = this.handleResign.bind(this);
+    this.offerDraw = this.offerDraw.bind(this);
 
     const { socket, username } = props;
     const { roomId } = props.match.params;
@@ -231,6 +234,26 @@ class LiveGame extends Component {
     });
   }
 
+  handleResign(resigning) {
+    const { game } = this.state;
+    const hasBeganResigning = this.state.resigning;
+    if (hasBeganResigning && resigning) {
+      game.resign(this.props.username);
+    } else if (hasBeganResigning && !resigning) {
+      this.setState({
+        resigning: false,
+      });
+    } else {
+      this.setState({
+        resigning: true,
+      })
+    }
+  }
+
+  offerDraw() {
+
+  }
+
   render() {
     const { game, stone } = this.state;
     const { socket } = this.props;
@@ -341,6 +364,29 @@ class LiveGame extends Component {
         </div>
       )
     }
+    let resign = '';
+    if (this.state.resigning) {
+      resign =
+      <td className="resigning">
+        <div
+          className="resign-button"
+          onClick={() => {this.handleResign(true)}}>
+          <Icon name='flag'/>
+        </div>
+        <div
+          className="cancel-resign-button"
+          onClick={() => {this.handleResign(false)}}>
+          <Icon name='ban'/>
+        </div>
+      </td>
+    } else {
+      resign =
+      <td
+        className="resign-button"
+        onClick={() => {this.handleResign(true)}}>
+        <Icon name='flag'/>
+      </td>
+    }
 
     if (this.state.noRoom) {
       return (
@@ -365,8 +411,8 @@ class LiveGame extends Component {
             <PTN ptn={game.ptn} victor={game.victor} winType={game.winType} full={game.isBoardFull}/>
             <div className="control-panel">
               <tr>
-                <td><Icon name='handshake'/></td>
-                <td><Icon name='ban'/></td>
+                <td onClick={this.offerDraw}><Icon name='handshake'/></td>
+                {resign}
               </tr>
             </div>
             <tr>{bottomPlayerName}</tr>
