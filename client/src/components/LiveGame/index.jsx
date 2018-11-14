@@ -12,6 +12,7 @@ import "../../styles/livegame.css";
 import "../../styles/controlpanel.css";
 import { convertCoord } from "./gameUtil";
 import PageNotFound from '../PageNotFound';
+import ControlPanel from './ControlPanel/ControlPanel';
 import {
   Input,
   Button,
@@ -46,6 +47,8 @@ class LiveGame extends Component {
     this.timeOut = this.timeOut.bind(this);
     this.handleResign = this.handleResign.bind(this);
     this.offerDraw = this.offerDraw.bind(this);
+    this.acceptDraw = this.acceptDraw.bind(this);
+    this.updateGame = this.updateGame.bind(this);
 
     const { socket, username } = props;
     const { roomId } = props.match.params;
@@ -116,6 +119,12 @@ class LiveGame extends Component {
       if (roomId === props.match.params.roomId) {
         this.timeOut(activePlayer)
       }
+    });
+  }
+  
+  updateGame(game) {
+    this.setState({
+      game
     });
   }
 
@@ -259,8 +268,12 @@ class LiveGame extends Component {
 
   }
 
+  acceptDraw() {
+
+  }
+
   render() {
-    const { game, stone } = this.state;
+    const { game, updateGame, stone } = this.state;
     const { socket } = this.props;
 
     if (!game) {
@@ -413,6 +426,39 @@ class LiveGame extends Component {
       />
     }
 
+    let offerDraw = '';
+    if (this.state.drawOffered) {
+      offerDraw =
+      <td className="draw-offered">
+        <Popup
+          content="Accept Draw"
+          position="top left"
+          size="tiny"
+          trigger={
+            <div 
+              className="draw-button"
+              onClick={this.acceptDraw}>
+              <Icon name='handshake'/>
+            </div>
+          }
+        />
+      </td>
+    } else {
+      offerDraw = 
+        <Popup
+          content="Offer Draw"
+          position="top left"
+          size="tiny"
+          trigger={
+            <td 
+              className="draw-button"
+              onClick={this.offerDraw}>
+              <Icon name='handshake'/>
+            </td>
+          }
+        />
+    }
+
     if (this.state.noRoom) {
       return (
         <div className="retak">
@@ -434,12 +480,15 @@ class LiveGame extends Component {
             {OpponentPieces}
             <tr>{topPlayerName}</tr>
             <PTN ptn={game.ptn} victor={game.victor} winType={game.winType} full={game.isBoardFull}/>
-            <div className="control-panel">
-              <tr>
-                <td onClick={this.offerDraw}><Icon name='handshake'/></td>
-                {resign}
-              </tr>
-            </div>
+            {
+            // <div className="control-panel">
+            //   <tr>
+            //     {offerDraw}
+            //     {resign}
+            //   </tr>
+            // </div>
+            }
+            <ControlPanel game={game} updateGame={updateGame} socket={socket}/>
             <tr>{bottomPlayerName}</tr>
             {PlayerPieces}
           </table>
