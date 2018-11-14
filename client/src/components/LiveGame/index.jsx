@@ -38,16 +38,12 @@ class LiveGame extends Component {
       noRoom: false,
       myTime: 0,
       opponentTime: 0,
-      resigning: false,
     };
 
     this.movePieces = this.movePieces.bind(this);
     this.handleSquareClick = this.handleSquareClick.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
     this.timeOut = this.timeOut.bind(this);
-    this.handleResign = this.handleResign.bind(this);
-    this.offerDraw = this.offerDraw.bind(this);
-    this.acceptDraw = this.acceptDraw.bind(this);
     this.updateGame = this.updateGame.bind(this);
 
     const { socket, username } = props;
@@ -122,10 +118,33 @@ class LiveGame extends Component {
     });
   }
   
+
+
   updateGame(game) {
     this.setState({
       game
-    });
+    }, emit.bind(this));
+
+    function emit() {
+      const { socket, match } = this.props;
+      const { game } = this.state;
+      socket.emit("updateGame", {
+        gameState: {
+          ptn: game.ptn,
+          tps: game.tps,
+          victor: game.victor,
+          winType: game.winType,
+        },
+        activePlayer: game.activePlayer,
+        roomId: match.params.roomId,
+      });
+      //fix room not closing if resign if first move of game
+      if (game.winType && game.player1 !== game.player2) {
+        const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
+        const endOfGameState = { player1, player2, ptn: ptnString, tps, victor: victorUsername, size, winType, ranked };
+        socket.emit('closeGame', match.params.roomId, endOfGameState);
+      }
+    }
   }
 
   movePieces(col, row) {
@@ -244,34 +263,6 @@ class LiveGame extends Component {
     });
   }
 
-  handleResign(resigning) {
-    const { game } = this.state;
-    const hasBeganResigning = this.state.resigning;
-    if (hasBeganResigning && resigning) {
-      game.resign(this.props.username);
-      this.setState({
-        resigning: false,
-        game,
-      });
-    } else if (hasBeganResigning && !resigning) {
-      this.setState({
-        resigning: false,
-      });
-    } else {
-      this.setState({
-        resigning: true,
-      })
-    }
-  }
-
-  offerDraw() {
-
-  }
-
-  acceptDraw() {
-
-  }
-
   render() {
     const { game, updateGame, stone } = this.state;
     const { socket } = this.props;
@@ -381,83 +372,6 @@ class LiveGame extends Component {
         </div>
       )
     }
-    let resign = '';
-    if (this.state.resigning) {
-      resign =
-      <td className="resigning">
-        <Popup
-          content="Resign"
-          position="top left"
-          size="tiny"
-          trigger={
-          <div
-            className="resign-button"
-            onClick={() => {this.handleResign(true)}}>
-            <Icon name='flag'/>
-          </div>
-          }
-        />
-        <Popup
-          content="Cancel"
-          position="top right"
-          size="tiny"
-          trigger={
-            <div
-              className="cancel-resign-button"
-              onClick={() => {this.handleResign(false)}}>
-              <Icon name='ban'/>
-            </div>
-          }
-        />
-      </td>
-    } else {
-      resign =
-      <Popup
-        content="Resign"
-        position="top left"
-        size="tiny"
-        trigger={
-          <td
-            className="resign-button"
-            onClick={() => {this.handleResign(true)}}>
-            <Icon name='flag'/>
-          </td>
-        }
-      />
-    }
-
-    let offerDraw = '';
-    if (this.state.drawOffered) {
-      offerDraw =
-      <td className="draw-offered">
-        <Popup
-          content="Accept Draw"
-          position="top left"
-          size="tiny"
-          trigger={
-            <div 
-              className="draw-button"
-              onClick={this.acceptDraw}>
-              <Icon name='handshake'/>
-            </div>
-          }
-        />
-      </td>
-    } else {
-      offerDraw = 
-        <Popup
-          content="Offer Draw"
-          position="top left"
-          size="tiny"
-          trigger={
-            <td 
-              className="draw-button"
-              onClick={this.offerDraw}>
-              <Icon name='handshake'/>
-            </td>
-          }
-        />
-    }
 
     if (this.state.noRoom) {
       return (
@@ -480,15 +394,7 @@ class LiveGame extends Component {
             {OpponentPieces}
             <tr>{topPlayerName}</tr>
             <PTN ptn={game.ptn} victor={game.victor} winType={game.winType} full={game.isBoardFull}/>
-            {
-            // <div className="control-panel">
-            //   <tr>
-            //     {offerDraw}
-            //     {resign}
-            //   </tr>
-            // </div>
-            }
-            <ControlPanel game={game} updateGame={updateGame} socket={socket}/>
+            <ControlPanel game={game} updateGame={this.updateGame} socket={socket}/>
             <tr>{bottomPlayerName}</tr>
             {PlayerPieces}
           </table>

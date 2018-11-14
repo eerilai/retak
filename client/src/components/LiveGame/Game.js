@@ -44,7 +44,12 @@ class Game {
     this.loserUsername = null; // Loosing Player Username or null
 
     if (gameState !== 'new') {
-      const { tps, ptn } = gameState;
+      const { tps, ptn, victor, winType } = gameState;
+      if (winType) {
+        this.winType = winType;
+        this.victor = victor;
+        this.setWinString();
+      }
       this.tps = tps;
       this.ptn = ptn;
       this.readTPS(tps);
