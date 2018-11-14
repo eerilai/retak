@@ -4,7 +4,7 @@
   "description": "web-based app for Tak the board game",
   "main": "./server/index.js",
   "scripts": {
-    "webpack": "webpack -p --config ./webpack.config.js --mode development",
+    "webpack": "webpack --mode development --config ./webpack.config.js -w",
     "dev": "nodemon server/index/js",
     "start": "node server/index.js"
   },
