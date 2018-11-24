@@ -13,6 +13,7 @@ import "../../styles/controlpanel.css";
 import { convertCoord } from "./gameUtil";
 import PageNotFound from '../PageNotFound';
 import ControlPanel from './ControlPanel';
+import SelectStoneButtons from './SelectStoneButtons';
 import {
   Input,
   Button,
@@ -31,6 +32,7 @@ class LiveGame extends Component {
     super(props);
     this.state = {
       game: null,
+      playerNumber: 1,
       stone: "",
       isOpen: true,
       user: props.currentUsername,
@@ -43,6 +45,8 @@ class LiveGame extends Component {
     this.movePieces = this.movePieces.bind(this);
     this.handleSquareClick = this.handleSquareClick.bind(this);
     this.selectCapstone = this.selectCapstone.bind(this);
+    this.toggleStanding = this.toggleStanding.bind(this);
+    this.setStone = this.setStone.bind(this);
     this.timeOut = this.timeOut.bind(this);
     this.updateGame = this.updateGame.bind(this);
 
@@ -61,12 +65,14 @@ class LiveGame extends Component {
           this.setState({
             myTime: player1Time,
             opponentTime: player2Time,
+            playerNumber: 1,
             game
           });
         } else {
           this.setState({
             myTime: player2Time,
             opponentTime: player1Time,
+            playerNumber: 2,
             game
           });
         }
@@ -196,6 +202,19 @@ class LiveGame extends Component {
     }
   }
 
+  setStone(stone) {
+    if (this.state.game.turn !== 0) {
+      if (stone === 'S' && this.state.stone === '') {
+        this.setState({
+          stone,
+        })
+      }
+      this.setState({
+        stone,
+      });
+    }
+  }
+
   toggleStanding() {
     if (this.state.game.turn !== 0) {
       if (this.state.stone === "") {
@@ -264,7 +283,7 @@ class LiveGame extends Component {
   }
 
   render() {
-    const { game, updateGame, stone } = this.state;
+    const { game, updateGame, stone, playerNumber } = this.state;
     const { socket } = this.props;
 
     if (!game) {
@@ -274,7 +293,7 @@ class LiveGame extends Component {
     let PlayerPieces;
     let OpponentPieces;
     let topPlayerName, bottomPlayerName, topPlayerNo, bottomPlayerNo, color, oppColor;
-    if (this.props.username === game.player2) {
+    if (playerNumber === game.player2) {
       topPlayerName = game.player1;
       bottomPlayerName = this.props.username;
       topPlayerNo = 1;
@@ -321,57 +340,6 @@ class LiveGame extends Component {
       </div>
     );
 
-    let capActive = '', flatActive = '';
-    let capSide = '', flatSide = '';
-    let PieceSelect, CapSelect;
-    if ((bottomPlayerNo === 1 && this.state.game.ptn.length === 0) || (bottomPlayerNo === 2 && (!this.state.game.ptn[0] || this.state.game.ptn[0].length <= 1))) {
-      PieceSelect = (
-        <div className={`flat-toggle ${flatSide}`} onClick={() => { this.toggleStanding(); }}>
-          <div className={`${flatActive} stone ${color}`} >
-            <div className={`${flatActive} stone ${oppColor} ui-overlay first-move-indicator`}>
-            !
-            </div>
-          </div>
-          <div className={`inactive stone S ${color}`} />
-          <div className="flat-count">{game.pieces[bottomPlayerNo].F}</div>
-        </div>
-      );
-    } else if (stone === '' || stone === 'C') {
-      if (stone === '') flatActive = 'active-stone', flatSide = 'piece-selected';
-      if (stone === 'C') capActive = 'active-stone', capSide = 'piece-selected';
-      PieceSelect = (
-        <div className={`flat-toggle ${flatSide}`} onClick={() => { this.toggleStanding(); }}>
-          <div className={`${flatActive} stone ${color}`} />
-          <div className={`inactive stone S ${color}`} />
-          <div className="flat-count">{game.pieces[bottomPlayerNo].F}</div>
-        </div>
-      );
-    } else if (stone === 'S') {
-      flatSide = 'piece-selected';
-      PieceSelect = (
-        <div className={`flat-toggle ${flatSide}`} onClick={() => { this.toggleStanding(); }}>
-          <div className={`active-stone stone S ${color}`} />
-          <div className={`inactive stone flat ${color}`} />
-          <div className="flat-count">{game.pieces[bottomPlayerNo].F}</div>
-        </div>
-      );
-    }
-    if (game.pieces[bottomPlayerNo].C === 0) {
-      CapSelect = (<div />)
-    } else if (game.pieces[bottomPlayerNo].C === 1) {
-      CapSelect = (
-        <div className={`cap-select ${capSide}`}>
-          <div className={`${capActive} stone C ${color}`} onClick={() => { this.selectCapstone('C'); }} />
-        </div>
-      )
-    } else if (game.pieces[bottomPlayerNo].C === 2) {
-      CapSelect = (
-        <div className={`cap-select ${capSide}`}>
-          <div className={`${capActive} stone C ${color}`} onClick={() => { this.selectCapstone('C'); }} />
-          <div className={`${capActive} stone C ${color}`} onClick={() => { this.selectCapstone('C'); }} />
-        </div>
-      )
-    }
 
     if (this.state.noRoom) {
       return (
@@ -407,10 +375,18 @@ class LiveGame extends Component {
             <div className="board">
               <Board game={game} handleSquareClick={this.handleSquareClick} />
             </div>
-            <div className="stone-select">
-              {CapSelect}
-              {PieceSelect}
-            </div>
+            {// <div className="stone-select">
+            //   {CapSelect}
+            //   {PieceSelect}
+            // </div>
+          }
+            <SelectStoneButtons 
+              game={game}
+              stone={stone}
+              playerNumber={playerNumber}
+              selectCapstone={this.selectCapstone}
+              setStone={this.setStone}
+            />
           </div>
         </div>
         <Chat />
