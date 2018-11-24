@@ -1,6 +1,6 @@
 import React from 'react';
 import { Popup, Icon } from 'semantic-ui-react';
-import '../../../styles/controlpanel.css';
+import '../../../../styles/controlpanel.css';
 
 const Resign = (props) => {
   const { resigning, handleResign } = props;
@@ -39,7 +39,7 @@ const Resign = (props) => {
   return (
     <Popup
       content="Resign"
-      position="top left"
+      position="top center"
       size="tiny"
       trigger={
         <td

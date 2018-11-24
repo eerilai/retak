@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Game } from '../Game';
-import io from 'socket.io-client';
+import Game from '../../Game';
 import PropTypes from 'prop-types';
 import Resign from './Resign';
 import OfferDraw from './OfferDraw';
-import '../../../styles/controlpanel.css';
+import '../../../../styles/controlpanel.css';
 
 class ControlPanel extends Component {
   constructor(props) {
@@ -77,14 +76,12 @@ ControlPanel.propTypes = {
   username: PropTypes.string.isRequired,
   game: PropTypes.instanceOf(Game).isRequired,
   updateGame: PropTypes.func.isRequired,
-  socket: PropTypes.instanceOf(io).isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
     username: state.currentUsername,
-    socket: state.socket,
   };
 };
 
-export default ControlPanel;
+export default connect(mapStateToProps)(ControlPanel);

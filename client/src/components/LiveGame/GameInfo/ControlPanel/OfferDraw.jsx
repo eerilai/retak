@@ -1,6 +1,6 @@
 import React from 'react';
 import { Popup, Icon } from 'semantic-ui-react';
-import '../../../styles/controlpanel.css';
+import '../../../../styles/controlpanel.css';
 
 const OfferDraw = (props) => {
   const { drawOffered, offerDraw, acceptDraw } = props;
@@ -9,7 +9,7 @@ const OfferDraw = (props) => {
       <td className="draw-offered">
         <Popup
           content="Accept Draw"
-          position="top left"
+          position="top center"
           size="tiny"
           trigger={
             <div
@@ -26,7 +26,7 @@ const OfferDraw = (props) => {
   return (
     <Popup
       content="Offer Draw"
-      position="top left"
+      position="top center"
       size="tiny"
       trigger={
         <td
