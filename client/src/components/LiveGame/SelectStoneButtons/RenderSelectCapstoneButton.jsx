@@ -5,7 +5,7 @@ import Game from '../Game';
 const RenderSelectCapstoneButton = (props) => {
   const {
     game,
-    selectCapstone,
+    setStone,
     color,
     stone,
     playerNumber,
@@ -29,8 +29,8 @@ const RenderSelectCapstoneButton = (props) => {
           role="button"
           tabIndex={0}
           className={`${capActive} stone C ${color}`}
-          onClick={() => { selectCapstone('C'); }}
-          onKeyPress={() => { selectCapstone('C'); }}
+          onClick={() => { setStone('C'); }}
+          onKeyPress={() => { setStone('C'); }}
         />,
       );
     }
@@ -46,7 +46,7 @@ const RenderSelectCapstoneButton = (props) => {
 
 RenderSelectCapstoneButton.propTypes = {
   game: PropTypes.instanceOf(Game).isRequired,
-  selectCapstone: PropTypes.func.isRequired,
+  setStone: PropTypes.func.isRequired,
   color: PropTypes.string.isRequired,
   stone: PropTypes.string.isRequired,
   playerNumber: PropTypes.number.isRequired,

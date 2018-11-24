@@ -28,7 +28,7 @@ const SelectStoneButtons = (props) => {
     <div className="stone-select">
       <RenderSelectCapstoneButton
         game={game}
-        selectCapstone={selectCapstone}
+        setStone={setStone}
         color={color}
         stone={stone}
         playerNumber={playerNumber}

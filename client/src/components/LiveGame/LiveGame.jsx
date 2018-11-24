@@ -1,30 +1,18 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { connect } from "react-redux";
-import { Link, withRouter } from 'react-router-dom';
-import Game from "./Game";
-import Board from "./Board";
-import Stack from "./Stack";
-import Chat from "./chat";
-import Clock from "./Clock";
-import "../../styles/livegame.css";
-import "../../styles/controlpanel.css";
-import { convertCoord } from "./gameUtil";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { Loader } from 'semantic-ui-react';
+import Game from './Game';
+import Board from './Board';
+import Stack from './Stack';
+import Chat from './chat';
+import Clock from './Clock';
+import '../../styles/livegame.css';
+import '../../styles/controlpanel.css';
+import { convertCoord } from './gameUtil';
 import PageNotFound from '../PageNotFound';
 import SelectStoneButtons from './SelectStoneButtons';
 import GameInfo from './GameInfo';
-import {
-  Input,
-  Button,
-  Header,
-  Modal,
-  Icon,
-  Form,
-  Select,
-  Transition,
-  Loader,
-  Popup
-} from 'semantic-ui-react';
 
 class LiveGame extends Component {
   constructor(props) {
@@ -32,10 +20,7 @@ class LiveGame extends Component {
     this.state = {
       game: null,
       playerNumber: 1,
-      stone: "",
-      isOpen: true,
-      user: props.currentUsername,
-      opponentName: "",
+      stone: '',
       noRoom: false,
       myTime: 0,
       opponentTime: 0,
@@ -43,8 +28,6 @@ class LiveGame extends Component {
 
     this.movePieces = this.movePieces.bind(this);
     this.handleSquareClick = this.handleSquareClick.bind(this);
-    this.selectCapstone = this.selectCapstone.bind(this);
-    this.toggleStanding = this.toggleStanding.bind(this);
     this.setStone = this.setStone.bind(this);
     this.timeOut = this.timeOut.bind(this);
     this.updateGame = this.updateGame.bind(this);
@@ -52,9 +35,9 @@ class LiveGame extends Component {
     const { socket, username } = props;
     const { roomId } = props.match.params;
     const loadGame = this.props.location.state ? this.props.location.state.game : null;
-    
+
     socket.emit('fetchGame', username, roomId, loadGame);
-    
+
     socket.on('syncGame', ({ boardSize, gameState, player1Time, player2Time, status, player1, player2, roomId, activePlayer, isPlayer1 }) => {
       if (roomId === props.match.params.roomId) {
         const game = new Game(boardSize, gameState, player1, player2);
@@ -123,7 +106,18 @@ class LiveGame extends Component {
     });
   }
   
-
+  setStone(stone) {
+    if (this.state.game.turn !== 0) {
+      if (stone === 'S' && this.state.stone === '') {
+        this.setState({
+          stone,
+        })
+      }
+      this.setState({
+        stone,
+      });
+    }
+  }
 
   updateGame(game) {
     this.setState({
@@ -143,7 +137,7 @@ class LiveGame extends Component {
         activePlayer: game.activePlayer,
         roomId: match.params.roomId,
       });
-      //fix room not closing if resign if first move of game
+      // fix room not closing if resign if first move of game
       if (game.winType && game.player1 !== game.player2) {
         const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
         const endOfGameState = { player1, player2, ptn: ptnString, tps, victor: victorUsername, size, winType, ranked };
@@ -191,38 +185,6 @@ class LiveGame extends Component {
     }
   }
 
-  selectCapstone(stone) {
-    if (this.state.game.turn !== 0) {
-      if (this.state.game.pieces[this.state.game.toPlay].C > 0) {
-        this.setState({
-          stone
-        });
-      }
-    }
-  }
-
-  setStone(stone) {
-    if (this.state.game.turn !== 0) {
-      if (stone === 'S' && this.state.stone === '') {
-        this.setState({
-          stone,
-        })
-      }
-      this.setState({
-        stone,
-      });
-    }
-  }
-
-  toggleStanding() {
-    if (this.state.game.turn !== 0) {
-      if (this.state.stone === "") {
-        this.setState({ stone: "S" });
-      } else {
-        this.setState({ stone: "" });
-      }
-    }
-  }
 
   opponentTurn() {
     const { activePlayer, player1, player2 } = this.state.game;
@@ -272,6 +234,7 @@ class LiveGame extends Component {
           </div>
         </div>);
     }
+
     return (
       <div className="retak">
         <GameInfo
