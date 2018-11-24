@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Loader } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 import Game from './Game';
 import Board from './Board';
 import Stack from './Stack';
@@ -265,11 +266,17 @@ class LiveGame extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    username: state.currentUsername,
-    socket: state.socket
-  };
+LiveGame.propTypes = {
+  socket: PropTypes.object.isRequired,
+  username: PropTypes.string.isRequired,
 };
+
+const mapStateToProps = state => (
+  {
+    username: state.currentUsername,
+    socket: state.socket,
+  }
+);
+
 
 export default withRouter(connect(mapStateToProps)(LiveGame));
