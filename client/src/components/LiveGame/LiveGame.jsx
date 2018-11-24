@@ -39,7 +39,18 @@ class LiveGame extends Component {
 
     socket.emit('fetchGame', username, roomId, loadGame);
 
-    socket.on('syncGame', ({ boardSize, gameState, player1Time, player2Time, status, player1, player2, roomId, activePlayer, isPlayer1 }) => {
+    socket.on('syncGame', ({
+      boardSize,
+      gameState,
+      player1Time,
+      player2Time,
+      status,
+      player1,
+      player2,
+      roomId,
+      activePlayer,
+      isPlayer1
+    }) => {
       if (roomId === props.match.params.roomId) {
         const game = new Game(boardSize, gameState, player1, player2);
         game.activePlayer = activePlayer;
@@ -49,14 +60,14 @@ class LiveGame extends Component {
             myTime: player1Time,
             opponentTime: player2Time,
             playerNumber: 1,
-            game
+            game,
           });
         } else {
           this.setState({
             myTime: player2Time,
             opponentTime: player1Time,
             playerNumber: 2,
-            game
+            game,
           });
         }
       }
@@ -67,7 +78,7 @@ class LiveGame extends Component {
         const game = new Game(boardSize, 'new', this.props.username, this.props.username);
         game.activePlayer = this.props.username;
         this.setState({
-          game
+          game,
         });
       }
     });
@@ -75,13 +86,13 @@ class LiveGame extends Component {
     socket.on('gameAccessDenied', (roomId) => {
       if (roomId === props.match.params.roomId) {
         this.setState({
-          accessDenied: true
+          accessDenied: true,
         });
       }
     });
 
     socket.on('closedRoom', () => {
-      this.setState({ noRoom: true })
+      this.setState({ noRoom: true });
     });
     socket.on('updateTime', ({ roomId, player1Time, player2Time }) => {
       if (roomId === props.match.params.roomId) {
@@ -89,30 +100,30 @@ class LiveGame extends Component {
 
           this.setState({
             myTime: player1Time,
-            opponentTime: player2Time
-          })
+            opponentTime: player2Time,
+          });
         } else {
           this.setState({
             myTime: player2Time,
-            opponentTime: player1Time
-          })
+            opponentTime: player1Time,
+          });
         }
       }
     });
 
     socket.on('timeOut', ({ activePlayer, roomId }) => {
       if (roomId === props.match.params.roomId) {
-        this.timeOut(activePlayer)
+        this.timeOut(activePlayer);
       }
     });
   }
-  
+
   setStone(stone) {
     if (this.state.game.turn !== 0) {
       if (stone === 'S' && this.state.stone === '') {
         this.setState({
           stone,
-        })
+        });
       }
       this.setState({
         stone,
@@ -120,15 +131,11 @@ class LiveGame extends Component {
     }
   }
 
-  updateGame(game) {
-    this.setState({
-      game
-    }, emit.bind(this));
-
+  updateGame(updatedGame) {
     function emit() {
       const { socket, match } = this.props;
       const { game } = this.state;
-      socket.emit("updateGame", {
+      socket.emit('updateGame', {
         gameState: {
           ptn: game.ptn,
           tps: game.tps,
@@ -139,31 +146,52 @@ class LiveGame extends Component {
         roomId: match.params.roomId,
       });
       // fix room not closing if resign if first move of game
-      if (game.winType && game.player1 !== game.player2) {
-        const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
-        const endOfGameState = { player1, player2, ptn: ptnString, tps, victor: victorUsername, size, winType, ranked };
+      if (updatedGame.winType && updatedGame.player1 !== updatedGame.player2) {
+        const {
+          player1,
+          player2,
+          ptnString,
+          tps,
+          victorUsername,
+          size,
+          winType,
+          ranked,
+        } = updatedGame;
+        const endOfGameState = {
+          player1,
+          player2,
+          ptn: ptnString,
+          tps,
+          victor: victorUsername,
+          size,
+          winType,
+          ranked,
+        };
         socket.emit('closeGame', match.params.roomId, endOfGameState);
       }
     }
+
+    this.setState({
+      game: updatedGame,
+    }, emit.bind(this));
   }
 
   movePieces(col, row) {
     const { game, stone } = this.state;
     const { socket, match } = this.props;
     game.selectStack(col, row, stone);
-    if (stone !== "") {
+    if (stone !== '') {
       this.setState({
-        stone: ""
+        stone: '',
       });
     }
     this.setState({
-      game
+      game,
     });
 
 
     if (this.props.username !== game.activePlayer) {
-
-      socket.emit("updateGame", {
+      socket.emit('updateGame', {
         gameState: {
           ptn: game.ptn,
           tps: game.tps,
@@ -175,45 +203,28 @@ class LiveGame extends Component {
 
     if (game.winType && game.player1 !== game.player2) {
       const { player1, player2, ptnString, tps, victorUsername, size, winType, ranked } = game;
-      const endOfGameState = { player1, player2, ptn: ptnString, tps, victor: victorUsername, size, winType, ranked };
+      const endOfGameState = {
+        player1,
+        player2,
+        ptn: ptnString,
+        tps,
+        victor: victorUsername,
+        size,
+        winType,
+        ranked,
+      };
       socket.emit('closeGame', match.params.roomId, endOfGameState);
     }
-
   }
+
   handleSquareClick(col, row) {
     if (this.props.username === this.state.game.activePlayer) {
       this.movePieces(col, row);
     }
   }
 
-
-  opponentTurn() {
-    const { activePlayer, player1, player2 } = this.state.game;
-
-    const isPlayer = this.props.username === player1 || this.props.username === player2;
-    if (activePlayer !== this.props.username && isPlayer) {
-      return <div className="to-play">Waiting for Opponent...</div>;
-    } else if (isPlayer || activePlayer === player1) {
-      return <div className="to-play" />;
-    }
-    return <div className="to-play">{player2}'s turn</div>;
-  }
-
-  userTurn() {
-    const { activePlayer, player1, player2 } = this.state.game;
-
-    const isPlayer = this.props.username === player1 || this.props.username === player2;
-    if (activePlayer === this.props.username) {
-      return <div className="to-play">Your turn</div>;
-    } else if (isPlayer || activePlayer === player2) {
-      return <div className="to-play" />;
-    }
-    return <div className="to-play">{player1}'s turn</div>;
-  }
-
   timeOut(player) {
-
-    let game = this.state.game;
+    const { game } = this.state;
     game.timeOut(player);
     this.setState({
       game,
@@ -265,11 +276,6 @@ class LiveGame extends Component {
     );
   }
 }
-
-LiveGame.propTypes = {
-  socket: PropTypes.object.isRequired,
-  username: PropTypes.string.isRequired,
-};
 
 const mapStateToProps = state => (
   {
