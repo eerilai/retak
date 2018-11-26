@@ -5,8 +5,8 @@
   "main": "./server/index.js",
   "scripts": {
     "webpack": "webpack --mode development --config ./webpack.config.js -w",
-    "dev": "nodemon ./server",
-    "start": "node ./server"
+    "dev": "nodemon ./server/server.js",
+    "start": "node ./server/server.js"
   },
   "repository": {
     "type": "git",
