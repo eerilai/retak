@@ -228,7 +228,7 @@ class Game {
           this.activePlayer = (this.activePlayer === this.player1) ? this.player2 : this.player1;
 
         // Start a move
-        } else if (!isEmpty && (stack.owner === this.toPlay)) {
+        } else if (!isEmpty && (stack.owner === this.toPlay) && this.turn !== 0) {
           this.moveStack = [...stack.stack];
           this.toMove.stack = stack.stack.splice(0, this.size);
           this.toMove.stone = stack.stone;
