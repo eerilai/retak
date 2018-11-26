@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { pieceCount, convertCoord } from './gameUtil';
 import Stack from './Stack';
 
