@@ -49,7 +49,7 @@ class LiveGame extends Component {
       player2,
       roomId,
       activePlayer,
-      isPlayer1
+      isPlayer1,
     }) => {
       if (roomId === props.match.params.roomId) {
         const game = new Game(boardSize, gameState, player1, player2);
@@ -97,7 +97,6 @@ class LiveGame extends Component {
     socket.on('updateTime', ({ roomId, player1Time, player2Time }) => {
       if (roomId === props.match.params.roomId) {
         if (this.props.username === this.state.game.player1) {
-
           this.setState({
             myTime: player1Time,
             opponentTime: player2Time,

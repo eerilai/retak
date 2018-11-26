@@ -377,27 +377,27 @@ class Game {
     }
   }
 
-  checkFullBoardWins(){
+  checkFullBoardWins() {
     let isOccupiedCnt = 0;
     let p1FCnt = 0;
-    let p2FCnt =0;
-    
-    Object.values(this.squares).forEach(square => {
-      if(square.isEmpty === false){
-        isOccupiedCnt++;
-        if(square.owner === 1 && square.stone === ''){
-          p1FCnt++;
+    let p2FCnt = 0;
+
+    Object.values(this.squares).forEach((square) => {
+      if (square.isEmpty === false) {
+        isOccupiedCnt += 1;
+        if (square.owner === 1 && square.stone === '') {
+          p1FCnt += 1;
         }
-        if(square.owner === 2 && square.stone === ''){
-          p2FCnt++;
+        if (square.owner === 2 && square.stone === '') {
+          p2FCnt += 1;
         }
-      } 
-    })
+      };
+    });
     this.p1FlatScore = p1FCnt;
     this.p2FlatScore = p2FCnt;
-    if( isOccupiedCnt === (this.size * this.size)){
+    if (isOccupiedCnt === (this.size * this.size)) {
       this.isBoardFull = true;
-      if(this.p1FlatScore === this.p2FlatScore){
+      if (this.p1FlatScore === this.p2FlatScore) {
         this.victor = 0;
         this.winType = '1/2';
         this.setWinString();
@@ -409,11 +409,10 @@ class Game {
         this.setWinString();
       }
     }
-    return;
   }
 
-  checkOutOfPiecesWins(){
-    if(this.p1FlatScore === this.p2FlatScore){
+  checkOutOfPiecesWins() {
+    if (this.p1FlatScore === this.p2FlatScore) {
       this.victor = 0;
       this.winType = '1/2';
       this.setWinString();
@@ -424,7 +423,6 @@ class Game {
       this.winType = 'F';
       this.setWinString();
     }
-    return;
   }
 
   setWinString() {
