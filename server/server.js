@@ -273,6 +273,12 @@ io.on('connection', (socket) => {
     });
   });
 
+  socket.on('drawOffer', (roomId, drawOffered) => {
+    console.log('server got draw offer');
+    console.log('===============', roomId);
+    socket.to(roomId.roomId).emit('receiveDrawOffer', drawOffered);
+  });
+
   // Add 'isClosed' property to finished game and update lobby
   socket.on('closeGame', (roomId, game) => {
     logGame(game);

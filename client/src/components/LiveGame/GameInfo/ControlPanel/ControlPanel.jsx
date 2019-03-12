@@ -17,10 +17,23 @@ class ControlPanel extends Component {
     this.handleResign = this.handleResign.bind(this);
     this.offerDraw = this.offerDraw.bind(this);
     this.acceptDraw = this.acceptDraw.bind(this);
+
+    const { socket } = props;
+
+
+    socket.on('receiveDrawOffer', (drawOffered) => {
+      console.log('drawOffered');
+      this.setState({
+        drawOffered
+      });
+    });
   }
 
   handleResign(resigning) {
     const { game, updateGame, emit } = this.props;
+    if (game.winString){
+      return;
+    }
     const hasBeganResigning = this.state.resigning;
     if (hasBeganResigning && resigning) {
       game.resign(this.props.username);
@@ -40,11 +53,24 @@ class ControlPanel extends Component {
   }
 
   offerDraw() {
-    
+    const { game } = this.props;
+    if (game.winString){
+      return;
+    }
+    console.log('offering draw');
+    const { socket, roomId } = this.props;
+    this.setState({ drawRequested: true });
+    socket.emit('drawOffer', roomId, true);
   }
 
   acceptDraw() {
-
+    const { game, updateGame } = this.props;
+    if (game.winString){
+      return;
+    }
+    game.draw();
+    updateGame(game);
+    this.setState({ drawOffered: false});
   }
 
   render() {
@@ -81,6 +107,7 @@ ControlPanel.propTypes = {
 const mapStateToProps = (state) => {
   return {
     username: state.currentUsername,
+    socket: state.socket,
   };
 };
 

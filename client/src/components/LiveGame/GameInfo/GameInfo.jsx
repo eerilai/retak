@@ -34,6 +34,7 @@ const GameInfo = (props) => {
     playerNumber,
     myTime,
     opponentTime,
+    roomId
   } = props;
 
   let opponentName;
@@ -90,7 +91,7 @@ const GameInfo = (props) => {
         {OpponentPieces}
         <tr>{opponentName}</tr>
         <PTN ptn={game.ptn} victor={game.victor} winType={game.winType} full={game.isBoardFull}/>
-        <ControlPanel game={game} updateGame={updateGame} />
+        <ControlPanel game={game} updateGame={updateGame} roomId={roomId} />
         <tr>{playerName}</tr>
         {PlayerPieces}
       </table>

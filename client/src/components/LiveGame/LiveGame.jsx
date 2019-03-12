@@ -35,6 +35,7 @@ class LiveGame extends Component {
 
     const { socket, username } = props;
     const { roomId } = props.match.params;
+    this.roomId = props.match.params;
     const loadGame = this.props.location.state ? this.props.location.state.game : null;
 
     socket.emit('fetchGame', username, roomId, loadGame);
@@ -254,6 +255,7 @@ class LiveGame extends Component {
           playerNumber={playerNumber}
           myTime={this.state.myTime}
           opponentTime={this.state.opponentTime}
+          roomId={this.roomId}
         />
         <div className="main">
           <div className="game">

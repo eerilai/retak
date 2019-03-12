@@ -144,6 +144,7 @@ class Game {
   }
 
   readTPS(tps) {
+    console.log(tps);
     let parsedTPS = tps.split('').slice(6, tps.length - 2).join('').split(' ');
     this.turn = +parsedTPS.pop() - 1;
     this.toPlay = +parsedTPS.pop();
@@ -462,6 +463,14 @@ class Game {
     this.victorUsername = this.victor === 1 ? this.player1 : this.player2;
     this.loserUsername = this.victor === 1 ? this.player2 : this.player1;
     this.winType = '1';
+    this.setWinString();
+  }
+
+  draw() {
+    this.victor = null;
+    this.victorUsername = null;
+    this.loserUsername = null;
+    this.winType = '1/2';
     this.setWinString();
   }
 }
