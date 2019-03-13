@@ -9,10 +9,10 @@ class SignupModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
-      email: "",
-      password: "",
-      passwordRetype: ""
+      username: '',
+      email: '',
+      password: '',
+      passwordRetype: '',
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,7 +29,7 @@ class SignupModal extends Component {
     const { username, email, password, passwordRetype } = this.state;
     if (password === passwordRetype) {
       axios
-        .post("/auth/signup", {
+        .post('/auth/signup', {
           username,
           email,
           password
@@ -38,7 +38,7 @@ class SignupModal extends Component {
           let currentUserInfo = res.data;
           let currentUsername = res.data.currentUsername;
           if (res.status === 200) {
-            this.props.toggleView("off");
+            this.props.toggleView('off');
             this.props.toggleLoginLogout(true);
             this.props.login(currentUserInfo);
             this.props.socket.emit('login', currentUsername);
@@ -57,7 +57,7 @@ class SignupModal extends Component {
     return (
       <Modal isOpen={this.props.modalView === "signup"}>
         <div className="log">
-          <Header icon='SignUp' content='Sign Up' />
+          <Header icon="SignUp" content="Sign Up" />
           <a href="/auth/google">
             <Button circular class="ui google plus button" role="button" color="google plus">
               <i aria-hidden="true" class="google plus icon"></i>

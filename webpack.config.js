@@ -1,24 +1,24 @@
 module.exports = {
-  entry: ["./client/src/index.jsx"],
+  entry: ['./client/src/index.jsx'],
   output: {
     path: `${__dirname}/client/dist`,
-    publicPath: "/",
-    filename: "bundle.js"
+    publicPath: '/',
+    filename: 'bundle.js',
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ["babel-loader"]
+        use: ['babel-loader'],
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.wav$/,
-        loader: "file-loader"
+        loader: 'file-loader',
       },
       {
         test: /\.(png|jp(e*)g|svg)$/,
@@ -34,6 +34,6 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ["*", ".js", ".jsx"]
+    extensions: ['*', '.js', '.jsx'],
   },
 };

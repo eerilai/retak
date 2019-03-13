@@ -62,10 +62,11 @@ class AuthNav extends Component {
     const userNavLink = (
       <nav>
         <div id="user-nav">
+          <Icon name='user circle outline' />
           <Dropdown
             text={<span>
               {/* <Image avatar src={avatarImg} /> Hello, {currentUsername} */}
-              <Icon name='user circle outline' /> Hello, {currentUsername}
+              Hello, {currentUsername}
               {/* <Image avatar src={faker.internet.avatar()} /> Hello, {currentUsername} */}              
             </span>} 
             pointing='top left' 
