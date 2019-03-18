@@ -238,10 +238,9 @@ class ProfileModal extends Component {
         <Modal.Actions>
           <Button 
             primary 
-            icon='right chevron' 
             onClick={(e) => this.handleOnSave(e)}
           >
-            Save <Icon name='right chevron' />
+            Save {/*<Icon name='right chevron' />*/}
           </Button>
         </Modal.Actions>
       </Modal>

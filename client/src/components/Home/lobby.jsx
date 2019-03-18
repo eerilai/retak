@@ -22,7 +22,7 @@ class Lobby extends Component {
   render() {
     const games = this.state.games.sort((a, b) => { return a.players - b.players; });
     return (
-      <table class="tg">
+      <table className="tg">
         <thead>
           <tr>
             <th colSpan="4" className="title">

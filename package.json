@@ -4,8 +4,8 @@
   "description": "web-based app for Tak the board game",
   "main": "./server/index.js",
   "scripts": {
-    "webpack": "webpack --mode development --config ./webpack.config.js -w",
-    "dev": "nodemon ./server/server.js",
+    "webpack": "webpack --mode development --config ./webpack.config.js --watch",
+    "dev": "nodemon --watch server --watch database ./server/server.js",
     "start": "node ./server/server.js"
   },
   "repository": {

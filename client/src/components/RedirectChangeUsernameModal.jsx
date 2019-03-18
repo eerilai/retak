@@ -51,7 +51,6 @@ class RedirectCreateUsername extends Component {
         <Modal.Actions>
           <Button 
             primary 
-            icon='right chevron' 
             onClick={() => this.props.handleSubmit(username) }
           >
             Save <Icon name='right chevron' />

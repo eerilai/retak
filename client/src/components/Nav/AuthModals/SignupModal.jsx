@@ -138,7 +138,7 @@ class SignupModal extends Component {
                 </Input>
               </div>
             </div>
-            <Button id="signupButton" size="large" color="#4cc560">Sign Up  <Icon size="large" name="add user" corner="true" /></Button>
+            <Button id="signupButton" size="large" color="green">Sign Up  <Icon size="large" name="add user" corner /></Button>
           </form>
           <p className="question">Already have an account?</p>
           <Button
@@ -155,7 +155,7 @@ class SignupModal extends Component {
               this.props.toggleView("off");
             }}
           >
-            <Icon size="large" name="ban" corner="true"/>
+            <Icon size="large" name="ban" corner />
             Cancel
           </Button>
         </div>
