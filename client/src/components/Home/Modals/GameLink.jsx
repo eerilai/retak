@@ -81,8 +81,6 @@ class GameLink extends Component {
     return (
       <Modal
         open={modalView === 'GameLink'}
-        size="small"
-        dimmer={false}
         onClose={() => changeView('')}
         closeIcon
       >
