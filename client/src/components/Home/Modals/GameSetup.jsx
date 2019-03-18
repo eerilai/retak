@@ -101,7 +101,7 @@ class GameSetup extends Component {
         <Modal.Header style={{ display: 'flex' }}>
           GameSetup
           <Form.Input
-            style={{ height: '30px', 'margin-left': '50%', width: '65%' }}
+            style={{ height: '30px', marginLeft: '50%', width: '65%' }}
             type="text"
             placeholder="Name Room?"
             value={this.state.roomId}
@@ -109,8 +109,8 @@ class GameSetup extends Component {
           />
         </Modal.Header>
         <Modal.Content>
-          <Form >
-            <Form.Group inline label="Board Size" style={{ 'justify-content': 'center' }}>
+          <Form>
+            <Form.Group inline label="Board Size" style={{ justifyContent: 'center' }}>
               <label>Board Size</label>
               <Form.Radio
                 label="3x3"
@@ -164,7 +164,7 @@ class GameSetup extends Component {
               label="Private"
               onChange={this.handlePrivacyChange}
             />
-            <Form.Group inline label="Board Size" style={{ 'justify-content': 'center' }}>
+            <Form.Group inline label="Board Size" style={{ justifyContent: 'center' }}>
               <Form.Radio
                 label="White"
                 value="white"
