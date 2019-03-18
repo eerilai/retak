@@ -267,7 +267,6 @@ class LiveGame extends Component {
               game={game}
               stone={stone}
               playerNumber={playerNumber}
-              selectCapstone={this.selectCapstone}
               setStone={this.setStone}
             />
           </div>

@@ -9,7 +9,6 @@ const SelectStoneButtons = (props) => {
     game,
     stone,
     playerNumber,
-    selectCapstone,
     setStone,
   } = props;
   const { ptn } = game;
@@ -49,7 +48,6 @@ SelectStoneButtons.propTypes = {
   game: PropTypes.instanceOf(Game).isRequired,
   stone: PropTypes.string.isRequired,
   playerNumber: PropTypes.number.isRequired,
-  selectCapstone: PropTypes.func.isRequired,
   setStone: PropTypes.func.isRequired,
 };
 
