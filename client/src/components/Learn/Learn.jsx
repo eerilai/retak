@@ -40,42 +40,43 @@ const Learn = props => (
     <div className='table'>
 
       <table id='learntable'>
-
-        <tr>
-          <th>Board Size</th>
-          <th>Stones</th>
-          <th>Capstones</th>
-        </tr>
-        <tr>
-          <td>3 x 3</td>
-          <td>10</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td>4 x 4</td>
-          <td>15</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td>5 x 5</td>
-          <td>21</td>
-          <td>1</td>
-        </tr>
-        <tr>
-          <td>6 x 6</td>
-          <td>30</td>
-          <td>1</td>
-        </tr>
-        <tr>
-          <td>7 x 7</td>
-          <td>40</td>
-          <td>1-2</td>
-        </tr>
-        <tr>
-          <td>8 x 8</td>
-          <td>50</td>
-          <td>2</td>
-        </tr>
+        <tbody>
+          <tr>
+            <th>Board Size</th>
+            <th>Stones</th>
+            <th>Capstones</th>
+          </tr>
+          <tr>
+            <td>3 x 3</td>
+            <td>10</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>4 x 4</td>
+            <td>15</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>5 x 5</td>
+            <td>21</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>6 x 6</td>
+            <td>30</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>7 x 7</td>
+            <td>40</td>
+            <td>1-2</td>
+          </tr>
+          <tr>
+            <td>8 x 8</td>
+            <td>50</td>
+            <td>2</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
