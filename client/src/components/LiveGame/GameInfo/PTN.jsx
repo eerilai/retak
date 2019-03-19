@@ -66,7 +66,13 @@ class PTN extends Component {
             <col className="turn-number" />
             <col className="ptn-ply" span="2" />
           </colgroup>
-          {ptn.map((turn, no) => <tr>{no + 1} {turn.map(ply => <td>{ply}</td>)}</tr>)}
+          <tbody>
+            {ptn.map((turn, no) => (
+              <tr key={`Turn${turn}`}><td>{no + 1}</td>{
+                turn.map(ply => <td key={`Ply${ply}`}>{ply}</td>)}
+              </tr>
+            ))}
+          </tbody>
         </table>
         {gameStats}
         <div ref={(el) => { this.bottom = el; }} />
