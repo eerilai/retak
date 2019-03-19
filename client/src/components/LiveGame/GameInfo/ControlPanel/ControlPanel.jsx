@@ -81,18 +81,22 @@ class ControlPanel extends Component {
     } = this.state;
     return (
       <div className="control-panel">
-        <tr>
-          <OfferDraw
-            drawOffered={drawOffered}
-            drawRequested={drawRequested}
-            offerDraw={this.offerDraw}
-            acceptDraw={this.acceptDraw}
-          />
-          <Resign
-            resigning={resigning}
-            handleResign={this.handleResign}
-          />
-        </tr>
+        <table>
+          <tbody>
+            <tr>
+              <OfferDraw
+                drawOffered={drawOffered}
+                drawRequested={drawRequested}
+                offerDraw={this.offerDraw}
+                acceptDraw={this.acceptDraw}
+              />
+              <Resign
+                resigning={resigning}
+                handleResign={this.handleResign}
+              />
+            </tr>
+          </tbody>
+        </table>
       </div>
     );
   }

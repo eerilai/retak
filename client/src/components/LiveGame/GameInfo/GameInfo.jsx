@@ -69,8 +69,10 @@ const GameInfo = (props) => {
     <tr className="score">
       <td>
       <table>
-        <tr><td>{`${game.pieces[playerNumber].F} / ${game.pieces[playerNumber].C}`}</td><td>{game[`p${playerNumber}FlatScore`]}</td></tr>
-        <tr style={{ fontSize: '10px' }}><td>Stones</td><td>Score</td></tr>
+        <tbody>
+          <tr><td>{`${game.pieces[playerNumber].F} / ${game.pieces[playerNumber].C}`}</td><td>{game[`p${playerNumber}FlatScore`]}</td></tr>
+          <tr style={{ fontSize: '10px' }}><td>Stones</td><td>Score</td></tr>
+        </tbody>
       </table>
       </td>
     </tr>
@@ -116,7 +118,7 @@ const GameInfo = (props) => {
           {PlayerPieces}
         </tbody>
       </table>
-      <div className={`timer ${pToPlay}`}style={{ 'border-top': '0' }}>
+      <div className={`timer ${pToPlay}`}style={{ borderTop: '0' }}>
         {formatSeconds(myTime)}
       </div>
     </div>
