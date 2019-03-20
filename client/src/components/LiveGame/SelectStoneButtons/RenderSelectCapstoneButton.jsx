@@ -28,6 +28,7 @@ const RenderSelectCapstoneButton = (props) => {
         <div
           role="button"
           tabIndex={0}
+          key={`Capstone${i}`}
           className={`${capActive} stone C ${color}`}
           onClick={() => { setStone('C'); }}
           onKeyPress={() => { setStone('C'); }}

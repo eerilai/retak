@@ -84,9 +84,9 @@ class GameSetup extends Component {
     ]
     const timeSliders = this.state.isLive ?
       (<div>
-        <div><strong>Minutes per side</strong>: {this.state.timeControl} minute(s)</div>
+        <span><strong>Minutes per side</strong>: {this.state.timeControl} minute(s)</span>
         <input className='slider' type='range' min={0} max={90} value={this.state.timeControl} onChange={this.handleTimeControl} />
-        <div><strong>Increment in seconds</strong>: {this.state.timeIncrement} second(s)</div>
+        <span><strong>Increment in seconds</strong>: {this.state.timeIncrement} second(s)</span>
         <input className='slider' type='range' min={0} max={30} value={this.state.timeIncrement} onChange={this.handleTimeIncrement} />
       </div>
       ) : <div></div>
@@ -95,13 +95,11 @@ class GameSetup extends Component {
       <Modal
         open={this.props.modalView === 'GameSetup'}
         // size="small"
-        dimmer={false}
-
       >
         <Modal.Header style={{ display: 'flex' }}>
           GameSetup
           <Form.Input
-            style={{ height: '30px', 'margin-left': '50%', width: '65%' }}
+            style={{ height: '30px', marginLeft: '50%', width: '65%' }}
             type="text"
             placeholder="Name Room?"
             value={this.state.roomId}
@@ -109,8 +107,8 @@ class GameSetup extends Component {
           />
         </Modal.Header>
         <Modal.Content>
-          <Form >
-            <Form.Group inline label="Board Size" style={{ 'justify-content': 'center' }}>
+          <Form>
+            <Form.Group inline label="Board Size" style={{ justifyContent: 'center' }}>
               <label>Board Size</label>
               <Form.Radio
                 label="3x3"
@@ -164,7 +162,7 @@ class GameSetup extends Component {
               label="Private"
               onChange={this.handlePrivacyChange}
             />
-            <Form.Group inline label="Board Size" style={{ 'justify-content': 'center' }}>
+            <Form.Group inline label="Board Size" style={{ justifyContent: 'center' }}>
               <Form.Radio
                 label="White"
                 value="white"

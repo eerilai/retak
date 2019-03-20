@@ -4,8 +4,8 @@
   "description": "web-based app for Tak the board game",
   "main": "./server/index.js",
   "scripts": {
-    "webpack": "webpack --mode development --config ./webpack.config.js -w",
-    "dev": "nodemon ./server/server.js",
+    "webpack": "webpack --mode development --config ./webpack.config.js --watch",
+    "dev": "nodemon --watch server --watch database ./server/server.js",
     "start": "node ./server/server.js"
   },
   "repository": {
@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/eerilai/retak#readme",
   "dependencies": {
-    "aws-sdk": "^2.418.0",
+    "aws-sdk": "^2.423.0",
     "axios": "^0.18.0",
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
@@ -37,19 +37,19 @@
     "passport-facebook": "^2.1.1",
     "passport-google-oauth20": "^1.0.0",
     "passport-local": "^1.0.0",
-    "pg": "^7.8.2",
+    "pg": "^7.9.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.4",
     "react-redux": "^5.1.1",
     "react-router-dom": "^4.2.2",
-    "react-transition-group": "^2.6.0",
+    "react-transition-group": "^2.6.1",
     "reactstrap": "^6.5.0",
     "redux": "^4.0.1",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0",
-    "semantic-ui-react": "^0.80.0",
+    "semantic-ui-react": "^0.86.0",
     "sequelize": "^4.43.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
@@ -66,6 +66,6 @@
     "redux-devtools-extension": "^2.13.8",
     "style-loader": "^0.21.0",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.3.0"
   }
 }

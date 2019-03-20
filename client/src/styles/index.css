@@ -374,6 +374,13 @@ th.title {
   margin-top: auto;
 }
 
+.ui.modal {
+  margin-top: 0;
+  margin-left: 0;
+  top: 20%;
+  left: 28%;
+}
+
 .ui.modal>.content {
   height: 300px;
 }

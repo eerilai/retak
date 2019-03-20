@@ -66,36 +66,59 @@ const GameInfo = (props) => {
   }
 
   const PlayerPieces = (
-    <div className="score">
+    <tr className="score">
+      <td>
       <table>
-        <tr><td>{`${game.pieces[playerNumber].F} / ${game.pieces[playerNumber].C}`}</td><td>{game[`p${playerNumber}FlatScore`]}</td></tr>
-        <tr style={{ 'font-size': '10px' }}><td>Stones</td><td>Score</td></tr>
+        <tbody>
+          <tr><td>{`${game.pieces[playerNumber].F} / ${game.pieces[playerNumber].C}`}</td><td>{game[`p${playerNumber}FlatScore`]}</td></tr>
+          <tr style={{ fontSize: '10px' }}><td>Stones</td><td>Score</td></tr>
+        </tbody>
       </table>
-    </div>
+      </td>
+    </tr>
   );
   const OpponentPieces = (
-    <div className="score">
+    <tr className="score">
+      <td>
       <table>
-        <tr style={{ 'font-size': '10px' }}><td>Stones</td><td>Score</td></tr>
-        <tr><td>{`${game.pieces[opponentPlayerNumber].F} / ${game.pieces[opponentPlayerNumber].C}`}</td><td>{game[`p${opponentPlayerNumber}FlatScore`]}</td></tr>
+        <tbody>
+          <tr style={{ fontSize: '10px' }}><td>Stones</td><td>Score</td></tr>
+          <tr><td>{`${game.pieces[opponentPlayerNumber].F} / ${game.pieces[opponentPlayerNumber].C}`}</td><td>{game[`p${opponentPlayerNumber}FlatScore`]}</td></tr>
+        </tbody>
       </table>
-    </div>
+      </td>
+    </tr>
   );
 
   return (
     <div className="game-info">
-      <div className={`timer ${oppToPlay}`} style={{ 'border-bottom':'0' }}>
+      <div className={`timer ${oppToPlay}`} style={{ borderBottom: '0' }}>
         {formatSeconds(opponentTime)}
       </div>
       <table>
-        {OpponentPieces}
-        <tr>{opponentName}</tr>
-        <PTN ptn={game.ptn} victor={game.victor} winType={game.winType} full={game.isBoardFull}/>
-        <ControlPanel game={game} updateGame={updateGame} roomId={roomId} />
-        <tr>{playerName}</tr>
-        {PlayerPieces}
+        <tbody>
+          {OpponentPieces}
+          <tr><td>{opponentName}</td></tr>
+          <tr>
+            <td>
+              <PTN
+                ptn={game.ptn}
+                victor={game.victor}
+                winType={game.winType}
+                full={game.isBoardFull}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <ControlPanel game={game} updateGame={updateGame} roomId={roomId} />
+            </td>
+          </tr>
+          <tr><td>{playerName}</td></tr>
+          {PlayerPieces}
+        </tbody>
       </table>
-      <div className={`timer ${pToPlay}`}style={{ 'border-top': '0' }}>
+      <div className={`timer ${pToPlay}`}style={{ borderTop: '0' }}>
         {formatSeconds(myTime)}
       </div>
     </div>

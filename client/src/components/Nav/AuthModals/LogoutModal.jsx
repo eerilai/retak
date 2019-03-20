@@ -47,7 +47,7 @@ class LogoutModal extends Component {
         <Header icon='LogOut' content='Log-Out to Your Account' />
           <p className="question">Are you sure you want to Logout?</p>
           <Button color="blue" onClick={this.handleLogout}>
-            <Icon size="large" name="sign out" corner="true"/>
+            <Icon size="large" name="sign out" corner />
             Logout
           </Button>
           <Button
@@ -56,7 +56,7 @@ class LogoutModal extends Component {
               this.props.toggleView("off");
             }}
           >
-            <Icon size="large" name="ban" corner="true"/>
+            <Icon size="large" name="ban" corner />
             Cancel
           </Button>
         </div>

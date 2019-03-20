@@ -1,5 +1,6 @@
 import React from 'react';
 import Square from './Square';
+import { convertCoord } from './gameUtil';
 
 const Board = ({ game, handleSquareClick }) => {
   const squares = [];
@@ -9,6 +10,7 @@ const Board = ({ game, handleSquareClick }) => {
         game={game}
         row={row}
         col={col}
+        key={convertCoord([col, row])}
         handleSquareClick={handleSquareClick}
       />);
     }
