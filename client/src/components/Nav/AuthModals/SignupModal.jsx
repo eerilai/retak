@@ -1,10 +1,11 @@
-import React, { Component } from "react";
-import { Modal } from "reactstrap";
-import axios from "axios";
-import { Button, Icon, Input, Header } from "semantic-ui-react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { toggleLoginLogout, login } from "../../../actions/actions";
+import React, { Component } from 'react';
+import { Modal } from 'reactstrap';
+import axios from 'axios';
+import { Button, Icon, Input, Header } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toggleLoginLogout, login } from '../../../actions/actions';
+
 class SignupModal extends Component {
   constructor(props) {
     super(props);
@@ -49,13 +50,13 @@ class SignupModal extends Component {
         });
     } else {
       // TODO: Alert user passwords must match
-      alert('password doesn\'t match')
+      alert('password doesn\'t match');
     }
   }
 
   render() {
     return (
-      <Modal isOpen={this.props.modalView === "signup"}>
+      <Modal isOpen={this.props.modalView === 'signup'}>
         <div className="log">
           <Header icon="SignUp" content="Sign Up" />
           <a href="/auth/google">
@@ -83,7 +84,7 @@ class SignupModal extends Component {
                       placeholder="Username"
                       value={this.state.username}
                       onChange={e => {
-                        this.handleInputChange(e, "username");
+                        this.handleInputChange(e, 'username');
                       }}
                     />
                   </div>
@@ -99,7 +100,7 @@ class SignupModal extends Component {
                       placeholder="Email"
                       value={this.state.email}
                       onChange={e => {
-                        this.handleInputChange(e, "email");
+                        this.handleInputChange(e, 'email');
                       }}
                     />
                   </div>
@@ -115,7 +116,7 @@ class SignupModal extends Component {
                       placeholder="Password"
                       value={this.state.password}
                       onChange={e => {
-                        this.handleInputChange(e, "password");
+                        this.handleInputChange(e, 'password');
                       }}
                     />
                   </div>
@@ -131,7 +132,7 @@ class SignupModal extends Component {
                       placeholder="Re-Type Password"
                       value={this.state.passwordRetype}
                       onChange={e => {
-                        this.handleInputChange(e, "passwordRetype");
+                        this.handleInputChange(e, 'passwordRetype');
                       }}
                     />
                   </div>
@@ -144,7 +145,7 @@ class SignupModal extends Component {
           <Button
             color="blue"
             onClick={() => {
-              this.props.toggleView("login");
+              this.props.toggleView('login');
             }}
           >
             Click here to Login
@@ -152,7 +153,7 @@ class SignupModal extends Component {
           <Button
             color="red"
             onClick={() => {
-              this.props.toggleView("off");
+              this.props.toggleView('off');
             }}
           >
             <Icon size="large" name="ban" corner />
@@ -167,7 +168,7 @@ class SignupModal extends Component {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
-    currentUsername: state.currentUsername
+    currentUsername: state.currentUsername,
   };
 }
 
