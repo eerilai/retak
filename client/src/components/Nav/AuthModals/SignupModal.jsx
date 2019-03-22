@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal } from 'reactstrap';
 import axios from 'axios';
-import { Button, Icon, Input, Header } from 'semantic-ui-react';
+import { Form, Button, Icon, Input, Header, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toggleLoginLogout, login } from '../../../actions/actions';
@@ -13,7 +13,13 @@ class SignupModal extends Component {
       username: '',
       email: '',
       password: '',
-      passwordRetype: '',
+      confirmPassword: '',
+      error: false,
+      usernameError: false,
+      emailError: false,
+      passwordError: false,
+      confirmPasswordError: false,
+      errorMessages: [],
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,10 +31,32 @@ class SignupModal extends Component {
     this.setState(newState);
   }
 
+  checkForm() {
+    const newState = this.state;
+    newState.errorMessages = [];
+    if (this.state.password.length < 8) {
+      newState.passwordError = true;
+      newState.errorMessages.push('Password must be at least 8 characters long');
+    }
+    if (this.state.password !== this.state.confirmPassword) {
+      newState.passwordError = true;
+      newState.confirmPasswordError = true;
+      newState.errorMessages.push('Passwords do not match');
+    }
+    if (newState.usernameError
+      || newState.emailError
+      || newState.passwordError
+      || newState.confirmPasswordError) {
+      newState.error = true;
+    }
+    this.setState(newState);
+  }
+
   handleSubmit(e) {
     e.preventDefault();
-    const { username, email, password, passwordRetype } = this.state;
-    if (password === passwordRetype) {
+    const { username, email, password, confirmPassword } = this.state;
+    this.checkForm();
+    if (!this.state.error) {
       axios
         .post('/auth/signup', {
           username,
@@ -48,9 +76,6 @@ class SignupModal extends Component {
         .catch(err => {
           console.error(err);
         });
-    } else {
-      // TODO: Alert user passwords must match
-      alert('password doesn\'t match');
     }
   }
 
@@ -72,11 +97,15 @@ class SignupModal extends Component {
             </Button>
           </a>
 
-          <form onSubmit={this.handleSubmit} className="signupForm">
+          <Form error={this.state.error} onSubmit={this.handleSubmit} className="signupForm">
+            <Message error size="tiny">
+              <Message.Header>Please check the following and try again</Message.Header>
+              <ul>{this.state.errorMessages.map(error => <li>{error}</li>)}</ul>
+            </Message>
             <div>
               <div>
                 <p className="logTag">Username:</p>
-                <Input className="hvr-shadow-radial" required>
+                <Form.Input error={this.state.usernameError} className="hvr-shadow-radial" required>
                   <div className="ui left icon input">
                     <i class="user icon"></i>
                     <input
@@ -88,11 +117,11 @@ class SignupModal extends Component {
                       }}
                     />
                   </div>
-                </Input>
+                </Form.Input>
               </div>
               <div>
                 <p className="logTag">Email:</p>
-                <Input className="hvr-shadow-radial" required>
+                <Form.Input error={this.state.emailError} className="hvr-shadow-radial" required>
                   <div className="ui left icon input">
                     <i class="user icon"></i>
                     <input
@@ -104,11 +133,11 @@ class SignupModal extends Component {
                       }}
                     />
                   </div>
-                </Input>
+                </Form.Input>
               </div>
               <div>
                 <p className="logTag">Password:</p>
-                <Input className="hvr-shadow-radial" required>
+                <Form.Input error={this.state.passwordError} className="hvr-shadow-radial" required>
                   <div class="ui left icon input">
                     <i class="lock icon"></i>
                     <input
@@ -120,27 +149,39 @@ class SignupModal extends Component {
                       }}
                     />
                   </div>
-                </Input>
+                </Form.Input>
               </div>
               <div>
                 <p className="logTag">Retype Password:</p>
-                <Input className="hvr-shadow-radial" required>
+                <Form.Input error={this.state.confirmPasswordError} className="hvr-shadow-radial" required>
                   <div class="ui left icon input">
                     <i class="lock icon"></i>
                     <input
                       type="password"
                       placeholder="Re-Type Password"
-                      value={this.state.passwordRetype}
+                      value={this.state.confirmPassword}
                       onChange={e => {
-                        this.handleInputChange(e, 'passwordRetype');
+                        this.handleInputChange(e, 'confirmPassword');
                       }}
                     />
                   </div>
-                </Input>
+                </Form.Input>
               </div>
             </div>
-            <Button id="signupButton" size="large" color="green">Sign Up  <Icon size="large" name="add user" corner /></Button>
-          </form>
+            <Button
+              id="signupButton"
+              size="large"
+              color="green"
+              disabled={
+                !this.state.username
+                || !this.state.email
+                || !this.state.password
+                || !this.state.confirmPassword
+              }
+            >
+              Sign Up
+            </Button>
+          </Form>
           <p className="question">Already have an account?</p>
           <Button
             color="blue"
@@ -156,7 +197,6 @@ class SignupModal extends Component {
               this.props.toggleView('off');
             }}
           >
-            <Icon size="large" name="ban" corner />
             Cancel
           </Button>
         </div>
