@@ -127,68 +127,68 @@ class SignupModal extends Component {
             </Message>
             <div>
               <div>
-                <p className="logTag">Username:</p>
-                <Form.Input error={this.state.usernameError} className="hvr-shadow-radial" required>
+                <Form.Field error={this.state.usernameError} className="hvr-shadow-radial" required>
+                  <label className="logTag" htmlFor="username">Username</label>
                   <div className="ui left icon input">
                     <i className="user icon" />
                     <input
                       type="text"
-                      placeholder="Username"
+                      id="username"
                       value={this.state.username}
                       onChange={(e) => {
                         this.handleInputChange(e, 'username');
                       }}
                     />
                   </div>
-                </Form.Input>
+                </Form.Field>
               </div>
               <div>
-                <p className="logTag">Email:</p>
-                <Form.Input error={this.state.emailError} className="hvr-shadow-radial" required>
+                <Form.Field error={this.state.emailError} className="hvr-shadow-radial" required>
+                  <label className="logTag" htmlFor="email">Email</label>
                   <div className="ui left icon input">
                     <i className="mail icon" />
                     <input
                       type="email"
-                      placeholder="Email"
+                      id="email"
                       value={this.state.email}
                       onChange={(e) => {
                         this.handleInputChange(e, 'email');
                       }}
                     />
                   </div>
-                </Form.Input>
+                </Form.Field>
               </div>
               <div>
-                <p className="logTag">Password:</p>
-                <Form.Input error={this.state.passwordError} className="hvr-shadow-radial" required>
+                <Form.Field error={this.state.passwordError} className="hvr-shadow-radial" required>
+                  <label className="logTag" htmlFor="password">Password</label>
                   <div className="ui left icon input">
                     <i className="lock icon" />
                     <input
                       type="password"
-                      placeholder="Password"
+                      id="password"
                       value={this.state.password}
                       onChange={(e) => {
                         this.handleInputChange(e, 'password');
                       }}
                     />
                   </div>
-                </Form.Input>
+                </Form.Field>
               </div>
               <div>
-                <p className="logTag">Retype Password:</p>
-                <Form.Input error={this.state.confirmPasswordError} className="hvr-shadow-radial" required>
+                <Form.Field error={this.state.confirmPasswordError} className="hvr-shadow-radial" required>
+                  <label className="logTag" htmlFor="retype">Retype Password</label>
                   <div className="ui left icon input">
                     <i className="lock icon" />
                     <input
                       type="password"
-                      placeholder="Re-Type Password"
+                      id="retype"
                       value={this.state.confirmPassword}
                       onChange={(e) => {
                         this.handleInputChange(e, 'confirmPassword');
                       }}
                     />
                   </div>
-                </Form.Input>
+                </Form.Field>
               </div>
             </div>
             <Button
