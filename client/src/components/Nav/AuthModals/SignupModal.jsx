@@ -43,6 +43,20 @@ class SignupModal extends Component {
       newState.confirmPasswordError = true;
       newState.errorMessages.push('Passwords do not match');
     }
+    const endsWithAlphanumeric = RegExp(/[A-Za-z0-9]$/);
+    if (!endsWithAlphanumeric.test(this.state.username)) {
+      newState.usernameError = true;
+      newState.errorMessages.push('Username must end with a letter or a number');
+    }
+    const onlyContainsAlphanumAndDashes = RegExp(/[\w|-]*/);
+    if (!onlyContainsAlphanumAndDashes.test(this.state.username)) {
+      newState.usernameError = true;
+      newState.errorMessages.push('Username must only contain alphanumeric characters, dashes, or underscores');
+    }
+    if (this.state.username.length < 2) {
+      newState.usernameError = true;
+      newState.errorMessages.push('Username must be at least 2 characters long');
+    }
     if (newState.usernameError
       || newState.emailError
       || newState.passwordError
