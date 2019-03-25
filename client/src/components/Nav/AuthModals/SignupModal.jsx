@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Modal } from 'reactstrap';
 import axios from 'axios';
-import { Form, Button, Icon, Input, Header, Message } from 'semantic-ui-react';
+import { Form, Button, Header, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toggleLoginLogout, login } from '../../../actions/actions';
@@ -68,26 +69,33 @@ class SignupModal extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const { username, email, password, confirmPassword } = this.state;
+    const { username, email, password } = this.state;
     this.checkForm();
     if (!this.state.error) {
       axios
         .post('/auth/signup', {
           username,
           email,
-          password
+          password,
         })
-        .then(res => {
-          let currentUserInfo = res.data;
-          let currentUsername = res.data.currentUsername;
+        .then((res) => {
+          const currentUserInfo = res.data;
+          const { currentUsername } = res.data;
           if (res.status === 200) {
             this.props.toggleView('off');
             this.props.toggleLoginLogout(true);
             this.props.login(currentUserInfo);
             this.props.socket.emit('login', currentUsername);
+          } else {
+            const { errorMessages } = this.state;
+            errorMessages.push('Unable to create account. Please try again.');
+            this.setState({
+              error: true,
+              errorMessages,
+            });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
         });
     }
@@ -97,20 +105,21 @@ class SignupModal extends Component {
     return (
       <Modal isOpen={this.props.modalView === 'signup'}>
         <div className="log">
-          <Header icon="SignUp" content="Sign Up" />
+          <Header content="Sign Up" />
+          {/*
           <a href="/auth/google">
-            <Button circular class="ui google plus button" role="button" color="google plus">
-              <i aria-hidden="true" class="google plus icon"></i>
+            <Button circular className="ui google plus button" role="button" color="google plus">
+              <i aria-hidden="true" className="google plus icon"></i>
               |   Google
             </Button>
           </a>
           <a href="/auth/facebook">
-            <Button circular class="ui facebook button" role="button" color="facebook">
-              <i aria-hidden="true" class="facebook icon"></i>
+            <Button circular className="ui facebook button" role="button" color="facebook">
+              <i aria-hidden="true" className="facebook icon"></i>
               |  Facebook
             </Button>
           </a>
-
+          */}
           <Form error={this.state.error} onSubmit={this.handleSubmit} className="signupForm">
             <Message error size="tiny">
               <Message.Header>Please check the following and try again</Message.Header>
@@ -121,12 +130,12 @@ class SignupModal extends Component {
                 <p className="logTag">Username:</p>
                 <Form.Input error={this.state.usernameError} className="hvr-shadow-radial" required>
                   <div className="ui left icon input">
-                    <i class="user icon"></i>
+                    <i className="user icon" />
                     <input
                       type="text"
                       placeholder="Username"
                       value={this.state.username}
-                      onChange={e => {
+                      onChange={(e) => {
                         this.handleInputChange(e, 'username');
                       }}
                     />
@@ -137,12 +146,12 @@ class SignupModal extends Component {
                 <p className="logTag">Email:</p>
                 <Form.Input error={this.state.emailError} className="hvr-shadow-radial" required>
                   <div className="ui left icon input">
-                    <i class="user icon"></i>
+                    <i className="mail icon" />
                     <input
                       type="email"
                       placeholder="Email"
                       value={this.state.email}
-                      onChange={e => {
+                      onChange={(e) => {
                         this.handleInputChange(e, 'email');
                       }}
                     />
@@ -152,13 +161,13 @@ class SignupModal extends Component {
               <div>
                 <p className="logTag">Password:</p>
                 <Form.Input error={this.state.passwordError} className="hvr-shadow-radial" required>
-                  <div class="ui left icon input">
-                    <i class="lock icon"></i>
+                  <div className="ui left icon input">
+                    <i className="lock icon" />
                     <input
                       type="password"
                       placeholder="Password"
                       value={this.state.password}
-                      onChange={e => {
+                      onChange={(e) => {
                         this.handleInputChange(e, 'password');
                       }}
                     />
@@ -168,13 +177,13 @@ class SignupModal extends Component {
               <div>
                 <p className="logTag">Retype Password:</p>
                 <Form.Input error={this.state.confirmPasswordError} className="hvr-shadow-radial" required>
-                  <div class="ui left icon input">
-                    <i class="lock icon"></i>
+                  <div className="ui left icon input">
+                    <i className="lock icon" />
                     <input
                       type="password"
                       placeholder="Re-Type Password"
                       value={this.state.confirmPassword}
-                      onChange={e => {
+                      onChange={(e) => {
                         this.handleInputChange(e, 'confirmPassword');
                       }}
                     />
@@ -218,6 +227,14 @@ class SignupModal extends Component {
     );
   }
 }
+
+SignupModal.propTypes = {
+  toggleView: PropTypes.func.isRequired,
+  toggleLoginLogout: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+  modalView: PropTypes.string.isRequired,
+  socket: PropTypes.any.isRequired,
+};
 
 function mapStateToProps(state) {
   return {
