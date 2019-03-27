@@ -141,7 +141,7 @@ class Home extends Component {
           <InPlay />
         </div>
         <div className="main">
-          <div className="lobby">
+          <div className="game-list">
             <Lobby socket={this.props.socket} />
           </div>
           <GameSetup
