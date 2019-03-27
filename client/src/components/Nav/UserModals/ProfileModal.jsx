@@ -35,8 +35,8 @@ class ProfileModal extends Component {
   }
   // handleSubmit(e) {
   //   e.preventDefault();
-  //   const { username, email, password, passwordRetype } = this.state;
-  //   if (password === passwordRetype) {
+  //   const { username, email, password, confirmPassword } = this.state;
+  //   if (password === confirmPassword) {
   //     axios
   //       .post("/auth/signup", {
   //         username,
@@ -225,7 +225,7 @@ class ProfileModal extends Component {
                         placeholder="Re-Type Password"
                         value={this.state.newPasswordRetype}
                         onChange={e => {
-                          this.handleInputChange(e, "passwordRetype");
+                          this.handleInputChange(e, "confirmPassword");
                         }}
                       />
                     </div>
