@@ -623,14 +623,14 @@ p.question {
   width: 100%
 }
 
-.signup-form-controls {
+.auth-modal-form-controls {
   display: flex;
 }
 
 #signupButton {
 }
 
-#cancelSignupButton {
+#cancelAuthButton {
   margin: 10px 0px 10px 5px;
   width: 15%
 }
@@ -644,6 +644,14 @@ p.question {
   margin: 30px 30px 60px 50px;
 }
 
+.ui.form .field > label.auth-form-label {
+  color: #767676;
+  font-weight: 500;
+}
+
+.ui.header {
+  color: #767676;
+}
 
 
 

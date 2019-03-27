@@ -32,19 +32,19 @@ class SignupModal extends Component {
     this.setState(newState);
   }
 
-  clearErrors(state) {
+  clearErrors() {
     return {
-      ...state,
+      ...this.state,
       errorMessages: [],
       usernameError: false,
       emailError: false,
       passwordError: false,
       confirmPasswordError: false,
-    }
+    };
   }
 
   checkForm() {
-    const newState = this.clearErrors(this.state);
+    const newState = SignupModal.clearErrors(this.state);
     if (this.state.password.length < 8) {
       newState.passwordError = true;
       newState.errorMessages.push('Password must be at least 8 characters long');
@@ -137,7 +137,7 @@ class SignupModal extends Component {
             </Message>
             <div>
               <Form.Field error={this.state.usernameError}>
-                <label className="logTag" htmlFor="usernameInput">Username</label>
+                <label className="auth-form-label" htmlFor="usernameInput">Username</label>
                 <div className="ui left icon input">
                   <i className="user icon" />
                   <input
@@ -151,7 +151,7 @@ class SignupModal extends Component {
                 </div>
               </Form.Field>
               <Form.Field error={this.state.emailError}>
-                <label className="logTag" htmlFor="email">Email</label>
+                <label className="auth-form-label" htmlFor="email">Email</label>
                 <div className="ui left icon input">
                   <i className="mail icon" />
                   <input
@@ -165,7 +165,7 @@ class SignupModal extends Component {
                 </div>
               </Form.Field>
               <Form.Field error={this.state.passwordError}>
-                <label className="logTag" htmlFor="password">Password</label>
+                <label className="auth-form-label" htmlFor="password">Password</label>
                 <div className="ui left icon input">
                   <i className="lock icon" />
                   <input
@@ -179,7 +179,7 @@ class SignupModal extends Component {
                 </div>
               </Form.Field>
               <Form.Field error={this.state.confirmPasswordError}>
-                <label className="logTag" htmlFor="retype">Retype Password</label>
+                <label className="auth-form-label" htmlFor="retype">Retype Password</label>
                 <div className="ui left icon input">
                   <i className="lock icon" />
                   <input
@@ -193,7 +193,7 @@ class SignupModal extends Component {
                 </div>
               </Form.Field>
             </div>
-            <div className="signup-form-controls">
+            <div className="auth-modal-form-controls">
               <Button
                 id="signupButton"
                 type="submit"
@@ -209,7 +209,7 @@ class SignupModal extends Component {
                 Sign Up
               </Button>
               <Button
-                id="cancelSignupButton"
+                id="cancelAuthButton"
                 type="button"
                 color="red"
                 onClick={() => {
@@ -241,7 +241,11 @@ SignupModal.propTypes = {
   toggleLoginLogout: PropTypes.func.isRequired,
   login: PropTypes.func.isRequired,
   modalView: PropTypes.string.isRequired,
-  socket: PropTypes.any.isRequired,
+  socket: PropTypes.any,
+};
+
+SignupModal.defaultProps = {
+  socket: null,
 };
 
 function mapStateToProps(state) {
