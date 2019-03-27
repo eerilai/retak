@@ -85,7 +85,6 @@ class Home extends Component {
         roomId,
       });
       socket.on('gameInitiated', ({ roomId }) => {
-        // TODO: Change URL from localhost to retak for deployment
         const url = `${SITE_URL}/game/${roomId}`;
         const link = `game/${roomId}`;
         this.setState({
@@ -116,7 +115,7 @@ class Home extends Component {
     return (
       <div className="retak">
         <div className="left">
-          <h1 id="logo"><span id="sub-logo">re</span>Tak</h1>
+          <h1 id="logo"><span id="sub-logo">re</span>tak</h1>
           <button
             className="createGame"
             onClick={() =>
