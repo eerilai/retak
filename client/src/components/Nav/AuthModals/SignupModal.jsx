@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'reactstrap';
 import axios from 'axios';
-import { Form, Button, Header, Message } from 'semantic-ui-react';
+import { Form, Button, Header, Message, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toggleLoginLogout, login } from '../../../actions/actions';
@@ -32,9 +32,19 @@ class SignupModal extends Component {
     this.setState(newState);
   }
 
+  clearErrors(state) {
+    return {
+      ...state,
+      errorMessages: [],
+      usernameError: false,
+      emailError: false,
+      passwordError: false,
+      confirmPasswordError: false,
+    }
+  }
+
   checkForm() {
-    const newState = this.state;
-    newState.errorMessages = [];
+    const newState = this.clearErrors(this.state);
     if (this.state.password.length < 8) {
       newState.passwordError = true;
       newState.errorMessages.push('Password must be at least 8 characters long');
@@ -126,101 +136,99 @@ class SignupModal extends Component {
               <ul>{this.state.errorMessages.map(error => <li>{error}</li>)}</ul>
             </Message>
             <div>
-              <div>
-                <Form.Field error={this.state.usernameError} className="hvr-shadow-radial" required>
-                  <label className="logTag" htmlFor="username">Username</label>
-                  <div className="ui left icon input">
-                    <i className="user icon" />
-                    <input
-                      type="text"
-                      id="username"
-                      value={this.state.username}
-                      onChange={(e) => {
-                        this.handleInputChange(e, 'username');
-                      }}
-                    />
-                  </div>
-                </Form.Field>
-              </div>
-              <div>
-                <Form.Field error={this.state.emailError} className="hvr-shadow-radial" required>
-                  <label className="logTag" htmlFor="email">Email</label>
-                  <div className="ui left icon input">
-                    <i className="mail icon" />
-                    <input
-                      type="email"
-                      id="email"
-                      value={this.state.email}
-                      onChange={(e) => {
-                        this.handleInputChange(e, 'email');
-                      }}
-                    />
-                  </div>
-                </Form.Field>
-              </div>
-              <div>
-                <Form.Field error={this.state.passwordError} className="hvr-shadow-radial" required>
-                  <label className="logTag" htmlFor="password">Password</label>
-                  <div className="ui left icon input">
-                    <i className="lock icon" />
-                    <input
-                      type="password"
-                      id="password"
-                      value={this.state.password}
-                      onChange={(e) => {
-                        this.handleInputChange(e, 'password');
-                      }}
-                    />
-                  </div>
-                </Form.Field>
-              </div>
-              <div>
-                <Form.Field error={this.state.confirmPasswordError} className="hvr-shadow-radial" required>
-                  <label className="logTag" htmlFor="retype">Retype Password</label>
-                  <div className="ui left icon input">
-                    <i className="lock icon" />
-                    <input
-                      type="password"
-                      id="retype"
-                      value={this.state.confirmPassword}
-                      onChange={(e) => {
-                        this.handleInputChange(e, 'confirmPassword');
-                      }}
-                    />
-                  </div>
-                </Form.Field>
-              </div>
+              <Form.Field error={this.state.usernameError}>
+                <label className="logTag" htmlFor="usernameInput">Username</label>
+                <div className="ui left icon input">
+                  <i className="user icon" />
+                  <input
+                    type="text"
+                    id="usernameInput"
+                    value={this.state.username}
+                    onChange={(e) => {
+                      this.handleInputChange(e, 'username');
+                    }}
+                  />
+                </div>
+              </Form.Field>
+              <Form.Field error={this.state.emailError}>
+                <label className="logTag" htmlFor="email">Email</label>
+                <div className="ui left icon input">
+                  <i className="mail icon" />
+                  <input
+                    type="email"
+                    id="email"
+                    value={this.state.email}
+                    onChange={(e) => {
+                      this.handleInputChange(e, 'email');
+                    }}
+                  />
+                </div>
+              </Form.Field>
+              <Form.Field error={this.state.passwordError}>
+                <label className="logTag" htmlFor="password">Password</label>
+                <div className="ui left icon input">
+                  <i className="lock icon" />
+                  <input
+                    type="password"
+                    id="password"
+                    value={this.state.password}
+                    onChange={(e) => {
+                      this.handleInputChange(e, 'password');
+                    }}
+                  />
+                </div>
+              </Form.Field>
+              <Form.Field error={this.state.confirmPasswordError}>
+                <label className="logTag" htmlFor="retype">Retype Password</label>
+                <div className="ui left icon input">
+                  <i className="lock icon" />
+                  <input
+                    type="password"
+                    id="retype"
+                    value={this.state.confirmPassword}
+                    onChange={(e) => {
+                      this.handleInputChange(e, 'confirmPassword');
+                    }}
+                  />
+                </div>
+              </Form.Field>
             </div>
-            <Button
-              id="signupButton"
-              size="large"
-              color="green"
-              disabled={
-                !this.state.username
-                || !this.state.email
-                || !this.state.password
-                || !this.state.confirmPassword
-              }
-            >
-              Sign Up
-            </Button>
+            <div className="signup-form-controls">
+              <Button
+                id="signupButton"
+                type="submit"
+                size="large"
+                color="green"
+                disabled={
+                  !this.state.username
+                  || !this.state.email
+                  || !this.state.password
+                  || !this.state.confirmPassword
+                }
+              >
+                Sign Up
+              </Button>
+              <Button
+                id="cancelSignupButton"
+                type="button"
+                color="red"
+                onClick={() => {
+                  this.props.toggleView('off');
+                }}
+              >
+                <Icon style={{ margin: 'auto' }} name="ban" />
+              </Button>
+            </div>
           </Form>
           <p className="question">Already have an account?</p>
           <Button
+            id="switch-auth-modal-button"
             color="blue"
             onClick={() => {
               this.props.toggleView('login');
             }}
           >
             Click here to Login
-          </Button>
-          <Button
-            color="red"
-            onClick={() => {
-              this.props.toggleView('off');
-            }}
-          >
-            Cancel
           </Button>
         </div>
       </Modal>
