@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from 'reactstrap';
-import { Form, Button, Icon, Header } from 'semantic-ui-react';
+import { Form, Button, Icon, Header, Message } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { toggleLoginLogout, login, setCorrGames } from '../../../actions/actions';
 
@@ -13,6 +13,8 @@ class LoginModal extends Component {
     this.state = {
       usernameOrEmail: '',
       password: '',
+      error: false,
+      errorMessage: '',
     };
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -34,6 +36,8 @@ class LoginModal extends Component {
   handleSubmit(e) {
     e.preventDefault();
     const { usernameOrEmail, password } = this.state;
+    let error = false;
+    let errorMessage = '';
     axios
       .post('/auth/login', {
         username: usernameOrEmail,
@@ -49,7 +53,19 @@ class LoginModal extends Component {
         this.props.socket.emit('login', currentUsername);
       })
       .catch((err) => {
-        console.error(err);
+        if (err.response) {
+          if (err.response.status === 500) {
+            error = true;
+            errorMessage = 'Invalid username or password.';
+          }
+        } else {
+          console.error(err);
+          error = true;
+          errorMessage = 'Unable to login to account. Please try again.';
+        }
+      })
+      .finally(() => {
+        this.setState({ error, errorMessage });
       });
   }
 
@@ -80,7 +96,10 @@ class LoginModal extends Component {
             </Button>
           </a>
           */}
-          <Form onSubmit={this.handleSubmit}>
+          <Form error={this.state.error} onSubmit={this.handleSubmit}>
+            <Message error size="tiny">
+              {this.state.errorMessage}
+            </Message>
             <div>
               <Form.Field>
                 <label className="auth-form-label" htmlFor="usernameInput">Username</label>
@@ -112,14 +131,16 @@ class LoginModal extends Component {
             <div className="auth-modal-form-controls">
               <Button
                 id="loginButton"
+                type="submit"
+                color="green"
                 size="large"
                 disabled={
-                  !this.state.username
+                  !this.state.usernameOrEmail
                   || !this.state.password
                 }
               >
                   Log In
-                <Icon size="large" name="sign in" corner />
+                <Icon size="small" name="sign in" />
               </Button>
               <Button
                 id="cancelAuthButton"

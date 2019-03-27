@@ -106,6 +106,12 @@ class SignupModal extends Component {
           }
         })
         .catch((err) => {
+          const { errorMessages } = this.state;
+          errorMessages.push('Unable to create account. Please try again.');
+          this.setState({
+            error: true,
+            errorMessages,
+          });
           console.error(err);
         });
     }
