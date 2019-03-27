@@ -597,7 +597,7 @@ textarea {
 }
 
 .log {
-  margin: 30px 30px 60px 50px;
+  margin: 30px 30px 30px 30px;
 }
 
 p:first-child {
@@ -620,12 +620,38 @@ p.question {
   padding-left: 0px;
   display: block;
   margin: 10px 0px;
-  width: 400px;
+  width: 100%
 }
+
+.auth-modal-form-controls {
+  display: flex;
+}
+
+#signupButton {
+}
+
+#cancelAuthButton {
+  margin: 10px 0px 10px 5px;
+  width: 15%
+}
+
+#switch-auth-modal-button {
+  display: block;
+  margin: auto;
+}
+
 .logout {
   margin: 30px 30px 60px 50px;
 }
 
+.ui.form .field > label.auth-form-label {
+  color: #767676;
+  font-weight: 500;
+}
+
+.ui.header {
+  color: #767676;
+}
 
 
 

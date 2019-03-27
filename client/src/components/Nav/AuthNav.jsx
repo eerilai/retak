@@ -91,7 +91,7 @@ class AuthNav extends Component {
           this.changeView("login");
         }}
       >
-        LogIn / SignUp
+        Login
       </nav>
     );
 
