@@ -9,6 +9,7 @@ import GameSetup from './Modals/GameSetup';
 import GameLink from './Modals/GameLink';
 import { SITE_URL } from '../../copy';
 import generateRoomName from './roomNames';
+import MyModal from '../Util/Modal';
 
 class Home extends Component {
   constructor(props) {
@@ -114,8 +115,9 @@ class Home extends Component {
 
     return (
       <div className="retak">
+        <MyModal isOpen />
         <div className="left">
-          <h1 id="logo"><span id="sub-logo">re</span>tak</h1>
+          <h1 id="logo"><span id="sub-logo">re</span><b>tak</b></h1>
           <button
             className="createGame"
             onClick={() =>
