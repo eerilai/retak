@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Modal, Form, Checkbox } from 'semantic-ui-react';
+import './GameSetup.scss';
 
 class GameSetup extends Component {
   constructor(props) {

@@ -1,0 +1,24 @@
+/* game setup  */
+.ui.modal>.actions,
+.ui.modal>.content {
+  text-align: center;
+  margin-top: auto;
+}
+
+.ui.modal {
+  margin-top: 0;
+  margin-left: 0;
+  top: 20%;
+  left: 28%;
+}
+
+.ui.modal>.content {
+  height: 340px;
+}
+.ui.modal.transition.visible.active{
+  height: 500px;
+  width: 500px;
+}
+.slider{
+  width:100%
+}
