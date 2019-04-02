@@ -96,7 +96,7 @@ i.icon.paste:hover {
   background: #ccc;
 }
 
-#page {
+#app {
   background-color: #eeeeee;
   display: grid;
   margin: auto;
@@ -367,30 +367,6 @@ th.title {
   padding-left: 220px;
 }
 
-/* game setup  */
-.ui.modal>.actions,
-.ui.modal>.content {
-  text-align: center;
-  margin-top: auto;
-}
-
-.ui.modal {
-  margin-top: 0;
-  margin-left: 0;
-  top: 20%;
-  left: 28%;
-}
-
-.ui.modal>.content {
-  height: 300px;
-}
-.ui.modal.transition.visible.active{
-  height: 440px;
-  width: 500px;
-}
-.slider{
-  width:100%
-}
 
 #gameMenu{
   margin: 30px;

@@ -14,13 +14,6 @@ import Chat from './LiveGame/chat';
 import RedirectCreateUsernameModal from './RedirectChangeUsernameModal';
 import { setAnonUsername, toggleLoginLogout, login, changeCurrentUsername, setCorrGames } from '../actions/actions';
 
-var sectionStyle = {
-  width: '100%',
-  height: '100%',
-  backgroundRepeat: 'no-repeat',
-  backgroundSize: 'cover'
-};
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -97,7 +90,7 @@ class App extends Component {
 
   render() {
     return (
-      <div id="page" style={sectionStyle}>
+      <div id="app">
         <Nav />
         <Switch>
           <Route path="/learn" component={Learn} />
