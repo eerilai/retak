@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  Button,
-  Modal,
-  Form,
-  Select,
-  Checkbox,
-} from 'semantic-ui-react';
+import { Button, Modal, Form, Checkbox } from 'semantic-ui-react';
 
 class GameSetup extends Component {
   constructor(props) {
@@ -19,14 +14,13 @@ class GameSetup extends Component {
       timeControl: 15,
       timeIncrement: 0,
       color: 'random',
-    }
+    };
 
     this.handleBoardSizeChange = this.handleBoardSizeChange.bind(this);
     this.handlePrivacyChange = this.handlePrivacyChange.bind(this);
     this.handleLiveChange = this.handleLiveChange.bind(this);
     this.handleRoomIdChange = this.handleRoomIdChange.bind(this);
     this.handleColorChange = this.handleColorChange.bind(this);
-
   }
 
   handleTimeControl(e) {
@@ -39,13 +33,13 @@ class GameSetup extends Component {
 
   handleBoardSizeChange(e, { value }) {
     this.setState({
-      boardSize: Number(value)
+      boardSize: Number(value),
     });
   }
 
   handlePrivacyChange() {
     this.setState({
-      isPrivate: !this.state.isPrivate
+      isPrivate: !this.state.isPrivate,
     });
   }
 
@@ -57,7 +51,7 @@ class GameSetup extends Component {
 
   handleRoomIdChange(e, { value }) {
     this.setState({
-      roomId: value
+      roomId: value,
     });
   }
 
@@ -71,7 +65,7 @@ class GameSetup extends Component {
       this.setState({
         isLive: true,
         timeControl: 15,
-      })
+      });
     }
   }
 
@@ -81,15 +75,22 @@ class GameSetup extends Component {
     const timeOptions = [
       { text: 'Real Time', value: true },
       { text: 'Correspondence', value: false, disabled: !this.props.isLoggedIn },
-    ]
+    ];
     const timeSliders = this.state.isLive ?
-      (<div>
-        <span><strong>Minutes per side</strong>: {this.state.timeControl} minute(s)</span>
-        <input className='slider' type='range' min={0} max={90} value={this.state.timeControl} onChange={this.handleTimeControl} />
-        <span><strong>Increment in seconds</strong>: {this.state.timeIncrement} second(s)</span>
-        <input className='slider' type='range' min={0} max={30} value={this.state.timeIncrement} onChange={this.handleTimeIncrement} />
-      </div>
-      ) : <div></div>
+      (
+        <div>
+          <span><strong>Minutes per side</strong>: {this.state.timeControl} minute(s)</span>
+          <input
+            className="slider" type="range" min={0} max={90} value={this.state.timeControl}
+            onChange={this.handleTimeControl}
+          />
+          <span><strong>Increment in seconds</strong>: {this.state.timeIncrement} second(s)</span>
+          <input
+            className="slider" type="range" min={0} max={30} value={this.state.timeIncrement}
+            onChange={this.handleTimeIncrement}
+          />
+        </div>
+      ) : <div />;
 
     return (
       <Modal
@@ -193,7 +194,8 @@ class GameSetup extends Component {
           <Button
             positive
             content="New Game"
-            onClick={() => this.props.handleCreateGame(boardSize, timeControl, timeIncrement, isFriendGame, isPrivate, isLive, roomId, color)}
+            onClick={() => this.props.handleCreateGame(boardSize, timeControl, timeIncrement,
+              isFriendGame, isPrivate, isLive, roomId, color)}
           />
 
         </Modal.Actions>
@@ -202,10 +204,16 @@ class GameSetup extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    isLoggedIn: state.isLoggedIn
-  };
+GameSetup.propTypes = {
+  gameType: PropTypes.string.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  handleCreateGame: PropTypes.func.isRequired,
+  changeView: PropTypes.func.isRequired,
+  modalView: PropTypes.string.isRequired,
 };
+
+const mapStateToProps = state => ({
+  isLoggedIn: state.isLoggedIn,
+});
 
 export default connect(mapStateToProps)(GameSetup);
