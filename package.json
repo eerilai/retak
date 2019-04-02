@@ -62,8 +62,10 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^0.28.11",
+    "node-sass": "^4.11.0",
     "nodemon": "^1.18.10",
     "redux-devtools-extension": "^2.13.8",
+    "sass-loader": "^7.1.0",
     "style-loader": "^0.21.0",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"

@@ -1,0 +1,125 @@
+.game-list {
+  border: 1px solid #ccc;
+  margin-top: 21px;
+  min-height: 400px;
+  max-height: 400px;
+  color: #767676;
+  background-color: #f7f7f7;
+  table {
+    grid-column: 3;
+    width: 100%;
+    border-spacing: 0;
+    border-color: #ccc;
+    margin: auto;
+    th {
+      font-size: 14px;
+      padding: 10px 5px;
+      border-style: solid;
+      border-width: 0;
+      overflow: hidden;
+      word-break: normal;
+      border-color: #ccc;
+      color: #767676 !important;
+      background-color: #eee;
+    }
+    tr.room {
+      border: solid 1px #CCCCCC;
+      & > td {
+        padding: 5px 0;
+      }
+      &:hover > td {
+        background-color: #eeeeee !important;
+      }
+    }
+    td {
+      font-size: 12px;
+      border-style: solid;
+      border-width: 0px;
+      overflow: hidden;
+      word-break: normal;
+      border-top-width: 1px;
+      border-bottom-width: 1px;
+      border-color: #ccc;
+      color: #333;
+      background-color: #f7f7f7;
+      cursor: pointer;
+    }
+    &>thead {
+      border-bottom: solid 2px #ccc;
+    }
+    .row:hover {
+      background-color: rgba(0, 0, 155, 0.2);
+    }
+    .tg-yw4l {
+      vertical-align: top;
+    }
+    .tg-colName1 {
+      border-color: inherit;
+      vertical-align: top;
+    }
+    .tg-colNames {
+      font-size: 14px;
+      border-color: inherit;
+      vertical-align: top;
+    }
+    .tg-row {
+      background-color: #f7f7f7;
+      border-color: inherit;
+      vertical-align: top;
+    }
+  }
+}
+
+h1.game-list-header {
+  &:first-child {
+    margin-top: 2px;
+  }
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.lobby {
+  .title {
+    margin: 2px auto;
+    padding: 2px 0;
+    font-weight: bold;
+  }
+}
+
+.col-time,
+.col-board {
+  width: 15%;
+}
+
+.col-room {
+  width: 25%;
+}
+
+.col-players {
+  width: 35%;
+}
+
+.room-players,
+.room-players > p,
+.room-players > p:first-child {
+  margin: 0;
+  font-size: 12px;
+  text-align: center;
+  .player1, .player2 {
+    display: inline;
+  }
+}
+
+.white-icon,
+.black-icon {
+  width: 10px;
+  height: 10px;
+  border-radius: 30%;
+  display: inline-block;
+  border: solid 1px gray;
+  background-color: white;
+}
+
+.black-icon {
+  background-color: black;
+}

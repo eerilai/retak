@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
+import '../../styles/gameList.scss';
 
 class Lobby extends Component {
   constructor(props) {
@@ -22,11 +22,11 @@ class Lobby extends Component {
   render() {
     const games = this.state.games.sort((a, b) => { return a.players - b.players; });
     return (
-      <table className="tg">
+      <table className="lobby">
         <thead>
           <tr>
             <th colSpan="4" className="title">
-              <h3>Lobby</h3>
+              <h1 className="game-list-header">Lobby</h1>
             </th>
           </tr>
           <tr>
@@ -43,21 +43,21 @@ class Lobby extends Component {
               if (game.player1) {
                 players = (
                   <div className="room-players">
-                    <div className="white-icon" /><p>{`${game.player1}`}</p>
+                    <div className="white-icon" /><p>{` ${game.player1}`}</p>
                   </div>
                 );
               } else if (game.player2) {
                 players = (
                   <div className="room-players">
-                    <div className="black-icon" /><p>{`${game.player2}`}</p>
+                    <div className="black-icon" /><p>{` ${game.player2}`}</p>
                   </div>
                 );
               }
             } else {
               players = (
                 <div className="room-players">
-                  <div className="white-icon" /><p>{`${game.player1}`}</p>
-                  <div className="black-icon" /><p>{`${game.player2}`}</p>
+                  <div className="white-icon" /><p>{` ${game.player1}`}</p>
+                  <div className="black-icon" /><p>{` ${game.player2}`}</p>
                 </div>
               );
             }

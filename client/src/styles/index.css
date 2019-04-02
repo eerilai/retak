@@ -419,7 +419,6 @@ th.title {
 }
 .tg th {
   font-size: 14px;
-  font-weight: bold;
   padding: 10px 5px;
   border-style: solid;
   border-width: 0;
@@ -447,52 +446,6 @@ th.title {
   border-bottom: solid 2px #ccc;
 }
 
-.col-time,
-.col-board {
-  width: 15%;
-}
-
-.col-room {
-  width: 25%;
-}
-
-.col-players {
-  width: 35%;
-}
-
-tr.room {
-  border: solid 1px #CCCCCC;
-}
-
-tr.room > td {
-  padding: 5px 0;
-}
-
-tr.room:hover > td {
-  background-color: #eeeeee !important;
-}
-
-.room-players,
-.room-players > p,
-.room-players > p:first-child {
-  margin: 0;
-  font-size: 12px;
-  text-align: center;
-}
-
-.white-icon,
-.black-icon {
-  width: 10px;
-  height: 10px;
-  border-radius: 30%;
-  display: inline-block;
-  border: solid 1px gray;
-  background-color: white;
-}
-
-.black-icon {
-  background-color: black;
-}
 
 .tg .tg-yw4l {
   vertical-align: top;
@@ -533,7 +486,7 @@ tr.room:hover > td {
   width: 240px;
   text-align: left;
   border: 1px solid #ddd;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0, 0.05);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.05);
   border-radius: 2px;
   height: 0px;
   margin-left: 10px;
