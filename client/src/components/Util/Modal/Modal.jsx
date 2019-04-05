@@ -19,6 +19,11 @@ class Modal extends Component {
         ),
         document.getElementById(this.props.mountTo),
       );
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.props.setView('');
+      }
+    });
   }
 
   render() {
@@ -34,6 +39,7 @@ class Modal extends Component {
 
 Modal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
+  setView: PropTypes.func.isRequired,
   mountTo: PropTypes.string,
   children: PropTypes.array,
 };
