@@ -8,6 +8,7 @@ body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
+  color: #767676;
 }
 
 .imgPreview {
@@ -108,7 +109,7 @@ i.icon.paste:hover {
 
 a {
   cursor: pointer;
-  color: #000;
+  color: #308DB5;
 }
 
 a:hover {

@@ -5,35 +5,24 @@
 h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child {
   margin-top: 30px;
 }
-.mainheader{
-  color:#065D46;
-  font-family: 'Black Han Sans', sans-serif;
-}
+
 h4 {
   text-align: left;
 }
 
-.header{
-  color: #328874 ;
+.mainheader, .header, .header2{
+  color: #308DB5;
   margin-top: 30px;
-  font-family: 'Anton', sans-serif;
-  font-family: 'Gloria Hallelujah', cursive;  
+  font-weight: bold;
 }
 
 p {
-  
   text-align: left;
   color:#393B3B  ;
 }
 
 h5 {
   text-align: left;
-}
-
-.header2{
-  color: #65B1A2  ;
-  font-family: 'Anton', sans-serif;
-  font-family: 'Gloria Hallelujah', cursive;  
 }
 
 table#learntable {
