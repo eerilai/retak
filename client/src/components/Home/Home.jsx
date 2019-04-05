@@ -115,7 +115,9 @@ class Home extends Component {
 
     return (
       <div className="retak">
-        <MyModal isOpen />
+        <MyModal mountTo="game-list" isOpen>
+          <p>Help</p>
+        </MyModal>
         <div className="left">
           <h1 id="logo"><span id="sub-logo">re</span><b>tak</b></h1>
           <button
@@ -143,7 +145,7 @@ class Home extends Component {
           <InPlay />
         </div>
         <div className="main">
-          <div className="game-list">
+          <div className="game-list" id="game-list">
             <Lobby socket={this.props.socket} />
           </div>
           <GameSetup
