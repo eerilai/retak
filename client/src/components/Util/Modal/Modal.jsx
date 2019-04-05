@@ -35,7 +35,7 @@ class Modal extends Component {
 Modal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   mountTo: PropTypes.string,
-  children: PropTypes.object,
+  children: PropTypes.array,
 };
 
 Modal.defaultProps = {

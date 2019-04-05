@@ -115,9 +115,6 @@ class Home extends Component {
 
     return (
       <div className="retak">
-        <MyModal mountTo="game-list" isOpen>
-          <p>Help</p>
-        </MyModal>
         <div className="left">
           <h1 id="logo"><span id="sub-logo">re</span><b>tak</b></h1>
           <button

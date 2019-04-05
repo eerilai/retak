@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Modal, Form, Checkbox } from 'semantic-ui-react';
+import MyModal from '../../Util/Modal';
 import './GameSetup.scss';
 
 class GameSetup extends Component {
@@ -94,9 +95,9 @@ class GameSetup extends Component {
       ) : <div />;
 
     return (
-      <Modal
-        open={this.props.modalView === 'GameSetup'}
-        // size="small"
+      <MyModal
+        mountTo="game-list"
+        isOpen={this.props.modalView === 'GameSetup'}
       >
         <Modal.Header style={{ display: 'flex' }}>
           GameSetup
@@ -200,7 +201,7 @@ class GameSetup extends Component {
           />
 
         </Modal.Actions>
-      </Modal>
+      </MyModal>
     );
   }
 }
