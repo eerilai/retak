@@ -30,12 +30,12 @@ const roomNames = [
   'Tinue',
   'Trebon',
   'Waterside',
-  'Waystone'
+  'Waystone',
 ];
 
 const generateRoomName = () => {
   const placeName = roomNames[Math.floor(Math.random() * roomNames.length)];
-  return `${placeName}-${Math.random().toString(36).slice(2,5)}`
+  return `${placeName}-${Math.random().toString(36).slice(2, 5)}`;
 };
 
 export default generateRoomName;

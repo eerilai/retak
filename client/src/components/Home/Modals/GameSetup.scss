@@ -1,24 +1,32 @@
-/* game setup  */
-.ui.modal>.actions,
-.ui.modal>.content {
-  text-align: center;
-  margin-top: auto;
-}
-
-.ui.modal {
-  margin-top: 0;
-  margin-left: 0;
-  top: 20%;
-  left: 28%;
-}
-
-.ui.modal>.content {
-  height: 340px;
-}
-.ui.modal.transition.visible.active{
-  height: 500px;
-  width: 500px;
-}
-.slider{
-  width:100%
+.my-modal {
+  .header {
+    margin-top: 5px;
+    display: flex;
+    .ui.input {
+      width: 100%
+    }
+    .field {
+      margin: 5px 5px;
+      .ui.fitted.checkbox {
+        margin: 7px 0 0 20px;
+      }
+    }
+    input {
+      height: 30px;
+      margin: auto;
+    }
+    label {
+      color: #767676;
+      font-weight: normal;
+      margin: auto 5px;
+    }
+  }
+  .content {
+    //.ui.selection.dropdown {
+    //  height: 30px;
+    //}
+    .slider{
+      width:100%
+    }
+  }
 }

@@ -541,10 +541,6 @@ p.question {
 
 }
 
-.ui.input{
-  font-size: 1em;
-  width: 400px;
-}
 #loginButton ,
 #signupButton {
   padding-left: 0px;

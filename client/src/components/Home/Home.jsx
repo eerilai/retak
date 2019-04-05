@@ -143,8 +143,10 @@ class Home extends Component {
         </div>
         <div className="main">
           <div className="game-list" id="game-list">
+            <div id="game-list-modal-hook" />
             <Lobby socket={this.props.socket} />
           </div>
+          <Leaderboard leaderboard={this.state.leaderboard} />
           <GameSetup
             modalView={this.state.modalView}
             gameType={this.state.gameType}
@@ -164,7 +166,6 @@ class Home extends Component {
             url={this.state.url}
             link={this.state.link}
           />
-          <Leaderboard leaderboard={this.state.leaderboard} />
         </div>
       </div>
     );

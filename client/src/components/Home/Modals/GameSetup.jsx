@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Button, Modal, Form, Checkbox } from 'semantic-ui-react';
 import MyModal from '../../Util/Modal';
 import './GameSetup.scss';
+import generateRoomName from '../roomNames';
 
 class GameSetup extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class GameSetup extends Component {
       timeIncrement: 0,
       color: 'random',
     };
-
+    this.defaultRoomName = generateRoomName();
     this.handleBoardSizeChange = this.handleBoardSizeChange.bind(this);
     this.handlePrivacyChange = this.handlePrivacyChange.bind(this);
     this.handleLiveChange = this.handleLiveChange.bind(this);
@@ -78,6 +79,14 @@ class GameSetup extends Component {
       { text: 'Real Time', value: true },
       { text: 'Correspondence', value: false, disabled: !this.props.isLoggedIn },
     ];
+    const boardSizeOptions = [
+      { text: '3x3', value: 3 },
+      { text: '4x4', value: 4 },
+      { text: '5x5', value: 5 },
+      { text: '6x6', value: 6 },
+      { text: '7x7', value: 7 },
+      { text: '8x8', value: 8 },
+    ];
     const timeSliders = this.state.isLive ?
       (
         <div>
@@ -96,75 +105,42 @@ class GameSetup extends Component {
 
     return (
       <MyModal
-        mountTo="game-list"
+        mountTo="game-list-modal-hook"
+        setView={this.props.changeView}
         isOpen={this.props.modalView === 'GameSetup'}
       >
-        <Modal.Header style={{ display: 'flex' }}>
-          GameSetup
+        <Modal.Header>
           <Form.Input
-            style={{ height: '30px', marginLeft: '50%', width: '65%' }}
             type="text"
-            placeholder="Name Room?"
+            placeholder={`Room Name (${this.defaultRoomName})`}
             value={this.state.roomId}
             onChange={this.handleRoomIdChange}
           />
+          <Form.Field
+            id="checkbox-allow-spectators"
+            control={Checkbox}
+            onChange={this.handlePrivacyChange}
+          />
+          <label>Allow Spectators</label>
         </Modal.Header>
         <Modal.Content>
           <Form>
-            <Form.Group inline label="Board Size" style={{ justifyContent: 'center' }}>
-              <label>Board Size</label>
-              <Form.Radio
-                label="3x3"
-                value="3"
-                checked={this.state.boardSize === 3}
-                onChange={this.handleBoardSizeChange}
-              />
-              <Form.Radio
-                label="4x4"
-                value="4"
-                checked={this.state.boardSize === 4}
-                onChange={this.handleBoardSizeChange}
-              />
-              <Form.Radio
-                label="5x5"
-                value="5"
-                checked={this.state.boardSize === 5}
-                onChange={this.handleBoardSizeChange}
-              />
-              <Form.Radio
-                label="6x6"
-                value="6"
-                checked={this.state.boardSize === 6}
-                onChange={this.handleBoardSizeChange}
-              />
-              <Form.Radio
-                label="7x7"
-                value="7"
-                checked={this.state.boardSize === 7}
-                onChange={this.handleBoardSizeChange}
-              />
-              <Form.Radio
-                label="8x8"
-                value="8"
-                checked={this.state.boardSize === 8}
-                onChange={this.handleBoardSizeChange}
-              />
-            </Form.Group>
+            <label>Board Size</label>
             <Form.Dropdown
               selection
-              style={{ width: '10%' }}
-              label="Time Control"
+              value={this.state.boardSize}
+              options={boardSizeOptions}
+              onChange={this.handleBoardSizeChange}
+            />
+            <label>Time Control</label>
+            <Form.Dropdown
+              selection
               value={this.state.isLive}
               options={timeOptions}
               onChange={this.handleLiveChange}
             />
             {timeSliders}
             <br />
-            <Form.Field
-              control={Checkbox}
-              label="Private"
-              onChange={this.handlePrivacyChange}
-            />
             <Form.Group inline label="Board Size" style={{ justifyContent: 'center' }}>
               <Form.Radio
                 label="White"
@@ -189,15 +165,13 @@ class GameSetup extends Component {
         </Modal.Content>
         <Modal.Actions>
           <Button
-            negative
-            content="Close"
-            onClick={() => this.props.changeView('')}
-          />
-          <Button
             positive
-            content="New Game"
-            onClick={() => this.props.handleCreateGame(boardSize, timeControl, timeIncrement,
-              isFriendGame, isPrivate, isLive, roomId, color)}
+            content="Create Game"
+            onClick={() => {
+              const roomName = this.state.roomId === '' ? this.defaultRoomName : this.state.roomId;
+              this.props.handleCreateGame(boardSize, timeControl, timeIncrement,
+                isFriendGame, isPrivate, isLive, roomName, color)
+            }}
           />
 
         </Modal.Actions>
