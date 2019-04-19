@@ -13,7 +13,7 @@ class PTN extends Component {
     const { ptn, victor, winType, full } = this.props;
     const victorColor = victor === 1 ? 'White' : 'Black';
     const loserColor = victor === 1 ? 'Black' : 'White';
-    let gameStats = <div/>;
+    let gameStats = <div />;
 
     if (winType) {
       if (winType === 'R') {
@@ -68,7 +68,9 @@ class PTN extends Component {
           </colgroup>
           <tbody>
             {ptn.map((turn, no) => (
-              <tr key={`Turn${turn}`}><td>{no + 1}</td>{
+              <tr key={`Turn${turn}`}>
+                <td>{no + 1}</td>
+                {
                 turn.map(ply => <td key={`Ply${ply}`}>{ply}</td>)}
               </tr>
             ))}

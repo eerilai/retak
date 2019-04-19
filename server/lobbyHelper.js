@@ -1,6 +1,6 @@
 const filterLobbyList = (roomsObj) => {
-  let availableRooms = [];
-  for (let roomId in roomsObj) {
+  const availableRooms = [];
+  for (const roomId in roomsObj) {
     const currentRoom = roomsObj[roomId];
     // console.log('currentRoom in filterLobbyList', currentRoom);
     if (currentRoom.players && !currentRoom.isFriendGame && !(currentRoom.isPrivate && currentRoom.player2) && !currentRoom.isClosed) {
@@ -9,7 +9,7 @@ const filterLobbyList = (roomsObj) => {
       if (!currentRoom.isLive) {
         timeCon = 'Correspondence';
       } else {
-        timeCon = `${currentRoom.timeControl / 60}+${currentRoom.timeIncrement}`
+        timeCon = `${currentRoom.timeControl / 60}+${currentRoom.timeIncrement}`;
       }
       availableRooms.push({
         name: roomId,
@@ -23,6 +23,6 @@ const filterLobbyList = (roomsObj) => {
     }
   }
   return availableRooms;
-}
+};
 
 module.exports = filterLobbyList;

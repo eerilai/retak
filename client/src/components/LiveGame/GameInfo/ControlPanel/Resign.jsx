@@ -11,27 +11,27 @@ const Resign = (props) => {
           content="Resign"
           position="top left"
           size="tiny"
-          trigger={
+          trigger={(
             <div
               className="resign-button"
               onClick={() => { handleResign(true); }}
             >
               <Icon name="flag" />
             </div>
-          }
+)}
         />
         <Popup
           content="Cancel"
           position="top right"
           size="tiny"
-          trigger={
+          trigger={(
             <div
               className="cancel-resign-button"
               onClick={() => { handleResign(false); }}
             >
               <Icon name="ban" />
             </div>
-          }
+)}
         />
       </td>
     );
@@ -41,14 +41,14 @@ const Resign = (props) => {
       content="Resign"
       position="top center"
       size="tiny"
-      trigger={
+      trigger={(
         <td
           className="resign-button"
           onClick={() => { handleResign(true); }}
         >
           <Icon name="flag" />
         </td>
-      }
+)}
     />
   );
 };

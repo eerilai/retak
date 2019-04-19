@@ -115,14 +115,16 @@ class Home extends Component {
     return (
       <div className="retak">
         <div className="left">
-          <h1 id="logo"><span id="sub-logo">re</span>tak</h1>
+          <h1 id="logo">
+            <span id="sub-logo">re</span>
+tak
+          </h1>
           <button
             className="createGame"
-            onClick={() =>
-              this.setState({
-                modalView: 'GameSetup',
-                gameType: 'general',
-              })
+            onClick={() => this.setState({
+              modalView: 'GameSetup',
+              gameType: 'general',
+            })
             }
           >
             Create Game

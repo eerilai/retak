@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Game from '../../Game';
 import PropTypes from 'prop-types';
+import Game from '../../Game';
 import Resign from './Resign';
 import OfferDraw from './OfferDraw';
 import '../../../../styles/controlpanel.css';
@@ -24,14 +24,14 @@ class ControlPanel extends Component {
     socket.on('receiveDrawOffer', (drawOffered) => {
       console.log('drawOffered');
       this.setState({
-        drawOffered
+        drawOffered,
       });
     });
   }
 
   handleResign(resigning) {
     const { game, updateGame, emit } = this.props;
-    if (game.winString){
+    if (game.winString) {
       return;
     }
     const hasBeganResigning = this.state.resigning;
@@ -54,7 +54,7 @@ class ControlPanel extends Component {
 
   offerDraw() {
     const { game } = this.props;
-    if (game.winString){
+    if (game.winString) {
       return;
     }
     console.log('offering draw');
@@ -65,12 +65,12 @@ class ControlPanel extends Component {
 
   acceptDraw() {
     const { game, updateGame } = this.props;
-    if (game.winString){
+    if (game.winString) {
       return;
     }
     game.draw();
     updateGame(game);
-    this.setState({ drawOffered: false});
+    this.setState({ drawOffered: false });
   }
 
   render() {
@@ -108,11 +108,9 @@ ControlPanel.propTypes = {
   updateGame: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => {
-  return {
-    username: state.currentUsername,
-    socket: state.socket,
-  };
-};
+const mapStateToProps = state => ({
+  username: state.currentUsername,
+  socket: state.socket,
+});
 
 export default connect(mapStateToProps)(ControlPanel);

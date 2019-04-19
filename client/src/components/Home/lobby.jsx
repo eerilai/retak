@@ -7,7 +7,7 @@ class Lobby extends Component {
     super(props);
     this.state = {
       games: [],
-      socket: props.socket
+      socket: props.socket,
     };
 
     const { socket } = props;
@@ -20,7 +20,7 @@ class Lobby extends Component {
   }
 
   render() {
-    const games = this.state.games.sort((a, b) => { return a.players - b.players; });
+    const games = this.state.games.sort((a, b) => a.players - b.players);
     return (
       <table className="lobby">
         <thead>
@@ -43,28 +43,38 @@ class Lobby extends Component {
               if (game.player1) {
                 players = (
                   <div className="room-players">
-                    <div className="white-icon" /><p>{` ${game.player1}`}</p>
+                    <div className="white-icon" />
+                    <p>{` ${game.player1}`}</p>
                   </div>
                 );
               } else if (game.player2) {
                 players = (
                   <div className="room-players">
-                    <div className="black-icon" /><p>{` ${game.player2}`}</p>
+                    <div className="black-icon" />
+                    <p>{` ${game.player2}`}</p>
                   </div>
                 );
               }
             } else {
               players = (
                 <div className="room-players">
-                  <div className="white-icon" /><p>{` ${game.player1}`}</p>
-                  <div className="black-icon" /><p>{` ${game.player2}`}</p>
+                  <div className="white-icon" />
+                  <p>{` ${game.player1}`}</p>
+                  <div className="black-icon" />
+                  <p>{` ${game.player2}`}</p>
                 </div>
               );
             }
             const pending = game.isPending ? '(Open)' : '';
             return (
               <tr className="room" key={game.name}>
-                <td><Link to={`/game/${game.name}`}>{game.name} {pending}</Link></td>
+                <td>
+                  <Link to={`/game/${game.name}`}>
+                    {game.name}
+                    {' '}
+                    {pending}
+                  </Link>
+                </td>
                 <td>
                   <Link to={`/game/${game.name}`}>
                     {players}
@@ -74,7 +84,7 @@ class Lobby extends Component {
                 <td><Link to={`/game/${game.name}`}>{game.boardSize}</Link></td>
               </tr>
 
-            )
+            );
           })}
         </tbody>
       </table>

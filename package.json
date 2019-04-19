@@ -6,7 +6,8 @@
   "scripts": {
     "webpack": "webpack --mode development --config ./webpack.config.js --watch",
     "dev": "nodemon --watch server --watch database ./server/server.js",
-    "start": "node ./server/server.js"
+    "start": "node ./server/server.js",
+    "lint": "eslint --fix ./**/*.js"
   },
   "repository": {
     "type": "git",
@@ -39,9 +40,12 @@
     "passport-local": "^1.0.0",
     "pg": "^7.9.0",
     "prop-types": "^15.7.2",
+    "raw-loader": "^2.0.0",
     "react": "^16.8.4",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.4",
+    "react-markdown": "^4.0.8",
+    "react-parallax": "^2.2.0",
     "react-redux": "^5.1.1",
     "react-router-dom": "^4.2.2",
     "react-transition-group": "^2.6.1",
@@ -62,6 +66,11 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^0.28.11",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4",
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.10",
     "redux-devtools-extension": "^2.13.8",

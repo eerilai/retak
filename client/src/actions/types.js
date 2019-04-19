@@ -1,4 +1,4 @@
-// EXAMPLE => 
+// EXAMPLE =>
 // export const CHANGE_STORE = 'CHANGE_STORE';
 
 export const SET_ANON_USERNAME = 'SET_ANON_USERNAME';

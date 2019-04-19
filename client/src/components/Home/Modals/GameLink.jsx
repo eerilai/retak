@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import {
   Button,
   Modal,
   Icon,
   Form,
-  Image
+  Image,
 
 } from 'semantic-ui-react';
 
@@ -28,32 +28,78 @@ class GameLink extends Component {
     let urlLink;
     let urlField;
     let header;
-    let privateStatus, liveStatus
+    let privateStatus; let
+      liveStatus;
     if (isPrivate === true) {
-      privateStatus = 'Yes'
+      privateStatus = 'Yes';
     } else {
-      privateStatus = 'No'
+      privateStatus = 'No';
     }
     if (isLive === true) {
-      liveStatus = 'No'
+      liveStatus = 'No';
     } else {
-      liveStatus = 'Yes'
+      liveStatus = 'Yes';
     }
-    urlField = <div id='gameMenu'>
-      <div> <Icon name='check square' /><strong>BoardSize</strong>: {boardSize} x {boardSize}</div>
-      <div> <Icon name='check square' /><strong>Minutes per side</strong>: {timeControl} minute(s)</div>
-      <div> <Icon name='check square' /><strong>Increment in seconds</strong>: {timeIncrement} second(s)</div>
-      <div> <Icon name='check square' /><strong>Color</strong>: {color}</div>
-      <div> <Icon name='check square' /><strong>Private</strong>: {privateStatus}</div>
-      <div> <Icon name='check square' /><strong>Correspondence</strong>: {liveStatus}</div>
-    </div>;
-    if (gameType === "friend") {
+    urlField = (
+      <div id="gameMenu">
+        <div>
+          {' '}
+          <Icon name="check square" />
+          <strong>BoardSize</strong>
+:
+          {boardSize}
+          {' '}
+x
+          {boardSize}
+        </div>
+        <div>
+          {' '}
+          <Icon name="check square" />
+          <strong>Minutes per side</strong>
+:
+          {timeControl}
+          {' '}
+minute(s)
+        </div>
+        <div>
+          {' '}
+          <Icon name="check square" />
+          <strong>Increment in seconds</strong>
+:
+          {timeIncrement}
+          {' '}
+second(s)
+        </div>
+        <div>
+          {' '}
+          <Icon name="check square" />
+          <strong>Color</strong>
+:
+          {color}
+        </div>
+        <div>
+          {' '}
+          <Icon name="check square" />
+          <strong>Private</strong>
+:
+          {privateStatus}
+        </div>
+        <div>
+          {' '}
+          <Icon name="check square" />
+          <strong>Correspondence</strong>
+:
+          {liveStatus}
+        </div>
+      </div>
+    );
+    if (gameType === 'friend') {
       urlLink = (
         <div>
-          <div className='gamelink'>
-            <div id='linkurl'>{url}</div>
-            <div id='clip'>
-              <div >
+          <div className="gamelink">
+            <div id="linkurl">{url}</div>
+            <div id="clip">
+              <div>
                 <CopyToClipboard
                   text={url}
                   onCopy={() => this.setState({ copied: true })}
@@ -74,7 +120,7 @@ class GameLink extends Component {
       );
       header = 'Send link to a friend then Enter!';
     } else {
-      urlLink = urlField
+      urlLink = urlField;
       header = 'New Game Created';
     }
 

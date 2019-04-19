@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class Clock extends Component {
   constructor(props) {
@@ -9,6 +9,7 @@ class Clock extends Component {
     this.start = this.start.bind(this);
     this.countDown = this.countDown.bind(this);
   }
+
   // called when one of the props changed and call the render function
   static getDerivedStateFromProps(nextProps, prevState) {
     // set the new value for the timer to the current state
@@ -76,7 +77,9 @@ class Clock extends Component {
 
     return (
       <div>
-        {formattedTime.m}:{formattedTime.s}
+        {formattedTime.m}
+:
+        {formattedTime.s}
       </div>
     );
   }

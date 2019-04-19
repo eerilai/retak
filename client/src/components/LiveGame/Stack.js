@@ -42,20 +42,16 @@ class Stack {
     }
 
     if (this.row !== 0) {
-      this.neighbors['-'] =
-        this.game.squares[convertCoord([this.col, this.row - 1])];
+      this.neighbors['-'] = this.game.squares[convertCoord([this.col, this.row - 1])];
     }
     if (this.row !== this.game.size - 1) {
-      this.neighbors['+'] =
-        this.game.squares[convertCoord([this.col, this.row + 1])];
+      this.neighbors['+'] = this.game.squares[convertCoord([this.col, this.row + 1])];
     }
     if (this.col !== 0) {
-      this.neighbors['<'] =
-        this.game.squares[convertCoord([this.col - 1, this.row])];
+      this.neighbors['<'] = this.game.squares[convertCoord([this.col - 1, this.row])];
     }
     if (this.col !== this.game.size - 1) {
-      this.neighbors['>'] =
-        this.game.squares[convertCoord([this.col + 1, this.row])];
+      this.neighbors['>'] = this.game.squares[convertCoord([this.col + 1, this.row])];
     }
   }
 }

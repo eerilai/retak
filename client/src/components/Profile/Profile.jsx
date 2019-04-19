@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import axios from 'axios';
-import { Grid, Menu, Segment } from 'semantic-ui-react'
+import { Grid, Menu, Segment } from 'semantic-ui-react';
 import { userInfo } from 'os';
 import UserHistory from './UserHistory';
 import PageNotFound from '../PageNotFound';
+
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -13,8 +14,8 @@ class Profile extends Component {
       selectedFile: null,
       userHistory: [],
       userInfo: {},
-      isUser: false
-    }
+      isUser: false,
+    };
 
     this.getUserHistory();
     this.getUserInfo();
@@ -60,9 +61,6 @@ class Profile extends Component {
   }
 
 
-
-
-
   render() {
     const { isLoggedIn, currentUsername, userID } = this.props;
     const { userName } = this.props.match.params;
@@ -91,7 +89,7 @@ function mapStateToProps(state) {
   return {
     isLoggedIn: state.isLoggedIn,
     currentUsername: state.currentUsername,
-    userID: state.userID
+    userID: state.userID,
   };
 }
 

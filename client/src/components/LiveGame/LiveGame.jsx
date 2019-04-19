@@ -244,7 +244,8 @@ class LiveGame extends Component {
           <div className="main">
             <PageNotFound />
           </div>
-        </div>);
+        </div>
+      );
     }
 
     return (

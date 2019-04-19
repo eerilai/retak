@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Game from '../Game';
 import { Popup } from 'semantic-ui-react';
+import Game from '../Game';
 
 const RenderToggleFlatstoneButton = (props) => {
   const {
@@ -24,8 +24,8 @@ const RenderToggleFlatstoneButton = (props) => {
     }
   };
   // If it's the first move, render opposite color first move notification
-  if ((playerNumber === 1 && ptn.length === 0) ||
-    (playerNumber === 2 && (!ptn[0] || ptn[0].length <= 1))) {
+  if ((playerNumber === 1 && ptn.length === 0)
+    || (playerNumber === 2 && (!ptn[0] || ptn[0].length <= 1))) {
     const firstMoveSelectStoneButton = (
       <div
         role="button"
@@ -34,7 +34,7 @@ const RenderToggleFlatstoneButton = (props) => {
         onClick={() => { toggleStanding(); }}
         onKeyPress={() => { toggleStanding(); }}
       >
-        <div className={`${flatActive} stone ${color}`} >
+        <div className={`${flatActive} stone ${color}`}>
           <div className={`${flatActive} stone ${opponentColor} ui-overlay first-move-indicator`}>
           !
           </div>

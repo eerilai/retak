@@ -1,6 +1,6 @@
-import React from "react";
-import AuthNav from "./AuthNav";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import AuthNav from './AuthNav';
 
 const Nav = props => (
   <div id="nav">

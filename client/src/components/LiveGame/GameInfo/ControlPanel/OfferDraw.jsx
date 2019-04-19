@@ -11,14 +11,14 @@ const OfferDraw = (props) => {
           content="Accept Draw"
           position="top center"
           size="tiny"
-          trigger={
+          trigger={(
             <div
               className="draw-button"
               onClick={acceptDraw}
             >
               <Icon name="handshake" />
             </div>
-          }
+)}
         />
       </td>
     );
@@ -28,14 +28,14 @@ const OfferDraw = (props) => {
       content="Offer Draw"
       position="top center"
       size="tiny"
-      trigger={
+      trigger={(
         <td
           className="draw-button"
           onClick={offerDraw}
         >
           <Icon name="handshake" />
         </td>
-      }
+)}
     />
   );
 };

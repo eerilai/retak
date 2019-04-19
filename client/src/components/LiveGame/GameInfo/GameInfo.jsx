@@ -24,7 +24,13 @@ const formatSeconds = (totalSeconds) => {
     minutes = `0${minutes}`;
   }
 
-  return <div>{minutes}:{seconds}</div>;
+  return (
+    <div>
+      {minutes}
+:
+      {seconds}
+    </div>
+  );
 };
 
 const GameInfo = (props) => {
@@ -34,7 +40,7 @@ const GameInfo = (props) => {
     playerNumber,
     myTime,
     opponentTime,
-    roomId
+    roomId,
   } = props;
 
   let opponentName;
@@ -52,8 +58,8 @@ const GameInfo = (props) => {
 
   let pToPlay;
   let oppToPlay;
-  if ((game.toPlay === 1 && playerNumber === 1) ||
-     (game.toPlay === 2 && playerNumber === 2)) {
+  if ((game.toPlay === 1 && playerNumber === 1)
+     || (game.toPlay === 2 && playerNumber === 2)) {
     pToPlay = 'to-play';
     oppToPlay = '';
   } else {
@@ -68,24 +74,36 @@ const GameInfo = (props) => {
   const PlayerPieces = (
     <tr className="score">
       <td>
-      <table>
-        <tbody>
-          <tr><td>{`${game.pieces[playerNumber].F} / ${game.pieces[playerNumber].C}`}</td><td>{game[`p${playerNumber}FlatScore`]}</td></tr>
-          <tr style={{ fontSize: '10px' }}><td>Stones</td><td>Score</td></tr>
-        </tbody>
-      </table>
+        <table>
+          <tbody>
+            <tr>
+              <td>{`${game.pieces[playerNumber].F} / ${game.pieces[playerNumber].C}`}</td>
+              <td>{game[`p${playerNumber}FlatScore`]}</td>
+            </tr>
+            <tr style={{ fontSize: '10px' }}>
+              <td>Stones</td>
+              <td>Score</td>
+            </tr>
+          </tbody>
+        </table>
       </td>
     </tr>
   );
   const OpponentPieces = (
     <tr className="score">
       <td>
-      <table>
-        <tbody>
-          <tr style={{ fontSize: '10px' }}><td>Stones</td><td>Score</td></tr>
-          <tr><td>{`${game.pieces[opponentPlayerNumber].F} / ${game.pieces[opponentPlayerNumber].C}`}</td><td>{game[`p${opponentPlayerNumber}FlatScore`]}</td></tr>
-        </tbody>
-      </table>
+        <table>
+          <tbody>
+            <tr style={{ fontSize: '10px' }}>
+              <td>Stones</td>
+              <td>Score</td>
+            </tr>
+            <tr>
+              <td>{`${game.pieces[opponentPlayerNumber].F} / ${game.pieces[opponentPlayerNumber].C}`}</td>
+              <td>{game[`p${opponentPlayerNumber}FlatScore`]}</td>
+            </tr>
+          </tbody>
+        </table>
       </td>
     </tr>
   );
@@ -118,7 +136,7 @@ const GameInfo = (props) => {
           {PlayerPieces}
         </tbody>
       </table>
-      <div className={`timer ${pToPlay}`}style={{ borderTop: '0' }}>
+      <div className={`timer ${pToPlay}`} style={{ borderTop: '0' }}>
         {formatSeconds(myTime)}
       </div>
     </div>

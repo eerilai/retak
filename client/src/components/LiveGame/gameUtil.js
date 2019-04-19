@@ -11,7 +11,7 @@ export const convertCoord = (square) => {
   const a = 'a'.charCodeAt(0);
   if (typeof square === 'string') {
     return [square[0].charCodeAt(0) - a, (1 * square[1]) - 1];
-  } else if (Array.isArray(square)) {
+  } if (Array.isArray(square)) {
     return String.fromCharCode(a + square[0]) + (square[1] + 1);
   }
 };

@@ -5,7 +5,7 @@ const { createUser, updateUserName, getUserData } = require('../../database/quer
 require('../passportConfig');
 
 router.get('/google', passport.authenticate('google', {
-  scope: ['profile', 'email']
+  scope: ['profile', 'email'],
 }));
 
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
@@ -13,25 +13,25 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
 });
 
 router.get('/facebook', passport.authenticate('facebook', {
-  scope: ['email']
+  scope: ['email'],
 }));
 
 router.get('/facebook/redirect', passport.authenticate('facebook', {
   successRedirect: '/',
-  failureRedirect: '/'
+  failureRedirect: '/',
 }));
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
-  let currentUsername = req.user.dataValues;
-  let currentUserInfo = {
+  const currentUsername = req.user.dataValues;
+  const currentUserInfo = {
     userID: currentUsername.id,
     currentUsername: currentUsername.username,
     userEmail: currentUsername.email,
     rankedGames: currentUsername.ranked_games,
     rankedWins: currentUsername.ranked_wins,
     rankedLosses: currentUsername.ranked_losses,
-    totalGames: currentUsername.total_games
-  }
+    totalGames: currentUsername.total_games,
+  };
   res.send(currentUserInfo);
 });
 
@@ -41,19 +41,19 @@ router.post('/signup', (req, res) => {
     .then((user) => {
       req.login(user, (err) => {
         if (err) {
-          res.status(500)
+          res.status(500);
           res.send('Server Error');
         }
-        let currentUsername = user.dataValues;
-        let currentUserInfo = {
+        const currentUsername = user.dataValues;
+        const currentUserInfo = {
           userID: currentUsername.id,
           currentUsername: currentUsername.username,
           userEmail: currentUsername.email,
           rankedGames: currentUsername.ranked_games,
           rankedWins: currentUsername.ranked_wins,
           rankedLosses: currentUsername.ranked_losses,
-          totalGames: currentUsername.total_games
-        }
+          totalGames: currentUsername.total_games,
+        };
         res.send(currentUserInfo);
       });
     })
@@ -72,11 +72,11 @@ router.post('/logout', (req, res) => {
 router.post('/changeUsername', (req, res) => {
   const { userID, currentUsername, newUsername } = req.body;
   updateUserName(userID, currentUsername, newUsername)
-  .then((newUser) => {
-    let username = newUser.dataValues.username
-    req.user = newUser;
-    res.send(username);
-  });
+    .then((newUser) => {
+      const { username } = newUser.dataValues;
+      req.user = newUser;
+      res.send(username);
+    });
 });
 
 const authCheck = ((req, res, next) => {
@@ -88,16 +88,16 @@ const authCheck = ((req, res, next) => {
 });
 
 router.get('/check', authCheck, (req, res) => {
-  let currentUsername = req.user.dataValues;
-  let currentUserInfo = {
+  const currentUsername = req.user.dataValues;
+  const currentUserInfo = {
     userID: currentUsername.id,
     currentUsername: currentUsername.username,
     userEmail: currentUsername.email,
     rankedGames: currentUsername.ranked_games,
     rankedWins: currentUsername.ranked_wins,
     rankedLosses: currentUsername.ranked_losses,
-    totalGames: currentUsername.total_games
-  }
+    totalGames: currentUsername.total_games,
+  };
   res.send(currentUserInfo);
 });
 

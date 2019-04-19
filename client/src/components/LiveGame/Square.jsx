@@ -45,23 +45,26 @@ const Square = ({ game, row, col, handleSquareClick }) => {
     if (coord === game.toMove.coord && game.toMove.stack) {
       return (
         <div className="selected" style={stoneStyle}>
-          {game.toMove.stack.map((x, i) =>
-             (i === 0 ?
-               <div
-                 className={`p${x} ${game.toMove.stone} stone top`}
-                 style={{ ...stoneStyle, 'z-index': '10' }}
-                 key={`${coord}ToMoveTop`}
-               />
-               : <div
-                 className={`p${x} stone captive`}
-                 style={
+          {game.toMove.stack.map((x, i) => (i === 0
+            ? (
+              <div
+                className={`p${x} ${game.toMove.stone} stone top`}
+                style={{ ...stoneStyle, 'z-index': '10' }}
+                key={`${coord}ToMoveTop`}
+              />
+            )
+            : (
+              <div
+                className={`p${x} stone captive`}
+                style={
                   {
                     ...stoneStyle,
                     'z-index': `${10 - i}`,
                     'margin-top': '-65%',
                   }}
-                 key={`${coord}MoveStack`}
-               />))
+                key={`${coord}MoveStack`}
+              />
+            )))
           }
         </div>
       );
@@ -79,14 +82,13 @@ const Square = ({ game, row, col, handleSquareClick }) => {
           onClick={() => { handleSquareClick(col, row); }}
         >
           {renderSelected()}
-          {stack.stack.map((x, i) =>
-             (i === 0 ?
-               <div className={`p${x} ${stack.stone} stone ${top}`} style={topStackStyle} key={`${coord}TopStone`} />
-               : <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${10 - i}` }} key={`${coord}TopStack`} />))
+          {stack.stack.map((x, i) => (i === 0
+            ? <div className={`p${x} ${stack.stone} stone ${top}`} style={topStackStyle} key={`${coord}TopStone`} />
+            : <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${10 - i}` }} key={`${coord}TopStack`} />))
           }
         </div>
       );
-    } else if (stack.stack.length > maxStack) {
+    } if (stack.stack.length > maxStack) {
       const topStack = stack.stack.slice(0, maxStack);
       const rest = stack.stack.slice(maxStack);
       return (
@@ -96,10 +98,9 @@ const Square = ({ game, row, col, handleSquareClick }) => {
           onClick={() => { handleSquareClick(col, row); }}
         >
           {renderSelected()}
-          {topStack.map((x, i) =>
-             (i === 0 ?
-               <div className={`p${x} ${stack.stone} stone ${top}`} style={topStackStyle} key={`${coord}TopStone`} />
-               : <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${10 - i}` }} key={`${coord}TopStack`} />))
+          {topStack.map((x, i) => (i === 0
+            ? <div className={`p${x} ${stack.stone} stone ${top}`} style={topStackStyle} key={`${coord}TopStone`} />
+            : <div className={`p${x} stone captive`} style={{ ...stoneStyle, 'z-index': `${10 - i}` }} key={`${coord}TopStack`} />))
           }
           <div className="stack-overflow" style={stackOverflowStyle}>
             {rest.map(x => <div className={`p${x} stone overflow-stone`} key={`${coord}Overflow`} />)}

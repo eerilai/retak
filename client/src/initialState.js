@@ -11,7 +11,7 @@ const initialState = {
   rankedLosses: null,
   totalGames: null,
   avatar: null,
-  socket: socketIOClient(undefined, {forceNew: true}),
+  socket: socketIOClient(undefined, { forceNew: true }),
   games: [],
 };
 

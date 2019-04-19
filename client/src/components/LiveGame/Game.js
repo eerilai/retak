@@ -69,17 +69,17 @@ class Game {
   }
 
   setMoveDir(stack) {
-    if (stack.col > this.moveOrigin.col &&
-        stack.row === this.moveOrigin.row) {
+    if (stack.col > this.moveOrigin.col
+        && stack.row === this.moveOrigin.row) {
       this.moveDir = '>';
-    } else if (stack.col < this.moveOrigin.col &&
-               stack.row === this.moveOrigin.row) {
+    } else if (stack.col < this.moveOrigin.col
+               && stack.row === this.moveOrigin.row) {
       this.moveDir = '<';
-    } else if (stack.col === this.moveOrigin.col &&
-               stack.row > this.moveOrigin.row) {
+    } else if (stack.col === this.moveOrigin.col
+               && stack.row > this.moveOrigin.row) {
       this.moveDir = '+';
-    } else if (stack.col === this.moveOrigin.col &&
-               stack.row < this.moveOrigin.row) {
+    } else if (stack.col === this.moveOrigin.col
+               && stack.row < this.moveOrigin.row) {
       this.moveDir = '-';
     }
   }
@@ -104,9 +104,9 @@ class Game {
       if (this.plyPtn[0] === 1) {
         this.plyPtn.shift();
       }
-      if (((this.plyPtn.length === 3 || this.plyPtn.length === 2) &&
-          this.plyPtn[this.plyPtn.length - 1] === 1) ||
-          this.plyPtn[0] === this.plyPtn[2]) {
+      if (((this.plyPtn.length === 3 || this.plyPtn.length === 2)
+          && this.plyPtn[this.plyPtn.length - 1] === 1)
+          || this.plyPtn[0] === this.plyPtn[2]) {
         this.plyPtn.pop();
       }
       if (this.plyPtn.length) {
@@ -139,7 +139,7 @@ class Game {
       }
       tpsArray.push(tpsRow.join(','));
     }
-    let tps = tpsArray.join('/');
+    const tps = tpsArray.join('/');
     this.tps = `[TPS "${tps} ${this.toPlay} ${this.turn + 1}"]`;
   }
 
@@ -149,7 +149,7 @@ class Game {
     this.turn = +parsedTPS.pop() - 1;
     this.toPlay = +parsedTPS.pop();
     parsedTPS = parsedTPS.join('').split('/');
-    parsedTPS.forEach((row, i) => { parsedTPS[i] = row.split(',') });
+    parsedTPS.forEach((row, i) => { parsedTPS[i] = row.split(','); });
     parsedTPS = parsedTPS.join(',').split(',');
     for (let row = this.size - 1; row >= 0; row -= 1) {
       for (let col = 0; col < this.size; col += 1) {
@@ -164,7 +164,7 @@ class Game {
               this.pieces[square[square.length - 1]].C -= 1;
             }
           }
-          let s = square.split('').reverse().map((x) => {
+          const s = square.split('').reverse().map((x) => {
             if (+x === 1) {
               this.pieces[1].F -= 1;
               this.pieces[1].Total -= 1;
@@ -244,17 +244,17 @@ class Game {
             .forEach((dir) => {
               if (stack.neighbors[dir].stone === '') {
                 stack.neighbors[dir].validMove = true;
-              } else if (stack.neighbors[dir].stone === 'S' &&
-                         this.toMove.stone === 'C' &&
-                         this.toMove.stack.length === 1) {
+              } else if (stack.neighbors[dir].stone === 'S'
+                         && this.toMove.stone === 'C'
+                         && this.toMove.stack.length === 1) {
                 stack.neighbors[dir].validMove = true;
               }
             });
         }
       // Continue Movement
-      } else if (this.isMoving &&
-                 stack.stone === '' &&
-                 stack.validMove === true) {
+      } else if (this.isMoving
+                 && stack.stone === ''
+                 && stack.validMove === true) {
         this.setMoveDir(stack);
         this.toMove.coord = coord;
         if (this.moveDir !== '') {
@@ -264,9 +264,9 @@ class Game {
           if (Object.prototype.hasOwnProperty.call(stack.neighbors, this.moveDir)) {
             if (stack.neighbors[this.moveDir].stone === '') {
               stack.neighbors[this.moveDir].validMove = true;
-            } else if (stack.neighbors[this.moveDir].stone === 'S' &&
-                       this.toMove.stone === 'C' &&
-                       this.toMove.stack.length === 2) {
+            } else if (stack.neighbors[this.moveDir].stone === 'S'
+                       && this.toMove.stone === 'C'
+                       && this.toMove.stack.length === 2) {
               stack.neighbors[this.moveDir].validMove = true;
             }
           }
@@ -301,10 +301,10 @@ class Game {
           this.moveDir = '';
         }
       // Wallsmash
-      } else if (this.isMoving &&
-                 stack.stone === 'S' &&
-                 this.toMove.stone === 'C' &&
-                 this.toMove.stack.length === 1) {
+      } else if (this.isMoving
+                 && stack.stone === 'S'
+                 && this.toMove.stone === 'C'
+                 && this.toMove.stack.length === 1) {
         this.setMoveDir(stack);
         this.toMove.coord = coord;
         this.step = stack.coord;
@@ -330,8 +330,8 @@ class Game {
     let player = 0;
     let checked = [];
     const followRoad = (square, p) => {
-      if ((checkNS && square.edges.includes('+')) ||
-          (checkEW && square.edges.includes('>'))) {
+      if ((checkNS && square.edges.includes('+'))
+          || (checkEW && square.edges.includes('>'))) {
         this.victor = p;
         this.victorUsername = (this.victor === 1) ? this.player1 : this.player2;
         this.loserUsername = (this.victor === 1) ? this.player2 : this.player1;
@@ -391,7 +391,7 @@ class Game {
         if (square.owner === 2 && square.stone === '') {
           p2FCnt += 1;
         }
-      };
+      }
     });
     this.p1FlatScore = p1FCnt;
     this.p2FlatScore = p2FCnt;
