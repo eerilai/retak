@@ -7,8 +7,10 @@ const options = {
     dialectModulePath: 'pg',
     trustedConnection: true,
   },
-  host: 'localhost',
-  database: 'test',
+  hostname: process.env.PG_HOSTNAME || 'localhost',
+  database: process.env.PG_DATABASE || 'test',
+  username: process.env.PG_USERNAME,
+  password: process.env.PG_PASSWORD
 };
 
 const dbPath = process.env.DATABASEURL || options;
