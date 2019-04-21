@@ -1,0 +1,30 @@
+{
+	// See http://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"command": "yarn",
+	"echoCommand": true,
+	"tasks": [
+		{
+            "type": "shell",
+			"label": "build",
+            "isBackground": true,
+            "group": "build",
+			"args": [ "run", "build" ],
+			"options": {
+				"env": {
+					"NODE_ENV": "development"
+				}
+			},
+			"command": "yarn"
+		},
+		{
+            "type": "shell",
+			"label": "test",
+			"isBackground": true,
+			"group": "test",
+			"args": [ "run", "test" ],
+			"command": "yarn"
+		}		
+	]
+}

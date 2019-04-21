@@ -4,7 +4,6 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const socket = require('socket.io');
 const sharedSession = require('express-socket.io-session');
-const https = require('https')
 
 require('dotenv').config();
 
@@ -92,7 +91,6 @@ const server = app.listen(PORT, () => {
 
 
 //Socket Setup
-let rooms = 0;
 const io = socket(server);
 
 io.use(sharedSession(session, {

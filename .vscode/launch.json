@@ -1,0 +1,53 @@
+{
+	"version": "0.2.0",
+	"configurations": [{
+        "type": "node",
+        "request": "launch",
+        "protocol": "inspector",
+        "name": "Debug Typescript - Prod",
+        "env": {
+			"NODE_ENV": "production",
+            "DEBUG": "*",
+            "DEBUG_COLORS": "enabled"
+        },
+        "runtimeArgs": [
+            "-r",
+            "ts-node/register",
+            "-r",
+            "tsconfig-paths/register"
+        ],
+        "sourceMaps": true,
+        "cwd": "${workspaceRoot}",
+        "args": [
+            "${workspaceFolder}/src/server.ts"
+        ]
+    }, {
+        "type": "node",
+        "request": "launch",
+        "protocol": "inspector",
+        "name": "Debug Typescript - Dev",
+        "env": {
+			"NODE_ENV": "development",
+            "DEBUG": "*",
+            "DEBUG_COLORS": "enabled"
+        },
+        "runtimeArgs": [
+            "-r",
+            "ts-node/register",
+            "-r",
+            "tsconfig-paths/register"
+        ],
+        "sourceMaps": true,
+        "cwd": "${workspaceRoot}",
+        "args": [
+            "${workspaceFolder}/src/server.ts"
+        ]
+    }, {
+        "type": "node",
+        "request": "attach",
+        "protocol": "inspector",
+        "processId": "${command:PickProcess}",
+        "name": "Debug w/ Nodemon",
+        "restart": true,
+    }]
+}
