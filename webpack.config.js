@@ -5,15 +5,22 @@ module.exports = {
     publicPath: '/',
     filename: 'bundle.js',
   },
+  
+  devtool: 'inline-source-map',
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: ['babel-loader'],
       },
       {
-        test: /\.(css|scss)$/,
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.s?css$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
@@ -30,10 +37,14 @@ module.exports = {
           },
         }],
       },
+      {
+        test: /\.md$/,
+        use: 'raw-loader',
+      },
     ],
   },
 
   resolve: {
-    extensions: ['*', '.js', '.jsx'],
+    extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
   },
 };

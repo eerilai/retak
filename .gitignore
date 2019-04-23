@@ -2,6 +2,7 @@
 .env
 package-lock.json
 yarn.lock
+yarn-error.log
 
 ## Build Files ##
 client/dist/bundle.js

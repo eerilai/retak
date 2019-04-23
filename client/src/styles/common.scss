@@ -1,0 +1,10 @@
+$container-background: #f7f7f7;
+
+.border-box {
+    border: 1px solid #ccc;
+    margin-top: 21px;
+    min-height: 400px;
+    color: #767676;
+    background-color: $container-background;
+    padding: 0 25px 25px 25px;
+}

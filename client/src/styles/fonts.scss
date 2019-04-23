@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans");
+@import url("https://fonts.googleapis.com/css?family=Anton|Gloria+Hallelujah");
+@import url("https://fonts.googleapis.com/css?family=Black+Han+Sans");
+
+$header-font-color: #308DB5;
+
+.primary-font {
+    font-family: "Noto Sans", "Helvetica", sans-serif;
+    font-size: 1.3em;
+    text-align: left;
+    color: #767676;
+}
+
+.header-font {
+    margin-top: 18px;
+    text-align: left;
+    margin-bottom: 15px;
+    color: $header-font-color;
+    font-size: 1.75em;
+    font-weight: bold;
+}
