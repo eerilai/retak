@@ -6,13 +6,17 @@
   "scripts": {
     "webpack": "webpack --mode development --config ./webpack.config.js --watch",
     "dev": "nodemon --watch server --watch database ./server/server.js",
+    "db-start": "docker start takdb && npm run start",
     "start": "node ./server/server.js"
   },
+  "author": "eerilai",
+  "contributors": [
+    "hannah c <hannah@harubex.com> (https://github.com/harubex)"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eerilai/retak.git"
   },
-  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/eerilai/retak/issues"
@@ -39,6 +43,7 @@
     "react": "^16.8.6",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.6",
+    "react-markdown": "^4.0.8",
     "react-redux": "^7.0.2",
     "react-router-dom": "^5.0.0",
     "reactstrap": "^8.0.0",
@@ -55,12 +60,18 @@
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/node": "^11.13.6",
+    "@types/react": "^16.8.14",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.1",
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.11",
+    "raw-loader": "^2.0.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.4.4",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.0"
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header, Icon, Image, Container, } from 'semantic-ui-react';
 import { SITE_TITLE, SITE_GITHUB, SITE_LEGACY_GITHUB, EERILAI_GITHUB, TAK_CHEAPASS_SITE } from '../../copy';
-import './about.css';
+import './about.scss';
 
 const About = props => (
   <div className="retak">
