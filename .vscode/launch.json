@@ -19,7 +19,7 @@
         "sourceMaps": true,
         "cwd": "${workspaceRoot}",
         "args": [
-            "${workspaceFolder}/src/server.ts"
+            "${workspaceFolder}/server/server.js"
         ]
     }, {
         "type": "node",
@@ -34,13 +34,11 @@
         "runtimeArgs": [
             "-r",
             "ts-node/register",
-            "-r",
-            "tsconfig-paths/register"
         ],
         "sourceMaps": true,
         "cwd": "${workspaceRoot}",
         "args": [
-            "${workspaceFolder}/src/server.ts"
+            "${workspaceFolder}/server/server.js"
         ]
     }, {
         "type": "node",

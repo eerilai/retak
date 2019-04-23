@@ -4,13 +4,16 @@
         "typeRoots": ["node_modules/@types", "typings"],
         "paths": {
             "semantic-ui-react": ["node_modules/semantic-ui-react/index.d.ts"],
-            "react-markdown": ["node_modules/react-markdown/index.d.ts"]
+            "react-markdown": ["node_modules/react-markdown/index.d.ts"],
+            "sequelize": ["node_modules/sequelize/types/index.d.ts"]
         },
+        
+        "experimentalDecorators": true,
         "baseUrl": "./",
         "outDir": "./client/dist/",
         "sourceMap": true,
         "noImplicitAny": true,
-        "module": "es6",
+        "module": "commonjs",
         "target": "es5",
         "jsx": "react",
         "allowJs": true

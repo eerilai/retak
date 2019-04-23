@@ -11,7 +11,6 @@ const GAME_NOT_STARTED = 0
 const GAME_STARTED = 1
 const GAME_FINISHED = 2
 
-const db = require('../database');
 const { logGame, getLeaderboard, getUserGames,
   getUserData, storeAsyncGame, getCurrentUserGames,
   endCorrespondence } = require('../database/queries');
