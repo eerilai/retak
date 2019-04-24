@@ -1,0 +1,52 @@
+version: 2.1
+executors:
+    node-executor:
+        docker:
+            - image: circleci/node:11
+        working_directory: ~/tak
+jobs: 
+    build:
+        executor: node-executor
+        steps:
+            #- setup_remote_docker
+            - checkout
+            - run: 
+                name: Install modules
+                command: yarn install
+            #- run:  
+            #    name: Run lint
+            #    command: yarn run lint
+            #- run:
+            #    name: Run tests
+            #    command: yarn run test
+            - run:
+                name: Install python/awscli
+                command: |
+                    sudo apt-get update
+                    sudo apt-get install python3 python-pip libpython-dev
+                    curl -O https://bootstrap.pypa.io/get-pip.py
+                    python get-pip.py --user
+                    echo 'export PATH=~/.local/bin/:$PATH' >> $BASH_ENV
+                    python -m pip install awscli --upgrade --user
+            #- run:
+            #    name: Build/Deploy Docker image
+            #    command: |
+            #        $(aws ecr get-login --no-include-email --region us-east-1)
+            #        if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            #            docker build -t retak .
+            #            docker tag retak:latest 727377630268.dkr.ecr.us-east-1.amazonaws.com/retak:latest
+            #            docker push 727377630268.dkr.ecr.us-east-1.amazonaws.com/retak:latest
+            #        else
+            #            docker build -t retak:dev .
+            #            docker tag retak:dev 727377630268.dkr.ecr.us-east-1.amazonaws.com/retak:dev
+            #            docker push 727377630268.dkr.ecr.us-east-1.amazonaws.com/retak:dev
+            #        fi
+            #- run:
+            #    name: Pull image into ECS
+            #    command: |
+            #        aws ecr describe-repositories --region us-east-1
+            #        if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            #            aws ecs update-service --cluster net-results-production-api-cluster --service net-results-production-api-service --force-new-deployment --region us-east-1
+            #        else
+            #            aws ecs update-service --cluster retak-dev --service net-results-development-api-service --force-new-deployment --region us-east-1
+            #        fi

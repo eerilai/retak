@@ -44,7 +44,7 @@ class SignupModal extends Component {
   }
 
   checkForm() {
-    const newState = SignupModal.clearErrors(this.state);
+    const newState = this.clearErrors(this.state);
     if (this.state.password.length < 8) {
       newState.passwordError = true;
       newState.errorMessages.push('Password must be at least 8 characters long');
