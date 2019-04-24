@@ -1,19 +1,17 @@
 {
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
-        "typeRoots": ["node_modules/@types", "typings"],
-        "paths": {
-            "semantic-ui-react": ["node_modules/semantic-ui-react/index.d.ts"],
-            "react-markdown": ["node_modules/react-markdown/index.d.ts"],
-            "sequelize": ["node_modules/sequelize/types/index.d.ts"]
-        },
-        
+        "typeRoots": ["node_modules/@types/*", "typings/*"],
+        "moduleResolution": "node",
         "experimentalDecorators": true,
         "baseUrl": "./",
         "outDir": "./client/dist/",
         "sourceMap": true,
         "noImplicitAny": true,
         "module": "commonjs",
+        "incremental": true,
+        "strictBindCallApply": true,
+        "lib": ["dom", "esnext"],
         "target": "es5",
         "jsx": "react",
         "allowJs": true

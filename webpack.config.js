@@ -1,5 +1,11 @@
+const { DefinePlugin } = require("webpack");
+const { join } = require("path");
+const dotenv = require("dotenv").config({
+    path: join(__dirname, "/.env")
+});
+
 module.exports = {
-  entry: ['./client/src/index.jsx'],
+  entry: ['./client/src/index.tsx'],
   output: {
     path: `${__dirname}/client/dist`,
     publicPath: '/',
@@ -43,7 +49,11 @@ module.exports = {
       },
     ],
   },
-
+  plugins: [
+    new DefinePlugin({
+        "windows.env": dotenv.parsed
+    }),
+  ],
   resolve: {
     extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
   },
