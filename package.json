@@ -2,12 +2,11 @@
   "name": "retak",
   "version": "1.0.0",
   "description": "web-based app for Tak the board game",
-  "main": "./server/index.js",
   "scripts": {
     "webpack": "webpack --mode development --config ./webpack.config.js --watch",
     "dev": "nodemon --watch server --watch database ./server/server.js",
     "db-start": "docker start takdb && npm run start",
-    "start": "node ./server/server.js"
+    "start": "ts-node --pretty --transpile-only --project tsconfig.json server/server.js"
   },
   "author": "eerilai",
   "contributors": [
@@ -65,7 +64,9 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
     "@types/dotenv": "^6.1.1",
-    "@types/node": "^11.13.6",
+    "@types/bcrypt": "^3.0.0",
+    "@types/node": "^11.13.7",
+    "@types/passport": "^1.0.0",
     "@types/react": "^16.8.14",
     "@types/react-dom": "^16.8.4",
     "@types/react-redux": "^7.0.8",
@@ -78,9 +79,9 @@
     "raw-loader": "^2.0.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
-    "ts-loader": "^5.3.3",
-    "typescript": "^3.4.4",
+    "ts-loader": "^5.4.3",
+    "typescript": "^3.4.5",
     "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.0"
+    "webpack-cli": "^3.3.1"
   }
 }

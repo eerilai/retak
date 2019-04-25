@@ -1,19 +1,33 @@
-{
+{   
+    "compileOnSave": true,
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
-        "typeRoots": ["node_modules/@types/*", "typings/*"],
         "moduleResolution": "node",
+        "typeRoots": [
+            "./node_modules/@types/*",
+            "./typings/*"
+        ],
+        "alwaysStrict": true,
         "experimentalDecorators": true,
         "baseUrl": "./",
         "outDir": "./client/dist/",
         "sourceMap": true,
         "noImplicitAny": true,
+        "disableSizeLimit": true,
         "module": "commonjs",
         "incremental": true,
         "strictBindCallApply": true,
-        "lib": ["dom", "esnext"],
-        "target": "es5",
+        "removeComments": true,
+        "forceConsistentCasingInFileNames": true,
+        "target": "esnext",
         "jsx": "react",
-        "allowJs": true
+        "jsxFactory": "React.createElement",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "emitDecoratorMetadata": true,
+        "allowJs": true,
+        "lib": [
+            "dom", "esnext"
+        ]
     }
 }

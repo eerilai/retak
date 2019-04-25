@@ -10,6 +10,9 @@ const {
 } = require('../database/queries');
 const { User, Sequelize } = require('../database');
 
+const { connection } = require("../database");
+const UserController = require("../database/repositories/User");
+
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -72,14 +75,11 @@ passport.use(new FacebookStrategy(
 
 
 
-passport.use(new LocalStrategy(
-  (usernameOrEmail, password, done) => {
-    const Op = Sequelize.Op;
-    findUserLocal(usernameOrEmail, password)
-      .then((user) => {
-        done(null, user);
-      })
-      .catch((err) => {
-        done(err);
-      })
-  }));
+passport.use(new LocalStrategy(async (usernameOrEmail, password, done) => {
+    try {
+        const repo = (await connection).getCustomRepository(UserController);
+        done(null, await repo.authenticateUser(usernameOrEmail, password));
+    } catch (err) {
+        done(new Error(`Unable to find user: ${err.message}`));
+    }
+}));

@@ -1,9 +1,11 @@
 const Sequelize = require('sequelize');
-const { User, Game, AsyncGame } = require('./index');
+const { Game, AsyncGame } = require('./index');
+const { User, connection } = require("./index");
 const { hashPassword, comparePassword } = require('./encryptionHelpers');
 const Op = Sequelize.Op;
 
-const findUserLocal = (usernameOrEmail, password) => {
+const findUserLocal = async (usernameOrEmail, password) => {
+
   return new Promise((resolve, reject) => {
     User.findOne({
       where: {

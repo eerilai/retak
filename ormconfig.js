@@ -1,3 +1,4 @@
+const { join } = require("path");
 const { NODE_ENV, PG_HOSTNAME, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = process.env;
 
 module.exports = {
