@@ -1,22 +1,21 @@
-import { createStore, applyMiddleware, compose, Store, Action } from "redux";
+import { createStore, applyMiddleware, compose, Store, Action, Unsubscribe } from "redux";
 import thunk from "redux-thunk";
 import rootReducer from "./reducers";
 import initialState, { ReduxState } from "./initialState";
 
-const middleware = [thunk];
-
 const ext: Function = (window as any).__REDUX_DEVTOOLS_EXTENSION__;
 
-
-const store = createStore<ReduxState, Action<any>, {}, {}>(
+export const store: Store<ReduxState, Action<any>> = createStore<ReduxState, Action<any>, {}, {}>(
     rootReducer,
     initialState,
     compose(
-        applyMiddleware(...middleware),
+        applyMiddleware(thunk),
         ext ? ext() : undefined
     )
 );
 
-store.subscribe(() => console.log("store changed", store.getState()));
+export const unsubscribe: Unsubscribe = store.subscribe(() => {
+    console.log("store changed", store.getState());
+});
 
 export default store;

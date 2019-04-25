@@ -172,6 +172,10 @@ const charName = [
   'Wilem',
 ];
 
+/**
+ * Generates and returns a random player name.
+ * @return {string}
+ */
 const generateCharacterName = () => {
   const personCharName = charName[Math.floor(Math.random() * charName.length)];
   return `${personCharName}-${Math.random().toString(36).slice(2, 6)}(Guest)`;

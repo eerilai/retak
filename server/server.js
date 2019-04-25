@@ -11,10 +11,9 @@ const GAME_NOT_STARTED = 0
 const GAME_STARTED = 1
 const GAME_FINISHED = 2
 
-const { logGame, getLeaderboard, getUserGames,
-  getUserData, storeAsyncGame, getCurrentUserGames,
-  endCorrespondence } = require('../database/queries');
-const authRoutes = require('./routes/authRoutes');
+const { logGame, getLeaderboard, storeAsyncGame, endCorrespondence } = require('../database/queries');
+const authRouter = require('./routes/auth');
+const userRouter = require('./routes/user');
 const filterLobbyList = require('./lobbyHelper');
 
 const app = express();
@@ -36,17 +35,8 @@ app.use(session);
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/auth', authRoutes);
-
-// Implement authorization check for relevant requests, ie profile, logout, etc
-const authCheck = (req, res, next) => {
-  if (!req.user) {
-    res.redirect('/');
-  } else {
-    next();
-  }
-};
-
+app.use('/auth', authRouter);
+app.use('/users', userRouter)
 app.use('/', express.static(path.join(__dirname, '../client/dist')));
 
 app.post('/record', (req, res) => {
@@ -56,21 +46,6 @@ app.post('/record', (req, res) => {
 app.get('/leaderboard', async (req, res) => {
   const board = await getLeaderboard();
   res.json(board);
-});
-
-app.get('/users/:username/data', async (req, res) => {
-  const data = await getUserData(req.params.username);
-  res.json(data);
-});
-
-app.get('/users/:username/games', async (req, res) => {
-  const games = await getUserGames(req.params.username);
-  res.json(games);
-});
-
-app.get('/users/:userID/games/current', async (req, res) => {
-  const games = await getCurrentUserGames(req.params.userID);
-  res.json(games);
 });
 
 app.get('/bundle.js', (req, res) => {
