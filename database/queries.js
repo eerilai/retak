@@ -4,60 +4,6 @@ const { User, connection } = require("./index");
 const { hashPassword, comparePassword } = require('./encryptionHelpers');
 const Op = Sequelize.Op;
 
-const findUserLocal = async (usernameOrEmail, password) => {
-
-  return new Promise((resolve, reject) => {
-    User.findOne({
-      where: {
-        [Op.or]: [
-          { username: usernameOrEmail },
-          { email: usernameOrEmail }
-        ]
-      }
-    })
-      .then((user) => {
-        comparePassword(password, user.password)
-          .then(() => {
-            resolve(user);
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-}
-
-const findUserById = (id) => {
-  return new Promise((resolve, reject) => {
-    User.findById(id)
-      .then((user) => {
-        resolve(user);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-};
-
-const findOrCreateUserByOauth = (options) => {
-  return new Promise((resolve, reject) => {
-    User.findOrCreate({
-      where: options,
-      defaults: {
-        username: 'Tak-user-' + Math.random().toString(36).slice(2, 9)
-      }
-    })
-      .then(([user, created]) => {
-        resolve(user);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-}
 
 const createUser = (userInfo) => {
   return new Promise((resolve, reject) => {
@@ -205,7 +151,7 @@ const storeAsyncGame = (gameState, room, roomId) => {
     player1_id = p1[0] ? p1[0].dataValues.id : null;
     player2_id = p2[0] ? p2[0].dataValues.id : null;
 
-    AsyncGame.findOrCreate({
+    AsyncGame. te({
       where: {
         room_id: roomId,
       },
@@ -262,14 +208,11 @@ const updateUserName = (userID, currentUsername, newUsername) => {
 }
 
 module.exports = {
-  findUserLocal,
-  findUserById,
   createUser,
   logGame,
   getLeaderboard,
   getUserData,
   getUserGames,
-  findOrCreateUserByOauth,
 
   getCurrentUserGames,
   storeAsyncGame,

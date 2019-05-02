@@ -5,6 +5,17 @@ import User from "../models/User";
 @EntityRepository(User)
 export default class UserRepository extends Repository<User> {
 
+    public async findOrCreate(userProps: Partial<User>) {
+        if (!userProps.username) {
+            userProps.username = `Tak-user-${Math.random().toString(36).slice(2, 9)}`;
+        }
+        let user = await this.findOne(userProps);
+        if (!user) {
+            user = await (Object.assign(new User(), userProps)).save();
+        }
+        return user;
+    }
+
     public async findOneByUsernameOrEmail(usernameOrEmail: string): Promise<User> {
         const users = await this.find({
             where: [

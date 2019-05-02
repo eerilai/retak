@@ -1,5 +1,6 @@
 import { Entity, Column } from "typeorm";
 import Game from "./Game";
+import {} from "typescript";
 
 @Entity({ schema: "tak", name: "games" })
 export class AsyncGame extends Game {

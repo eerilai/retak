@@ -4,30 +4,36 @@ import User from "./models/User";
 
 import UserRepository from "./repositories/User";
 
-import { createConnection, ConnectionManager, Connection, BaseEntity, Repository, ObjectType } from "typeorm";
+import { createConnection, ConnectionManager, Connection, BaseEntity, Repository, Entity } from "typeorm";
 
 const defaultConnectionName = "default";
 
 const manager = new ConnectionManager();
-(async () => {
 
-    const repo = await getRepo<User, UserRepository>(UserRepository);
-})();
+const models = { AsyncGame, Game, User }
+export { AsyncGame, Game, User };
+const repos = { UserRepository }
 
-async function getRepo<T extends BaseEntity>(): Promise<Repository<T>> {
-
-}
-async function getRepo<T extends BaseEntity, U extends Repository<T>>(repoName: ObjectType<U>): Promise<U>;
-async function getCustomRepo<T extends BaseEntity>(repoName?: ObjectType<Repository<T>>): Promise<Repository<T>> {
+async function getConnection(): Promise<Connection> {
     let conn: Connection = null;
     if (!manager.has(defaultConnectionName)) {
         conn = await createConnection("default");
     } else {
         conn = manager.get(defaultConnectionName);
     }
-    let repo: T = null;
+    return conn;
 }
 
-export {
-    AsyncGame, Game, User, connection, UserRepository
-};
+export async function getRepo<User>(entity: "User"): Promise<User>;
+export async function getRepo<AsyncGame>(entity: "AsyncGame"): Promise<AsyncGame>;
+export async function getRepo<Game>(entity: "Game"): Promise<Game>;
+export async function getRepo<T extends BaseEntity>(entity: keyof typeof models): Promise<Repository<T>> {
+    const conn = await getConnection();
+    return await conn.getRepository<T>(models[entity])
+}
+
+export async function getCustomRepo(repo: "UserRepository"): Promise<UserRepository>;
+export async function getCustomRepo(repo: keyof typeof repos): Promise<Repository<BaseEntity>> {
+    const conn = await getConnection();
+    return await conn.getCustomRepository(repos[repo]);;
+}
