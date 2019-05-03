@@ -1,7 +1,6 @@
-const express = require('express');
+const express, { urlencoded, json } = require('express');
 const passport = require('passport');
 const path = require('path');
-const bodyParser = require('body-parser');
 const socket = require('socket.io');
 const sharedSession = require('express-socket.io-session');
 
@@ -18,7 +17,7 @@ const filterLobbyList = require('./lobbyHelper');
 
 const app = express();
 
-app.use(bodyParser());
+app.use(urlencoded, json);
 
 const session = require('express-session')({
   secret: process.env.SESSION_SECRET,

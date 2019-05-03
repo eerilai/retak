@@ -13,8 +13,8 @@ router.get("/:username/games", async (req, res) => {
     res.json(games);
 });
 
-router.get("/:userID/games/current", async (req, res) => {
-    const games = await getCurrentUserGames(req.params.userID);
+router.get("/:userId/games/current", async (req, res) => {
+    const games = await getCurrentUserGames(req.params.userId);
     res.json(games);
 });
 
