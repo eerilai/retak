@@ -8,7 +8,7 @@ const options = {
     trustedConnection: true,
   },
   hostname: process.env.PG_HOSTNAME || 'localhost',
-  database: process.env.PG_DATABASE || 'test',
+  database: process.env.PG_DATABASE || 'retak',
   username: process.env.PG_USERNAME,
   password: process.env.PG_PASSWORD
 };
