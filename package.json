@@ -21,7 +21,7 @@
   "dependencies": {
     "aws-sdk": "^2.423.0",
     "axios": "^0.18.0",
-    "bcrypt": "^2.0.1",
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.18.2",
     "bootstrap": "^4.3.1",
     "dotenv": "^5.0.1",
