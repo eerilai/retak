@@ -7,10 +7,17 @@ const options = {
     dialectModulePath: 'pg',
     trustedConnection: true,
   },
+<<<<<<< HEAD
   host: 'localhost',
   database: 'retak',
   username: process.env.PG_USERNAME,
   password: process.env.PG_PASSWORD,
+=======
+  hostname: process.env.PG_HOSTNAME || 'localhost',
+  database: process.env.PG_DATABASE || 'retak',
+  username: process.env.PG_USERNAME,
+  password: process.env.PG_PASSWORD
+>>>>>>> dev
 };
 
 const dbPath = process.env.DATABASEURL || options;

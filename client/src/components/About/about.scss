@@ -1,0 +1,18 @@
+@import "../../styles/fonts.scss";
+@import "../../styles/common.scss";
+
+.about {
+  @extend .border-box;
+
+  h1 {
+    @extend .header-font;
+  }
+
+  p {
+    @extend .primary-font;
+  }
+
+  a {
+    color: #308DB5;
+  }
+}
