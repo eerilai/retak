@@ -24,6 +24,8 @@ class GameSetup extends Component {
     this.handleLiveChange = this.handleLiveChange.bind(this);
     this.handleRoomIdChange = this.handleRoomIdChange.bind(this);
     this.handleColorChange = this.handleColorChange.bind(this);
+    this.handleTimeControl = this.handleTimeControl.bind(this);
+    this.handleTimeIncrement = this.handleTimeIncrement.bind(this);
   }
 
   handleTimeControl(e) {
@@ -35,6 +37,8 @@ class GameSetup extends Component {
   }
 
   handleBoardSizeChange(e, { value }) {
+    console.log(e.target.value);
+    console.log(value);
     this.setState({
       boardSize: Number(value),
     });
